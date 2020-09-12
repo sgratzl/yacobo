@@ -1,12 +1,10 @@
 import useSWR from 'swr';
-import { fetchMeta } from '../data';
+import { ICountyValue } from '../data';
 import { ISignal } from '../data/constants';
+import { fetcher } from '../ui/utils';
 
 export default function SignalSection({ signal }: { signal: ISignal }) {
-  const { data, error } = useSWR(`/api/meta`, fetchMeta);
-
-  if (error) return <div>Failed to load user</div>;
-  if (!data) return <div>Loading...</div>;
+  const { data } = useSWR<ICountyValue[]>(`/api/signal/${signal.id}`, fetcher);
   return (
     <section key={signal.id}>
       <header>
@@ -14,7 +12,7 @@ export default function SignalSection({ signal }: { signal: ISignal }) {
       </header>
       <p>{signal.description}</p>
       <div>
-        {signal.mean} +- {signal.stdev}
+        {signal.meta.mean} +- {signal.meta.stdev}
       </div>
       <div>{JSON.stringify(data)}</div>
     </section>

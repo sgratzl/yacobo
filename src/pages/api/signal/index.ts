@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { fetchMeta } from '@/data';
-import { formatOutput } from '@/api/format';
+import { withError } from '@/api/error';
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
+export default withError(async (_req: NextApiRequest, res: NextApiResponse) => {
   const data = fetchMeta();
-  return formatOutput(data, ['id', 'label', 'description'], `signals`, req, res);
-};
+  return res.status(200).json(data);
+});

@@ -103,8 +103,8 @@ function injectMeta(data: any[]) {
       {
         mean: d.mean_value,
         stdev: d.stdev_value,
-        minTime: parseAPIDate(d.min_time),
-        maxTime: parseAPIDate(d.max_time),
+        minTime: parseAPIDate(d.min_time).toString(),
+        maxTime: parseAPIDate(d.max_time).toString(),
       },
     ])
   );

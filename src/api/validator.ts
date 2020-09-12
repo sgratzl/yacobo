@@ -1,30 +1,62 @@
 import { parseISO } from 'date-fns';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest } from 'next';
+import { CustomHTTPError } from './error';
 import { signalByID } from '../data/constants';
 
-export function extractSignal(req: NextApiRequest, res: NextApiResponse) {
-  const signal = signalByID.get(req.query.signal as string);
+export function extractSignal(res: string | NextApiRequest) {
+  const querySignal = typeof res === 'string' ? res : (res.query.signal as string);
+  const signal = signalByID.get(querySignal);
   if (!signal) {
-    res.status(404).json({ message: `signal "${signal}" not found` });
-    return null;
+    throw new CustomHTTPError(400, `signal "${querySignal}" not found`);
   }
   return signal;
 }
 
-export function extractRegion(req: NextApiRequest, res: NextApiResponse) {
-  const region = req.query.region as string;
+export enum Formats {
+  png = 'png',
+  svg = 'svg',
+  json = 'json',
+  csv = 'csv',
+}
+
+export function extractFormat<S extends string, V>(res: NextApiRequest, key: S, resolver: (value: string) => V) {
+  const param = res.query[key] as string;
+  if (!param) {
+    throw new CustomHTTPError(400, `missing ${key}`);
+  }
+  const d = param.lastIndexOf('.');
+  if (d < 0) {
+    return {
+      param: resolver(param),
+      format: Formats.json,
+    };
+  }
+  const format = Formats[param.slice(d + 1)] as keyof Formats;
+  if (!format) {
+    throw new CustomHTTPError(
+      400,
+      `invalid format "${param.slice(d + 1)}", supported: ${Object.keys(Formats).join(',')}`
+    );
+  }
+  return {
+    param: resolver(param.slice(0, d)),
+    format,
+  };
+}
+
+export function extractRegion(res: string | NextApiRequest) {
+  const region = typeof res === 'string' ? res : (res.query.region as string);
   if (!region) {
-    res.status(404).json({ message: `region "${region}" not found` });
-    return null;
+    throw new CustomHTTPError(400, `region "${region}" missing`);
   }
   return region;
 }
 
-export function extractDate(req: NextApiRequest, res: NextApiResponse) {
-  const date = parseISO(req.query.date as string);
+export function extractDate(res: string | NextApiRequest) {
+  const queryDate = typeof res === 'string' ? res : (res.query.date as string);
+  const date = parseISO(queryDate);
   if (!date || Number.isNaN(date.getTime())) {
-    res.status(401).json({ message: `bad date "${req.query.date}" not found` });
-    return null;
+    throw new CustomHTTPError(400, `bad date "${queryDate}"`);
   }
   return date;
 }

@@ -1,17 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { fetchAllCounties, formatAPIDate } from '@/data';
-import { extractDate, extractSignal } from '@/api/validator';
-import { formatOutput } from '@/api/format';
+import { extractDate, extractFormat, extractSignal, Formats } from '@/api/validator';
+import { sendCSV } from '@/api/format';
+import { withError } from '@/api/error';
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
-  const signal = extractSignal(req, res);
-  if (!signal) {
-    return;
+export default withError(async (req: NextApiRequest, res: NextApiResponse) => {
+  const { param: signal, format } = extractFormat(req, 'signal', extractSignal);
+  const date = extractDate(req);
+  const data = await fetchAllCounties(signal.data, date);
+  switch (format) {
+    case Formats.csv:
+      return sendCSV(data, ['region', 'value', 'stderr'], `${signal}-${formatAPIDate(date)}`, res);
+    default:
+      return res.status(200).json(data);
   }
-  const date = extractDate(req, res);
-  if (!date) {
-    return;
-  }
-  const data = fetchAllCounties(signal.data, date);
-  return formatOutput(data, ['region', 'value', 'stderr'], `${signal}-${formatAPIDate(date)}`, req, res);
-};
+});

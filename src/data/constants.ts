@@ -12,8 +12,8 @@ export interface ISignal {
   meta: {
     mean: number;
     stdev: number;
-    minTime: Date;
-    maxTime: Date;
+    minTime: string | Date;
+    maxTime: string | Date;
   };
 }
 
