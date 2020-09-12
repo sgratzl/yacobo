@@ -1,17 +1,4 @@
-.main {
-}
-
-.logo {
-  float: left;
-}
-
-.backTop {
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
-  border-radius: 4px;
-  background-color: '#1088e9';
-  color: '#fff';
-  text-align: center;
-  font-size: 14;
+.col {
+  display: flex;
+  flex-direction: column;
 }

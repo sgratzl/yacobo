@@ -1,17 +1,23 @@
+import { Row, Col } from 'antd';
 import { max, parseJSON } from 'date-fns';
 import { GetStaticProps } from 'next';
 import BaseLayout from '../components/BaseLayout';
 import SignalSection from '../components/SignalSection';
 import { fetchMeta } from '../data';
 import { signals } from '../data/constants';
+import styles from './index.module.scss';
 
 export default function Home({ dateString }: { dateString: string }) {
   const date = parseJSON(dateString);
   return (
     <BaseLayout title="My COVIDcast" mainActive="overview">
-      {signals.map((s) => (
-        <SignalSection key={s.id} signal={s} date={date} />
-      ))}
+      <Row>
+        {signals.map((s) => (
+          <Col key={s.id} xs={24} sm={24} md={12} span={8} className={styles.col}>
+            <SignalSection signal={s} date={date} />
+          </Col>
+        ))}
+      </Row>
     </BaseLayout>
   );
 }

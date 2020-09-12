@@ -2,6 +2,7 @@ import Head from 'next/head';
 import styles from './BaseLayout.module.scss';
 import Link from 'next/link';
 import { Layout, Menu, Breadcrumb, BackTop } from 'antd';
+import { UpCircleOutlined } from '@ant-design/icons';
 
 export interface BaseLayoutProps {
   title: string;
@@ -18,7 +19,7 @@ export default function BaseLayout({ children, title, mainActive }: React.PropsW
         <div className={styles.logo}>COVIDCast-Lite</div>
         <Menu theme="dark" mode="horizontal" activeKey={mainActive}>
           <Menu.Item key="overview">
-            <Link href="/">US Overview</Link>
+            <Link href="/">US</Link>
           </Menu.Item>
           <Menu.Item key="single">
             <Link href="/signal">County</Link>
@@ -36,8 +37,8 @@ export default function BaseLayout({ children, title, mainActive }: React.PropsW
           {/* TODO */}
         </Breadcrumb>
         <main className={styles.main}>{children}</main>
-        <BackTop>
-          <div className={styles.backTop}>UP</div>
+        <BackTop className={styles.backTop}>
+          <UpCircleOutlined />
         </BackTop>
       </Layout.Content>
       <Layout.Footer>Samuel Gratzl ©2020</Layout.Footer>

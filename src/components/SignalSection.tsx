@@ -8,7 +8,6 @@ import {
   FileImageOutlined,
   FileOutlined,
   FileExcelOutlined,
-  StarFilled,
   StarOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
@@ -57,7 +56,6 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date:
           className={styles.img}
           src={image}
           placeholder
-          height={300}
           srcSet={`${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x`}
           alt={`US Map of ${signal.name}`}
         />
@@ -72,8 +70,10 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date:
           <Button
             type="default"
             shape="circle"
+            className={bookmarked ? styles.filled : undefined}
+            suppressHydrationWarning
             onClick={toggleBookmark}
-            icon={bookmarked ? <StarFilled /> : <StarOutlined />}
+            icon={<StarOutlined />}
           />
         </Tooltip>,
         <Dropdown overlay={menu} trigger={['click']}>

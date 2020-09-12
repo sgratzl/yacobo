@@ -1,13 +1,24 @@
 .card {
   margin: 0.5em 0.2em;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.card > .ant-card-body {
+  flex: auto;
 }
 
 .img {
-  width: auto;
-  display: flex;
-  justify-content: center;
+  padding: 1em;
 
   > img {
-    width: auto;
+    height: 100%;
+    object-fit: contain;
+    background-color: unset;
   }
+}
+
+.filled {
+  color: red;
 }
