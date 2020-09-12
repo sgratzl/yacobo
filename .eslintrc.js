@@ -13,7 +13,7 @@ module.exports = {
   ],
   settings: {
     react: {
-      version: pkg.devDependencies.react ? 'detect' : '99.99.99',
+      version: 'detect',
     },
   },
   rules: {

@@ -1,6 +1,11 @@
 {
   "name": "my-covidcast",
   "version": "0.1.0",
+  "author": {
+    "name": "Samuel Gratzl",
+    "email": "sam@sgratzl.com",
+    "url": "https://www.sgratzl.com"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,10 +14,25 @@
   },
   "dependencies": {
     "@types/react-vega": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@typescript-eslint/parser": "^4.0.1",
+    "canvas": "^2.6.1",
+    "cross-fetch": "^3.0.6",
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-react-app": "^5.2.1",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0",
     "next": "9.5.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-vega": "^7.4.1",
+    "us-atlas": "^3.0.0",
+    "use-ssr": "^1.0.23",
     "vega": "^5.15.0",
     "vega-lite": "^4.15.0"
   },

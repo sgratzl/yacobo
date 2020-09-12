@@ -1,6 +1,7 @@
 {
-  "editor.formatOnSave": true,
   "editor.formatOnType": true,
+  "eslint.enable": true,
+  "editor.formatOnSaveMode": "file",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -16,5 +17,8 @@
   "files.eol": "\n",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.detectIndentation": false,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
