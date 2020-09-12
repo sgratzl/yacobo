@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { LATEST } from '@/data';
 import { formatISODate } from '@/ui/utils';
 import { withError } from '@/api/error';
 import { redirectWithFormat } from '@/api/redirect';
+import { fetchLatestDate } from '@/data';
 
-export default withError((req: NextApiRequest, res: NextApiResponse) => {
-  return redirectWithFormat(req, res, formatISODate(LATEST));
+export default withError(async (req: NextApiRequest, res: NextApiResponse) => {
+  const d = await fetchLatestDate();
+  return redirectWithFormat(req, res, formatISODate(d));
 });

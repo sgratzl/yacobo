@@ -1,9 +1,9 @@
 import { Row, Col } from 'antd';
-import { max, parseJSON } from 'date-fns';
+import { parseJSON } from 'date-fns';
 import { GetStaticProps } from 'next';
 import BaseLayout from '../components/BaseLayout';
 import SignalSection from '../components/SignalSection';
-import { fetchMeta } from '../data';
+import { fetchLatestDate } from '../data';
 import { signals } from '../data/constants';
 import styles from './index.module.scss';
 
@@ -24,14 +24,12 @@ export default function Home({ dateString }: { dateString: string }) {
 
 export const getStaticProps: GetStaticProps = async () => {
   // Get external data from the file system, API, DB, etc.
-  const data = await fetchMeta();
-
-  const maxDate = max(data.map((d) => d.meta.maxTime));
+  const date = await fetchLatestDate();
   // The value of the `props` key will be
   //  passed to the `Home` component
   return {
     props: {
-      dateString: maxDate.getTime(),
+      dateString: date.getTime(),
     },
   };
 };

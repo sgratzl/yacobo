@@ -54,7 +54,7 @@ export const signals: ISignal[] = [
        of the daily Facebook survey from  ${formatLocal(date)} survey
        know someone in their local community with COVID-like symptoms`,
     longDescription: 'TODO',
-    colorScheme: 'reds',
+    colorScheme: 'teals',
     data: {
       maxValue: 100,
       dataSource: 'fb-survey',
@@ -68,7 +68,7 @@ export const signals: ISignal[] = [
     description: (date: Date) =>
       `How many out of 100 doctor visits on ${formatLocal(date)} were due to COVID-like symptoms`,
     longDescription: 'TODO',
-    colorScheme: 'reds',
+    colorScheme: 'purples',
     data: {
       maxValue: 100,
       dataSource: 'doctor-visits',
@@ -82,7 +82,7 @@ export const signals: ISignal[] = [
     description: (date: Date) =>
       `How many out of 100,000 people are newly confirmed COVID cases on ${formatLocal(date)} (7-day average)`,
     longDescription: 'based on data reported by USAFacts and Johns Hopkins University',
-    colorScheme: 'reds',
+    colorScheme: 'yelloworangered',
     data: {
       maxValue: 100000,
       dataSource: 'indicator-combination',
@@ -110,7 +110,7 @@ export const signals: ISignal[] = [
     description: (date: Date) =>
       `How many out of 100 people tested by Quidel, Inc. on ${formatLocal(date)} show for COVID-19 antigens`,
     longDescription: 'TODO',
-    colorScheme: 'reds',
+    colorScheme: 'yellowgreen',
     data: {
       maxValue: 100,
       dataSource: 'quidel',
@@ -124,7 +124,7 @@ export const signals: ISignal[] = [
     description: (date: Date) =>
       `How many out of 100,000 people died because daily because of COVID on ${formatLocal(date)} (7-day average)`,
     longDescription: 'based on data reported by USAFacts and Johns Hopkins University',
-    colorScheme: 'reds',
+    colorScheme: 'bluepurple',
     data: {
       maxValue: 100000,
       dataSource: 'indicator-combination',

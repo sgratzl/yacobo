@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch';
-import { differenceInHours, formatISO, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
+import { differenceInHours, formatISO, min, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
 import { signals, ISignal, ISignalWithMeta, hasMeta, ISignalMeta } from './constants';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
@@ -149,4 +149,8 @@ export function fetchSignalMeta(signal: ISignal) {
     return Promise.resolve(signal.meta);
   }
   return fetchMeta().then((meta) => meta.find((d) => d.id === signal.id)!.meta);
+}
+
+export function fetchLatestDate() {
+  return fetchMeta().then((data) => min(data.map((d) => d.meta.maxTime)));
 }
