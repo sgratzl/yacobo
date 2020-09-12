@@ -8,7 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(404).json({ message: `region "${region}" not found` });
   }
   const date = parseISO(req.query.date as string);
-  if (!date) {
+  if (!date || Number.isNaN(date.getTime())) {
     return res.status(401).json({ message: `bad date "${req.query.date}" not found` });
   }
   const r = await fetchCounty(region, date);

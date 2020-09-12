@@ -1,25 +1,33 @@
 import fetch from 'cross-fetch';
-import { formatISO, parseISO, subDays } from 'date-fns';
+import { formatISO, parseISO, startOfToday, subDays } from 'date-fns';
 import { signals, ISignal } from './constants';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 
 const fetchOptions = process.env.NODE_ENV === 'development' ? { cache: 'force-cache' as const } : undefined;
 
+export const LATEST = subDays(startOfToday(), 4);
+
 export function formatAPIDate(date: Date) {
   return formatISO(date, { representation: 'date' });
 }
 export function parseAPIDate(v: number | string) {
-  return parseISO(v.toString());
+  return parseISO(`${v}T000000-05`);
 }
 
-export interface ICountyValue {
-  region: string;
-  value: number;
+export interface IValue {
+  value?: number | null;
   stderr?: number | null;
 }
 
-export const LATEST = subDays(new Date(), 4);
+export interface ICountyValue extends IValue {
+  region: string;
+  date: Date;
+}
+
+export interface ISignalValue extends IValue {
+  signal: string;
+}
 
 export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<ICountyValue[]> {
   const url = new URL(ENDPOINT);
@@ -43,7 +51,11 @@ export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<I
     );
 }
 
-export function fetchSignalCounty(signal: ISignal['data'], region: string, date: Date): Promise<ICountyValue[]> {
+export function fetchSignalCounty(
+  signal: ISignal['data'],
+  region: string,
+  date: Date | [Date, Date]
+): Promise<ICountyValue[]> {
   const url = new URL(ENDPOINT);
   url.searchParams.set('source', 'covidcast');
   url.searchParams.set('data_source', signal.dataSource);
@@ -51,37 +63,33 @@ export function fetchSignalCounty(signal: ISignal['data'], region: string, date:
   url.searchParams.set('geo_type', 'county');
   url.searchParams.set('time_type', 'day');
   url.searchParams.set('geo_value', region);
-  url.searchParams.set('time_values', formatAPIDate(date));
+  url.searchParams.set(
+    'time_values',
+    date instanceof Date ? formatAPIDate(date) : `${formatAPIDate(date[0])}:${formatAPIDate(date[1])}`
+  );
   url.searchParams.set('format', 'json');
-  url.searchParams.set('fields', ['value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
+  url.searchParams.set('fields', ['time_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
   return fetch(url.toString(), fetchOptions)
     .then((r) => r.json())
-    .then((r) =>
-      r.map((d) => ({
+    .then((r) => {
+      return r.map((d) => ({
         region,
+        date: parseAPIDate(d.time_value),
         value: d.value,
         stderr: d.stderr,
-      }))
-    );
+      }));
+    });
 }
 
-export interface ICountyInfo {
-  region: string;
-  signals: { signal: string; value?: number | null; stderr?: number | null }[];
-}
-
-export function fetchCounty(region: string, date: Date): Promise<ICountyInfo> {
+export function fetchCounty(region: string, date: Date): Promise<ISignalValue[]> {
   return Promise.all(signals.map((signal) => fetchSignalCounty(signal.data, region, date))).then((infos) => {
-    return {
-      region,
-      signals: signals.map((signal, i) => {
-        const info = infos[i];
-        return {
-          signal: signal.id,
-          ...(info[0] ?? {}),
-        };
-      }),
-    };
+    return signals.map((signal, i) => {
+      const info = infos[i];
+      return {
+        signal: signal.id,
+        ...(info[0] ?? {}),
+      };
+    });
   });
 }
 
