@@ -14,5 +14,6 @@ export default withError(async (req: NextApiRequest, res: NextApiResponse) => {
     title: `${signal.id}-${region}`,
     headers: ['date', 'value', 'stderr'],
     vega: (data) => createLineChart(signal, data),
+    shortCache: true,
   });
 });

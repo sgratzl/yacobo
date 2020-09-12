@@ -1,9 +1,10 @@
 import { withError } from '@/api/error';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat, extractRegion } from '@/api/validator';
-import { fetchCounty } from '@/data';
+import { fetchCounty, LATEST } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { formatISODate } from '@/ui/utils';
+import { differenceInDays } from 'date-fns';
 
 export default withError(async (req: NextApiRequest, res: NextApiResponse) => {
   const { param: region, format } = extractFormat(req, 'region', extractRegion);
@@ -12,5 +13,6 @@ export default withError(async (req: NextApiRequest, res: NextApiResponse) => {
   return sendFormat(req, res, format, data, {
     title: `${region}-${formatISODate(date)}`,
     headers: ['signal', 'value', 'stderr'],
+    shortCache: differenceInDays(date, LATEST) < 2,
   });
 });

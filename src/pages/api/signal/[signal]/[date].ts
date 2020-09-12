@@ -2,7 +2,8 @@ import { withError } from '@/api/error';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat, extractSignal } from '@/api/validator';
 import { createMap } from '@/charts';
-import { fetchAllCounties, formatAPIDate } from '@/data';
+import { fetchAllCounties, formatAPIDate, LATEST } from '@/data';
+import { differenceInDays } from 'date-fns';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default withError(async (req: NextApiRequest, res: NextApiResponse) => {
@@ -14,5 +15,6 @@ export default withError(async (req: NextApiRequest, res: NextApiResponse) => {
     title: `${signal.id}-${formatAPIDate(date)}`,
     headers: ['region', 'value', 'stderr'],
     vega: () => createMap(signal, data),
+    shortCache: differenceInDays(date, LATEST) < 2,
   });
 });

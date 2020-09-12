@@ -6,27 +6,37 @@ import { Canvas } from 'canvas';
 import { CustomHTTPError } from './error';
 import { Formats } from './validator';
 
-export function sendJSON<T>(req: NextApiRequest, res: NextApiResponse, data: T[], title: string) {
+export interface ICommonOptions {
+  title: string;
+  shortCache?: boolean;
+}
+
+const HOURS_12_IN_SEC = 12 * 60 * 60;
+const HOURS_48_IN_SEC = 48 * 60 * 60;
+
+function setCommonHeaders(req: NextApiRequest, res: NextApiResponse, options: ICommonOptions, extension: string) {
   res.status(200);
   if (req.query.download != null) {
-    res.setHeader('Content-Disposition', `attachment; filename="${title}.json"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${options.title}.${extension}"`);
   }
+  res.setHeader('Cache-Control', `public, max-age=${options.shortCache ? HOURS_12_IN_SEC : HOURS_48_IN_SEC}`);
+}
+
+function sendJSON<T>(req: NextApiRequest, res: NextApiResponse, data: T[], options: ICommonOptions) {
+  setCommonHeaders(req, res, options, 'json');
   res.json(data);
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function sendCSV<T extends object>(
+function sendCSV<T extends object>(
   req: NextApiRequest,
   res: NextApiResponse,
   data: T[],
   headers: (keyof T)[],
-  title: string
+  options: ICommonOptions
 ) {
-  res.status(200);
+  setCommonHeaders(req, res, options, 'csv');
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-  if (req.query.download != null) {
-    res.setHeader('Content-Disposition', `attachment; filename="${title}.csv"`);
-  }
   res.send(csvFormat(data, headers));
   res.end();
 }
@@ -40,42 +50,36 @@ async function createVega(spec: TopLevelSpec | Promise<TopLevelSpec>) {
   });
 }
 
-export async function sendVegaPNG(
+async function sendVegaPNG(
   req: NextApiRequest,
   res: NextApiResponse,
   spec: TopLevelSpec | Promise<TopLevelSpec>,
-  title: string
+  options: ICommonOptions
 ) {
   try {
     const view = await createVega(spec);
     const scale = req.query.scale ? Number.parseInt(req.query.scale as string, 10) : 1;
     const canvas = await view.toCanvas(scale);
     const stream = ((canvas as unknown) as Canvas).createPNGStream();
-    res.status(200);
+    setCommonHeaders(req, res, options, 'png');
     res.setHeader('Content-Type', 'image/png');
-    if (req.query.download != null) {
-      res.setHeader('Content-Disposition', `attachment; filename="${title}.png"`);
-    }
     stream.pipe(res);
   } catch (err) {
     throw new CustomHTTPError(500, err.message);
   }
 }
 
-export async function sendVegaSVG(
+async function sendVegaSVG(
   req: NextApiRequest,
   res: NextApiResponse,
   spec: TopLevelSpec | Promise<TopLevelSpec>,
-  title: string
+  options: ICommonOptions
 ) {
   try {
     const view = await createVega(spec);
     const svg = await view.toSVG();
-    res.status(200);
+    setCommonHeaders(req, res, options, 'svg');
     res.setHeader('Content-Type', 'image/svg+xml');
-    if (req.query.download != null) {
-      res.setHeader('Content-Disposition', `attachment; filename="${title}.svg"`);
-    }
     res.send(svg);
     res.end();
   } catch (err) {
@@ -89,25 +93,24 @@ export async function sendFormat<T extends object>(
   res: NextApiResponse,
   format: Formats,
   data: T[],
-  options: {
-    title: string;
+  options: ICommonOptions & {
     headers: (keyof T)[];
     vega?: (data: T[]) => TopLevelSpec | Promise<TopLevelSpec>;
   }
 ) {
   switch (format) {
     case Formats.csv:
-      return sendCSV(req, res, data, options.headers, options.title);
+      return sendCSV(req, res, data, options.headers, options);
     case Formats.png:
       if (options.vega) {
-        return sendVegaPNG(req, res, options.vega(data), options.title);
+        return sendVegaPNG(req, res, options.vega(data), options);
       }
       break;
     case Formats.svg:
       if (options.vega) {
-        return sendVegaSVG(req, res, options.vega(data), options.title);
+        return sendVegaSVG(req, res, options.vega(data), options);
       }
       break;
   }
-  return sendJSON(req, res, data, options.title);
+  return sendJSON(req, res, data, options);
 }
