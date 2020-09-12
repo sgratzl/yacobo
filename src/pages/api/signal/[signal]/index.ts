@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { formatAPIDate, LATEST } from '@/data';
+import { LATEST } from '@/data';
+import { formatISODate } from '@/ui/utils';
+import { withError } from '@/api/error';
+import { redirectWithFormat } from '@/api/redirect';
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
-  return res.redirect(`${req.url!}/${formatAPIDate(LATEST)}`);
-};
+export default withError((req: NextApiRequest, res: NextApiResponse) => {
+  return redirectWithFormat(req, res, formatISODate(LATEST));
+});
