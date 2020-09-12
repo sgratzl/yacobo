@@ -1,0 +1,13 @@
+
+.title {
+  display: flex;
+  align-items: center;
+}
+
+.smallDate {
+  transform: translate(-8em);
+  align-self: flex-end;
+  z-index: -1;
+  visibility: hidden;
+  width: 0;
+}

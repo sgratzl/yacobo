@@ -6,7 +6,8 @@ import { UpCircleOutlined } from '@ant-design/icons';
 import { ReactNode } from 'react';
 
 export interface BaseLayoutProps {
-  title: string;
+  pageTitle?: string;
+  title: string | ReactNode;
   mainActive: 'overview' | 'county' | 'compare';
   breadcrumbs: ReactNode[];
 }
@@ -14,13 +15,14 @@ export interface BaseLayoutProps {
 export default function BaseLayout({
   children,
   title,
+  pageTitle,
   mainActive,
   breadcrumbs,
 }: React.PropsWithChildren<BaseLayoutProps>) {
   return (
     <Layout className={styles.layout}>
       <Head>
-        <title>COVIDCast-Lite - {title}</title>
+        <title>COVIDCast-Lite - {pageTitle ?? typeof title === 'string' ? title : ''}</title>
       </Head>
       <Layout.Header>
         <div className={styles.logo}></div>
