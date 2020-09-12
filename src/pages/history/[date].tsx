@@ -1,16 +1,16 @@
 import { Row, Col } from 'antd';
-import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
-import { extractDate } from '../../api/validator';
-import BaseLayout from '../../components/BaseLayout';
-import SignalSection from '../../components/SignalSection';
-import { signals } from '../../data/constants';
-import { formatLocal, formatISODate } from '../../ui/utils';
+import { useQueryParam } from '@/api/hooks';
+import { extractDate } from '@/api/validator';
+import BaseLayout from '@/components/BaseLayout';
+import SignalSection from '@/components/SignalSection';
+import { LATEST } from '@/data';
+import { signals } from '@/data/constants';
+import { formatLocal, formatISODate } from '@/ui/utils';
 import styles from '../index.module.scss';
 
 export default function History() {
-  const router = useRouter();
-  const date = extractDate(router);
+  const date = useQueryParam(extractDate);
 
   const breadcrumbs = [
     <Link href="/history/[date]" as={`/history/${formatISODate(date)}`}>

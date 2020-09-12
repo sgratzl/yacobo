@@ -44,10 +44,11 @@ export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<I
   url.searchParams.set('time_values', formatAPIDate(date));
   url.searchParams.set('format', 'json');
   url.searchParams.set('fields', ['geo_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
+  console.log(url.toString());
   return fetch(url.toString(), fetchOptions)
     .then((r) => r.json())
     .then((r) =>
-      r.map((d) => ({
+      r.map((d: any) => ({
         region: d.geo_value,
         value: d.value,
         stderr: d.stderr,
@@ -77,7 +78,7 @@ export function fetchSignalCounty(
   return fetch(url.toString(), fetchOptions)
     .then((r) => r.json())
     .then((r) => {
-      return r.map((d) => ({
+      return r.map((d: any) => ({
         date: parseAPIDate(d.time_value),
         value: d.value,
         stderr: d.stderr,

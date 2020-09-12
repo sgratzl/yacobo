@@ -1,10 +1,9 @@
 import { parseISO } from 'date-fns';
-import { NextApiRequest } from 'next';
 import { CustomHTTPError } from './error';
 import { signalByID } from '../data/constants';
 
 interface IRouterLike {
-  query: { [key: string]: string | string[] };
+  query: { [key: string]: string | string[] | undefined };
 }
 
 export function extractSignal(res: string | IRouterLike) {
@@ -35,7 +34,7 @@ export function extractFormat<S extends string, V>(res: IRouterLike, key: S, res
       format: Formats.json,
     };
   }
-  const format = Formats[param.slice(d + 1)] as Formats;
+  const format = Formats[(param.slice(d + 1) as unknown) as keyof typeof Formats] as Formats;
   if (!format) {
     throw new CustomHTTPError(
       400,

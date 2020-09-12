@@ -14,13 +14,15 @@ import Link from 'next/link';
 import { ReactNode, useCallback } from 'react';
 import styles from './SignalSection.module.scss';
 import { useBookmark } from './useBookmark';
+import { isValid } from 'date-fns';
 
-function f(v: ReactNode | ((v: Date) => ReactNode), date: Date) {
+function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
   return typeof v === 'function' ? v(date) : v;
 }
 
-export default function SignalSection({ signal, date }: { signal: ISignal; date: Date }) {
+export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatISODate(date);
+  const validDate = isValid(date);
   const image = `/api/signal/${signal.id}/${apiDate}.png?plain`;
 
   const [bookmarked, setBookmark] = useBookmark(signal);
@@ -54,9 +56,9 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date:
       cover={
         <Image
           className={styles.img}
-          src={image}
+          src={!validDate ? undefined : image}
           placeholder
-          srcSet={`${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x`}
+          srcSet={!validDate ? undefined : `${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x`}
           alt={`US Map of ${signal.name}`}
         />
       }

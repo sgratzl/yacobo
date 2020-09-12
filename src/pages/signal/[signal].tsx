@@ -1,12 +1,12 @@
-import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
-import { extractSignal } from '../../api/validator';
-import BaseLayout from '../../components/BaseLayout';
+import { useQueryParam } from '@/api/hooks';
+import { extractSignal } from '@/api/validator';
+import BaseLayout from '@/components/BaseLayout';
+import { signals } from '../../data/constants';
 
 export default function Signal() {
-  const router = useRouter();
-
-  const signal = extractSignal(router);
+  // TODO could be a fake one
+  const signal = useQueryParam(extractSignal) ?? signals[0];
 
   const breadcrumbs = [
     <Link href="/signal/[signal]" as={`/signal/${signal.id}`}>
