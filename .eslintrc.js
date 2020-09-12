@@ -1,8 +1,5 @@
 /* eslint-env node */
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const pkg = require('./package.json');
-
 module.exports = {
   plugins: ['@typescript-eslint', 'prettier'],
   extends: [

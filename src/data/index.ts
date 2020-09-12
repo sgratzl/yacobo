@@ -19,7 +19,7 @@ export interface ICountyValue {
   stderr?: number | null;
 }
 
-export const LATEST = subDays(new Date(), 2);
+export const LATEST = subDays(new Date(), 4);
 
 export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<ICountyValue[]> {
   const url = new URL(ENDPOINT);
@@ -41,6 +41,48 @@ export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<I
         stderr: d.stderr,
       }))
     );
+}
+
+export function fetchSignalCounty(signal: ISignal['data'], region: string, date: Date): Promise<ICountyValue[]> {
+  const url = new URL(ENDPOINT);
+  url.searchParams.set('source', 'covidcast');
+  url.searchParams.set('data_source', signal.dataSource);
+  url.searchParams.set('signal', signal.signal);
+  url.searchParams.set('geo_type', 'county');
+  url.searchParams.set('time_type', 'day');
+  url.searchParams.set('geo_value', region);
+  url.searchParams.set('time_values', formatAPIDate(date));
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('fields', ['value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
+  return fetch(url.toString(), fetchOptions)
+    .then((r) => r.json())
+    .then((r) =>
+      r.map((d) => ({
+        region,
+        value: d.value,
+        stderr: d.stderr,
+      }))
+    );
+}
+
+export interface ICountyInfo {
+  region: string;
+  signals: { signal: string; value?: number | null; stderr?: number | null }[];
+}
+
+export function fetchCounty(region: string, date: Date): Promise<ICountyInfo> {
+  return Promise.all(signals.map((signal) => fetchSignalCounty(signal.data, region, date))).then((infos) => {
+    return {
+      region,
+      signals: signals.map((signal, i) => {
+        const info = infos[i];
+        return {
+          signal: signal.id,
+          ...(info[0] ?? {}),
+        };
+      }),
+    };
+  });
 }
 
 function injectMeta(data: any[]) {
