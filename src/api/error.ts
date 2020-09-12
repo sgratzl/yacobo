@@ -12,7 +12,14 @@ export function withError(handler: (req: NextApiRequest, res: NextApiResponse) =
       await handler(req, res);
     } catch (error: unknown) {
       if (error instanceof CustomHTTPError) {
-        res.status(error.statusCode).json({ message: error.message });
+        const out: any = {
+          message: error.message,
+        };
+        if (process.env.NODE_ENV !== 'production') {
+          out.name = error.name;
+          out.stackTrace = error.stack;
+        }
+        res.status(error.statusCode).json(out);
       } else {
         throw error;
       }
