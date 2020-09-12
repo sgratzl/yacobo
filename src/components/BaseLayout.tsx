@@ -22,7 +22,7 @@ export default function BaseLayout({
   return (
     <Layout className={styles.layout}>
       <Head>
-        <title>COVIDCast-Lite - {pageTitle ?? typeof title === 'string' ? title : ''}</title>
+        <title>COVIDCast-Lite - {pageTitle ?? (typeof title === 'string' ? title : '')}</title>
       </Head>
       <Layout.Header>
         <div className={styles.logo}></div>

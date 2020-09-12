@@ -58,7 +58,11 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
           className={styles.img}
           src={!validDate ? undefined : image}
           placeholder
-          srcSet={!validDate ? undefined : `${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x`}
+          srcSet={
+            !validDate
+              ? undefined
+              : `${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x, ${image}&scale=2 1000w, ${image}&scale=3 1500w, ${image}&scale=4 2000w`
+          }
           alt={`US Map of ${signal.name}`}
         />
       }
