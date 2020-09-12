@@ -1,6 +1,6 @@
 import { ISignal } from '../data/constants';
 import { formatISODate } from '../ui/utils';
-import { Button, Card, Dropdown, Image, Tooltip, Typography, Menu } from 'antd';
+import { Button, Card, Dropdown, Image, Tooltip, Typography, Menu, Modal } from 'antd';
 import {
   DownloadOutlined,
   QuestionOutlined,
@@ -12,7 +12,7 @@ import {
   StarOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
-import { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback } from 'react';
 import styles from './SignalSection.module.scss';
 import { useBookmark } from './useBookmark';
 
@@ -24,10 +24,14 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date:
   const apiDate = formatISODate(date);
   const image = `/api/signal/${signal.id}/${apiDate}.png?plain`;
 
-  const [info, setInfo] = useState(false);
   const [bookmarked, setBookmark] = useBookmark(signal);
 
-  const toggleInfo = useCallback(() => setInfo(!info), [setInfo, info]);
+  const showInfo = useCallback(() => {
+    Modal.info({
+      title: signal.name,
+      content: <Typography.Paragraph>{f(signal.longDescription, date)}</Typography.Paragraph>,
+    });
+  }, []);
   const toggleBookmark = useCallback(() => setBookmark(!bookmarked), [setBookmark, bookmarked]);
 
   const menu = (
@@ -76,12 +80,11 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date:
           <Button type="default" shape="circle" icon={<DownloadOutlined />} />
         </Dropdown>,
         <Tooltip title="show signal information">
-          <Button type="default" shape="circle" onClick={toggleInfo} icon={<QuestionOutlined />} />
+          <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />
         </Tooltip>,
       ]}
     >
       <Card.Meta title={signal.name} description={f(signal.description, date)} />
-      {info && <Typography.Paragraph>{f(signal.longDescription, date)}</Typography.Paragraph>}
     </Card>
   );
 }
