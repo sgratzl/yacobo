@@ -1,29 +1,21 @@
 import fetch from 'cross-fetch';
+import { formatISO } from 'date-fns';
+import { signals, ISignal } from './constants';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 
-export interface ISignal {
-  id: string;
-  label: string;
-  description: string;
-
-  mean: number;
-  stdev: number;
-}
-
-export const signals = [
-  {
-    id: 'doctor-visits',
-    label: 'Doctor Visits',
-    description: 'How many out of 100 daily doctor visits that are due to COVID-like symptoms',
-    dataSource: 'doctor-visits',
-    signal: 'smoothed_adj_cli',
-  },
-];
-
-export const SIGNALS = ['doctor-visits:smoothed_adj_cli'];
-
 const fetchOptions = process.env.NODE_ENV === 'development' ? { cache: 'force-cache' as const } : undefined;
+
+export function fetchAllCounties(signal: ISignal, date: Date) {
+  const url = new URL(ENDPOINT);
+  url.searchParams.set('source', 'covidcast');
+  url.searchParams.set('data_source', signal.dataSource);
+  url.searchParams.set('signal', signal.signal);
+  url.searchParams.set('geo_type', 'county');
+  url.searchParams.set('geo_value', '*');
+  url.searchParams.set('time_values', formatISO(date, { representation: 'date' }));
+  return fetch(url.toString(), fetchOptions).then((r) => r.json());
+}
 
 export function fetchMeta(): Promise<ISignal[]> {
   const url = new URL(ENDPOINT);

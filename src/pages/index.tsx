@@ -1,7 +1,8 @@
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import SignalSection from '../components/SignalSection';
-import { fetchMeta, ISignal } from '../data';
+import { fetchMeta } from '../data';
+import { ISignal } from '../data/constants';
 import styles from '../styles/Home.module.css';
 
 export default function Home({ data }: { data: ISignal[] }) {
@@ -24,7 +25,6 @@ export default function Home({ data }: { data: ISignal[] }) {
 export const getStaticProps: GetStaticProps = async () => {
   // Get external data from the file system, API, DB, etc.
   const data = await fetchMeta();
-  debugger;
 
   // The value of the `props` key will be
   //  passed to the `Home` component

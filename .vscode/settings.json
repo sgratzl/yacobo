@@ -14,11 +14,15 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "prettier.enable": true,
   "files.eol": "\n",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.detectIndentation": false,
   "editor.tabSize": 2,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.packageManager": "yarn",
+  "eslint.packageManager": "yarn",
+  "npm.packageManager": "yarn"
 }
