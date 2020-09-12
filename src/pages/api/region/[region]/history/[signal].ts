@@ -1,16 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { EARLIEST, fetchSignalCounty, LATEST } from '@/data';
-import { signalByID } from '@/data/constants';
+import { extractRegion, extractSignal } from '@/api/validator';
+import { formatOutput } from '@/api/format';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const signal = signalByID.get(req.query.signal as string);
+export default (req: NextApiRequest, res: NextApiResponse) => {
+  const signal = extractSignal(req, res);
   if (!signal) {
-    return res.status(404).json({ message: `signal "${signal}" not found` });
+    return;
   }
-  const region = req.query.region as string;
+  const region = extractRegion(req, res);
   if (!region) {
-    return res.status(404).json({ message: `region "${region}" not found` });
+    return;
   }
-  const r = await fetchSignalCounty(signal.data, region, [EARLIEST, LATEST]);
-  return res.status(200).json(r);
+  const data = fetchSignalCounty(signal.data, region, [EARLIEST, LATEST]);
+  return formatOutput(data, ['date', 'value', 'stderr'], `${signal.id}-${region}`, req, res);
 };

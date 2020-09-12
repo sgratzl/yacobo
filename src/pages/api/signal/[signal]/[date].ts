@@ -1,17 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { fetchAllCounties } from '@/data';
-import { signalByID } from '@/data/constants';
-import { parseISO } from 'date-fns';
+import { fetchAllCounties, formatAPIDate } from '@/data';
+import { extractDate, extractSignal } from '@/api/validator';
+import { formatOutput } from '@/api/format';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const signal = signalByID.get(req.query.signal as string);
+export default (req: NextApiRequest, res: NextApiResponse) => {
+  const signal = extractSignal(req, res);
   if (!signal) {
-    return res.status(404).json({ message: `signal "${signal}" not found` });
+    return;
   }
-  const date = parseISO(req.query.date as string);
-  if (!date || Number.isNaN(date.getTime())) {
-    return res.status(401).json({ message: `bad date "${req.query.date}" not found` });
+  const date = extractDate(req, res);
+  if (!date) {
+    return;
   }
-  const r = await fetchAllCounties(signal.data, date);
-  return res.status(200).json(r);
+  const data = fetchAllCounties(signal.data, date);
+  return formatOutput(data, ['region', 'value', 'stderr'], `${signal}-${formatAPIDate(date)}`, req, res);
 };

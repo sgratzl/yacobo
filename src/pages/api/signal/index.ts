@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { fetchMeta } from '@/data';
+import { formatOutput } from '@/api/format';
 
-export default async (_req: NextApiRequest, res: NextApiResponse) => {
-  const r = await fetchMeta();
-  res.statusCode = 200;
-  res.json(r);
+export default (req: NextApiRequest, res: NextApiResponse) => {
+  const data = fetchMeta();
+  return formatOutput(data, ['id', 'label', 'description'], `signals`, req, res);
 };
