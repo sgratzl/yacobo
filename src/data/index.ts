@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch';
-import { formatISO, parseISO, startOfToday, subDays } from 'date-fns';
+import { formatISO, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
 import { signals, ISignal } from './constants';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
@@ -7,6 +7,7 @@ const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 const fetchOptions = process.env.NODE_ENV === 'development' ? { cache: 'force-cache' as const } : undefined;
 
 export const LATEST = subDays(startOfToday(), 4);
+export const EARLIEST = startOfDay(new Date(2020, 1, 1));
 
 export function formatAPIDate(date: Date) {
   return formatISO(date, { representation: 'date' });
@@ -22,6 +23,9 @@ export interface IValue {
 
 export interface ICountyValue extends IValue {
   region: string;
+}
+
+export interface IDateValue extends IValue {
   date: Date;
 }
 
@@ -55,7 +59,7 @@ export function fetchSignalCounty(
   signal: ISignal['data'],
   region: string,
   date: Date | [Date, Date]
-): Promise<ICountyValue[]> {
+): Promise<IDateValue[]> {
   const url = new URL(ENDPOINT);
   url.searchParams.set('source', 'covidcast');
   url.searchParams.set('data_source', signal.dataSource);
@@ -73,7 +77,6 @@ export function fetchSignalCounty(
     .then((r) => r.json())
     .then((r) => {
       return r.map((d) => ({
-        region,
         date: parseAPIDate(d.time_value),
         value: d.value,
         stderr: d.stderr,
