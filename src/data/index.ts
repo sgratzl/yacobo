@@ -73,6 +73,7 @@ export function fetchSignalCounty(
   );
   url.searchParams.set('format', 'json');
   url.searchParams.set('fields', ['time_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
+  console.log(url.toString());
   return fetch(url.toString(), fetchOptions)
     .then((r) => r.json())
     .then((r) => {

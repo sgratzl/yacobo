@@ -1,5 +1,4 @@
 import { useRouter } from 'next/dist/client/router';
-import { extractSignal } from '@/api/validator';
 import BaseLayout from '../../components/BaseLayout';
 
 export default function Signal() {

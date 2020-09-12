@@ -4,14 +4,14 @@ import { Button, Card, Image, Tooltip, Typography } from 'antd';
 import { EllipsisOutlined, QuestionOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { ReactNode, useCallback, useState } from 'react';
-import styles from './SignalSection.module.css';
+import styles from './SignalSection.module.scss';
 
 function f(v: ReactNode | ((v: Date) => ReactNode), date: Date) {
   return typeof v === 'function' ? v(date) : v;
 }
 
 export default function SignalSection({ signal, date }: { signal: ISignal; date: Date }) {
-  const image = `/api/signal/${signal.id}/${formatISODate(date)}.png`;
+  const image = `/api/signal/${signal.id}/${formatISODate(date)}.png?plain`;
 
   const [info, setInfo] = useState(false);
 
@@ -23,10 +23,11 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date:
       className={styles.card}
       cover={
         <Image
+          className={styles.img}
           src={image}
           placeholder
           height={300}
-          srcSet={`${image} 1x, ${image}?scale=2 2x, ${image}?scale=3 3x`}
+          srcSet={`${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x`}
           alt={`US Map of ${signal.name}`}
         />
       }

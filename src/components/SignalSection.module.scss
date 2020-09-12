@@ -1,0 +1,13 @@
+.card {
+  margin: 0.5em 0.2em;
+}
+
+.img {
+  width: auto;
+  display: flex;
+  justify-content: center;
+
+  > img {
+    width: auto;
+  }
+}

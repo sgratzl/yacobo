@@ -41,8 +41,13 @@ function sendCSV<T extends object>(
   res.end();
 }
 
-async function createVega(spec: TopLevelSpec | Promise<TopLevelSpec>) {
+async function createVega(req: NextApiRequest, spec: TopLevelSpec | Promise<TopLevelSpec>) {
   const vegaLiteSpec = await spec;
+  if (req.query.plain != null) {
+    // delete title and description
+    delete vegaLiteSpec.title;
+    delete vegaLiteSpec.description;
+  }
   const vegaSpec = compile(vegaLiteSpec).spec;
   const runtime = parse(vegaSpec);
   return new View(runtime, {
@@ -57,7 +62,7 @@ async function sendVegaPNG(
   options: ICommonOptions
 ) {
   try {
-    const view = await createVega(spec);
+    const view = await createVega(req, spec);
     const scale = req.query.scale ? Number.parseInt(req.query.scale as string, 10) : 1;
     const canvas = await view.toCanvas(scale);
     const stream = ((canvas as unknown) as Canvas).createPNGStream();
@@ -76,7 +81,7 @@ async function sendVegaSVG(
   options: ICommonOptions
 ) {
   try {
-    const view = await createVega(spec);
+    const view = await createVega(req, spec);
     const svg = await view.toSVG();
     setCommonHeaders(req, res, options, 'svg');
     res.setHeader('Content-Type', 'image/svg+xml');
