@@ -3,7 +3,11 @@ import { NextApiRequest } from 'next';
 import { CustomHTTPError } from './error';
 import { signalByID } from '../data/constants';
 
-export function extractSignal(res: string | NextApiRequest) {
+interface IRouterLike {
+  query: { [key: string]: string | string[] };
+}
+
+export function extractSignal(res: string | IRouterLike) {
   const querySignal = typeof res === 'string' ? res : (res.query.signal as string);
   const signal = signalByID.get(querySignal);
   if (!signal) {
@@ -19,7 +23,7 @@ export enum Formats {
   csv = 'csv',
 }
 
-export function extractFormat<S extends string, V>(res: NextApiRequest, key: S, resolver: (value: string) => V) {
+export function extractFormat<S extends string, V>(res: IRouterLike, key: S, resolver: (value: string) => V) {
   const param = res.query[key] as string;
   if (!param) {
     throw new CustomHTTPError(400, `missing ${key}`);
@@ -44,7 +48,7 @@ export function extractFormat<S extends string, V>(res: NextApiRequest, key: S, 
   };
 }
 
-export function extractRegion(res: string | NextApiRequest) {
+export function extractRegion(res: string | IRouterLike) {
   const region = typeof res === 'string' ? res : (res.query.region as string);
   if (!region) {
     throw new CustomHTTPError(400, `region "${region}" missing`);
@@ -52,7 +56,7 @@ export function extractRegion(res: string | NextApiRequest) {
   return region;
 }
 
-export function extractDate(res: string | NextApiRequest) {
+export function extractDate(res: string | IRouterLike) {
   const queryDate = typeof res === 'string' ? res : (res.query.date as string);
   const date = parseISO(queryDate);
   if (!date || Number.isNaN(date.getTime())) {

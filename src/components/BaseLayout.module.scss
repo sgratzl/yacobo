@@ -1,8 +1,21 @@
 .main {
+  flex: auto;
+}
+
+.content {
+  padding: 0 2%;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout {
+  min-height: 100vh;
 }
 
 .logo {
   float: left;
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .backTop {
