@@ -46,22 +46,22 @@ export const signals: ISignal[] = [
       hasStdErr: true,
     },
   },
-  {
-    id: 'fb-survey-community',
-    name: 'Knowing Someone in Community with Symptoms',
-    description: (date: Date) =>
-      `How many out of 100 participants
-       of the daily Facebook survey from  ${formatLocal(date)} survey
-       know someone in their local community with COVID-like symptoms`,
-    longDescription: 'TODO',
-    colorScheme: 'teals',
-    data: {
-      maxValue: 100,
-      dataSource: 'fb-survey',
-      signal: 'smoothed_hh_cmnty_cli',
-      hasStdErr: true,
-    },
-  },
+  // {
+  //   id: 'fb-survey-community',
+  //   name: 'Knowing Someone in Community with Symptoms',
+  //   description: (date: Date) =>
+  //     `How many out of 100 participants
+  //      of the daily Facebook survey from  ${formatLocal(date)} survey
+  //      know someone in their local community with COVID-like symptoms`,
+  //   longDescription: 'TODO',
+  //   colorScheme: 'teals',
+  //   data: {
+  //     maxValue: 100,
+  //     dataSource: 'fb-survey',
+  //     signal: 'smoothed_hh_cmnty_cli',
+  //     hasStdErr: true,
+  //   },
+  // },
   {
     id: 'doctor-visits',
     name: 'Doctor Visits',
@@ -122,7 +122,7 @@ export const signals: ISignal[] = [
     id: 'deaths',
     name: 'Confirmed Deaths',
     description: (date: Date) =>
-      `How many out of 100,000 people died because daily because of COVID on ${formatLocal(date)} (7-day average)`,
+      `How many out of 100,000 people died on ${formatLocal(date)} because of COVID (7-day average)`,
     longDescription: 'based on data reported by USAFacts and Johns Hopkins University',
     colorScheme: 'bluepurple',
     data: {

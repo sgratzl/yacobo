@@ -21,7 +21,7 @@ export default function History() {
     <BaseLayout title={`COVID as of ${formatLocal(date)}`} mainActive="overview" breadcrumbs={breadcrumbs}>
       <Row>
         {signals.map((s) => (
-          <Col key={s.id} xs={24} sm={24} md={12} span={8} className={styles.col}>
+          <Col key={s.id} xs={24} sm={24} md={12} lg={8} className={styles.col}>
             <SignalSection signal={s} date={date} />
           </Col>
         ))}
