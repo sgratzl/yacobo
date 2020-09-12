@@ -12,6 +12,13 @@ export function extractSignal(res: string | NextApiRequest) {
   return signal;
 }
 
+export function extractTitle(res: NextApiRequest, title: string) {
+  if (!res.query.download) {
+    return undefined;
+  }
+  return title;
+}
+
 export enum Formats {
   png = 'png',
   svg = 'svg',
