@@ -8,16 +8,23 @@ export interface ISignal {
     signal: string;
     hasStdErr: boolean;
   };
-
-  meta: {
-    mean: number;
-    stdev: number;
-    minTime: string | Date;
-    maxTime: string | Date;
-  };
 }
 
-export const signals: Omit<ISignal, 'meta'>[] = [
+export interface ISignalMeta {
+  mean: number;
+  stdev: number;
+  minTime: Date;
+  maxTime: Date;
+}
+export interface ISignalWithMeta extends ISignal {
+  meta: ISignalMeta;
+}
+
+export function hasMeta(signal: ISignal): signal is ISignalWithMeta {
+  return (signal as ISignalWithMeta).meta != null;
+}
+
+export const signals: ISignal[] = [
   {
     id: 'doctor-visits',
     label: 'Doctor Visits',

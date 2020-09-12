@@ -48,7 +48,8 @@ export async function sendVegaPNG(
 ) {
   try {
     const view = await createVega(spec);
-    const canvas = await view.toCanvas();
+    const scale = req.query.scale ? Number.parseInt(req.query.scale as string, 10) : 1;
+    const canvas = await view.toCanvas(scale);
     const stream = ((canvas as unknown) as Canvas).createPNGStream();
     res.status(200);
     res.setHeader('Content-Type', 'image/png');

@@ -1,6 +1,6 @@
 import fetch from 'cross-fetch';
-import { formatISO, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
-import { signals, ISignal } from './constants';
+import { differenceInHours, formatISO, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
+import { signals, ISignal, ISignalWithMeta, hasMeta, ISignalMeta } from './constants';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 
@@ -97,14 +97,14 @@ export function fetchCounty(region: string, date: Date): Promise<ISignalValue[]>
 }
 
 function injectMeta(data: any[]) {
-  const lookup = new Map<string, ISignal['meta']>(
+  const lookup = new Map<string, ISignalMeta>(
     data.map((d) => [
       `${d.data_source}:${d.signal}`,
       {
         mean: d.mean_value,
         stdev: d.stdev_value,
-        minTime: parseAPIDate(d.min_time).toString(),
-        maxTime: parseAPIDate(d.max_time).toString(),
+        minTime: parseAPIDate(d.min_time),
+        maxTime: parseAPIDate(d.max_time),
       },
     ])
   );
@@ -114,7 +114,13 @@ function injectMeta(data: any[]) {
   }));
 }
 
-export function fetchMeta(): Promise<ISignal[]> {
+let cachedFetchedMeta: Promise<ISignalWithMeta[]> | null = null;
+let cachedFetchedMetaDate: Date | null;
+
+export function fetchMeta(): Promise<ISignalWithMeta[]> {
+  if (cachedFetchedMeta && cachedFetchedMetaDate && differenceInHours(cachedFetchedMetaDate, new Date()) < 6) {
+    return cachedFetchedMeta;
+  }
   const url = new URL(ENDPOINT);
   url.searchParams.set('source', 'covidcast_meta');
   url.searchParams.set(
@@ -125,7 +131,17 @@ export function fetchMeta(): Promise<ISignal[]> {
   url.searchParams.set('geo_types', 'county');
   url.searchParams.set('time_types', 'day');
   url.searchParams.set('format', 'json');
-  return fetch(url.toString(), fetchOptions)
+  const r = fetch(url.toString(), fetchOptions)
     .then((r) => r.json())
     .then(injectMeta);
+  cachedFetchedMeta = r;
+  cachedFetchedMetaDate = new Date();
+  return r;
+}
+
+export function fetchSignalMeta(signal: ISignal) {
+  if (hasMeta(signal)) {
+    return Promise.resolve(signal.meta);
+  }
+  return fetchMeta().then((meta) => meta.find((d) => d.id === signal.id)!.meta);
 }

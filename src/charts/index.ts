@@ -1,7 +1,9 @@
-import { ICountyValue, IDateValue } from '../data';
+import { ICountyValue, IDateValue, fetchSignalMeta } from '../data';
 import { TopLevelSpec } from 'vega-lite';
+import { ISignal } from '../data/constants';
 
-export function createLineChart(signal: { label: string }, values: IDateValue[]): TopLevelSpec {
+export async function createLineChart(signal: ISignal, values: IDateValue[]): Promise<TopLevelSpec> {
+  const meta = await fetchSignalMeta(signal);
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     title: signal.label,
@@ -25,6 +27,9 @@ export function createLineChart(signal: { label: string }, values: IDateValue[])
       y: {
         field: 'value',
         type: 'quantitative',
+        scale: {
+          domainMax: Math.min(100, Math.ceil(meta.mean + 3 * meta.stdev)),
+        },
         axis: {
           title: null,
           tickCount: 3,
@@ -39,8 +44,9 @@ export function createLineChart(signal: { label: string }, values: IDateValue[])
   };
 }
 
-export async function createMap(signal: { label: string }, values: ICountyValue[]): Promise<TopLevelSpec> {
+export async function createMap(signal: ISignal, values: ICountyValue[]): Promise<TopLevelSpec> {
   const counties = (await import('us-atlas/counties-10m.json')).default;
+  const meta = await fetchSignalMeta(signal);
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     title: signal.label,
@@ -73,6 +79,9 @@ export async function createMap(signal: { label: string }, values: ICountyValue[
       color: {
         field: 'value',
         type: 'quantitative',
+        scale: {
+          domainMax: Math.min(100, Math.ceil(meta.mean + 3 * meta.stdev)),
+        },
       },
     },
   };

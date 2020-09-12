@@ -1,20 +1,19 @@
-import useSWR from 'swr';
-import { ICountyValue } from '../data';
 import { ISignal } from '../data/constants';
-import { fetcher } from '../ui/utils';
+import { formatISODate } from '../ui/utils';
 
-export default function SignalSection({ signal }: { signal: ISignal }) {
-  const { data } = useSWR<ICountyValue[]>(`/api/signal/${signal.id}`, fetcher);
+export default function SignalSection({ signal, date }: { signal: ISignal; date: Date }) {
+  const image = `/api/signal/${signal.id}/${formatISODate(date)}.png`;
   return (
     <section key={signal.id}>
       <header>
         <h2>{signal.label}</h2>
       </header>
       <p>{signal.description}</p>
-      <div>
-        {signal.meta.mean} +- {signal.meta.stdev}
-      </div>
-      <div>{JSON.stringify(data)}</div>
+      <img
+        src={image}
+        srcSet={`${image} 1x, ${image}?scale=2 2x, ${image}?scale=3 3x`}
+        alt={`US Map of ${signal.label}`}
+      />
     </section>
   );
 }

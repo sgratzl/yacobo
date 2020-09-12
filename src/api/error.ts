@@ -6,7 +6,7 @@ export class CustomHTTPError extends Error {
   }
 }
 
-export function withError(handler: (req: NextApiRequest, res: NextApiResponse) => Promise<any>) {
+export function withError(handler: (req: NextApiRequest, res: NextApiResponse) => any) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       await handler(req, res);
