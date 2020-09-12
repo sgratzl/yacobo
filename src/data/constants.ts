@@ -1,7 +1,11 @@
+import { ReactNode } from 'react';
+import { formatLocal } from '../ui/utils';
+
 export interface ISignal {
   id: string;
-  label: string;
-  description: string;
+  name: string;
+  description: ReactNode | ((date: Date) => ReactNode);
+  longDescription: ReactNode | ((date: Date) => ReactNode);
 
   data: {
     dataSource: string;
@@ -26,13 +30,90 @@ export function hasMeta(signal: ISignal): signal is ISignalWithMeta {
 
 export const signals: ISignal[] = [
   {
+    id: 'fb-survey',
+    name: 'Showing Symptoms',
+    description: (date: Date) =>
+      `How many out of 100 participants
+       of the daily Facebook survey from ${formatLocal(date)} show COVID-like symptoms`,
+    longDescription: 'TODO',
+    data: {
+      dataSource: 'fb-survey',
+      signal: 'smoothed_cli',
+      hasStdErr: true,
+    },
+  },
+  {
+    id: 'fb-survey-community',
+    name: 'Knowing Someone in Community with Symptoms',
+    description: (date: Date) =>
+      `How many out of 100 participants
+       of the daily Facebook survey from  ${formatLocal(date)} survey
+       know someone in their local community with COVID-like symptoms`,
+    longDescription: 'TODO',
+    data: {
+      dataSource: 'fb-survey',
+      signal: 'smoothed_hh_cmnty_cli',
+      hasStdErr: true,
+    },
+  },
+  {
     id: 'doctor-visits',
-    label: 'Doctor Visits',
-    description: 'How many out of 100 daily doctor visits that are due to COVID-like symptoms',
+    name: 'Doctor Visits',
+    description: (date: Date) =>
+      `How many out of 100 doctor visits on ${formatLocal(date)} were due to COVID-like symptoms`,
+    longDescription: 'TODO',
     data: {
       dataSource: 'doctor-visits',
       signal: 'smoothed_adj_cli',
       hasStdErr: false,
+    },
+  },
+  {
+    id: 'cases',
+    name: 'Confirmed Cases',
+    description: (date: Date) =>
+      `How many out of 100,000 people are newly confirmed COVID cases on ${formatLocal(date)} (7-day average)`,
+    longDescription: 'based on data reported by USAFacts and Johns Hopkins University',
+    data: {
+      dataSource: 'indicator-combination',
+      signal: 'confirmed_7dav_incidence_num',
+      hasStdErr: false,
+    },
+  },
+  {
+    id: 'hospital-admissions',
+    name: 'Hospital Admissions',
+    description: (date: Date) =>
+      `How many out of 100 hospital admission on ${formatLocal(date)} had a COVID-19 associated diagnoses`,
+    longDescription: 'TODO',
+    data: {
+      dataSource: 'hospital-admissions',
+      signal: 'smoothed_adj_covid19',
+      hasStdErr: false,
+    },
+  },
+  {
+    id: 'antigen-tests',
+    name: 'COVID-19 Antigen Tests',
+    description: (date: Date) =>
+      `How many out of 100 people tested by Quidel, Inc. on ${formatLocal(date)} show for COVID-19 antigens`,
+    longDescription: 'TODO',
+    data: {
+      dataSource: 'quidel',
+      signal: 'covid_ag_smoothed_pct_positive',
+      hasStdErr: true,
+    },
+  },
+  {
+    id: 'deaths',
+    name: 'Confirmed Deaths',
+    description: (date: Date) =>
+      `How many out of 100,000 people died because daily because of COVID on ${formatLocal(date)} (7-day average)`,
+    longDescription: 'based on data reported by USAFacts and Johns Hopkins University',
+    data: {
+      dataSource: 'indicator-combination',
+      signal: 'deaths_7dav_incidence_num',
+      hasStdErr: true,
     },
   },
 ];

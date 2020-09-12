@@ -6,7 +6,7 @@ export async function createLineChart(signal: ISignal, values: IDateValue[]): Pr
   const meta = await fetchSignalMeta(signal);
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-    title: signal.label,
+    title: signal.name,
     data: { values },
     width: 400,
     height: 200,
@@ -49,7 +49,7 @@ export async function createMap(signal: ISignal, values: ICountyValue[]): Promis
   const meta = await fetchSignalMeta(signal);
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-    title: signal.label,
+    title: signal.name,
     width: 500,
     height: 300,
     data: {

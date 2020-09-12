@@ -97,6 +97,9 @@ export function fetchCounty(region: string, date: Date): Promise<ISignalValue[]>
 }
 
 function injectMeta(data: any[]) {
+  if (!Array.isArray(data)) {
+    data = Object.values(data);
+  }
   const lookup = new Map<string, ISignalMeta>(
     data.map((d) => [
       `${d.data_source}:${d.signal}`,
@@ -131,6 +134,7 @@ export function fetchMeta(): Promise<ISignalWithMeta[]> {
   url.searchParams.set('geo_types', 'county');
   url.searchParams.set('time_types', 'day');
   url.searchParams.set('format', 'json');
+  console.log(url.toString());
   const r = fetch(url.toString(), fetchOptions)
     .then((r) => r.json())
     .then(injectMeta);
