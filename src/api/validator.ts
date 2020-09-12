@@ -12,13 +12,6 @@ export function extractSignal(res: string | NextApiRequest) {
   return signal;
 }
 
-export function extractTitle(res: NextApiRequest, title: string) {
-  if (!res.query.download) {
-    return undefined;
-  }
-  return title;
-}
-
 export enum Formats {
   png = 'png',
   svg = 'svg',
@@ -38,7 +31,7 @@ export function extractFormat<S extends string, V>(res: NextApiRequest, key: S, 
       format: Formats.json,
     };
   }
-  const format = Formats[param.slice(d + 1)] as keyof Formats;
+  const format = Formats[param.slice(d + 1)] as Formats;
   if (!format) {
     throw new CustomHTTPError(
       400,
