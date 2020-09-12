@@ -5,12 +5,13 @@ import BaseLayout from '../components/BaseLayout';
 import SignalSection from '../components/SignalSection';
 import { fetchLatestDate } from '../data';
 import { signals } from '../data/constants';
+import { formatLocal } from '../ui/utils';
 import styles from './index.module.scss';
 
 export default function Home({ dateString }: { dateString: string }) {
   const date = parseJSON(dateString);
   return (
-    <BaseLayout title="My COVIDcast" mainActive="overview">
+    <BaseLayout title={`COVID as of ${formatLocal(date)}`} mainActive="overview" breadcrumbs={[]}>
       <Row>
         {signals.map((s) => (
           <Col key={s.id} xs={24} sm={24} md={12} span={8} className={styles.col}>
