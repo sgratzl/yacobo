@@ -1,6 +1,7 @@
 import { ICountyValue, IDateValue, fetchSignalMeta } from '../data';
 import { TopLevelSpec } from 'vega-lite';
 import { ISignal } from '../data/constants';
+import { LayerSpec, UnitSpec } from 'vega-lite/build/src/spec';
 
 const font = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`;
 
@@ -57,6 +58,60 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
     .filter((d) => d.region.endsWith('000'))
     .map((d) => ({ ...d, region: d.region.slice(0, -3) }));
 
+  const genLayer = (feature: string, values: ICountyValue[], hidden = false): LayerSpec | UnitSpec => ({
+    data: {
+      values: counties,
+      format: {
+        type: 'topojson',
+        feature,
+      },
+    },
+    transform: [
+      {
+        lookup: 'id',
+        from: {
+          data: {
+            values,
+          },
+          key: 'region',
+          fields: ['value', 'stderr'],
+        },
+      },
+    ],
+    projection: {
+      type: 'albersUsa',
+    },
+    mark: {
+      type: 'geoshape',
+      opacity: hidden ? 0 : 1,
+    },
+    encoding: {
+      color: {
+        condition: {
+          test: {
+            field: 'value',
+            equal: 0,
+          },
+          value: 'rgb(242,242,242)',
+        },
+        field: 'value',
+        type: 'quantitative',
+        scale: {
+          domainMin: 0,
+          domainMax: Math.min(signal.data.maxValue, Math.ceil(meta.mean + 3 * meta.stdev)),
+          scheme: signal.colorScheme,
+          clamp: true,
+        },
+        legend: {
+          orient: 'right',
+          title: null,
+          labelLimit: 30,
+          tickMinStep: 1,
+        },
+      },
+    },
+  });
+
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     title: signal.name,
@@ -76,6 +131,7 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
         },
         mark: {
           type: 'geoshape',
+          stroke: '#eaeaea',
           color: {
             y2: 0.4,
             gradient: 'linear',
@@ -85,81 +141,7 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
           },
         },
       },
-      {
-        data: {
-          values: counties,
-          format: {
-            type: 'topojson',
-            feature: 'states',
-          },
-        },
-        transform: [
-          {
-            lookup: 'id',
-            from: {
-              data: {
-                values: megaValues,
-              },
-              key: 'region',
-              fields: ['value', 'stderr'],
-            },
-          },
-        ],
-        projection: {
-          type: 'albersUsa',
-        },
-        mark: 'geoshape',
-      },
-      {
-        data: {
-          values: counties,
-          format: {
-            type: 'topojson',
-            feature: 'counties',
-          },
-        },
-        transform: [
-          {
-            lookup: 'id',
-            from: {
-              data: {
-                values,
-              },
-              key: 'region',
-              fields: ['value', 'stderr'],
-            },
-          },
-        ],
-        projection: {
-          type: 'albersUsa',
-        },
-        mark: 'geoshape',
-      },
     ],
-    encoding: {
-      color: {
-        condition: {
-          test: {
-            field: 'value',
-            equal: 0,
-          },
-          value: 'rgb(242,242,242)',
-        },
-        field: 'value',
-        type: 'quantitative',
-        scale: {
-          domainMin: 0,
-          domainMax: Math.min(signal.data.maxValue, Math.ceil(meta.mean + 3 * meta.stdev)),
-          scheme: signal.colorScheme,
-        },
-        legend: {
-          orient: 'right',
-          title: null,
-          labelLimit: 30,
-          tickMinStep: 1,
-        },
-      },
-    },
     config: {
       font,
       view: {
@@ -168,11 +150,14 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
     },
   };
 
-  if (values.length === 0) {
-    // only missing
-    spec.layer.splice(1, 2);
-  } else if (megaValues.length === 0) {
-    spec.layer.splice(1, 2);
+  if (megaValues.length > 0) {
+    spec.layer.push(genLayer('states', megaValues));
+  }
+  if (values.length > 0) {
+    spec.layer.push(genLayer('counties', values));
+  } else {
+    // add a dummy layer such that we have the legend
+    spec.layer.unshift(genLayer('nation', [{ region: 'US', value: 0 }], true));
   }
 
   return spec;

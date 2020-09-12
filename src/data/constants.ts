@@ -129,7 +129,7 @@ export const signals: ISignal[] = [
       maxValue: 100000,
       dataSource: 'indicator-combination',
       signal: 'deaths_7dav_incidence_num',
-      hasStdErr: true,
+      hasStdErr: false,
     },
   },
 ];
