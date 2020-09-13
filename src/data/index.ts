@@ -1,6 +1,7 @@
 import fetch from './fetchWrapper';
 import { formatISO, min, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
 import { signals, ISignal, ISignalWithMeta, hasMeta, ISignalMeta } from './constants';
+import { IRegion } from './regions';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 
@@ -69,7 +70,7 @@ export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<I
 
 export function fetchSignalCounty(
   signal: ISignal['data'],
-  region: string,
+  region: IRegion,
   date: Date | [Date, Date]
 ): Promise<IDateValue[]> {
   const url = new URL(ENDPOINT);
@@ -78,7 +79,7 @@ export function fetchSignalCounty(
   url.searchParams.set('signal', signal.signal);
   url.searchParams.set('geo_type', 'county');
   url.searchParams.set('time_type', 'day');
-  url.searchParams.set('geo_value', region);
+  url.searchParams.set('geo_value', region.id);
   url.searchParams.set(
     'time_values',
     date instanceof Date ? formatAPIDate(date) : `${formatAPIDate(date[0])}:${formatAPIDate(date[1])}`
@@ -96,7 +97,7 @@ export function fetchSignalCounty(
     });
 }
 
-export function fetchCounty(region: string, date: Date): Promise<ISignalValue[]> {
+export function fetchCounty(region: IRegion, date: Date): Promise<ISignalValue[]> {
   return Promise.all(signals.map((signal) => fetchSignalCounty(signal.data, region, date))).then((infos) => {
     return signals.map((signal, i) => {
       const info = infos[i];

@@ -1,6 +1,7 @@
 import { parseISO } from 'date-fns';
 import { CustomHTTPError } from './error';
 import { signalByID } from '../data/constants';
+import { regionByID } from '../data/regions';
 
 interface IRouterLike {
   query: { [key: string]: string | string[] | undefined };
@@ -52,7 +53,7 @@ export function extractRegion(res: string | IRouterLike) {
   if (!region) {
     throw new CustomHTTPError(400, `region "${region}" missing`);
   }
-  return region;
+  return regionByID(region);
 }
 
 export function extractDate(res: string | IRouterLike) {

@@ -11,7 +11,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
   const data = await fetchSignalCounty(signal.data, region, [EARLIEST, LATEST]);
 
   return sendFormat(req, res, format, data, {
-    title: `${signal.id}-${region}`,
+    title: `${signal.id}-${region.name}`,
     headers: ['date', 'value', 'stderr'],
     vega: (data) => createLineChart(signal, data),
     cache: 'short',

@@ -1,13 +1,14 @@
 import { UpCircleOutlined } from '@ant-design/icons';
-import { BackTop, Layout, Menu, Select } from 'antd';
+import { BackTop, Layout, Menu, Select, TreeSelect } from 'antd';
 import { BreadcrumbProps } from 'antd/lib/breadcrumb';
 import PageHeader, { PageHeaderProps } from 'antd/lib/page-header';
 import Head from 'next/head';
 import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import DatePicker from '../components/DatePicker';
 import { ISignal, signals } from '../data/constants';
+import { IRegion, states } from '../data/regions';
 import { formatISODate } from '../ui/utils';
 import styles from './BaseLayout.module.scss';
 
@@ -118,7 +119,7 @@ export function SignalSelect({ signal, path }: { signal?: ISignal; path: string 
   );
 }
 
-export function RegionSelect({ region, path }: { region?: string; path: string }) {
+export function RegionSelect({ region, path }: { region?: IRegion; path: string }) {
   const router = useRouter();
   const onSelect = useCallback(
     (s: string | null) => {
@@ -130,12 +131,27 @@ export function RegionSelect({ region, path }: { region?: string; path: string }
     [router, path]
   );
 
+  console.log(states);
+  const treeData = useMemo(
+    () =>
+      states.map((state) => ({
+        title: state.name,
+        value: state.id,
+        children: state.counties.map((county) => ({ title: county.name, value: county.id })),
+      })),
+    []
+  );
+
   return (
-    <Select className={styles.select} value={region} onChange={onSelect} allowClear={false}>
-      <Select.Option key={region} value={region ?? ''}>
-        {region}
-      </Select.Option>
-    </Select>
+    <TreeSelect
+      className={`${styles.select} ${styles.selectTree}`}
+      value={region?.id}
+      onChange={onSelect}
+      allowClear={false}
+      showSearch
+      treeData={treeData}
+      dropdownMatchSelectWidth={300}
+    ></TreeSelect>
   );
 }
 

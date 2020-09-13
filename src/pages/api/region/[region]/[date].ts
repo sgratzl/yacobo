@@ -12,7 +12,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
   const date = extractDate(req);
   const data = await fetchCounty(region, date);
   return sendFormat(req, res, format, data, {
-    title: `${region}-${formatISODate(date)}`,
+    title: `${region.name}-${formatISODate(date)}`,
     headers: ['signal', 'value', 'stderr'],
     cache: differenceInDays(date, LATEST) < 5 ? 'short' : 'medium',
     signals: signalByID.get.bind(signalByID),

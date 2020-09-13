@@ -19,7 +19,7 @@ export default function Region() {
       }
       breadcrumb={[
         {
-          breadcrumbName: region ?? '',
+          breadcrumbName: region?.name ?? '',
           path: '/region/[region]',
         },
         {
