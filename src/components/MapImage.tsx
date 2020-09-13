@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './MapImage.module.scss';
 
 export default function MapImage({ image, alt }: { image?: string; alt: string }) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const imgRef = useRef(null as HTMLImageElement | null);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function MapImage({ image, alt }: { image?: string; alt: string }
     imgRef.current.onload = () => {
       setLoading(false);
     };
-    if (imgRef.current.src === image && imgRef.current.complete) {
+    if (imgRef.current.dataset.src === image && imgRef.current.complete) {
       setLoading(false);
       return;
     }
@@ -26,6 +26,7 @@ export default function MapImage({ image, alt }: { image?: string; alt: string }
         <img
           ref={imgRef}
           className={styles.imgImg}
+          data-src={image}
           src={image}
           srcSet={
             !image
