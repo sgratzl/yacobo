@@ -8,7 +8,8 @@ import { Button, Col, Divider, Dropdown, Row, Typography } from 'antd';
 import { isValid } from 'date-fns';
 import React, { ReactNode } from 'react';
 import SignalTable from '@/components/SignalTable';
-import { BookmarkSignalToggle, DownloadSignalMenu } from '@/components/SignalSection';
+import { DownloadSignalMenu } from '@/components/SignalSection';
+import { BookmarkToggle } from '@/components/BookmarkToggle';
 import { DownloadOutlined } from '@ant-design/icons';
 
 function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
@@ -46,7 +47,7 @@ export default function SignalDate() {
         },
       ]}
       extra={[
-        <BookmarkSignalToggle signal={signal} key="a" />,
+        <BookmarkToggle signal={signal} key="a" />,
         <Dropdown key="b" overlay={<DownloadSignalMenu signal={signal} date={date} />} trigger={['click']}>
           <Button type="default" shape="circle" icon={<DownloadOutlined />} />
         </Dropdown>,

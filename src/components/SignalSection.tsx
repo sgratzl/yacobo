@@ -8,15 +8,13 @@ import {
   FileImageOutlined,
   FileOutlined,
   FileExcelOutlined,
-  StarOutlined,
-  StarFilled,
 } from '@ant-design/icons';
 import Link from 'next/link';
 import { ReactNode, useCallback } from 'react';
 import styles from './SignalSection.module.scss';
-import { useBookmark } from './useBookmark';
 import { isValid } from 'date-fns';
 import MapImage from './MapImage';
+import { BookmarkToggle } from './BookmarkToggle';
 
 function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
   return typeof v === 'function' ? v(date) : v;
@@ -36,22 +34,6 @@ export function DownloadSignalMenu({ signal, date }: { signal: ISignal; date?: D
         <a href={`/api/signal/${signal.id}/${apiDate}.csv?download`}>Download CSV</a>
       </Menu.Item>
     </Menu>
-  );
-}
-
-export function BookmarkSignalToggle({ signal }: { signal: ISignal }) {
-  const [bookmarked, setBookmark] = useBookmark(signal);
-  const toggleBookmark = useCallback(() => setBookmark(!bookmarked), [setBookmark, bookmarked]);
-
-  return (
-    <Tooltip title="mark signal as favorite">
-      <Button
-        type="default"
-        shape="circle"
-        onClick={toggleBookmark}
-        icon={bookmarked ? <StarFilled /> : <StarOutlined />}
-      />
-    </Tooltip>
   );
 }
 
@@ -77,7 +59,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,
-        <BookmarkSignalToggle signal={signal} />,
+        <BookmarkToggle signal={signal} />,
         <Dropdown overlay={<DownloadSignalMenu signal={signal} date={date} />} trigger={['click']}>
           <Button type="default" shape="circle" icon={<DownloadOutlined />} />
         </Dropdown>,
