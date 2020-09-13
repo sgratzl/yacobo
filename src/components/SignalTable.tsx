@@ -4,11 +4,11 @@ import { isValid } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
-import { ICountyValue } from '../data';
+import { ICountyWithDetailsValue } from '../data';
 import { ISignal } from '../data/constants';
 import { formatISODate } from '../ui/utils';
 
-export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
+// export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
 
 function compare<T>(a?: T | null, b?: T | null, sortOrder?: SortOrder) {
   if (a === b) {
@@ -23,13 +23,16 @@ function compare<T>(a?: T | null, b?: T | null, sortOrder?: SortOrder) {
   return a < b ? -1 : +1;
 }
 
-function compareRegion(a: ICountyValue, b: ICountyValue, sortOrder?: SortOrder) {
-  return compare(a.region, b.region, sortOrder);
+function compareName(a: ICountyWithDetailsValue, b: ICountyWithDetailsValue, sortOrder?: SortOrder) {
+  return compare(a.regionName, b.regionName, sortOrder);
 }
-function compareValue(a: ICountyValue, b: ICountyValue, sortOrder?: SortOrder) {
+function compareState(a: ICountyWithDetailsValue, b: ICountyWithDetailsValue, sortOrder?: SortOrder) {
+  return compare(a.regionState, b.regionState, sortOrder);
+}
+function compareValue(a: ICountyWithDetailsValue, b: ICountyWithDetailsValue, sortOrder?: SortOrder) {
   return compare(a.value, b.value, sortOrder);
 }
-function compareStdErr(a: ICountyValue, b: ICountyValue, sortOrder?: SortOrder) {
+function compareStdErr(a: ICountyWithDetailsValue, b: ICountyWithDetailsValue, sortOrder?: SortOrder) {
   return compare(a.stderr, b.stderr, sortOrder);
 }
 
@@ -51,24 +54,34 @@ function compareStdErr(a: ICountyValue, b: ICountyValue, sortOrder?: SortOrder) 
 function fetchFilter(key: string) {
   return fetch(key)
     .then((r) => r.json())
-    .then((r: ICountyValue[]) => r.filter((d) => !d.region.endsWith('000')));
+    .then((r: ICountyWithDetailsValue[]) => r.filter((d) => !d.region.endsWith('000')).sort(compareValue));
 }
 
 export default function SignalTable({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatISODate(date);
   const validDate = isValid(date);
 
-  const { data } = useSWR<{ region: string }[]>(
-    validDate ? `/api/signal/${signal.id}/${apiDate}.json` : null,
+  const { data } = useSWR<ICountyWithDetailsValue[]>(
+    validDate ? `/api/signal/${signal.id}/${apiDate}.json?details` : null,
     fetchFilter,
     {}
   );
 
   const renderRegion = useCallback(
-    (region: string) => {
+    (value: string, row: ICountyWithDetailsValue) => {
       return (
-        <Link href="/region/[region]/[signal]/[date]" as={`/region/${region}/${signal.id}/${apiDate}`} passHref>
-          <a>{region}</a>
+        <Link href="/region/[region]/[signal]/[date]" as={`/region/${row.region}/${signal.id}/${apiDate}`} passHref>
+          <a>{value}</a>
+        </Link>
+      );
+    },
+    [signal, apiDate]
+  );
+  const renderState = useCallback(
+    (value: string) => {
+      return (
+        <Link href="/region/[region]/[signal]/[date]" as={`/region/${value}/${signal.id}/${apiDate}`} passHref>
+          <a>{value}</a>
         </Link>
       );
     },
@@ -90,25 +103,39 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
   }, []);
 
   return (
-    <Table<ICountyValue> dataSource={data} loading={!data} rowKey="region">
-      <Table.Column<ICountyValue> title="Region" dataIndex="region" render={renderRegion} sorter={compareRegion} />
-      <Table.Column<ICountyValue>
+    <Table<ICountyWithDetailsValue> dataSource={data} loading={!data} rowKey="region">
+      <Table.Column<ICountyWithDetailsValue> title="ID" dataIndex="region" />
+      <Table.Column<ICountyWithDetailsValue>
+        title="County"
+        dataIndex="regionName"
+        render={renderRegion}
+        sorter={compareName}
+        sortDirections={['ascend', 'descend']}
+      />
+      <Table.Column<ICountyWithDetailsValue>
+        title="State"
+        dataIndex="regionState"
+        render={renderState}
+        sorter={compareState}
+        sortDirections={['ascend', 'descend']}
+      />
+      <Table.Column<ICountyWithDetailsValue>
         title={signal.name}
         dataIndex="value"
         render={renderValue}
         align="right"
         defaultSortOrder="descend"
         sorter={compareValue}
+        sortDirections={['descend', 'ascend']}
       />
       {signal.data.hasStdErr && (
-        <Table.Column<ICountyValue>
+        <Table.Column<ICountyWithDetailsValue>
           title="Standard Error"
           dataIndex="stderr"
           align="right"
-          sortOrder="descend"
           render={renderStdErr}
-          defaultSortOrder="descend"
           sorter={compareStdErr}
+          sortDirections={['descend', 'ascend']}
         />
       )}
     </Table>

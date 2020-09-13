@@ -5,6 +5,7 @@ import { createMap } from '@/charts';
 import { fetchAllCounties, formatAPIDate, LATEST } from '@/data';
 import { differenceInDays } from 'date-fns';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { regionByID } from '@/data/regions';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
   const { param: date, format } = extractFormat(req, 'date', extractDate);
@@ -16,5 +17,6 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
     headers: ['region', 'value', 'stderr'],
     vega: () => createMap(signal, data, req.query.size === 'large' ? 2 : 1),
     cache: differenceInDays(date, LATEST) < 5 ? 'short' : 'medium',
+    regions: regionByID,
   });
 });

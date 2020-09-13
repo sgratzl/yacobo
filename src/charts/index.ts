@@ -1,4 +1,4 @@
-import { ICountyValue, IDateValue, fetchSignalMeta } from '../data';
+import { IRegionValue, IDateValue, fetchSignalMeta } from '../data';
 import { TopLevelSpec } from 'vega-lite';
 import { ISignal, ISignalMeta } from '../data/constants';
 import { LayerSpec, UnitSpec } from 'vega-lite/build/src/spec';
@@ -58,7 +58,7 @@ function genLayer(
   signal: ISignal,
   meta: ISignalMeta,
   feature: string,
-  values: ICountyValue[],
+  values: IRegionValue[],
   hidden = false
 ): LayerSpec | UnitSpec {
   return {
@@ -119,7 +119,7 @@ function genLayer(
   };
 }
 
-export async function createMap(signal: ISignal, values: ICountyValue[], factor = 1) {
+export async function createMap(signal: ISignal, values: IRegionValue[], factor = 1) {
   const counties = (await import('us-atlas/counties-10m.json')).default;
   const meta = await fetchSignalMeta(signal);
   const stopCount = 70;

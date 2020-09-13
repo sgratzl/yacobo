@@ -1,12 +1,13 @@
 import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat } from '@/api/validator';
-import { fetchAllCounties, formatAPIDate, ICountyValue, LATEST } from '@/data';
+import { fetchAllCounties, formatAPIDate, IRegionValue, LATEST } from '@/data';
 import { differenceInDays } from 'date-fns';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { signals } from '@/data/constants';
+import { regionByID } from '../../../../data/regions';
 
-function merge(all: ICountyValue[][]) {
+function merge(all: IRegionValue[][]) {
   const regions = new Map<string, { region: string } & Record<string, string | number | undefined | null>>();
   signals.forEach((signal, i) => {
     const data = all[i]!;
@@ -39,5 +40,6 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
     ].flat(),
     // vega: () => createMap(signal, data),
     cache: differenceInDays(date, LATEST) < 5 ? 'short' : 'medium',
+    regions: regionByID,
   });
 });

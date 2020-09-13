@@ -5,10 +5,14 @@ import { compile, TopLevelSpec } from 'vega-lite';
 import { Canvas } from 'canvas';
 import { CustomHTTPError } from './error';
 import { Formats } from './validator';
+import { ISignal } from '../data/constants';
+import { IRegion, isCountyRegion } from '../data/regions';
 
 export interface ICommonOptions {
   title: string;
   cache?: 'short' | 'medium' | 'long';
+  signals?: (signal: string) => ISignal | undefined;
+  regions?: (region: string) => IRegion;
 }
 
 const maxAges = {
@@ -28,7 +32,30 @@ function setCommonHeaders(req: NextApiRequest, res: NextApiResponse, options: IC
 
 function sendJSON<T>(req: NextApiRequest, res: NextApiResponse, data: T[], options: ICommonOptions) {
   setCommonHeaders(req, res, options, 'json');
-  res.json(data);
+  if (req.query.details == null || (!options.signals && !options.regions)) {
+    res.json(data);
+    return;
+  }
+  // inject details
+  let data2: any[] = data;
+  if (options.signals) {
+    data2 = data.map((row: any) => ({
+      ...row,
+      signalName: options.signals!(row.signal)!.name,
+    }));
+  }
+  if (options.regions) {
+    data2 = data.map((row: any) => {
+      const region = options.regions!(row.region);
+      return {
+        ...row,
+        regionName: region.name,
+        regionPopulation: region.population,
+        ...(isCountyRegion(region) ? { regionState: region.state.short } : {}),
+      };
+    });
+  }
+  res.json(data2);
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -37,11 +64,43 @@ function sendCSV<T extends object>(
   res: NextApiResponse,
   data: T[],
   headers: (keyof T)[],
-  options: ICommonOptions
+  options: ICommonOptions & {
+    details?: Map<string, IRegion | ISignal>;
+  }
 ) {
   setCommonHeaders(req, res, options, 'csv');
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-  res.send(csvFormat(data, headers));
+  if (req.query.details == null || (!options.signals && !options.regions)) {
+    res.send(csvFormat(data, headers));
+    res.end();
+    return;
+  }
+  // inject details
+  let data2: any[] = data;
+  const headers2: string[] = headers.map(String);
+  if (options.signals) {
+    headers2.splice(headers2.indexOf('signal'), 0, 'signalName');
+    data2 = data.map((row: any) => ({
+      ...row,
+      signalName: options.signals!(row.signal)!.name,
+    }));
+  }
+  if (options.regions) {
+    headers2.splice(headers2.indexOf('region'), 0, 'regionName', 'regionPopulation');
+    if (data.length > 0 && isCountyRegion(options.regions!((data[0] as any).region)!)) {
+      headers2.splice(headers2.indexOf('regionPopulation'), 0, 'regionState');
+    }
+    data2 = data.map((row: any) => {
+      const region = options.regions!(row.region);
+      return {
+        ...row,
+        regionName: region.name,
+        regionPopulation: region.population,
+        ...(isCountyRegion(region) ? { state: region.state.short } : {}),
+      };
+    });
+  }
+  res.send(csvFormat(data2, headers2));
   res.end();
 }
 

@@ -19,8 +19,19 @@ export interface IValue {
   stderr?: number | null;
 }
 
-export interface ICountyValue extends IValue {
+export interface IRegionValue extends IValue {
   region: string;
+}
+
+export interface ICountyWithDetailsValue extends IRegionValue {
+  regionName: string;
+  regionPopulation: number;
+  regionState: string;
+}
+
+export interface IStateWithDetailsValue extends IRegionValue {
+  regionName: string;
+  regionPopulation: number;
 }
 
 export interface IDateValue extends IValue {
@@ -30,8 +41,11 @@ export interface IDateValue extends IValue {
 export interface ISignalValue extends IValue {
   signal: string;
 }
+export interface ISignalWithDetailsValue extends ISignalValue {
+  signalName: string;
+}
 
-export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<ICountyValue[]> {
+export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<IRegionValue[]> {
   const url = new URL(ENDPOINT);
   url.searchParams.set('source', 'covidcast');
   url.searchParams.set('data_source', signal.dataSource);
