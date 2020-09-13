@@ -110,7 +110,7 @@ function genLayer(
           titleAlign: 'center',
           titleFontWeight: 'normal',
           titleOrient: 'left',
-          title: `of ${signal.data.maxValue.toLocaleString()} people`,
+          title: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
           labelLimit: 30,
           tickMinStep: 1,
         },

@@ -9,6 +9,7 @@ export interface ISignal {
   colorScheme: string;
 
   data: {
+    unit: string;
     maxValue: number;
     dataSource: string;
     signal: string;
@@ -40,6 +41,7 @@ export const signals: ISignal[] = [
     longDescription: 'TODO',
     colorScheme: 'blues',
     data: {
+      unit: 'participants',
       maxValue: 100,
       dataSource: 'fb-survey',
       signal: 'smoothed_cli',
@@ -70,6 +72,7 @@ export const signals: ISignal[] = [
     longDescription: 'TODO',
     colorScheme: 'purples',
     data: {
+      unit: 'doctor visits',
       maxValue: 100,
       dataSource: 'doctor-visits',
       signal: 'smoothed_adj_cli',
@@ -84,6 +87,7 @@ export const signals: ISignal[] = [
     longDescription: 'based on data reported by USAFacts and Johns Hopkins University',
     colorScheme: 'yelloworangered',
     data: {
+      unit: 'people',
       maxValue: 100000,
       dataSource: 'indicator-combination',
       signal: 'confirmed_7dav_incidence_num',
@@ -98,6 +102,7 @@ export const signals: ISignal[] = [
     longDescription: 'TODO',
     colorScheme: 'reds',
     data: {
+      unit: 'hospital admissions',
       maxValue: 100,
       dataSource: 'hospital-admissions',
       signal: 'smoothed_adj_covid19',
@@ -112,6 +117,7 @@ export const signals: ISignal[] = [
     longDescription: 'TODO',
     colorScheme: 'yellowgreen',
     data: {
+      unit: 'people',
       maxValue: 100,
       dataSource: 'quidel',
       signal: 'covid_ag_smoothed_pct_positive',
@@ -126,6 +132,7 @@ export const signals: ISignal[] = [
     longDescription: 'based on data reported by USAFacts and Johns Hopkins University',
     colorScheme: 'bluepurple',
     data: {
+      unit: 'people',
       maxValue: 100000,
       dataSource: 'indicator-combination',
       signal: 'deaths_7dav_incidence_num',
