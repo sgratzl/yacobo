@@ -8,23 +8,22 @@ import { Formats } from './validator';
 
 export interface ICommonOptions {
   title: string;
-  shortCache?: boolean;
+  cache?: 'short' | 'medium' | 'long';
 }
 
-const HOURS_12_IN_SEC = 12 * 60 * 60;
-const HOURS_48_IN_SEC = 48 * 60 * 60;
+const maxAges = {
+  short: 12 * 60 * 60,
+  medium: 48 * 60 * 60, // default
+  long: 96 * 60 * 60,
+};
 
 function setCommonHeaders(req: NextApiRequest, res: NextApiResponse, options: ICommonOptions, extension: string) {
   res.status(200);
   if (req.query.download != null) {
     res.setHeader('Content-Disposition', `attachment; filename="${options.title}.${extension}"`);
   }
-  res.setHeader(
-    'Cache-Control',
-    `public, max-age=${options.shortCache ? HOURS_12_IN_SEC : HOURS_48_IN_SEC}, s-max-age=${
-      options.shortCache ? HOURS_12_IN_SEC : HOURS_48_IN_SEC
-    }`
-  );
+  const maxAge = maxAges[options.cache ?? 'medium'];
+  res.setHeader('Cache-Control', `public, max-age=${maxAge}, s-max-age=${maxAge}`);
 }
 
 function sendJSON<T>(req: NextApiRequest, res: NextApiResponse, data: T[], options: ICommonOptions) {
@@ -60,7 +59,7 @@ async function createVega(req: NextApiRequest, spec: TopLevelSpec | Promise<TopL
   });
 }
 
-async function sendVegaPNG(
+export async function sendVegaPNG(
   req: NextApiRequest,
   res: NextApiResponse,
   spec: TopLevelSpec | Promise<TopLevelSpec>,

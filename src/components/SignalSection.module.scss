@@ -3,20 +3,12 @@
   flex: auto;
   display: flex;
   flex-direction: column;
-}
 
-.card > .ant-card-body {
-  flex: auto;
-}
-
-.img {
-  padding: 1em;
-  min-height: 12em;
-
-  > img {
-    height: 100%;
-    object-fit: contain;
-    background-color: unset;
+  > :global(.ant-card-body) {
+    flex: auto;
+  }
+  > :global(.ant-card-actions) {
+    flex-grow: 0;
   }
 }
 

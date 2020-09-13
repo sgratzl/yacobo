@@ -1,6 +1,6 @@
 import { ISignal } from '../data/constants';
 import { formatISODate } from '../ui/utils';
-import { Button, Card, Dropdown, Image, Tooltip, Typography, Menu, Modal } from 'antd';
+import { Button, Card, Dropdown, Tooltip, Typography, Menu, Modal } from 'antd';
 import {
   DownloadOutlined,
   QuestionOutlined,
@@ -15,6 +15,7 @@ import { ReactNode, useCallback } from 'react';
 import styles from './SignalSection.module.scss';
 import { useBookmark } from './useBookmark';
 import { isValid } from 'date-fns';
+import MapImage from './MapImage';
 
 function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
   return typeof v === 'function' ? v(date) : v;
@@ -34,22 +35,6 @@ export function DownloadSignalMenu({ signal, date }: { signal: ISignal; date?: D
         <a href={`/api/signal/${signal.id}/${apiDate}.csv?download`}>Download CSV</a>
       </Menu.Item>
     </Menu>
-  );
-}
-
-export function MapImage({ image, alt }: { image?: string; alt: string }) {
-  return (
-    <Image
-      className={styles.img}
-      src={image}
-      placeholder
-      srcSet={
-        !image
-          ? undefined
-          : `${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x, ${image}&scale=2 1000w, ${image}&scale=3 1500w, ${image}&scale=4 2000w`
-      }
-      alt={alt}
-    />
   );
 }
 
@@ -85,7 +70,6 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
 
   return (
     <Card
-      hoverable
       className={styles.card}
       cover={<MapImage image={validDate ? image : undefined} alt={`US Map of ${signal.name}`} />}
       actions={[

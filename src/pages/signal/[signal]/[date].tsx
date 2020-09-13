@@ -1,7 +1,7 @@
 import { useQueryParam } from '@/api/hooks';
 import { extractDate, extractSignal } from '@/api/validator';
 import BaseLayout, { DateSelect, SignalSelect } from '@/components/BaseLayout';
-import { MapImage } from '@/components/SignalSection';
+import MapImage from '@/components/MapImage';
 import { signals } from '@/data/constants';
 import { formatISODate, formatLocal } from '@/ui/utils';
 import { Col, Divider, Row, Typography } from 'antd';

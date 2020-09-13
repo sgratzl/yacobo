@@ -13,6 +13,6 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
   return sendFormat(req, res, format, data, {
     title: `${region}-${formatISODate(date)}`,
     headers: ['signal', 'value', 'stderr'],
-    shortCache: differenceInDays(date, LATEST) < 5,
+    cache: differenceInDays(date, LATEST) < 5 ? 'short' : 'medium',
   });
 });

@@ -1,0 +1,28 @@
+.img {
+  margin-bottom: 1em;
+  padding-top: 60%; // around the target aspect ratio
+  position: relative;
+}
+
+.imgPlaceholder,
+.imgImg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.imgPlaceholder {
+  animation: pulse 2s infinite alternate;
+}

@@ -162,3 +162,58 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
 
   return spec;
 }
+
+export async function createSkeletonMap() {
+  const counties = (await import('us-atlas/counties-10m.json')).default;
+
+  const spec: TopLevelSpec = {
+    $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+    width: 500,
+    height: 300,
+    data: {
+      values: counties,
+      format: {
+        type: 'topojson',
+        feature: 'counties',
+      },
+    },
+    projection: {
+      type: 'albersUsa',
+    },
+    mark: {
+      type: 'geoshape',
+      stroke: '#eaeaea',
+    },
+    encoding: {
+      color: {
+        condition: {
+          test: {
+            field: 'value',
+            valid: false,
+          },
+          value: 'rgb(242,242,242)',
+        },
+        field: 'id',
+        type: 'quantitative',
+        scale: {
+          domainMin: 0,
+          domainMax: 10,
+          scheme: ['rgb(242,242,242)', 'rgb(242,242,242)'] as any,
+        },
+        legend: {
+          orient: 'right',
+          title: null,
+          labelLimit: 30,
+          tickMinStep: 1,
+        },
+      },
+    },
+    config: {
+      font,
+      view: {
+        stroke: null,
+      },
+    },
+  };
+  return spec;
+}
