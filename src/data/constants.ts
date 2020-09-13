@@ -32,7 +32,7 @@ export function hasMeta(signal: ISignal): signal is ISignalWithMeta {
 
 export const signals: ISignal[] = [
   {
-    id: 'fb-survey',
+    id: 'fb_survey',
     name: 'Showing Symptoms',
     description: (date: Date) =>
       `How many out of 100 participants
@@ -63,7 +63,7 @@ export const signals: ISignal[] = [
   //   },
   // },
   {
-    id: 'doctor-visits',
+    id: 'doctor_visits',
     name: 'Doctor Visits',
     description: (date: Date) =>
       `How many out of 100 doctor visits on ${formatLocal(date)} were due to COVID-like symptoms`,
@@ -91,7 +91,7 @@ export const signals: ISignal[] = [
     },
   },
   {
-    id: 'hospital-admissions',
+    id: 'hospital_admissions',
     name: 'Hospital Admissions',
     description: (date: Date) =>
       `How many out of 100 hospital admission on ${formatLocal(date)} had a COVID-19 associated diagnoses`,
@@ -105,7 +105,7 @@ export const signals: ISignal[] = [
     },
   },
   {
-    id: 'antigen-tests',
+    id: 'antigen_tests',
     name: 'COVID-19 Antigen Tests',
     description: (date: Date) =>
       `How many out of 100 people tested by Quidel, Inc. on ${formatLocal(date)} show for COVID-19 antigens`,
