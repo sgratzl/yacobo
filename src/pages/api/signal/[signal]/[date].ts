@@ -1,4 +1,4 @@
-import { withError } from '@/api/error';
+import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat, extractSignal } from '@/api/validator';
 import { createMap } from '@/charts';
@@ -6,7 +6,7 @@ import { fetchAllCounties, formatAPIDate, LATEST } from '@/data';
 import { differenceInDays } from 'date-fns';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default withError(async (req: NextApiRequest, res: NextApiResponse) => {
+export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
   const { param: date, format } = extractFormat(req, 'date', extractDate);
   const signal = extractSignal(req);
   const data = await fetchAllCounties(signal.data, date);
