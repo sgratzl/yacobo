@@ -9,6 +9,7 @@ import {
   FileOutlined,
   FileExcelOutlined,
   StarOutlined,
+  StarFilled,
 } from '@ant-design/icons';
 import Link from 'next/link';
 import { ReactNode, useCallback } from 'react';
@@ -47,10 +48,8 @@ export function BookmarkSignalToggle({ signal }: { signal: ISignal }) {
       <Button
         type="default"
         shape="circle"
-        className={bookmarked ? styles.filled : undefined}
-        suppressHydrationWarning
         onClick={toggleBookmark}
-        icon={<StarOutlined />}
+        icon={bookmarked ? <StarFilled /> : <StarOutlined />}
       />
     </Tooltip>
   );
