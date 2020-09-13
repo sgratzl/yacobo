@@ -15,6 +15,6 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
     title: `${signal.id}-${formatAPIDate(date)}`,
     headers: ['region', 'value', 'stderr'],
     vega: () => createMap(signal, data),
-    shortCache: differenceInDays(date, LATEST) < 2,
+    shortCache: differenceInDays(date, LATEST) < 5,
   });
 });
