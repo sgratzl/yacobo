@@ -4,9 +4,12 @@ import BaseLayout, { DateSelect, SignalSelect } from '@/components/BaseLayout';
 import MapImage from '@/components/MapImage';
 import { signals } from '@/data/constants';
 import { formatISODate, formatLocal } from '@/ui/utils';
-import { Col, Divider, Row, Typography } from 'antd';
+import { Button, Col, Divider, Dropdown, Row, Typography } from 'antd';
 import { isValid } from 'date-fns';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
+import SignalTable from '@/components/SignalTable';
+import { BookmarkSignalToggle, DownloadSignalMenu } from '@/components/SignalSection';
+import { DownloadOutlined } from '@ant-design/icons';
 
 function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
   return typeof v === 'function' ? v(date) : v;
@@ -42,6 +45,12 @@ export default function SignalDate() {
           path: `/signal/[signal]/[date]`,
         },
       ]}
+      extra={[
+        <BookmarkSignalToggle signal={signal} key="a" />,
+        <Dropdown key="b" overlay={<DownloadSignalMenu signal={signal} date={date} />} trigger={['click']}>
+          <Button type="default" shape="circle" icon={<DownloadOutlined />} />
+        </Dropdown>,
+      ]}
     >
       <Row>
         <Col span={24}>
@@ -57,8 +66,13 @@ export default function SignalDate() {
         </Col>
 
         <Col span={24}>
-          <Typography.Title level={2}>Details</Typography.Title>
+          <Typography.Title level={2}>Background</Typography.Title>
           <Typography.Paragraph>{f(signal.longDescription, date)}</Typography.Paragraph>
+        </Col>
+
+        <Col span={24}>
+          <Typography.Title level={2}>Detail Table</Typography.Title>
+          <SignalTable signal={signal} date={date} />
         </Col>
       </Row>
     </BaseLayout>
