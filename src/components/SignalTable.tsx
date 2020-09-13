@@ -184,7 +184,6 @@ export function DateTable({ signal, region }: { signal?: ISignal; region?: IRegi
 
   return (
     <Table<IDateValue> dataSource={data} loading={!data} rowKey="region">
-      <Table.Column<IDateValue> title="ID" dataIndex="region" />
       <Table.Column<IDateValue>
         title="Date"
         dataIndex="date"

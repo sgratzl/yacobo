@@ -1,18 +1,19 @@
-import { IRegionValue, IDateValue, fetchSignalMeta } from '../data';
+import { IRegionValue, IDateValue, fetchSignalMeta, EARLIEST } from '../data';
 import { TopLevelSpec } from 'vega-lite';
 import { ISignal, ISignalMeta } from '../data/constants';
 import { LayerSpec, UnitSpec } from 'vega-lite/build/src/spec';
+import { startOfToday } from 'date-fns';
 
 const font = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`;
 
-export async function createLineChart(signal: ISignal, values: IDateValue[]): Promise<TopLevelSpec> {
+export async function createLineChart(signal: ISignal, values: IDateValue[], factor = 1): Promise<TopLevelSpec> {
   const meta = await fetchSignalMeta(signal);
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     title: signal.name,
     data: { values },
-    width: 400,
-    height: 200,
+    width: 400 * factor,
+    height: 200 * factor,
     encoding: {
       color: {
         value: 'grey',
@@ -20,8 +21,13 @@ export async function createLineChart(signal: ISignal, values: IDateValue[]): Pr
       x: {
         field: 'date',
         type: 'temporal',
+        scale: {
+          domainMin: EARLIEST.getTime(),
+          domainMax: startOfToday().getTime(),
+        },
         axis: {
-          title: null,
+          titleFontWeight: 'normal',
+          title: `Date`,
           format: '%m/%d',
           formatType: 'time',
           tickCount: 'month',
@@ -31,11 +37,64 @@ export async function createLineChart(signal: ISignal, values: IDateValue[]): Pr
         field: 'value',
         type: 'quantitative',
         scale: {
+          domainMin: 0,
           domainMax: Math.min(100, Math.ceil(meta.mean + 3 * meta.stdev)),
         },
         axis: {
-          title: null,
-          tickCount: 3,
+          titleFontWeight: 'normal',
+          title: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
+          minExtent: 25,
+          tickMinStep: 1,
+        },
+      },
+    },
+    mark: {
+      type: 'line',
+      interpolate: 'linear',
+    },
+    config: {
+      font,
+    },
+  };
+}
+
+export async function createSkeletonLineChart(factor = 1): Promise<TopLevelSpec> {
+  return {
+    $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+    data: { values: [] },
+    width: 400 * factor,
+    height: 200 * factor,
+    encoding: {
+      color: {
+        value: 'grey',
+      },
+      x: {
+        field: 'date',
+        type: 'temporal',
+        scale: {
+          domainMin: EARLIEST.getTime(),
+          domainMax: startOfToday().getTime(),
+        },
+        axis: {
+          titleFontWeight: 'normal',
+          title: `Date`,
+          format: '%m/%d',
+          formatType: 'time',
+          tickCount: 'month',
+        },
+      },
+      y: {
+        field: 'value',
+        type: 'quantitative',
+        scale: {
+          domainMin: 0,
+          domainMax: 10,
+        },
+        axis: {
+          titleFontWeight: 'normal',
+          title: `of 100 people`,
+          labelLimit: 30,
+          tickMinStep: 1,
           minExtent: 25,
         },
       },

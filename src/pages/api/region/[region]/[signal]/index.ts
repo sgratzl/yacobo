@@ -14,7 +14,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
   return sendFormat(req, res, format, data, {
     title: `${signal.id}-${region.name}`,
     headers: ['date', 'value', 'stderr'],
-    vega: (data) => createLineChart(signal, data),
+    vega: (data) => createLineChart(signal, data, req.query.size === 'large' ? 2 : 1),
     cache: 'short',
   });
 });

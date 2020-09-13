@@ -9,7 +9,7 @@ export default function Region() {
   const region = useQueryParam(extractRegion);
   const signal = useQueryParam(extractSignal);
 
-  const image = `/region/${region?.id}/${signal?.id}.png?plain`;
+  const image = `/api/region/${region?.id}/${signal?.id}.png?plain`;
 
   return (
     <BaseLayout
@@ -39,6 +39,7 @@ export default function Region() {
           <MapImage
             src={region && signal ? image : undefined}
             alt={`Line Chart ${signal?.name} for ${region?.name}`}
+            type="line"
             large
           />
         </Col>
