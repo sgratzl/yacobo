@@ -40,8 +40,6 @@ const DEFAULT_BOOKMARKS: IBookmark[] = [
   asBookmark(signalByID.get('cases')!, regionByID('06')!)!, // California Cases
 ];
 
-console.log(DEFAULT_BOOKMARKS);
-
 function parseBookmark(bookmark: ISerializedBookmark): IBookmark | null {
   if (!bookmark.r && !bookmark.s) {
     return null;
