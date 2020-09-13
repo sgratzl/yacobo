@@ -1,8 +1,7 @@
 import { Col, Row } from 'antd';
 import { parseJSON } from 'date-fns';
 import { GetStaticProps } from 'next';
-import BaseLayout from '../components/BaseLayout';
-import DateTitle from '../components/DateTitle';
+import BaseLayout, { DateSelect } from '../components/BaseLayout';
 import SignalSection from '../components/SignalSection';
 import { fetchLatestDate } from '../data';
 import { signals } from '../data/constants';
@@ -15,9 +14,16 @@ export default function Home({ dateString }: { dateString: string }) {
   return (
     <BaseLayout
       pageTitle={`COVID as of ${formatLocal(date)}`}
-      title={<DateTitle date={date} />}
       mainActive="overview"
-      breadcrumbs={[]}
+      backIcon={false}
+      title="COVID"
+      subTitle={
+        <>
+          as of
+          <DateSelect date={date} path="/history/[date]" />
+        </>
+      }
+      breadcrumb={[]}
     >
       <Row>
         {signals.map((s) => (

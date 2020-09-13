@@ -20,22 +20,9 @@ function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
   return typeof v === 'function' ? v(date) : v;
 }
 
-export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
+export function DownloadSignalMenu({ signal, date }: { signal: ISignal; date?: Date; details?: boolean }) {
   const apiDate = formatISODate(date);
-  const validDate = isValid(date);
-  const image = `/api/signal/${signal.id}/${apiDate}.png?plain`;
-
-  const [bookmarked, setBookmark] = useBookmark(signal);
-
-  const showInfo = useCallback(() => {
-    Modal.info({
-      title: signal.name,
-      content: <Typography.Paragraph>{f(signal.longDescription, date)}</Typography.Paragraph>,
-    });
-  }, []);
-  const toggleBookmark = useCallback(() => setBookmark(!bookmarked), [setBookmark, bookmarked]);
-
-  const menu = (
+  return (
     <Menu>
       <Menu.Item key="svg" icon={<FileImageOutlined />}>
         <a href={`/api/signal/${signal.id}/${apiDate}.svg?download`}>Download SVG</a>
@@ -48,41 +35,67 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
       </Menu.Item>
     </Menu>
   );
+}
+
+export function MapImage({ image, alt }: { image?: string; alt: string }) {
+  return (
+    <Image
+      className={styles.img}
+      src={image}
+      placeholder
+      srcSet={
+        !image
+          ? undefined
+          : `${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x, ${image}&scale=2 1000w, ${image}&scale=3 1500w, ${image}&scale=4 2000w`
+      }
+      alt={alt}
+    />
+  );
+}
+
+export function BookmarkSignalToggle({ signal }: { signal: ISignal }) {
+  const [bookmarked, setBookmark] = useBookmark(signal);
+  const toggleBookmark = useCallback(() => setBookmark(!bookmarked), [setBookmark, bookmarked]);
+
+  return (
+    <Tooltip title="mark signal as favorite">
+      <Button
+        type="default"
+        shape="circle"
+        className={bookmarked ? styles.filled : undefined}
+        suppressHydrationWarning
+        onClick={toggleBookmark}
+        icon={<StarOutlined />}
+      />
+    </Tooltip>
+  );
+}
+
+export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
+  const apiDate = formatISODate(date);
+  const validDate = isValid(date);
+  const image = `/api/signal/${signal.id}/${apiDate}.png?plain`;
+
+  const showInfo = useCallback(() => {
+    Modal.info({
+      title: signal.name,
+      content: <Typography.Paragraph>{f(signal.longDescription, date)}</Typography.Paragraph>,
+    });
+  }, []);
 
   return (
     <Card
       hoverable
       className={styles.card}
-      cover={
-        <Image
-          className={styles.img}
-          src={!validDate ? undefined : image}
-          placeholder
-          srcSet={
-            !validDate
-              ? undefined
-              : `${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x, ${image}&scale=2 1000w, ${image}&scale=3 1500w, ${image}&scale=4 2000w`
-          }
-          alt={`US Map of ${signal.name}`}
-        />
-      }
+      cover={<MapImage image={validDate ? image : undefined} alt={`US Map of ${signal.name}`} />}
       actions={[
-        <Link href="/signal/[signal]" as={`/signal/${signal.id}`}>
-          <Tooltip title="go to signal">
+        <Link href="/signal/[signal]/[date]" as={`/signal/${signal.id}/${apiDate}`}>
+          <Tooltip title="show signal details">
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,
-        <Tooltip title="mark signal as favorite">
-          <Button
-            type="default"
-            shape="circle"
-            className={bookmarked ? styles.filled : undefined}
-            suppressHydrationWarning
-            onClick={toggleBookmark}
-            icon={<StarOutlined />}
-          />
-        </Tooltip>,
-        <Dropdown overlay={menu} trigger={['click']}>
+        <BookmarkSignalToggle signal={signal} />,
+        <Dropdown overlay={<DownloadSignalMenu signal={signal} date={date} />} trigger={['click']}>
           <Button type="default" shape="circle" icon={<DownloadOutlined />} />
         </Dropdown>,
         <Tooltip title="show signal information">

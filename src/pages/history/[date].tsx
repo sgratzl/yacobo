@@ -1,28 +1,32 @@
-import { Row, Col } from 'antd';
-import Link from 'next/link';
 import { useQueryParam } from '@/api/hooks';
 import { extractDate } from '@/api/validator';
-import BaseLayout from '@/components/BaseLayout';
+import BaseLayout, { DateSelect } from '@/components/BaseLayout';
 import SignalSection from '@/components/SignalSection';
 import { signals } from '@/data/constants';
-import { formatLocal, formatISODate } from '@/ui/utils';
+import { formatISODate, formatLocal } from '@/ui/utils';
+import { Col, Row } from 'antd';
 import styles from '../index.module.scss';
-import DateTitle from '@/components/DateTitle';
 
 export default function History() {
   const date = useQueryParam(extractDate);
 
-  const breadcrumbs = [
-    <Link href="/history/[date]" as={`/history/${formatISODate(date)}`}>
-      {formatISODate(date)}
-    </Link>,
-  ];
   return (
     <BaseLayout
       pageTitle={`COVID as of ${formatLocal(date)}`}
-      title={<DateTitle date={date} />}
       mainActive="overview"
-      breadcrumbs={breadcrumbs}
+      title="COVID"
+      subTitle={
+        <>
+          as of
+          <DateSelect date={date} path="/history/[date]" />
+        </>
+      }
+      breadcrumb={[
+        {
+          breadcrumbName: formatISODate(date),
+          path: `/history/[date]`,
+        },
+      ]}
     >
       <Row>
         {signals.map((s) => (

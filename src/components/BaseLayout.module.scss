@@ -26,3 +26,34 @@
   align-items: center;
   font-size: 20px;
 }
+
+.picker {
+  font-size: inherit;
+  background-color: unset;
+  margin: 0 0.5em;
+
+  & :global(input) {
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+  }
+}
+
+.select {
+  font-size: inherit;
+  background-color: unset;
+  margin: 0 0.5em;
+
+  &:global(.ant-select) {
+    > :global(.ant-select-selector) {
+      background-color: unset;
+      font-size: inherit;
+      font-weight: inherit;
+      height: unset;
+
+      & :global(.ant-select-selection-search-input) {
+        height: unset;
+      }
+    }
+  }
+}
