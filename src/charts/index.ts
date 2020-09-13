@@ -1,6 +1,6 @@
 import { ICountyValue, IDateValue, fetchSignalMeta } from '../data';
 import { TopLevelSpec } from 'vega-lite';
-import { ISignal } from '../data/constants';
+import { ISignal, ISignalMeta } from '../data/constants';
 import { LayerSpec, UnitSpec } from 'vega-lite/build/src/spec';
 
 const font = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`;
@@ -53,15 +53,15 @@ export async function createLineChart(signal: ISignal, values: IDateValue[]): Pr
 const ZERO_COLOR = 'rgb(242,242,242)';
 const STROKE = '#eaeaea';
 
-export async function createMap(signal: ISignal, values: ICountyValue[]) {
-  const counties = (await import('us-atlas/counties-10m.json')).default;
-  const meta = await fetchSignalMeta(signal);
-  const stopCount = 70;
-  const megaValues = values
-    .filter((d) => d.region.endsWith('000'))
-    .map((d) => ({ ...d, region: d.region.slice(0, -3) }));
-
-  const genLayer = (feature: string, values: ICountyValue[], hidden = false): LayerSpec | UnitSpec => ({
+function genLayer(
+  counties: any,
+  signal: ISignal,
+  meta: ISignalMeta,
+  feature: string,
+  values: ICountyValue[],
+  hidden = false
+): LayerSpec | UnitSpec {
+  return {
     data: {
       values: counties,
       format: {
@@ -116,7 +116,16 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
         },
       },
     },
-  });
+  };
+}
+
+export async function createMap(signal: ISignal, values: ICountyValue[]) {
+  const counties = (await import('us-atlas/counties-10m.json')).default;
+  const meta = await fetchSignalMeta(signal);
+  const stopCount = 70;
+  const megaValues = values
+    .filter((d) => d.region.endsWith('000'))
+    .map((d) => ({ ...d, region: d.region.slice(0, -3) }));
 
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
@@ -157,13 +166,13 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
   };
 
   if (megaValues.length > 0) {
-    spec.layer.push(genLayer('states', megaValues));
+    spec.layer.push(genLayer(counties, signal, meta, 'states', megaValues));
   }
   if (values.length > 0) {
-    spec.layer.push(genLayer('counties', values));
+    spec.layer.push(genLayer(counties, signal, meta, 'counties', values));
   } else {
     // add a dummy layer such that we have the legend
-    spec.layer.unshift(genLayer('nation', [{ region: 'US', value: 0 }], true));
+    spec.layer.unshift(genLayer(counties, signal, meta, 'nation', [{ region: 'US', value: 0 }], true));
   }
 
   return spec;
@@ -208,8 +217,10 @@ export async function createSkeletonMap() {
         },
         legend: {
           orient: 'right',
-          title: `of 100`,
-          titleAlign: 'right',
+          titleAlign: 'center',
+          titleFontWeight: 'normal',
+          titleOrient: 'left',
+          title: `of 100 people`,
           labelLimit: 30,
           tickMinStep: 1,
         },
