@@ -19,7 +19,12 @@ function setCommonHeaders(req: NextApiRequest, res: NextApiResponse, options: IC
   if (req.query.download != null) {
     res.setHeader('Content-Disposition', `attachment; filename="${options.title}.${extension}"`);
   }
-  res.setHeader('Cache-Control', `public, max-age=${options.shortCache ? HOURS_12_IN_SEC : HOURS_48_IN_SEC}`);
+  res.setHeader(
+    'Cache-Control',
+    `public, max-age=${options.shortCache ? HOURS_12_IN_SEC : HOURS_48_IN_SEC}, s-max-age=${
+      options.shortCache ? HOURS_12_IN_SEC : HOURS_48_IN_SEC
+    }, stale-while-revalidate`
+  );
 }
 
 function sendJSON<T>(req: NextApiRequest, res: NextApiResponse, data: T[], options: ICommonOptions) {
