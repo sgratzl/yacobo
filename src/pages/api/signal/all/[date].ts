@@ -1,7 +1,7 @@
 import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat } from '@/api/validator';
-import { cacheMode, fetchAllCounties, formatAPIDate, IRegionValue } from '@/data';
+import { cacheMode, fetchAllRegions, formatAPIDate, IRegionValue } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { signals } from '@/data/constants';
 import { regionByID } from '@/data/regions';
@@ -27,7 +27,7 @@ function merge(all: IRegionValue[][]) {
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
   const { param: date, format } = extractFormat(req, 'date', extractDate);
-  const all = await Promise.all(signals.map((signal) => fetchAllCounties(signal.data, date)));
+  const all = await Promise.all(signals.map((signal) => fetchAllRegions(signal.data, date)));
 
   const data = merge(all);
 

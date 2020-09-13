@@ -1,7 +1,7 @@
 import fetch from './fetchWrapper';
 import { differenceInDays, formatISO, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
 import { signals, ISignal, hasMeta, ISignalMeta, selectLatestDate } from './constants';
-import { IRegion, isCountyRegion, isStateRegion } from './regions';
+import { IRegion, isCountyRegion, isStateRegion, regionByID, states } from './regions';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 
@@ -45,12 +45,16 @@ export interface ISignalWithDetailsValue extends ISignalValue {
   signalName: string;
 }
 
-export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<IRegionValue[]> {
+export function fetchAllRegions(
+  signal: ISignal['data'],
+  date: Date,
+  level: 'county' | 'state' = 'county'
+): Promise<IRegionValue[]> {
   const url = new URL(ENDPOINT);
   url.searchParams.set('source', 'covidcast');
   url.searchParams.set('data_source', signal.dataSource);
   url.searchParams.set('signal', signal.signal);
-  url.searchParams.set('geo_type', 'county');
+  url.searchParams.set('geo_type', level);
   url.searchParams.set('time_type', 'day');
   url.searchParams.set('geo_value', '*');
   url.searchParams.set('time_values', formatAPIDate(date));
@@ -60,7 +64,7 @@ export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<I
     .then((r) => r.json())
     .then((r) =>
       r.map((d: any) => ({
-        region: d.geo_value,
+        region: regionByID(d.geo_value)!.id,
         value: d.value,
         stderr: d.stderr,
       }))

@@ -37,6 +37,9 @@ const { counties, states, byId } = (() => {
 
   // create mega fakes
   for (const state of states) {
+    // by short code
+    byId.set(state.short.toLowerCase(), state);
+
     byId.set(`${state.id}000`, {
       id: `${state.id}000`,
       name: `Rest of ${state.name}`,
@@ -51,30 +54,31 @@ const { counties, states, byId } = (() => {
 export { counties, states };
 
 export function regionByID(region: string) {
-  if (byId.has(region)) {
-    return byId.get(region)!;
+  const search = region ? region.toLowerCase() : '';
+  if (byId.has(search)) {
+    return byId.get(search)!;
   }
   // create a fake and store it
-  if (region.length <= 2) {
+  if (search.length <= 2) {
     // fake state
     const fake: IStateRegion = {
-      id: region,
-      name: region,
+      id: search,
+      name: search,
       counties: [],
       population: null,
-      short: region,
+      short: search.toUpperCase(),
     };
-    byId.set(region, fake);
+    byId.set(search, fake);
     return fake;
   }
   // fake county
   const fake: ICountyRegion = {
-    id: region,
-    name: region,
-    state: regionByID(region.slice(0, 2)) as IStateRegion,
+    id: search,
+    name: search,
+    state: regionByID(search.slice(0, 2)) as IStateRegion,
     population: null,
   };
-  byId.set(region, fake);
+  byId.set(search, fake);
   return fake;
 }
 
