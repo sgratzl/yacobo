@@ -29,7 +29,7 @@ export default function SignalDate() {
         <>
           <SignalSelect signal={signal} path={`/signal/[signal]/[date]`} />
           as of
-          <DateSelect date={date} path={`/signal/${signal.id}/[date]`} />
+          <DateSelect date={date} path={`/signal/[signal]/[date]`} />
         </>
       }
       breadcrumb={[

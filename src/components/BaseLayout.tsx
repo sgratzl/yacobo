@@ -18,7 +18,7 @@ export interface BaseLayoutProps {
 }
 
 function injectQuery(router: NextRouter, path: string, extras: Record<string, string> = {}) {
-  return path.replace(/\[(.*)\]/gm, (_, key) => {
+  return path.replace(/\[(\w+)\]/gm, (_, key) => {
     return extras[key] ?? router.query[key] ?? key;
   });
 }
