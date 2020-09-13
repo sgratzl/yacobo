@@ -1,4 +1,3 @@
-import { readFile, writeFile } from 'fs';
 import fetchImpl from 'cross-fetch';
 
 export default function fetch(url: string): Promise<{ json(): Promise<any> }> {

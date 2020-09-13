@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { extractFormat } from './validator';
 
 export function redirectWithFormat(req: NextApiRequest, res: NextApiResponse, suffix: string) {
   const url = req.url!;

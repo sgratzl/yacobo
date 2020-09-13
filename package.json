@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "next dev",
     "debug": "cross-env NODE_OPTIONS='--inspect' next dev",
+    "lint": "eslint src --ext ts,tsx",
+    "fix": "npm run lint -- --fix",
     "build": "next build",
     "start": "next start"
   },
