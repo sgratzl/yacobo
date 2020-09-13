@@ -18,9 +18,16 @@ export default function RegionSignalSection({
   date?: Date;
 }) {
   const apiDate = formatISODate(date);
+
+  const cover = (
+    <>
+      <span>Hello</span>
+    </>
+  );
   return (
     <Card
       className={styles.card}
+      cover={cover}
       actions={[
         <Link key="d" href="/region/[region]/[signal]/[date]" as={`/region/${region.id}/${signal.id}/${apiDate}`}>
           <Tooltip title="show region details">

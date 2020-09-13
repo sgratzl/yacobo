@@ -1,18 +1,14 @@
 import { ISignal } from '../data/constants';
-import { formatISODate } from '../ui/utils';
+import { f, formatISODate } from '../ui/utils';
 import { Button, Card, Tooltip, Typography, Modal } from 'antd';
 import { QuestionOutlined, EyeOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import { ReactNode, useCallback } from 'react';
+import { useCallback } from 'react';
 import styles from './SignalSection.module.scss';
 import { isValid } from 'date-fns';
 import MapImage from './MapImage';
 import { BookmarkToggle } from './BookmarkToggle';
 import { DownloadMenu } from './DownloadMenu';
-
-function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
-  return typeof v === 'function' ? v(date) : v;
-}
 
 export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatISODate(date);

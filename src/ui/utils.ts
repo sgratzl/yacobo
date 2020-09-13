@@ -1,4 +1,5 @@
 import { format, formatISO, isValid, min, parseJSON } from 'date-fns';
+import { ReactNode } from 'react';
 import useSWR from 'swr';
 import { ISignalMeta, ISignalWithMeta, selectLatestDate, signalByID } from '../data/constants';
 
@@ -49,4 +50,8 @@ export function useFetchLatestDate() {
     return undefined;
   }
   return selectLatestDate(data.map((d) => d.meta));
+}
+
+export function f<T>(value: ReactNode | ((arg?: T) => ReactNode), arg?: T) {
+  return typeof value === 'function' ? value(arg) : value;
 }

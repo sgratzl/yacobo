@@ -1,11 +1,12 @@
 import { Table } from 'antd';
 import type { SortOrder } from 'antd/lib/table/interface';
-import { isValid } from 'date-fns';
+import { parseJSON, isValid } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
-import { ICountyWithDetailsValue } from '../data';
+import { ICountyWithDetailsValue, IDateValue } from '../data';
 import { ISignal } from '../data/constants';
+import { IRegion } from '../data/regions';
 import { formatISODate } from '../ui/utils';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
@@ -35,6 +36,25 @@ function compareValue(a: ICountyWithDetailsValue, b: ICountyWithDetailsValue, so
 function compareStdErr(a: ICountyWithDetailsValue, b: ICountyWithDetailsValue, sortOrder?: SortOrder) {
   return compare(a.stderr, b.stderr, sortOrder);
 }
+function compareDate(a: IDateValue, b: IDateValue, sortOrder?: SortOrder) {
+  return compare(a.date, b.date, sortOrder);
+}
+
+const renderValue = (value: number | null) => {
+  return (
+    <span>
+      {value == null
+        ? 'Missing'
+        : value.toLocaleString(undefined, {
+            maximumFractionDigits: 0,
+          })}
+    </span>
+  );
+};
+
+const renderStdErr = (value: number | null) => {
+  return <span>{value == null ? 'Missing' : value.toFixed(2)}</span>;
+};
 
 // export const columns: ColumnsType<ISignalMultiRow> = [
 //   {
@@ -87,20 +107,6 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
     },
     [signal, apiDate]
   );
-  const renderValue = useCallback((value: number | null) => {
-    return (
-      <span>
-        {value == null
-          ? 'Missing'
-          : value.toLocaleString(undefined, {
-              maximumFractionDigits: 0,
-            })}
-      </span>
-    );
-  }, []);
-  const renderStdErr = useCallback((value: number | null) => {
-    return <span>{value == null ? 'Missing' : value.toFixed(2)}</span>;
-  }, []);
 
   return (
     <Table<ICountyWithDetailsValue> dataSource={data} loading={!data} rowKey="region">
@@ -129,6 +135,73 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
         sortDirections={['descend', 'ascend']}
       />
       {signal.data.hasStdErr && (
+        <Table.Column<ICountyWithDetailsValue>
+          title="Standard Error"
+          dataIndex="stderr"
+          align="right"
+          render={renderStdErr}
+          sorter={compareStdErr}
+          sortDirections={['descend', 'ascend']}
+        />
+      )}
+    </Table>
+  );
+}
+
+function fetchDated(key: string) {
+  return fetch(key)
+    .then((r) => r.json())
+    .then((r: IDateValue[]) =>
+      r
+        .map((r) => {
+          r.date = parseJSON(r.date);
+          return r;
+        })
+        .sort(compareDate)
+    );
+}
+
+export function DateTable({ signal, region }: { signal?: ISignal; region?: IRegion }) {
+  const { data } = useSWR<IDateValue[]>(
+    signal && region ? `/api/region/${region.id}/${signal.id}.json?details` : null,
+    fetchDated
+  );
+
+  const renderDate = useCallback(
+    (value: Date) => {
+      return (
+        <Link
+          href="/region/[region]/[signal]/[date]"
+          as={`/region/${region!.id}/${signal!.id}/${formatISODate(value)}`}
+          passHref
+        >
+          <a>{formatISODate(value)}</a>
+        </Link>
+      );
+    },
+    [signal, region]
+  );
+
+  return (
+    <Table<IDateValue> dataSource={data} loading={!data} rowKey="region">
+      <Table.Column<IDateValue> title="ID" dataIndex="region" />
+      <Table.Column<IDateValue>
+        title="Date"
+        dataIndex="date"
+        render={renderDate}
+        sorter={compareDate}
+        defaultSortOrder="descend"
+        sortDirections={['ascend', 'descend']}
+      />
+      <Table.Column<ICountyWithDetailsValue>
+        title={signal?.name ?? 'Signal'}
+        dataIndex="value"
+        render={renderValue}
+        align="right"
+        sorter={compareValue}
+        sortDirections={['descend', 'ascend']}
+      />
+      {signal?.data.hasStdErr && (
         <Table.Column<ICountyWithDetailsValue>
           title="Standard Error"
           dataIndex="stderr"

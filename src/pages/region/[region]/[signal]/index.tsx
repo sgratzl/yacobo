@@ -1,10 +1,16 @@
 import { useQueryParam } from '@/api/hooks';
 import { extractRegion, extractSignal } from '@/api/validator';
 import BaseLayout, { RegionSelect, SignalSelect } from '@/components/BaseLayout';
+import { Col, Divider, Row, Typography } from 'antd';
+import MapImage from '@/components/MapImage';
+import { DateTable } from '@/components/SignalTable';
 
 export default function Region() {
   const region = useQueryParam(extractRegion);
   const signal = useQueryParam(extractSignal);
+
+  const image = `/region/${region?.id}/${signal?.id}.png?plain`;
+
   return (
     <BaseLayout
       pageTitle={`COVID ${region?.name} - ${signal?.name}`}
@@ -27,6 +33,21 @@ export default function Region() {
           path: '/region/[region]/[signal]',
         },
       ]}
-    ></BaseLayout>
+    >
+      <Row>
+        <Col span={24}>
+          <MapImage
+            src={region && signal ? image : undefined}
+            alt={`Line Chart ${signal?.name} for ${region?.name}`}
+            large
+          />
+        </Col>
+        <Divider />
+        <Col span={24}>
+          <Typography.Title level={2}>Detail Table</Typography.Title>
+          <DateTable signal={signal} region={region} />
+        </Col>
+      </Row>
+    </BaseLayout>
   );
 }

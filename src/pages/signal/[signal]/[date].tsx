@@ -5,15 +5,10 @@ import { BookmarkToggle } from '@/components/BookmarkToggle';
 import MapImage from '@/components/MapImage';
 import SignalTable from '@/components/SignalTable';
 import { signals } from '@/data/constants';
-import { formatISODate, formatLocal } from '@/ui/utils';
+import { f, formatISODate, formatLocal } from '@/ui/utils';
 import { Col, Divider, Row, Typography } from 'antd';
 import { isValid } from 'date-fns';
-import React, { ReactNode } from 'react';
 import { DownloadMenu } from '@/components/DownloadMenu';
-
-function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
-  return typeof v === 'function' ? v(date) : v;
-}
 
 export default function SignalDate() {
   // TODO could be a fake one

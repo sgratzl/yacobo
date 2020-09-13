@@ -4,6 +4,10 @@
   position: relative;
 }
 
+.imgLine {
+  padding-top: 25%; // 1:4 aspect ratio
+}
+
 .imgPlaceholder,
 .imgImg {
   position: absolute;
