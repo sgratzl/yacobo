@@ -1,13 +1,10 @@
+.picker {
+  font-size: inherit;
+  background-color: unset;
+  margin-left: 0.5em;
 
-.title {
-  display: flex;
-  align-items: center;
-}
-
-.smallDate {
-  transform: translate(-8em);
-  align-self: flex-end;
-  z-index: -1;
-  visibility: hidden;
-  width: 0;
+  & input {
+    font-size: inherit;
+    font-weight: inherit;
+  }
 }

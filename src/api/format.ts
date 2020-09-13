@@ -23,7 +23,7 @@ function setCommonHeaders(req: NextApiRequest, res: NextApiResponse, options: IC
     'Cache-Control',
     `public, max-age=${options.shortCache ? HOURS_12_IN_SEC : HOURS_48_IN_SEC}, s-max-age=${
       options.shortCache ? HOURS_12_IN_SEC : HOURS_48_IN_SEC
-    }, stale-while-revalidate`
+    }`
   );
 }
 

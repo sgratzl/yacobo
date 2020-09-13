@@ -22,18 +22,18 @@ export default function BaseLayout({
   return (
     <Layout className={styles.layout}>
       <Head>
-        <title>COVIDCast-Lite - {pageTitle ?? (typeof title === 'string' ? title : '')}</title>
+        <title>COVIDInfo - {pageTitle ?? (typeof title === 'string' ? title : '')}</title>
       </Head>
       <Layout.Header>
         <div className={styles.logo}></div>
         <Menu theme="dark" mode="horizontal" activeKey={mainActive}>
-          <Menu.Item key="overview">
-            <Link href="/">COVIDCast-Lite</Link>
+          <Menu.Item key="overview" active={mainActive === 'overview'}>
+            <Link href="/">Overview</Link>
           </Menu.Item>
-          <Menu.Item key="county">
+          <Menu.Item key="county" active={mainActive === 'county'}>
             <Link href="/county">Single County</Link>
           </Menu.Item>
-          <Menu.Item key="compare">
+          <Menu.Item key="compare" active={mainActive === 'compare'}>
             <Link href="/compare">Compare Counties</Link>
           </Menu.Item>
         </Menu>
