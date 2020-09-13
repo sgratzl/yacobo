@@ -1,27 +1,25 @@
 import { Col, Row } from 'antd';
-import { parseJSON } from 'date-fns';
-import { GetStaticProps } from 'next';
 import BaseLayout, { DateSelect } from '../components/BaseLayout';
 import SignalSection from '../components/SignalSection';
-import { fetchLatestDate } from '../data';
 import { signals } from '../data/constants';
-import { formatLocal } from '../ui/utils';
+import { formatLocal, useFetchLatestDate } from '../ui/utils';
 import styles from './index.module.scss';
 
-export default function Home({ dateString }: { dateString: string }) {
-  const date = parseJSON(dateString);
-
+export default function Home() {
+  const date = useFetchLatestDate();
   return (
     <BaseLayout
-      pageTitle={`COVID as of ${formatLocal(date)}`}
+      pageTitle={`COVID${date ? ` as of ${formatLocal(date)}` : ''}`}
       mainActive="overview"
       backIcon={false}
       title="COVID"
       subTitle={
-        <>
-          as of
-          <DateSelect date={date} path="/history/[date]" />
-        </>
+        date ? (
+          <>
+            as of
+            <DateSelect date={date} path="/history/[date]" />
+          </>
+        ) : undefined
       }
       breadcrumb={[]}
     >
@@ -35,15 +33,3 @@ export default function Home({ dateString }: { dateString: string }) {
     </BaseLayout>
   );
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  // Get external data from the file system, API, DB, etc.
-  const date = await fetchLatestDate();
-  // The value of the `props` key will be
-  //  passed to the `Home` component
-  return {
-    props: {
-      dateString: date.getTime(),
-    },
-  };
-};

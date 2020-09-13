@@ -1,6 +1,6 @@
 import fetch from './fetchWrapper';
 import { formatISO, min, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
-import { signals, ISignal, ISignalWithMeta, hasMeta, ISignalMeta } from './constants';
+import { signals, ISignal, ISignalWithMeta, hasMeta, ISignalMeta, selectLatestDate } from './constants';
 import { IRegion } from './regions';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
@@ -125,12 +125,12 @@ function injectMeta(data: any[]) {
     ])
   );
   return signals.map((s) => ({
-    ...s,
-    meta: lookup.get(`${s.data.dataSource}:${s.data.signal}`)!,
+    signal: s.id,
+    ...lookup.get(`${s.data.dataSource}:${s.data.signal}`)!,
   }));
 }
 
-export function fetchMeta(): Promise<ISignalWithMeta[]> {
+export function fetchMeta(): Promise<({ signal: string } & ISignalMeta)[]> {
   const url = new URL(ENDPOINT);
   url.searchParams.set('source', 'covidcast_meta');
   url.searchParams.set(
@@ -150,9 +150,9 @@ export function fetchSignalMeta(signal: ISignal) {
   if (hasMeta(signal)) {
     return Promise.resolve(signal.meta);
   }
-  return fetchMeta().then((meta) => meta.find((d) => d.id === signal.id)!.meta);
+  return fetchMeta().then((meta) => meta.find((d) => d.signal === signal.id)!);
 }
 
 export function fetchLatestDate() {
-  return fetchMeta().then((data) => min(data.map((d) => d.meta.maxTime)));
+  return fetchMeta().then(selectLatestDate);
 }

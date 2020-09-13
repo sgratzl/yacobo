@@ -1,4 +1,4 @@
-import { ISignal, signalByID } from '../data/constants';
+import { ISignal, signalByID, signals } from '../data/constants';
 import { Button, Tooltip } from 'antd';
 import { StarOutlined, StarFilled } from '@ant-design/icons';
 import { useCallback } from 'react';
@@ -28,7 +28,7 @@ interface ISerializedBookmark {
 
 export type IBookmark = ISignalBookmark | IRegionBookmark | IRegionSignalBookmark;
 
-const DEFAULT_BOOKMARKS: ISerializedBookmark[] = [];
+const DEFAULT_BOOKMARKS: IBookmark[] = signals.map((s) => asBookmark(s));
 
 function parseBookmark(bookmark: ISerializedBookmark): IBookmark | null {
   if (!bookmark.r && !bookmark.s) {
@@ -73,20 +73,20 @@ function formatBookmark(bookmark: IBookmark): ISerializedBookmark {
 }
 
 export function useBookmarks() {
-  const [bookmarks, setBookmarks] = useState([] as IBookmark[]);
+  const [bookmarks, setBookmarks] = useState(DEFAULT_BOOKMARKS);
 
   useEffect(() => {
-    let parsed: ISerializedBookmark[] = DEFAULT_BOOKMARKS;
     try {
       const content = localStorage.getItem('bookmarks');
       if (content) {
-        parsed = JSON.parse(content);
+        const parsed: ISerializedBookmark[] = JSON.parse(content);
+        setBookmarks(parsed.map(parseBookmark).filter((v): v is IBookmark => v != null));
       }
     } catch {
       // bad bookmarks
       localStorage.removeItem('bookmarks'); // bad
+      setBookmarks(DEFAULT_BOOKMARKS);
     }
-    setBookmarks(parsed.map(parseBookmark).filter((v): v is IBookmark => v != null));
   }, [setBookmarks]);
 
   useEffect(() => {
@@ -160,7 +160,7 @@ export function BookmarkToggle({ signal, region }: { signal?: ISignal; region?: 
   const [bookmarked, toggleBookmark] = useBookmark(signal!, region!);
 
   return (
-    <Tooltip title="mark as favorite">
+    <Tooltip title={bookmarked ? 'remove from favorites' : 'mark as favorite'}>
       <Button
         type="default"
         shape="circle"

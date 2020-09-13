@@ -142,3 +142,9 @@ export const signals: ISignal[] = [
 ];
 
 export const signalByID = new Map(signals.map((d) => [d.id, d]));
+
+export function selectLatestDate(meta: ISignalMeta[]) {
+  const dates = meta.slice().sort((a, b) => a.maxTime.getTime() - b.maxTime.getTime());
+  // use the median date
+  return dates[Math.ceil(dates.length / 2)].maxTime;
+}
