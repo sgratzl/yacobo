@@ -50,6 +50,9 @@ export async function createLineChart(signal: ISignal, values: IDateValue[]): Pr
   };
 }
 
+const ZERO_COLOR = 'rgb(242,242,242)';
+const STROKE = '#eaeaea';
+
 export async function createMap(signal: ISignal, values: ICountyValue[]) {
   const counties = (await import('us-atlas/counties-10m.json')).default;
   const meta = await fetchSignalMeta(signal);
@@ -92,7 +95,7 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
             field: 'value',
             equal: 0,
           },
-          value: 'rgb(242,242,242)',
+          value: ZERO_COLOR,
         },
         field: 'value',
         type: 'quantitative',
@@ -104,7 +107,10 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
         },
         legend: {
           orient: 'right',
-          title: null,
+          titleAlign: 'center',
+          titleFontWeight: 'normal',
+          titleOrient: 'left',
+          title: `of ${signal.data.maxValue.toLocaleString()} people`,
           labelLimit: 30,
           tickMinStep: 1,
         },
@@ -131,7 +137,7 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
         },
         mark: {
           type: 'geoshape',
-          stroke: '#eaeaea',
+          stroke: STROKE,
           color: {
             y2: 0.4,
             gradient: 'linear',
@@ -182,7 +188,7 @@ export async function createSkeletonMap() {
     },
     mark: {
       type: 'geoshape',
-      stroke: '#eaeaea',
+      stroke: STROKE,
     },
     encoding: {
       color: {
@@ -191,18 +197,19 @@ export async function createSkeletonMap() {
             field: 'value',
             valid: false,
           },
-          value: 'rgb(242,242,242)',
+          value: ZERO_COLOR,
         },
         field: 'id',
         type: 'quantitative',
         scale: {
           domainMin: 0,
           domainMax: 10,
-          scheme: ['rgb(242,242,242)', 'rgb(242,242,242)'] as any,
+          scheme: [ZERO_COLOR, ZERO_COLOR] as any,
         },
         legend: {
           orient: 'right',
-          title: null,
+          title: `of 100`,
+          titleAlign: 'right',
           labelLimit: 30,
           tickMinStep: 1,
         },
