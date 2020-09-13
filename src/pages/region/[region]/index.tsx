@@ -6,7 +6,7 @@ export default function Region() {
   const region = useQueryParam(extractRegion);
   return (
     <BaseLayout
-      pageTitle={`COVID ${region}`}
+      pageTitle={`COVID ${region?.name}`}
       mainActive="region"
       title="COVID"
       subTitle={

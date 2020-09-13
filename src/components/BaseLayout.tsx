@@ -131,7 +131,6 @@ export function RegionSelect({ region, path }: { region?: IRegion; path: string 
     [router, path]
   );
 
-  console.log(states);
   const treeData = useMemo(
     () =>
       states.map((state) => ({

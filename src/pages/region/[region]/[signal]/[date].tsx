@@ -10,7 +10,7 @@ export default function Region() {
   const apiDate = formatISODate(date);
   return (
     <BaseLayout
-      pageTitle={`COVID ${region} - ${signal?.name} as of ${formatLocal(date)}`}
+      pageTitle={`COVID ${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}
       mainActive="region"
       title="COVID"
       subTitle={

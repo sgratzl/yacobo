@@ -7,7 +7,7 @@ export default function Region() {
   const signal = useQueryParam(extractSignal);
   return (
     <BaseLayout
-      pageTitle={`COVID ${region} - ${signal?.name}`}
+      pageTitle={`COVID ${region?.name} - ${signal?.name}`}
       mainActive="region"
       title="COVID"
       subTitle={
