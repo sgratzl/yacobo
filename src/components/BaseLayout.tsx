@@ -102,8 +102,7 @@ export function SignalSelect({ signal, path, clearPath }: { signal?: ISignal; pa
     (s: string | null) => {
       if (s) {
         router.push(path, injectQuery(router, path, { signal: s }));
-      }
-      if (clearPath) {
+      } else if (clearPath) {
         router.push(clearPath, injectQuery(router, clearPath));
       }
     },
@@ -127,8 +126,7 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
     (s: string | null) => {
       if (s) {
         router.push(path, injectQuery(router, path, { region: s }));
-      }
-      if (clearPath) {
+      } else if (clearPath) {
         router.push(clearPath, injectQuery(router, clearPath));
       }
     },
@@ -138,9 +136,10 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
   const treeData = useMemo(
     () =>
       states.map((state) => ({
-        title: state.name,
+        key: state.id,
+        label: state.name,
         value: state.id,
-        children: state.counties.map((county) => ({ title: county.name, value: county.id })),
+        children: state.counties.map((county) => ({ key: county.id, label: county.name, value: county.id })),
       })),
     []
   );
@@ -164,8 +163,7 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
     (s: Date | null) => {
       if (s) {
         router.push(path, injectQuery(router, path, { date: formatISODate(s) }));
-      }
-      if (clearPath) {
+      } else if (clearPath) {
         router.push(clearPath, injectQuery(router, clearPath));
       }
     },
