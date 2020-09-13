@@ -4,7 +4,7 @@ import { sendVegaPNG } from '@/api/format';
 import { createSkeletonMap } from '@/charts';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
-  return sendVegaPNG(req, res, createSkeletonMap(), {
+  return sendVegaPNG(req, res, createSkeletonMap(req.query.size === 'large' ? 2 : 1), {
     title: 'skeleton',
     cache: 'long',
   });

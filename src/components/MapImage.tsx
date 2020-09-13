@@ -1,42 +1,59 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './MapImage.module.scss';
 
-export default function MapImage({ image, alt }: { image?: string; alt: string }) {
+function defaultSourceSet(src?: string, large?: boolean) {
+  if (!src) {
+    return undefined;
+  }
+  const suffix = large ? `&size=large` : '';
+  return `${src}${suffix} 1x, ${src}${suffix}&scale=2 2x`;
+}
+
+export default function MapImage({
+  alt,
+  large,
+  src,
+  srcSet = defaultSourceSet(src, large),
+}: {
+  src?: string;
+  alt: string;
+  srcSet?: string;
+  large?: boolean;
+}) {
   const [loading, setLoading] = useState(false);
   const imgRef = useRef(null as HTMLImageElement | null);
+  const suffix = large ? `&size=large` : '';
 
   useEffect(() => {
-    if (!image || !imgRef.current) {
+    if (!src || !imgRef.current) {
       setLoading(true);
       return;
     }
     imgRef.current.onload = () => {
       setLoading(false);
     };
-    if (imgRef.current.dataset.src === image && imgRef.current.complete) {
+    if (imgRef.current.dataset.src === src && imgRef.current.complete) {
       setLoading(false);
       return;
     }
     setLoading(true);
-  }, [imgRef, image, setLoading]);
+  }, [imgRef, src, setLoading]);
 
   return (
     <div className={styles.img}>
-      {image && (
+      {src && (
         <img
           ref={imgRef}
           className={styles.imgImg}
-          data-src={image}
-          src={image}
-          srcSet={
-            !image
-              ? undefined
-              : `${image} 1x, ${image}&scale=2 2x, ${image}&scale=3 3x, ${image}&scale=2 1000w, ${image}&scale=3 1500w, ${image}&scale=4 2000w`
-          }
+          data-src={src}
+          src={src ? `${src}${suffix}` : undefined}
+          srcSet={srcSet}
           alt={alt}
         />
       )}
-      {loading && <img className={styles.imgPlaceholder} src={'/api/skeletons/map'} alt={alt} />}
+      {loading && (
+        <img className={styles.imgPlaceholder} src={`/api/skeletons/map${large ? '?size=large' : ''}`} alt={alt} />
+      )}
     </div>
   );
 }

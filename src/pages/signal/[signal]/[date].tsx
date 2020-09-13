@@ -48,7 +48,7 @@ export default function SignalDate() {
           <Typography.Paragraph>{f(signal.description, date)}</Typography.Paragraph>
         </Col>
         <Col span={24}>
-          <MapImage image={validDate ? image : undefined} alt={`US Map of ${signal.name}`} />
+          <MapImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} large />
         </Col>
         <Divider />
         <Col span={24}>

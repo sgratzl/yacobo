@@ -30,6 +30,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-vega": "^7.4.1",
+    "react-virtual": "^2.2.5",
     "swr": "^0.3.2",
     "us-atlas": "^3.0.0",
     "use-ssr": "^1.0.23",

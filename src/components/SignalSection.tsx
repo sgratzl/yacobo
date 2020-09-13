@@ -71,7 +71,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
   return (
     <Card
       className={styles.card}
-      cover={<MapImage image={validDate ? image : undefined} alt={`US Map of ${signal.name}`} />}
+      cover={<MapImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} />}
       actions={[
         <Link href="/signal/[signal]/[date]" as={`/signal/${signal.id}/${apiDate}`}>
           <Tooltip title="show signal details">

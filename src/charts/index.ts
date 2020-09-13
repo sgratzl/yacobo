@@ -119,7 +119,7 @@ function genLayer(
   };
 }
 
-export async function createMap(signal: ISignal, values: ICountyValue[]) {
+export async function createMap(signal: ISignal, values: ICountyValue[], factor = 1) {
   const counties = (await import('us-atlas/counties-10m.json')).default;
   const meta = await fetchSignalMeta(signal);
   const stopCount = 70;
@@ -130,8 +130,8 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     title: signal.name,
-    width: 500,
-    height: 300,
+    width: 500 * factor,
+    height: 300 * factor,
     layer: [
       {
         data: {
@@ -178,13 +178,13 @@ export async function createMap(signal: ISignal, values: ICountyValue[]) {
   return spec;
 }
 
-export async function createSkeletonMap() {
+export async function createSkeletonMap(factor = 1) {
   const counties = (await import('us-atlas/counties-10m.json')).default;
 
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-    width: 500,
-    height: 300,
+    width: 500 * factor,
+    height: 300 * factor,
     data: {
       values: counties,
       format: {
