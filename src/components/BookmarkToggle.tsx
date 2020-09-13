@@ -6,16 +6,19 @@ import { IRegion, regionByID } from '../data/regions';
 import { useEffect, useState } from 'react';
 
 export interface ISignalBookmark {
+  id: string;
   type: 'signal';
   signal: ISignal;
 }
 
 export interface IRegionBookmark {
+  id: string;
   type: 'region';
   region: IRegion;
 }
 
 export interface IRegionSignalBookmark {
+  id: string;
   type: 'region+signal';
   signal: ISignal;
   region: IRegion;
@@ -28,34 +31,15 @@ interface ISerializedBookmark {
 
 export type IBookmark = ISignalBookmark | IRegionBookmark | IRegionSignalBookmark;
 
-const DEFAULT_BOOKMARKS: IBookmark[] = signals.map((s) => asBookmark(s));
+const DEFAULT_BOOKMARKS: IBookmark[] = signals.map((s) => asBookmark(s)!);
 
 function parseBookmark(bookmark: ISerializedBookmark): IBookmark | null {
   if (!bookmark.r && !bookmark.s) {
     return null;
   }
-  const region = bookmark.r ? regionByID(bookmark.r) : null;
-  const signal = bookmark.s ? signalByID.get(bookmark.s) : null;
-  if (region && signal) {
-    return {
-      type: 'region+signal',
-      region,
-      signal,
-    };
-  }
-  if (region) {
-    return {
-      type: 'region',
-      region,
-    };
-  }
-  if (signal) {
-    return {
-      type: 'signal',
-      signal,
-    };
-  }
-  return null;
+  const region = bookmark.r ? regionByID(bookmark.r) : undefined;
+  const signal = bookmark.s ? signalByID.get(bookmark.s) : undefined;
+  return asBookmark(signal, region);
 }
 
 function formatBookmark(bookmark: IBookmark): ISerializedBookmark {
@@ -99,9 +83,10 @@ export function useBookmarks() {
   return [bookmarks, setBookmarks] as const;
 }
 
-function asBookmark(signal?: ISignal, region?: IRegion): IBookmark {
+function asBookmark(signal?: ISignal, region?: IRegion): IBookmark | null {
   if (signal && region) {
     return {
+      id: `${region.id}+${signal.id}`,
       type: 'region+signal',
       signal,
       region,
@@ -109,14 +94,19 @@ function asBookmark(signal?: ISignal, region?: IRegion): IBookmark {
   }
   if (signal) {
     return {
+      id: signal.id,
       type: 'signal',
       signal,
     };
   }
-  return {
-    type: 'region',
-    region: region!,
-  };
+  if (region) {
+    return {
+      id: region!.id!,
+      type: 'region',
+      region: region!,
+    };
+  }
+  return null;
 }
 
 function isSignal(signalOrRegion: ISignal | IRegion): signalOrRegion is ISignal {

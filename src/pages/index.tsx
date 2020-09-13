@@ -1,12 +1,13 @@
 import { Col, Row } from 'antd';
 import BaseLayout, { DateSelect } from '../components/BaseLayout';
-import SignalSection from '../components/SignalSection';
-import { signals } from '../data/constants';
+import BookmarkSection from '../components/BookmarkSection';
+import { useBookmarks } from '../components/BookmarkToggle';
 import { formatLocal, useFetchLatestDate } from '../ui/utils';
 import styles from './index.module.scss';
 
 export default function Home() {
   const date = useFetchLatestDate();
+  const [bookmarks] = useBookmarks();
   return (
     <BaseLayout
       pageTitle={`COVID${date ? ` as of ${formatLocal(date)}` : ''}`}
@@ -24,9 +25,9 @@ export default function Home() {
       breadcrumb={[]}
     >
       <Row>
-        {signals.map((s) => (
-          <Col key={s.id} xs={24} sm={24} md={12} lg={8} className={styles.col}>
-            <SignalSection signal={s} date={date} />
+        {bookmarks.map((bookmark) => (
+          <Col key={bookmark.id} xs={24} sm={24} md={12} lg={8} className={styles.col}>
+            <BookmarkSection bookmark={bookmark} date={date} />
           </Col>
         ))}
       </Row>

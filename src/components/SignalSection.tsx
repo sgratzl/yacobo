@@ -1,40 +1,17 @@
 import { ISignal } from '../data/constants';
 import { formatISODate } from '../ui/utils';
-import { Button, Card, Dropdown, Tooltip, Typography, Menu, Modal } from 'antd';
-import {
-  DownloadOutlined,
-  QuestionOutlined,
-  EyeOutlined,
-  FileImageOutlined,
-  FileOutlined,
-  FileExcelOutlined,
-} from '@ant-design/icons';
+import { Button, Card, Tooltip, Typography, Modal } from 'antd';
+import { QuestionOutlined, EyeOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { ReactNode, useCallback } from 'react';
 import styles from './SignalSection.module.scss';
 import { isValid } from 'date-fns';
 import MapImage from './MapImage';
 import { BookmarkToggle } from './BookmarkToggle';
+import { DownloadMenu } from './DownloadMenu';
 
 function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
   return typeof v === 'function' ? v(date) : v;
-}
-
-export function DownloadSignalMenu({ signal, date }: { signal: ISignal; date?: Date; details?: boolean }) {
-  const apiDate = formatISODate(date);
-  return (
-    <Menu>
-      <Menu.Item key="svg" icon={<FileImageOutlined />}>
-        <a href={`/api/signal/${signal.id}/${apiDate}.svg?download`}>Download SVG</a>
-      </Menu.Item>
-      <Menu.Item key="json" icon={<FileOutlined />}>
-        <a href={`/api/signal/${signal.id}/${apiDate}.json?download`}>Download JSON</a>
-      </Menu.Item>
-      <Menu.Item key="csv" icon={<FileExcelOutlined />}>
-        <a href={`/api/signal/${signal.id}/${apiDate}.csv?download`}>Download CSV</a>
-      </Menu.Item>
-    </Menu>
-  );
 }
 
 export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
@@ -60,9 +37,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
           </Tooltip>
         </Link>,
         <BookmarkToggle signal={signal} />,
-        <Dropdown overlay={<DownloadSignalMenu signal={signal} date={date} />} trigger={['click']}>
-          <Button type="default" shape="circle" icon={<DownloadOutlined />} />
-        </Dropdown>,
+        <DownloadMenu path={`signal/${signal.id}/${apiDate}`} />,
         <Tooltip title="show signal information">
           <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />
         </Tooltip>,

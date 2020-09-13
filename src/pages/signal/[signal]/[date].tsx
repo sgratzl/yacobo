@@ -1,16 +1,15 @@
 import { useQueryParam } from '@/api/hooks';
 import { extractDate, extractSignal } from '@/api/validator';
 import BaseLayout, { DateSelect, SignalSelect } from '@/components/BaseLayout';
+import { BookmarkToggle } from '@/components/BookmarkToggle';
 import MapImage from '@/components/MapImage';
+import SignalTable from '@/components/SignalTable';
 import { signals } from '@/data/constants';
 import { formatISODate, formatLocal } from '@/ui/utils';
-import { Button, Col, Divider, Dropdown, Row, Typography } from 'antd';
+import { Col, Divider, Row, Typography } from 'antd';
 import { isValid } from 'date-fns';
 import React, { ReactNode } from 'react';
-import SignalTable from '@/components/SignalTable';
-import { DownloadSignalMenu } from '@/components/SignalSection';
-import { BookmarkToggle } from '@/components/BookmarkToggle';
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadMenu } from '@/components/DownloadMenu';
 
 function f(v: ReactNode | ((v?: Date) => ReactNode), date?: Date) {
   return typeof v === 'function' ? v(date) : v;
@@ -46,12 +45,7 @@ export default function SignalDate() {
           path: `/signal/[signal]/[date]`,
         },
       ]}
-      extra={[
-        <BookmarkToggle signal={signal} key="a" />,
-        <Dropdown key="b" overlay={<DownloadSignalMenu signal={signal} date={date} />} trigger={['click']}>
-          <Button type="default" shape="circle" icon={<DownloadOutlined />} />
-        </Dropdown>,
-      ]}
+      extra={[<BookmarkToggle signal={signal} key="a" />, <DownloadMenu path={`/signal/${signal.id}/${apiDate}`} />]}
     >
       <Row>
         <Col span={24}>
