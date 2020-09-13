@@ -1,10 +1,8 @@
-import fetch from 'cross-fetch';
-import { differenceInHours, formatISO, min, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
+import fetch from './fetchWrapper';
+import { formatISO, min, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
 import { signals, ISignal, ISignalWithMeta, hasMeta, ISignalMeta } from './constants';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
-
-const fetchOptions = process.env.NODE_ENV === 'development' ? { cache: 'force-cache' as const } : undefined;
 
 export const LATEST = subDays(startOfToday(), 4);
 export const EARLIEST = startOfDay(new Date(2020, 1, 1));
@@ -44,8 +42,7 @@ export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<I
   url.searchParams.set('time_values', formatAPIDate(date));
   url.searchParams.set('format', 'json');
   url.searchParams.set('fields', ['geo_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
-  console.log(url.toString());
-  return fetch(url.toString(), fetchOptions)
+  return fetch(url.toString())
     .then((r) => r.json())
     .then((r) =>
       r.map((d: any) => ({
@@ -74,8 +71,7 @@ export function fetchSignalCounty(
   );
   url.searchParams.set('format', 'json');
   url.searchParams.set('fields', ['time_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
-  console.log(url.toString());
-  return fetch(url.toString(), fetchOptions)
+  return fetch(url.toString())
     .then((r) => r.json())
     .then((r) => {
       return r.map((d: any) => ({
@@ -119,13 +115,7 @@ function injectMeta(data: any[]) {
   }));
 }
 
-let cachedFetchedMeta: Promise<ISignalWithMeta[]> | null = null;
-let cachedFetchedMetaDate: Date | null;
-
 export function fetchMeta(): Promise<ISignalWithMeta[]> {
-  if (cachedFetchedMeta && cachedFetchedMetaDate && differenceInHours(cachedFetchedMetaDate, new Date()) < 6) {
-    return cachedFetchedMeta;
-  }
   const url = new URL(ENDPOINT);
   url.searchParams.set('source', 'covidcast_meta');
   url.searchParams.set(
@@ -136,13 +126,9 @@ export function fetchMeta(): Promise<ISignalWithMeta[]> {
   url.searchParams.set('geo_types', 'county');
   url.searchParams.set('time_types', 'day');
   url.searchParams.set('format', 'json');
-  console.log(url.toString());
-  const r = fetch(url.toString(), fetchOptions)
+  return fetch(url.toString())
     .then((r) => r.json())
     .then(injectMeta);
-  cachedFetchedMeta = r;
-  cachedFetchedMetaDate = new Date();
-  return r;
 }
 
 export function fetchSignalMeta(signal: ISignal) {
