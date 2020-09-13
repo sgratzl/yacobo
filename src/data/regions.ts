@@ -55,7 +55,7 @@ export function regionByID(region: string) {
     return byId.get(region)!;
   }
   // create a fake and store it
-  if (region.length === 2) {
+  if (region.length <= 2) {
     // fake state
     const fake: IStateRegion = {
       id: region,
