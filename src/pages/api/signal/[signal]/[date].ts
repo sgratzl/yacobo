@@ -2,8 +2,7 @@ import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat, extractSignal } from '@/api/validator';
 import { createMap } from '@/charts';
-import { fetchAllCounties, formatAPIDate, LATEST } from '@/data';
-import { differenceInDays } from 'date-fns';
+import { cacheMode, fetchAllCounties, formatAPIDate } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { regionByID } from '@/data/regions';
 
@@ -16,7 +15,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
     title: `${signal.id}-${formatAPIDate(date)}`,
     headers: ['region', 'value', 'stderr'],
     vega: () => createMap(signal, data, req.query.size === 'large' ? 2 : 1),
-    cache: differenceInDays(date, LATEST) < 5 ? 'short' : 'medium',
+    cache: cacheMode(date),
     regions: regionByID,
   });
 });

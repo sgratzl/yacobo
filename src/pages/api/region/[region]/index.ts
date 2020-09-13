@@ -6,5 +6,5 @@ import { fetchLatestDate } from '@/data';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
   const d = await fetchLatestDate();
-  return redirectWithFormat(req, res, formatISODate(d));
+  return redirectWithFormat(req, res, `all/${formatISODate(d)}`);
 });

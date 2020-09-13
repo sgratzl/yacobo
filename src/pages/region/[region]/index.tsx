@@ -11,7 +11,7 @@ export default function Region() {
       title="COVID"
       subTitle={
         <>
-          <RegionSelect region={region} path="/region/[region]" clearPath="/" />
+          <RegionSelect region={region} path="/region/[region]" clearPath="/region" />
         </>
       }
       breadcrumb={[

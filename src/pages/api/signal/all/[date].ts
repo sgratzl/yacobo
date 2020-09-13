@@ -1,11 +1,10 @@
 import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat } from '@/api/validator';
-import { fetchAllCounties, formatAPIDate, IRegionValue, LATEST } from '@/data';
-import { differenceInDays } from 'date-fns';
+import { cacheMode, fetchAllCounties, formatAPIDate, IRegionValue } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { signals } from '@/data/constants';
-import { regionByID } from '../../../../data/regions';
+import { regionByID } from '@/data/regions';
 
 function merge(all: IRegionValue[][]) {
   const regions = new Map<string, { region: string } & Record<string, string | number | undefined | null>>();
@@ -39,7 +38,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
       ...signals.map((signal) => (signal.data.hasStdErr ? [signal.id, `${signal.id}_stderr`] : signal.id)),
     ].flat(),
     // vega: () => createMap(signal, data),
-    cache: differenceInDays(date, LATEST) < 5 ? 'short' : 'medium',
+    cache: cacheMode(date),
     regions: regionByID,
   });
 });

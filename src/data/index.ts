@@ -1,11 +1,10 @@
 import fetch from './fetchWrapper';
-import { formatISO, min, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
-import { signals, ISignal, ISignalWithMeta, hasMeta, ISignalMeta, selectLatestDate } from './constants';
-import { IRegion } from './regions';
+import { differenceInDays, formatISO, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
+import { signals, ISignal, hasMeta, ISignalMeta, selectLatestDate } from './constants';
+import { IRegion, isCountyRegion, isStateRegion } from './regions';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 
-export const LATEST = subDays(startOfToday(), 4);
 export const EARLIEST = startOfDay(new Date(2020, 1, 1));
 
 export function formatAPIDate(date: Date) {
@@ -68,7 +67,11 @@ export function fetchAllCounties(signal: ISignal['data'], date: Date): Promise<I
     );
 }
 
-export function fetchSignalCounty(
+export function cacheMode(date: Date) {
+  return differenceInDays(date, startOfToday()) < 5 ? 'short' : 'medium';
+}
+
+export function fetchSignalRegion(
   signal: ISignal['data'],
   region: IRegion,
   date: Date | [Date, Date]
@@ -77,9 +80,9 @@ export function fetchSignalCounty(
   url.searchParams.set('source', 'covidcast');
   url.searchParams.set('data_source', signal.dataSource);
   url.searchParams.set('signal', signal.signal);
-  url.searchParams.set('geo_type', 'county');
+  url.searchParams.set('geo_type', isStateRegion(region) ? 'state' : 'county');
   url.searchParams.set('time_type', 'day');
-  url.searchParams.set('geo_value', region.id);
+  url.searchParams.set('geo_value', isStateRegion(region) ? region.short.toLowerCase() : region.id);
   url.searchParams.set(
     'time_values',
     date instanceof Date ? formatAPIDate(date) : `${formatAPIDate(date[0])}:${formatAPIDate(date[1])}`
@@ -97,8 +100,8 @@ export function fetchSignalCounty(
     });
 }
 
-export function fetchCounty(region: IRegion, date: Date): Promise<ISignalValue[]> {
-  return Promise.all(signals.map((signal) => fetchSignalCounty(signal.data, region, date))).then((infos) => {
+export function fetchRegion(region: IRegion, date: Date): Promise<ISignalValue[]> {
+  return Promise.all(signals.map((signal) => fetchSignalRegion(signal.data, region, date))).then((infos) => {
     return signals.map((signal, i) => {
       const info = infos[i];
       return {
