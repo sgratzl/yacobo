@@ -31,7 +31,16 @@ interface ISerializedBookmark {
 
 export type IBookmark = ISignalBookmark | IRegionBookmark | IRegionSignalBookmark;
 
-const DEFAULT_BOOKMARKS: IBookmark[] = signals.map((s) => asBookmark(s)!);
+const DEFAULT_BOOKMARKS: IBookmark[] = [
+  ...signals.map((s) => asBookmark(s)!),
+  asBookmark(undefined, regionByID('42')!)!, // Pennsilenvia
+  asBookmark(undefined, regionByID('42003')!)!, // allegheny County
+  asBookmark(undefined, regionByID('06')!)!, // California
+  asBookmark(undefined, regionByID('06037')!)!, // Los Angeles County
+  asBookmark(signalByID.get('cases')!, regionByID('06')!)!, // California Cases
+];
+
+console.log(DEFAULT_BOOKMARKS);
 
 function parseBookmark(bookmark: ISerializedBookmark): IBookmark | null {
   if (!bookmark.r && !bookmark.s) {
@@ -122,11 +131,19 @@ function findBookmark(bookmarks: IBookmark[], bookmark: IBookmark) {
   );
 }
 
+function noop() {
+  // dummy
+}
+
 export function useBookmark(signal: ISignal): [boolean, () => void];
 export function useBookmark(region: IRegion): [boolean, () => void];
 export function useBookmark(signal: ISignal, region: IRegion): [boolean, () => void];
 export function useBookmark(signalOrRegion: ISignal | IRegion, region?: IRegion) {
   const [bookmarks, setBookmarks] = useBookmarks();
+
+  if (!signalOrRegion && !region) {
+    return [false, noop];
+  }
 
   const bookmark = asBookmark(
     isSignal(signalOrRegion) ? signalOrRegion : undefined,
@@ -147,7 +164,7 @@ export function useBookmark(signalOrRegion: ISignal | IRegion, region?: IRegion)
 }
 
 export function BookmarkToggle({ signal, region }: { signal?: ISignal; region?: IRegion }) {
-  const [bookmarked, toggleBookmark] = useBookmark(signal!, region!);
+  const [bookmarked, toggleBookmark] = useBookmark(signal ?? (region as any), region!);
 
   return (
     <Tooltip title={bookmarked ? 'remove from favorites' : 'mark as favorite'}>

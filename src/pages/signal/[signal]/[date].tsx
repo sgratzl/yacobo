@@ -30,9 +30,9 @@ export default function SignalDate() {
       title="COVID"
       subTitle={
         <>
-          <SignalSelect signal={signal} path={`/signal/[signal]/[date]`} />
+          <SignalSelect signal={signal} path={`/signal/[signal]/[date]`} clearPath={`/history/[date]`} />
           as of
-          <DateSelect date={date} path={`/signal/[signal]/[date]`} />
+          <DateSelect date={date} path={`/signal/[signal]/[date]`} clearPath={`/signal/all/[date]`} />
         </>
       }
       breadcrumb={[
@@ -45,7 +45,10 @@ export default function SignalDate() {
           path: `/signal/[signal]/[date]`,
         },
       ]}
-      extra={[<BookmarkToggle signal={signal} key="a" />, <DownloadMenu path={`/signal/${signal.id}/${apiDate}`} />]}
+      extra={[
+        <BookmarkToggle signal={signal} key="bookmark" />,
+        <DownloadMenu key="download" path={`/signal/${signal.id}/${apiDate}`} />,
+      ]}
     >
       <Row>
         <Col span={24}>

@@ -22,13 +22,13 @@ export default function RegionSignalSection({
     <Card
       className={styles.card}
       actions={[
-        <Link href="/region/[region]/[signal]/[date]" as={`/region/${region.id}/${signal.id}/${apiDate}`}>
+        <Link key="d" href="/region/[region]/[signal]/[date]" as={`/region/${region.id}/${signal.id}/${apiDate}`}>
           <Tooltip title="show region details">
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,
-        <BookmarkToggle region={region} signal={signal} />,
-        <DownloadMenu path={`region/${region.id}/${signal.id}/${apiDate}`} />,
+        <BookmarkToggle key="b" region={region} signal={signal} />,
+        <DownloadMenu key="d" path={`region/${region.id}/${signal.id}/${apiDate}`} />,
       ]}
     >
       <Card.Meta title={region.name} />

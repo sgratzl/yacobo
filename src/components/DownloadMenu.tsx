@@ -1,7 +1,7 @@
 import { Button, Dropdown, Menu } from 'antd';
 import { DownloadOutlined, FileImageOutlined, FileOutlined, FileExcelOutlined } from '@ant-design/icons';
 
-export function DownloadMenu({ path, svg }: { path: string; svg?: boolean }) {
+export function DownloadMenu({ path, svg = true }: { path: string; svg?: boolean }) {
   const menu = (
     <Menu>
       {svg && (

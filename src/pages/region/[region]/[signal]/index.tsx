@@ -12,9 +12,9 @@ export default function Region() {
       title="COVID"
       subTitle={
         <>
-          <RegionSelect region={region} path="/region/[region]/[signal]/[date]" />
+          <RegionSelect region={region} path="/region/[region]/[signal]" clearPath="/signal/[signal]" />
           -
-          <SignalSelect signal={signal} path="/region/[region]/[signal]/[date]" />
+          <SignalSelect signal={signal} path="/region/[region]/[signal]" clearPath="/region/[region]" />
         </>
       }
       breadcrumb={[

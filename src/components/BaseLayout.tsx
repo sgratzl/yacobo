@@ -96,20 +96,22 @@ function createBreadcrumbProps(
   };
 }
 
-export function SignalSelect({ signal, path }: { signal?: ISignal; path: string }) {
+export function SignalSelect({ signal, path, clearPath }: { signal?: ISignal; path: string; clearPath?: string }) {
   const router = useRouter();
   const onSelect = useCallback(
     (s: string | null) => {
-      if (!s) {
-        return;
+      if (s) {
+        router.push(path, injectQuery(router, path, { signal: s }));
       }
-      router.push(path, injectQuery(router, path, { signal: s }));
+      if (clearPath) {
+        router.push(clearPath, injectQuery(router, clearPath));
+      }
     },
-    [router, path]
+    [router, path, clearPath]
   );
 
   return (
-    <Select className={styles.select} value={signal?.id} onChange={onSelect} allowClear={false}>
+    <Select className={styles.select} value={signal?.id} onChange={onSelect} allowClear={clearPath != null}>
       {signals.map((s) => (
         <Select.Option key={s.id} value={s.id}>
           {s.name}
@@ -119,16 +121,18 @@ export function SignalSelect({ signal, path }: { signal?: ISignal; path: string 
   );
 }
 
-export function RegionSelect({ region, path }: { region?: IRegion; path: string }) {
+export function RegionSelect({ region, path, clearPath }: { region?: IRegion; path: string; clearPath?: string }) {
   const router = useRouter();
   const onSelect = useCallback(
     (s: string | null) => {
-      if (!s) {
-        return;
+      if (s) {
+        router.push(path, injectQuery(router, path, { region: s }));
       }
-      router.push(path, injectQuery(router, path, { region: s }));
+      if (clearPath) {
+        router.push(clearPath, injectQuery(router, clearPath));
+      }
     },
-    [router, path]
+    [router, path, clearPath]
   );
 
   const treeData = useMemo(
@@ -146,7 +150,7 @@ export function RegionSelect({ region, path }: { region?: IRegion; path: string 
       className={`${styles.select} ${styles.selectTree}`}
       value={region?.id}
       onChange={onSelect}
-      allowClear={false}
+      allowClear={clearPath != null}
       showSearch
       treeData={treeData}
       dropdownMatchSelectWidth={300}
@@ -154,18 +158,28 @@ export function RegionSelect({ region, path }: { region?: IRegion; path: string 
   );
 }
 
-export function DateSelect({ date, path }: { date?: Date; path: string }) {
+export function DateSelect({ date, path, clearPath }: { date?: Date; path: string; clearPath?: string }) {
   const router = useRouter();
   const onSelect = useCallback(
     (s: Date | null) => {
-      if (!s) {
-        return;
+      if (s) {
+        router.push(path, injectQuery(router, path, { date: formatISODate(s) }));
       }
-      router.push(path, injectQuery(router, path, { date: formatISODate(s) }));
+      if (clearPath) {
+        router.push(clearPath, injectQuery(router, clearPath));
+      }
     },
-    [router, path]
+    [router, path, clearPath]
   );
-  return <DatePicker className={styles.picker} value={date} onChange={onSelect} allowClear={false} format="MMM, d" />;
+  return (
+    <DatePicker
+      className={styles.picker}
+      value={date}
+      onChange={onSelect}
+      allowClear={clearPath != null}
+      format="MMM, d"
+    />
+  );
 }
 
 function historyBack() {

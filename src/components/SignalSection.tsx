@@ -31,14 +31,14 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
       className={styles.card}
       cover={<MapImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} />}
       actions={[
-        <Link href="/signal/[signal]/[date]" as={`/signal/${signal.id}/${apiDate}`}>
+        <Link key="d" href="/signal/[signal]/[date]" as={`/signal/${signal.id}/${apiDate}`}>
           <Tooltip title="show signal details">
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,
-        <BookmarkToggle signal={signal} />,
-        <DownloadMenu path={`signal/${signal.id}/${apiDate}`} />,
-        <Tooltip title="show signal information">
+        <BookmarkToggle key="b" signal={signal} />,
+        <DownloadMenu key="d" path={`signal/${signal.id}/${apiDate}`} />,
+        <Tooltip key="i" title="show signal information">
           <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />
         </Tooltip>,
       ]}
