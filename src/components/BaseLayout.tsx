@@ -13,7 +13,7 @@ import styles from './BaseLayout.module.scss';
 
 export interface BaseLayoutProps {
   pageTitle: string;
-  mainActive: 'overview' | 'county' | 'compare';
+  mainActive: 'overview' | 'region' | 'compare';
   breadcrumb: { breadcrumbName: string; path: string }[];
 }
 
@@ -42,8 +42,8 @@ export default function BaseLayout({
           <Menu.Item key="overview" active={mainActive === 'overview'}>
             <Link href="/">Overview</Link>
           </Menu.Item>
-          <Menu.Item key="county" active={mainActive === 'county'}>
-            <Link href="/county">Single County</Link>
+          <Menu.Item key="region" active={mainActive === 'region'}>
+            <Link href="/region">Single Region</Link>
           </Menu.Item>
           <Menu.Item key="compare" active={mainActive === 'compare'}>
             <Link href="/compare">Compare Counties</Link>
@@ -95,7 +95,7 @@ function createBreadcrumbProps(
   };
 }
 
-export function SignalSelect({ signal, path }: { signal: ISignal; path: string }) {
+export function SignalSelect({ signal, path }: { signal?: ISignal; path: string }) {
   const router = useRouter();
   const onSelect = useCallback(
     (s: string | null) => {
@@ -108,12 +108,33 @@ export function SignalSelect({ signal, path }: { signal: ISignal; path: string }
   );
 
   return (
-    <Select className={styles.select} value={signal.id} onChange={onSelect} allowClear={false}>
+    <Select className={styles.select} value={signal?.id} onChange={onSelect} allowClear={false}>
       {signals.map((s) => (
         <Select.Option key={s.id} value={s.id}>
           {s.name}
         </Select.Option>
       ))}
+    </Select>
+  );
+}
+
+export function RegionSelect({ region, path }: { region?: string; path: string }) {
+  const router = useRouter();
+  const onSelect = useCallback(
+    (s: string | null) => {
+      if (!s) {
+        return;
+      }
+      router.push(path, injectQuery(router, path, { region: s }));
+    },
+    [router, path]
+  );
+
+  return (
+    <Select className={styles.select} value={region} onChange={onSelect} allowClear={false}>
+      <Select.Option key={region} value={region ?? ''}>
+        {region}
+      </Select.Option>
     </Select>
   );
 }
