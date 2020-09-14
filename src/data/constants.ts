@@ -38,7 +38,13 @@ export const signals: ISignal[] = [
     description: (date: Date) =>
       `How many out of 100 participants
        of the daily Facebook survey from ${formatLocal(date)} show COVID-like symptoms`,
-    longDescription: 'TODO',
+    longDescription: `Each day, Delphi surveys tens of thousands of Facebook users and asks them
+    if they or anyone in their household are currently experiencing symptoms.
+    Based on the survey results, we estimate the percentage of people with COVID-like symptoms.
+    A person has "COVID-like" symptoms if they have a fever, along with either cough,
+    shortness of breath, or difficulty breathing. While many other conditions can cause
+    these symptoms, comparing the rates of COVID-like symptoms across the country can
+    suggest where COVID is most active.`,
     colorScheme: 'blues',
     data: {
       unit: 'participants',

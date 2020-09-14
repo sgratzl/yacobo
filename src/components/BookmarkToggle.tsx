@@ -3,7 +3,7 @@ import { Button, Tooltip } from 'antd';
 import { StarOutlined, StarFilled } from '@ant-design/icons';
 import { useCallback } from 'react';
 import { IRegion, regionByID } from '../data/regions';
-import { useEffect, useState } from 'react';
+import createPersistedState from 'use-persisted-state';
 
 export interface ISignalBookmark {
   id: string;
@@ -31,14 +31,14 @@ interface ISerializedBookmark {
 
 export type IBookmark = ISignalBookmark | IRegionBookmark | IRegionSignalBookmark;
 
-const DEFAULT_BOOKMARKS: IBookmark[] = [
+const DEFAULT_BOOKMARKS = [
   ...signals.map((s) => asBookmark(s)!),
   asBookmark(undefined, regionByID('42')!)!, // Pennsilenvia
   asBookmark(undefined, regionByID('42003')!)!, // allegheny County
   asBookmark(undefined, regionByID('06')!)!, // California
   asBookmark(undefined, regionByID('06037')!)!, // Los Angeles County
   asBookmark(signalByID.get('cases')!, regionByID('06')!)!, // California Cases
-];
+].map(formatBookmark);
 
 function parseBookmark(bookmark: ISerializedBookmark): IBookmark | null {
   if (!bookmark.r && !bookmark.s) {
@@ -61,33 +61,6 @@ function formatBookmark(bookmark: IBookmark): ISerializedBookmark {
         r: bookmark.region.id,
       };
   }
-}
-
-export function useBookmarks() {
-  const [bookmarks, setBookmarks] = useState(DEFAULT_BOOKMARKS);
-
-  useEffect(() => {
-    try {
-      const content = localStorage.getItem('bookmarks');
-      if (content) {
-        const parsed: ISerializedBookmark[] = JSON.parse(content);
-        setBookmarks(parsed.map(parseBookmark).filter((v): v is IBookmark => v != null));
-      }
-    } catch {
-      // bad bookmarks
-      localStorage.removeItem('bookmarks'); // bad
-      setBookmarks(DEFAULT_BOOKMARKS);
-    }
-  }, [setBookmarks]);
-
-  useEffect(() => {
-    const serialized = JSON.stringify(bookmarks.map(formatBookmark));
-    if (localStorage.getItem('bookmarks') !== serialized) {
-      localStorage.setItem('bookmarks', serialized);
-    }
-  }, [bookmarks]);
-
-  return [bookmarks, setBookmarks] as const;
 }
 
 function asBookmark(signal?: ISignal, region?: IRegion): IBookmark | null {
@@ -114,6 +87,23 @@ function asBookmark(signal?: ISignal, region?: IRegion): IBookmark | null {
     };
   }
   return null;
+}
+
+const usePersistentBookmarks = createPersistedState('bookmarks');
+
+export function useBookmarks() {
+  const [bookmarks, setBookmarks] = usePersistentBookmarks(DEFAULT_BOOKMARKS);
+
+  const setParsedBookmarks = useCallback(
+    (bookmarks: IBookmark[]) => {
+      setBookmarks(bookmarks.map(formatBookmark));
+    },
+    [setBookmarks]
+  );
+
+  const parsedBookmarks = bookmarks.map(parseBookmark).filter((d): d is IBookmark => d != null);
+
+  return [parsedBookmarks, setParsedBookmarks] as const;
 }
 
 function isSignal(signalOrRegion: ISignal | IRegion): signalOrRegion is ISignal {
