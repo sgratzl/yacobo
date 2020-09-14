@@ -1,4 +1,4 @@
-import { min } from 'date-fns/esm';
+import { min } from 'date-fns';
 import { ReactNode } from 'react';
 import { formatLocal } from '../ui/utils';
 

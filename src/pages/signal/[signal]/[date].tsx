@@ -41,7 +41,7 @@ export default function SignalDate() {
         },
       ]}
       extra={[
-        <BookmarkToggle signal={signal} key="bookmark" />,
+        <BookmarkToggle signal={signal} key="bookmark" warning={false} />,
         <DownloadMenu key="download" path={`/signal/${signal.id}/${apiDate}`} />,
       ]}
     >
