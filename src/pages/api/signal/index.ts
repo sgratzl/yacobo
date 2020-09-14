@@ -5,8 +5,7 @@ import { sendFormat } from '@/api/format';
 import { Formats } from '@/api/validator';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
-  const data = await fetchMeta();
-  return sendFormat(req, res, Formats.json, data, {
+  return sendFormat(req, res, Formats.json, fetchMeta, {
     title: `signals`,
     headers: ['signal', 'mean', 'stdev', 'minTime', 'maxTime'],
     // vega: () => createMap(signal, data),

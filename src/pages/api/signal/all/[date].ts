@@ -27,9 +27,8 @@ function merge(all: IRegionValue[][]) {
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
   const { param: date, format } = extractFormat(req, 'date', extractDate);
-  const all = await Promise.all(signals.map((signal) => fetchAllRegions(signal.data, date)));
 
-  const data = merge(all);
+  const data = () => Promise.all(signals.map((signal) => fetchAllRegions(signal.data, date))).then(merge);
 
   return sendFormat(req, res, format, data, {
     title: `all-${formatAPIDate(date)}`,

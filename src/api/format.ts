@@ -106,7 +106,7 @@ function sendCSV<T extends object>(
 
 async function createVega(req: NextApiRequest, spec: TopLevelSpec | Promise<TopLevelSpec>) {
   const vegaLiteSpec = await spec;
-  if (req.query.plain != null) {
+  if (req.query.details == null) {
     // delete title and description
     delete vegaLiteSpec.title;
     delete vegaLiteSpec.description;
@@ -160,25 +160,26 @@ export async function sendFormat<T extends object>(
   req: NextApiRequest,
   res: NextApiResponse,
   format: Formats,
-  data: T[],
+  data: () => Promise<T[]>,
   options: ICommonOptions & {
     headers: (keyof T)[];
     vega?: (data: T[]) => TopLevelSpec | Promise<TopLevelSpec>;
   }
 ) {
+  const d = await data();
   switch (format) {
     case Formats.csv:
-      return sendCSV(req, res, data, options.headers, options);
+      return sendCSV(req, res, d, options.headers, options);
     case Formats.png:
       if (options.vega) {
-        return sendVegaPNG(req, res, options.vega(data), options);
+        return sendVegaPNG(req, res, options.vega(d), options);
       }
       break;
     case Formats.svg:
       if (options.vega) {
-        return sendVegaSVG(req, res, options.vega(data), options);
+        return sendVegaSVG(req, res, options.vega(d), options);
       }
       break;
   }
-  return sendJSON(req, res, data, options);
+  return sendJSON(req, res, d, options);
 }

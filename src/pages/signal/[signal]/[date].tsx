@@ -16,7 +16,7 @@ export default function SignalDate() {
   const date = useQueryParam(extractDate);
   const apiDate = formatISODate(date);
   const validDate = isValid(date);
-  const image = `/api/signal/${signal.id}/${apiDate}.png?plain`;
+  const image = `/api/signal/${signal.id}/${apiDate}.png`;
 
   return (
     <BaseLayout

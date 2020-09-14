@@ -6,10 +6,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { formatISODate } from '@/ui/utils';
 import { signalByID } from '@/data/constants';
 
-export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
+export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
   const { param: date, format } = extractFormat(req, 'date', extractDate);
   const region = extractRegion(req);
-  const data = await fetchRegion(region, date);
+  const data = () => fetchRegion(region, date);
   return sendFormat(req, res, format, data, {
     title: `${region.name}-${formatISODate(date)}`,
     headers: ['signal', 'value', 'stderr'],

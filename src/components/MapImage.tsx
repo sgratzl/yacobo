@@ -2,12 +2,20 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './MapImage.module.scss';
 import { classNames } from './utils';
 
-function defaultSourceSet(src?: string, large?: boolean) {
+function addParam(url: URL | undefined, key: string, value: string | number) {
+  if (!url) {
+    return undefined;
+  }
+  const copy = new URL(url.toString());
+  copy.searchParams.set(key, value.toString());
+  return copy;
+}
+
+function defaultSourceSet(src?: URL) {
   if (!src) {
     return undefined;
   }
-  const suffix = large ? `&size=large` : '';
-  return `${src}${suffix} 1x, ${src}${suffix}&scale=2 2x`;
+  return `${src} 1x, ${addParam(src, 'scale', 2)} 2x`;
 }
 
 function useImageLoading(src?: string) {
@@ -36,29 +44,23 @@ export default function MapImage({
   alt,
   large,
   src,
-  srcSet = defaultSourceSet(src, large),
   type = 'map',
 }: {
   src?: string;
   alt: string;
-  srcSet?: string;
   large?: boolean;
   type?: 'map' | 'line';
 }) {
+  const url = src ? new URL(src, window.location.href) : undefined;
   const [loading, imgRef] = useImageLoading(src);
-  const suffix = large ? `&size=large` : '';
+
+  const full = large ? addParam(url, 'size', 'large') : url;
+  const srcSet = defaultSourceSet(full);
 
   return (
     <div className={classNames(styles.img, type === 'line' && styles.imgLine)}>
       {src && (
-        <img
-          ref={imgRef}
-          className={styles.imgImg}
-          data-src={src}
-          src={src ? `${src}${suffix}` : undefined}
-          srcSet={srcSet}
-          alt={alt}
-        />
+        <img ref={imgRef} className={styles.imgImg} data-src={src} src={full?.toString()} srcSet={srcSet} alt={alt} />
       )}
       {loading && (
         <img

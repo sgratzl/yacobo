@@ -6,14 +6,14 @@ export function DownloadMenu({ path, svg = true }: { path: string; svg?: boolean
     <Menu>
       {svg && (
         <Menu.Item key="svg" icon={<FileImageOutlined />}>
-          <a href={`/api${path}.svg?download`}>Download SVG</a>
+          <a href={`/api${path}.svg?download&details`}>Download SVG</a>
         </Menu.Item>
       )}
       <Menu.Item key="json" icon={<FileOutlined />}>
-        <a href={`/api${path}.json?download`}>Download JSON</a>
+        <a href={`/api${path}.json?download&details`}>Download JSON</a>
       </Menu.Item>
       <Menu.Item key="csv" icon={<FileExcelOutlined />}>
-        <a href={`/api${path}.csv?download`}>Download CSV</a>
+        <a href={`/api${path}.csv?download&details`}>Download CSV</a>
       </Menu.Item>
     </Menu>
   );

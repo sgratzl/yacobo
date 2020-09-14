@@ -9,7 +9,7 @@ export default function Region() {
   const region = useQueryParam(extractRegion);
   const signal = useQueryParam(extractSignal);
 
-  const image = `/api/region/${region?.id}/${signal?.id}.png?plain`;
+  const image = `/api/region/${region?.id}/${signal?.id}.png`;
 
   return (
     <BaseLayout

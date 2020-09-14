@@ -6,10 +6,10 @@ import { EARLIEST, fetchSignalRegion } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { endOfToday } from 'date-fns';
 
-export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
+export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
   const { param: signal, format } = extractFormat(req, 'signal', extractSignal);
   const region = extractRegion(req);
-  const data = await fetchSignalRegion(signal.data, region, [EARLIEST, endOfToday()]);
+  const data = () => fetchSignalRegion(signal.data, region, [EARLIEST, endOfToday()]);
 
   return sendFormat(req, res, format, data, {
     title: `${signal.id}-${region.name}`,

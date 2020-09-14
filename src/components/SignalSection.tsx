@@ -13,7 +13,7 @@ import { DownloadMenu } from './DownloadMenu';
 export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatISODate(date);
   const validDate = isValid(date);
-  const image = `/api/signal/${signal.id}/${apiDate}.png?plain`;
+  const image = `/api/signal/${signal.id}/${apiDate}.png`;
 
   const showInfo = useCallback(() => {
     Modal.info({
