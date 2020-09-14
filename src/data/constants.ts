@@ -1,3 +1,4 @@
+import { min } from 'date-fns/esm';
 import { ReactNode } from 'react';
 import { formatLocal } from '../ui/utils';
 
@@ -153,4 +154,8 @@ export function selectLatestDate(meta: ISignalMeta[]) {
   const dates = meta.slice().sort((a, b) => a.maxTime.getTime() - b.maxTime.getTime());
   // use the median date
   return dates[Math.ceil(dates.length / 2)].maxTime;
+}
+
+export function selectEarliestDate(meta: ISignalMeta[]) {
+  return min(meta.map((d) => d.minTime));
 }

@@ -91,7 +91,7 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
     (value: string, row: ICountyWithDetailsValue) => {
       return (
         <Link href="/region/[region]/[signal]/[date]" as={`/region/${row.region}/${signal.id}/${apiDate}`} passHref>
-          <a>{value}</a>
+          <a href="a">{value}</a>
         </Link>
       );
     },
@@ -101,7 +101,7 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
     (value: string) => {
       return (
         <Link href="/region/[region]/[signal]/[date]" as={`/region/${value}/${signal.id}/${apiDate}`} passHref>
-          <a>{value}</a>
+          <a href="a">{value}</a>
         </Link>
       );
     },
@@ -175,7 +175,7 @@ export function DateTable({ signal, region }: { signal?: ISignal; region?: IRegi
           as={`/region/${region!.id}/${signal!.id}/${formatISODate(value)}`}
           passHref
         >
-          <a>{formatISODate(value)}</a>
+          <a href="a">{formatISODate(value)}</a>
         </Link>
       );
     },

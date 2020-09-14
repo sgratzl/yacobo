@@ -3,7 +3,7 @@
 module.exports = {
   plugins: ['@typescript-eslint', 'prettier'],
   extends: [
-    'eslint:recommended',
+    'react-app',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'prettier/@typescript-eslint',
@@ -14,6 +14,7 @@ module.exports = {
     },
   },
   rules: {
+    'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',

@@ -1,7 +1,7 @@
-import { format, formatISO, isValid, min, parseJSON } from 'date-fns';
+import { format, formatISO, isValid, parseJSON } from 'date-fns';
 import { ReactNode } from 'react';
 import useSWR from 'swr';
-import { ISignalMeta, ISignalWithMeta, selectLatestDate, signalByID } from '../data/constants';
+import { ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../data/constants';
 
 export function fetcher(path: string) {
   return fetch(path).then((r) => r.json());
@@ -43,13 +43,16 @@ export function useFetchMeta() {
   return useSWR('/api/signal', fetchMeta);
 }
 
-export function useFetchLatestDate() {
+export function useFetchMinMaxDate() {
   const { data } = useSWR('/api/signal', fetchMeta);
 
   if (!data) {
-    return undefined;
+    return { min: undefined, max: undefined };
   }
-  return selectLatestDate(data.map((d) => d.meta));
+  return {
+    min: selectEarliestDate(data.map((d) => d.meta)),
+    max: selectLatestDate(data.map((d) => d.meta)),
+  };
 }
 
 export function f<T>(value: ReactNode | ((arg?: T) => ReactNode), arg?: T) {

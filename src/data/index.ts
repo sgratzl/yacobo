@@ -1,7 +1,7 @@
 import fetch from './fetchWrapper';
-import { differenceInDays, formatISO, parseISO, startOfDay, startOfToday, subDays } from 'date-fns';
+import { differenceInDays, formatISO, parseISO, startOfDay, startOfToday } from 'date-fns';
 import { signals, ISignal, hasMeta, ISignalMeta, selectLatestDate } from './constants';
-import { IRegion, isCountyRegion, isStateRegion, regionByID, states } from './regions';
+import { IRegion, isStateRegion, regionByID } from './regions';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 

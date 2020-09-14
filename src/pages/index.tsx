@@ -2,11 +2,11 @@ import { Col, Row } from 'antd';
 import BaseLayout, { DateSelect } from '../components/BaseLayout';
 import BookmarkSection from '../components/BookmarkSection';
 import { useBookmarks } from '../components/BookmarkToggle';
-import { formatLocal, useFetchLatestDate } from '../ui/utils';
+import { formatLocal, useFetchMinMaxDate } from '../ui/utils';
 import styles from './index.module.scss';
 
 export default function Home() {
-  const date = useFetchLatestDate();
+  const { max: date } = useFetchMinMaxDate();
   const [bookmarks] = useBookmarks();
   return (
     <BaseLayout

@@ -20,7 +20,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
       title: signal.name,
       content: <Typography.Paragraph>{f(signal.longDescription, date)}</Typography.Paragraph>,
     });
-  }, []);
+  }, [signal, date]);
 
   return (
     <Card

@@ -1,7 +1,7 @@
 import { ISignal, signalByID, signals } from '../data/constants';
 import { Button, Tooltip } from 'antd';
 import { StarOutlined, StarFilled } from '@ant-design/icons';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { IRegion, regionByID } from '../data/regions';
 import createPersistedState from 'use-persisted-state';
 
@@ -94,6 +94,12 @@ const usePersistentBookmarks = createPersistedState('bookmarks');
 export function useBookmarks() {
   const [bookmarks, setBookmarks] = usePersistentBookmarks(DEFAULT_BOOKMARKS);
 
+  useEffect(() => {
+    if (bookmarks.length === 0) {
+      setBookmarks(DEFAULT_BOOKMARKS);
+    }
+  }, [bookmarks, setBookmarks]);
+
   const setParsedBookmarks = useCallback(
     (bookmarks: IBookmark[]) => {
       setBookmarks(bookmarks.map(formatBookmark));
@@ -129,10 +135,6 @@ export function useBookmark(signal: ISignal, region: IRegion): [boolean, () => v
 export function useBookmark(signalOrRegion: ISignal | IRegion, region?: IRegion) {
   const [bookmarks, setBookmarks] = useBookmarks();
 
-  if (!signalOrRegion && !region) {
-    return [false, noop];
-  }
-
   const bookmark = asBookmark(
     isSignal(signalOrRegion) ? signalOrRegion : undefined,
     isSignal(signalOrRegion) ? region : signalOrRegion
@@ -148,6 +150,9 @@ export function useBookmark(signalOrRegion: ISignal | IRegion, region?: IRegion)
     setBookmarks(bookmarks.filter((d) => d !== savedBookmark));
   }, [savedBookmark, bookmarks, setBookmarks]);
 
+  if (!signalOrRegion && !region) {
+    return [false, noop];
+  }
   return [savedBookmark != null, savedBookmark ? removeBookmark : addBookmark] as const;
 }
 
