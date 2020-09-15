@@ -14,7 +14,7 @@ import styles from './BaseLayout.module.scss';
 
 export interface BaseLayoutProps {
   pageTitle: string;
-  mainActive: 'overview' | 'region' | 'compare';
+  mainActive: 'overview' | 'region' | 'compare' | 'favorites';
   breadcrumb: { breadcrumbName: string; path: string }[];
 }
 
@@ -35,7 +35,8 @@ export default function BaseLayout({
   return (
     <Layout className={styles.layout}>
       <Head>
-        <title>COVIDInfo - {pageTitle}</title>
+        <title>YaCoBo - {pageTitle}</title>
+        {/** generate social media tags */}
       </Head>
       <Layout.Header>
         <div className={styles.logo}></div>
@@ -43,12 +44,15 @@ export default function BaseLayout({
           <Menu.Item key="overview" active={mainActive === 'overview'}>
             <Link href="/">Overview</Link>
           </Menu.Item>
+          <Menu.Item key="favorites" active={mainActive === 'favorites'}>
+            <Link href="/">Favorites</Link>
+          </Menu.Item>
           <Menu.Item key="region" active={mainActive === 'region'}>
             <Link href="/region">Single Region</Link>
           </Menu.Item>
-          <Menu.Item key="compare" active={mainActive === 'compare'}>
+          {/* <Menu.Item key="compare" active={mainActive === 'compare'}>
             <Link href="/compare">Compare Counties</Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
       </Layout.Header>
       <Layout.Content className={styles.content}>

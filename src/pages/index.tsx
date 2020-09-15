@@ -10,10 +10,10 @@ export default function Home() {
   const [bookmarks] = useBookmarks();
   return (
     <BaseLayout
-      pageTitle={`COVID${date ? ` as of ${formatLocal(date)}` : ''}`}
+      pageTitle={`COVID-19${date ? ` as of ${formatLocal(date)}` : ''}`}
       mainActive="overview"
       backIcon={false}
-      title="COVID"
+      title="YaCoBo"
       subTitle={
         date ? (
           <>
