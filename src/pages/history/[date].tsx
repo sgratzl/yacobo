@@ -2,7 +2,7 @@ import { useQueryParam } from '@/api/hooks';
 import { extractDate } from '@/api/validator';
 import BaseLayout, { DateSelect } from '@/components/BaseLayout';
 import SignalSection from '@/components/SignalSection';
-import { signals } from '@/data/constants';
+import { signals } from '@/data/signals';
 import { formatISODate, formatLocal } from '@/ui/utils';
 import { Col, Row } from 'antd';
 import styles from '../index.module.scss';

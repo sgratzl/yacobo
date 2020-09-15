@@ -1,7 +1,7 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
-import { ISignal } from '../data/constants';
+import { ISignal } from '../data/signals';
 import { IRegion } from '../data/regions';
 import { formatISODate } from '../ui/utils';
 import { BookmarkToggle } from './BookmarkToggle';

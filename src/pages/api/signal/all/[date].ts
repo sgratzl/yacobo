@@ -1,9 +1,9 @@
 import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat } from '@/api/validator';
-import { cacheMode, fetchAllRegions, formatAPIDate, IRegionValue } from '@/data';
+import { estimateCacheDuration, fetchAllRegions, formatAPIDate, IRegionValue } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { signals } from '@/data/constants';
+import { signals } from '@/data/signals';
 import { regionByID } from '@/data/regions';
 
 function merge(all: IRegionValue[][]) {
@@ -37,7 +37,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
       ...signals.map((signal) => (signal.data.hasStdErr ? [signal.id, `${signal.id}_stderr`] : signal.id)),
     ].flat(),
     // vega: () => createMap(signal, data),
-    cache: cacheMode(date),
+    cache: estimateCacheDuration(date),
     regions: regionByID,
   });
 });

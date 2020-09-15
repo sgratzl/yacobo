@@ -2,7 +2,7 @@ import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat, extractSignal } from '@/api/validator';
 import { createMap } from '@/charts';
-import { cacheMode, fetchAllRegions, formatAPIDate } from '@/data';
+import { estimateCacheDuration, fetchAllRegions, formatAPIDate } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { regionByID } from '@/data/regions';
 
@@ -15,7 +15,7 @@ export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
     title: `${signal.id}-${formatAPIDate(date)}`,
     headers: ['region', 'value', 'stderr'],
     vega: createMap.bind(null, signal),
-    cache: cacheMode(date),
+    cache: estimateCacheDuration(date),
     regions: regionByID,
   });
 });

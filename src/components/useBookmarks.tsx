@@ -1,4 +1,4 @@
-import { ISignal, signalByID, signals } from '../data/constants';
+import { ISignal, signalByID, signals } from '../data/signals';
 import { useCallback } from 'react';
 import { IRegion, regionByID } from '../data/regions';
 import createPersistedState from 'use-persisted-state';
@@ -36,7 +36,7 @@ const DEFAULT_BOOKMARKS = [
   asBookmark(undefined, regionByID('42003')!)!, // allegheny County
   asBookmark(undefined, regionByID('06')!)!, // California
   asBookmark(undefined, regionByID('06037')!)!, // Los Angeles County
-  asBookmark(signalByID.get('cases')!, regionByID('06')!)!, // California Cases
+  asBookmark(signalByID('cases')!, regionByID('06')!)!, // California Cases
 ].map(formatBookmark);
 
 function parseBookmark(bookmark: ISerializedBookmark): IBookmark | null {
@@ -44,7 +44,7 @@ function parseBookmark(bookmark: ISerializedBookmark): IBookmark | null {
     return null;
   }
   const region = bookmark.r ? regionByID(bookmark.r) : undefined;
-  const signal = bookmark.s ? signalByID.get(bookmark.s) : undefined;
+  const signal = bookmark.s ? signalByID(bookmark.s) : undefined;
   return asBookmark(signal, region);
 }
 

@@ -1,7 +1,8 @@
 import { format, formatISO, isValid, parseJSON } from 'date-fns';
 import { ReactNode } from 'react';
 import useSWR from 'swr';
-import { ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../data/constants';
+import { selectEarliestDate, selectLatestDate } from '../data/constants';
+import { ISignalMeta, ISignalWithMeta, signalByID } from '../data/signals';
 
 export function fetcher(path: string) {
   return fetch(path).then((r) => r.json());
@@ -26,7 +27,7 @@ function fetchMeta(path: string) {
     .then((r) => r.json())
     .then((rows: (ISignalMeta & { signal: string })[]) =>
       rows.map((row) => {
-        const signal = signalByID.get(row.signal)!;
+        const signal = signalByID(row.signal)!;
         return {
           ...signal,
           meta: {

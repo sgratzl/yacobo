@@ -1,4 +1,4 @@
-import { ISignal } from '../data/constants';
+import { ISignal } from '../data/signals';
 import { f, formatISODate } from '../ui/utils';
 import { Button, Card, Tooltip, Typography, Modal } from 'antd';
 import { QuestionOutlined, EyeOutlined } from '@ant-design/icons';

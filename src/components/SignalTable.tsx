@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
 import { ICountyWithDetailsValue, IDateValue } from '../data';
-import { ISignal } from '../data/constants';
+import { ISignal } from '../data/signals';
 import { IRegion } from '../data/regions';
 import { formatISODate } from '../ui/utils';
 

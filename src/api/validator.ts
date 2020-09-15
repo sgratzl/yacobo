@@ -1,6 +1,6 @@
 import { parseISO } from 'date-fns';
 import { CustomHTTPError } from './error';
-import { signalByID } from '../data/constants';
+import { signalByID } from '../data/signals';
 import { regionByID } from '../data/regions';
 
 interface IRouterLike {
@@ -9,7 +9,7 @@ interface IRouterLike {
 
 export function extractSignal(res: string | IRouterLike) {
   const querySignal = typeof res === 'string' ? res : (res.query.signal as string);
-  const signal = signalByID.get(querySignal);
+  const signal = signalByID(querySignal);
   if (!signal) {
     throw new CustomHTTPError(400, `signal "${querySignal}" not found`);
   }

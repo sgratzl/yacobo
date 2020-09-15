@@ -1,6 +1,7 @@
 import { IRegionValue, IDateValue, fetchSignalMeta, fetchMeta } from '../data';
 import { TopLevelSpec } from 'vega-lite';
-import { ISignal, ISignalMeta, selectEarliestDate } from '../data/constants';
+import { selectEarliestDate } from '../data/constants';
+import { ISignal, ISignalMeta } from '../data/signals';
 import { LayerSpec, UnitSpec } from 'vega-lite/build/src/spec';
 import { startOfToday } from 'date-fns';
 import { DataSource } from 'vega-lite/build/src/data';

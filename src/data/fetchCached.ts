@@ -1,7 +1,15 @@
 import fetchImpl from 'cross-fetch';
 import { parseJSON } from 'date-fns';
-import { getAsync, setAsync, expireAsync } from './cache';
 import { CacheDuration } from './constants';
+import { createClient } from 'redis';
+import { promisify } from 'util';
+
+const client = createClient(process.env.REDIS_URL!);
+
+const getAsync = promisify(client.get).bind(client);
+const setAsync = promisify(client.set).bind(client);
+// export const existsAsync = promisify(client.exists).bind(client);
+const expireAsync = promisify(client.expire).bind(client);
 
 function identity(v: any) {
   return v;
@@ -47,6 +55,10 @@ type FilterFlags<Base, Condition> = {
 };
 type AllowedNames<Base, Condition> = FilterFlags<Base, Condition>[keyof Base];
 
+/**
+ * helper method for parsing serialized dates
+ * @param fields
+ */
 export function parseDates<T>(fields: AllowedNames<T, Date>[]) {
   if (fields.length === 0) {
     return identity;

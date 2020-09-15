@@ -5,7 +5,8 @@ import { compile, TopLevelSpec } from 'vega-lite';
 import { Canvas } from 'canvas';
 import { CustomHTTPError } from './error';
 import { Formats } from './validator';
-import { CacheDuration, ISignal } from '../data/constants';
+import { CacheDuration } from '../data/constants';
+import { ISignal } from '../data/signals';
 import { IRegion, isCountyRegion } from '../data/regions';
 
 export interface ICommonOptions {

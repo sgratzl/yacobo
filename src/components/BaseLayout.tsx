@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
 import DatePicker from '../components/DatePicker';
-import { ISignal, signals } from '../data/constants';
+import { ISignal, signals } from '../data/signals';
 import { IRegion, states } from '../data/regions';
 import { formatISODate } from '../ui/utils';
 import styles from './BaseLayout.module.scss';

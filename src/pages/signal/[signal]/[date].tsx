@@ -4,7 +4,7 @@ import BaseLayout, { DateSelect, SignalSelect } from '@/components/BaseLayout';
 import { BookmarkToggle } from '@/components/BookmarkToggle';
 import MapImage from '@/components/MapImage';
 import SignalTable from '@/components/SignalTable';
-import { signals } from '@/data/constants';
+import { signals } from '@/data/signals';
 import { f, formatISODate, formatLocal } from '@/ui/utils';
 import { Col, Divider, Row, Typography } from 'antd';
 import { isValid } from 'date-fns';

@@ -1,6 +1,7 @@
-import fetchCached, { fetchJSON, parseDates } from './fetchJSON';
-import { differenceInDays, formatISO, parseISO, startOfToday } from 'date-fns';
-import { signals, ISignal, hasMeta, ISignalMeta, selectLatestDate, CacheDuration } from './constants';
+import fetchCached, { fetchJSON, parseDates } from './fetchCached';
+import { formatISO, parseISO } from 'date-fns';
+import { selectLatestDate, CacheDuration, estimateCacheDuration } from './constants';
+import { signals, ISignal, hasMeta, ISignalMeta } from './signals';
 import { IRegion, isStateRegion, regionByID } from './regions';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
@@ -68,7 +69,7 @@ export function fetchAllRegions(
   url.searchParams.set('fields', ['geo_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
 
   return fetchJSON(url, {
-    // TODO cache
+    cache: estimateCacheDuration(date),
     process: (r: IEpiDataRow[]) =>
       r.map((d) => ({
         region: regionByID(d.geo_value)!.id,
@@ -76,10 +77,6 @@ export function fetchAllRegions(
         stderr: d.stderr,
       })),
   });
-}
-
-export function cacheMode(date: Date) {
-  return differenceInDays(date, startOfToday()) < 5 ? 'short' : 'medium';
 }
 
 export function fetchSignalRegion(
@@ -101,7 +98,7 @@ export function fetchSignalRegion(
   url.searchParams.set('format', 'json');
   url.searchParams.set('fields', ['time_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
   return fetchJSON(url, {
-    // TODO cache
+    cache: estimateCacheDuration(date instanceof Date ? date : date[1]),
     process: (r: IEpiDataRow[]) =>
       r.map(
         (d) =>
@@ -129,7 +126,9 @@ export function fetchRegion(region: IRegion, date: Date): Promise<ISignalValue[]
         });
       });
     },
-    {}
+    {
+      cache: estimateCacheDuration(date),
+    }
   );
 }
 

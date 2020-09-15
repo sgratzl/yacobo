@@ -1,6 +1,6 @@
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
-import { ISignal } from '../data/constants';
+import { ISignal } from '../data/signals';
 import { IRegion } from '../data/regions';
 import { useBookmark } from './useBookmarks';
 
