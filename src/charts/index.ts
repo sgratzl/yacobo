@@ -10,10 +10,10 @@ import { resolve } from 'path';
 import { existsSync } from 'fs';
 
 if (typeof registerFont === 'function') {
-  let path = resolve(process.cwd(), './public/Roboto-Regular.ttf');
+  let path = resolve(process.cwd(), './fonts/Roboto-Regular.ttf');
   console.log(path);
   if (process.env.NODE_ENV === 'production' && !existsSync(path)) {
-    path = resolve(`${require.resolve('canvas')}/Roboto-Regular.ttf`);
+    path = resolve(process.cwd(), `./node_modules/canvas/Roboto-Regular.ttf`);
     console.log(path);
   }
   if (existsSync(path)) {
