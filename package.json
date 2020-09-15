@@ -14,7 +14,8 @@
     "lint": "eslint src --ext ts,tsx && prettier src/** --check",
     "fix": "eslint src --ext ts,tsx --fix && prettier src/** --write",
     "build": "next build",
-    "vercel-build": "yum install libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/ && yarn build",
+    "canvas:fix": "yum install libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/ && cp ./fonts/*.ttf node_modules/canvas",
+    "vercel-build": "yarn canvas:fix && yarn build",
     "start": "next start"
   },
   "dependencies": {
