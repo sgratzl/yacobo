@@ -5,6 +5,14 @@ import { ISignal, ISignalMeta } from '../data/signals';
 import { LayerSpec, UnitSpec } from 'vega-lite/build/src/spec';
 import { startOfToday } from 'date-fns';
 import { DataSource } from 'vega-lite/build/src/data';
+import canvas from 'canvas';
+import { resolve } from 'path';
+
+canvas.registerFont(resolve('./fonts/Roboto-Regular.ttf'), {
+  family: 'Roboto',
+  style: 'normal',
+  weight: '400',
+});
 
 const font = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`;
 
