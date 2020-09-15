@@ -1,7 +1,10 @@
 version: '3.0'
 services:
   redis:
+    # not sure why it not works in my WSL docker setup
     image: redis:alpine
-    command: redis-server --appendonly yes
+    command: /redis.conf
     ports:
-      - '6379:6379'
+      - 6379:6379
+    volumes:
+      - ./config/redis.conf:/redis.conf

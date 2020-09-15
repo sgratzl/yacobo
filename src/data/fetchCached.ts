@@ -1,15 +1,7 @@
 import fetchImpl from 'cross-fetch';
 import { parseJSON } from 'date-fns';
 import { CacheDuration } from './constants';
-import { createClient } from 'redis';
-import { promisify } from 'util';
-
-const client = createClient(process.env.REDIS_URL!);
-
-const getAsync = promisify(client.get).bind(client);
-const setAsync = promisify(client.set).bind(client);
-// export const existsAsync = promisify(client.exists).bind(client);
-const expireAsync = promisify(client.expire).bind(client);
+import { getAsync, setAsync } from './redis';
 
 function identity(v: any) {
   return v;
@@ -32,12 +24,12 @@ export default async function fetchCached<T, R = T>(
 
   const loaded = await loader(key);
   const parsed = process(loaded);
-  await setAsync(key, JSON.stringify(parsed));
-  await expireAsync(key, cache);
+  await setAsync(key, JSON.stringify(parsed), 'EX', cache);
   return parsed;
 }
 
 function fetcher(url: string) {
+  console.log('fetch', url);
   return fetchImpl(url).then((r) => r.json());
 }
 

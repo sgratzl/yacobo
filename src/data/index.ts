@@ -3,6 +3,7 @@ import { formatISO, parseISO } from 'date-fns';
 import { selectLatestDate, CacheDuration, estimateCacheDuration } from './constants';
 import { signals, ISignal, hasMeta, ISignalMeta } from './signals';
 import { IRegion, isStateRegion, regionByID } from './regions';
+export { estimateCacheDuration } from './constants';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 
