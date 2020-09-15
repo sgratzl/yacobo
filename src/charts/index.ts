@@ -11,14 +11,20 @@ import { existsSync } from 'fs';
 
 if (typeof registerFont === 'function') {
   let path = resolve(process.cwd(), './public/Roboto-Regular.ttf');
+  console.log(path);
   if (process.env.NODE_ENV === 'production' && !existsSync(path)) {
     path = resolve(`${require.resolve('canvas')}/Roboto-Regular.ttf`);
+    console.log(path);
   }
-  registerFont(path, {
-    family: 'Roboto',
-    style: 'normal',
-    weight: '400',
-  });
+  if (existsSync(path)) {
+    registerFont(path, {
+      family: 'Roboto',
+      style: 'normal',
+      weight: '400',
+    });
+  } else {
+    console.warn('skip register font');
+  }
 }
 
 const font = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`;
