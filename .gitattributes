@@ -1,17 +1,13 @@
 # These settings are for any web project
-
 # Handle line endings automatically for files detected as text
 # and leave all files detected as binary untouched.
 * text=auto eol=lf
-
 #
 # The above will handle all files NOT found below
 #
-
 #
 ## These files are text and should be normalized (Convert crlf => lf)
 #
-
 # source code
 *.php text
 *.css text
@@ -36,7 +32,6 @@
 *.sql text
 *.sh text eof=LF
 *.bat text
-
 # templates
 *.hbt text
 *.jade text
@@ -45,44 +40,34 @@
 *.dot text
 *.tmpl text
 *.phtml text
-
 # server config
 .htaccess text
-
 # git config
 .gitattributes text
 .gitignore text
-
 # code analysis config
 .jshintrc text
 .jscsrc text
 .jshintignore text
 .csslintrc text
-
 # misc config
 *.yaml text
 *.yml text
 .editorconfig text
-
 # build config
 *.npmignore text
 *.bowerrc text
 Dockerfile text eof=LF
-
 # Heroku
 Procfile text
 .slugignore text
-
 # Documentation
 *.md text
 LICENSE text
 AUTHORS text
-
-
 #
 ## These files are binary and should be left untouched
 #
-
 # (binary is a macro for -text -diff)
 *.png binary
 *.jpg binary
@@ -101,7 +86,6 @@ AUTHORS text
 *.ttf binary
 *.pyc binary
 *.pdf binary
-
 # Source files
 # ============
 *.pxd		text
@@ -111,7 +95,6 @@ AUTHORS text
 *.pyx  		text
 *.sh        text eol=lf
 *.json      text
-
 # Binary files
 # ============
 *.db		binary
@@ -120,8 +103,8 @@ AUTHORS text
 *.pyc 		binary
 *.pyd		binary
 *.pyo 		binary
-
 # Note: .db, .p, and .pkl files are associated
 # with the python modules ``pickle``, ``dbm.*``,
 # ``shelve``, ``marshal``, ``anydbm``, & ``bsddb``
 # (among others).
+fonts/*.ttf filter=lfs diff=lfs merge=lfs -text
