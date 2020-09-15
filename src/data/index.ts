@@ -1,11 +1,9 @@
 import fetch from './fetchWrapper';
-import { differenceInDays, formatISO, parseISO, startOfDay, startOfToday } from 'date-fns';
+import { differenceInDays, formatISO, parseISO, startOfToday } from 'date-fns';
 import { signals, ISignal, hasMeta, ISignalMeta, selectLatestDate } from './constants';
 import { IRegion, isStateRegion, regionByID } from './regions';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
-
-export const EARLIEST = startOfDay(new Date(2020, 1, 1));
 
 export function formatAPIDate(date: Date) {
   return formatISO(date, { representation: 'date' });

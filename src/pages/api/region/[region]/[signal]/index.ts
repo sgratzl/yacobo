@@ -2,19 +2,19 @@ import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractFormat, extractRegion, extractSignal } from '@/api/validator';
 import { createLineChart } from '@/charts';
-import { EARLIEST, fetchSignalRegion } from '@/data';
+import { fetchSignalRegion } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { endOfToday } from 'date-fns';
+import { endOfToday, startOfDay } from 'date-fns';
 
 export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
   const { param: signal, format } = extractFormat(req, 'signal', extractSignal);
   const region = extractRegion(req);
-  const data = () => fetchSignalRegion(signal.data, region, [EARLIEST, endOfToday()]);
+  const data = () => fetchSignalRegion(signal.data, region, [startOfDay(new Date(2020, 1, 1)), endOfToday()]);
 
   return sendFormat(req, res, format, data, {
     title: `${signal.id}-${region.name}`,
     headers: ['date', 'value', 'stderr'],
-    vega: (data) => createLineChart(signal, data, req.query.size === 'large' ? 2 : 1),
+    vega: createLineChart.bind(null, signal),
     cache: 'short',
   });
 });

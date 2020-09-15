@@ -1,17 +1,23 @@
-import { IRegionValue, IDateValue, fetchSignalMeta, EARLIEST } from '../data';
+import { IRegionValue, IDateValue, fetchSignalMeta, fetchMeta } from '../data';
 import { TopLevelSpec } from 'vega-lite';
-import { ISignal, ISignalMeta } from '../data/constants';
+import { ISignal, ISignalMeta, selectEarliestDate } from '../data/constants';
 import { LayerSpec, UnitSpec } from 'vega-lite/build/src/spec';
 import { startOfToday } from 'date-fns';
+import { DataSource } from 'vega-lite/build/src/data';
 
 const font = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`;
 
-export async function createLineChart(signal: ISignal, values: IDateValue[], factor = 1): Promise<TopLevelSpec> {
-  const meta = await fetchSignalMeta(signal);
+export async function createLineChart(signal: ISignal, values?: IDateValue[], factor = 1): Promise<TopLevelSpec> {
+  const metas = await fetchMeta();
+  const meta = metas.find((d) => d.signal === signal.id)!;
+  const minDate = selectEarliestDate(metas);
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     title: signal.name,
-    data: { values },
+    datasets: {
+      name: values ?? [],
+    },
+    data: { name: 'data' },
     width: 400 * factor,
     height: 200 * factor,
     encoding: {
@@ -22,7 +28,7 @@ export async function createLineChart(signal: ISignal, values: IDateValue[], fac
         field: 'date',
         type: 'temporal',
         scale: {
-          domainMin: EARLIEST.getTime(),
+          domainMin: minDate.getTime(),
           domainMax: startOfToday().getTime(),
         },
         axis: {
@@ -59,6 +65,8 @@ export async function createLineChart(signal: ISignal, values: IDateValue[], fac
 }
 
 export async function createSkeletonLineChart(factor = 1): Promise<TopLevelSpec> {
+  const metas = await fetchMeta();
+  const minDate = selectEarliestDate(metas);
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     data: { values: [] },
@@ -72,7 +80,7 @@ export async function createSkeletonLineChart(factor = 1): Promise<TopLevelSpec>
         field: 'date',
         type: 'temporal',
         scale: {
-          domainMin: EARLIEST.getTime(),
+          domainMin: minDate.getTime(),
           domainMax: startOfToday().getTime(),
         },
         axis: {
@@ -113,27 +121,36 @@ const ZERO_COLOR = 'rgb(242,242,242)';
 const STROKE = '#eaeaea';
 
 function genLayer(
-  counties: any,
+  geoSource: DataSource,
   signal: ISignal,
   meta: ISignalMeta,
   feature: string,
-  values: IRegionValue[],
+  valuesSource: DataSource,
+  mega = false,
   hidden = false
 ): LayerSpec | UnitSpec {
   return {
     data: {
-      values: counties,
+      ...geoSource,
       format: {
         type: 'topojson',
         feature,
       },
     },
     transform: [
+      ...(mega
+        ? [
+            {
+              calculate: "datum.id + '000'",
+              as: 'mega',
+            },
+          ]
+        : []),
       {
-        lookup: 'id',
+        lookup: mega ? 'mega' : 'id',
         from: {
           data: {
-            values,
+            ...valuesSource,
           },
           key: 'region',
           fields: ['value', 'stderr'],
@@ -178,23 +195,35 @@ function genLayer(
   };
 }
 
-export async function createMap(signal: ISignal, values: IRegionValue[], factor = 1) {
+const COUNTIES_URL = {
+  url: 'https://cdn.jsdelivr.net/npm/us-atlas/counties-10m.json',
+};
+
+export async function createMap(signal: ISignal, values?: IRegionValue[], factor = 1) {
   const counties = (await import('us-atlas/counties-10m.json')).default;
   const meta = await fetchSignalMeta(signal);
   const stopCount = 70;
-  const megaValues = values
+  const megaValues = (values ?? [])
     .filter((d) => d.region.endsWith('000'))
     .map((d) => ({ ...d, region: d.region.slice(0, -3) }));
+
+  const source = {
+    values: counties,
+  };
 
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     title: signal.name,
     width: 500 * factor,
     height: 300 * factor,
+    datasets: {
+      data: values ?? [],
+    },
+    data: { name: 'data' },
     layer: [
       {
         data: {
-          values: counties,
+          ...source,
           format: {
             type: 'topojson',
             feature: 'nation',
@@ -224,14 +253,14 @@ export async function createMap(signal: ISignal, values: IRegionValue[], factor 
     },
   };
 
-  if (megaValues.length > 0) {
-    spec.layer.push(genLayer(counties, signal, meta, 'states', megaValues));
+  if (!values || megaValues.length > 0) {
+    spec.layer.push(genLayer(source, signal, meta, 'states', { name: 'data' }));
   }
-  if (values.length > 0) {
-    spec.layer.push(genLayer(counties, signal, meta, 'counties', values));
+  if (!values || values.length > 0) {
+    spec.layer.push(genLayer(source, signal, meta, 'counties', { name: 'data' }, true));
   } else {
     // add a dummy layer such that we have the legend
-    spec.layer.unshift(genLayer(counties, signal, meta, 'nation', [{ region: 'US', value: 0 }], true));
+    spec.layer.unshift(genLayer(source, signal, meta, 'nation', { values: [{ region: 'US', value: 0 }] }, false, true));
   }
 
   return spec;

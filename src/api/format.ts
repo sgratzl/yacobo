@@ -137,6 +137,27 @@ export async function sendVegaPNG(
   }
 }
 
+export async function sendVegaSpec(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  spec: TopLevelSpec | Promise<TopLevelSpec>,
+  options: ICommonOptions
+) {
+  try {
+    const vegaLiteSpec = await spec;
+    if (req.query.details == null) {
+      // delete title and description
+      delete vegaLiteSpec.title;
+      delete vegaLiteSpec.description;
+    }
+    setCommonHeaders(req, res, options, 'vg.json');
+    res.setHeader('Content-Type', 'application/json');
+    res.json(vegaLiteSpec);
+  } catch (err) {
+    throw new CustomHTTPError(500, err.message);
+  }
+}
+
 async function sendVegaSVG(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -163,21 +184,25 @@ export async function sendFormat<T extends object>(
   data: () => Promise<T[]>,
   options: ICommonOptions & {
     headers: (keyof T)[];
-    vega?: (data: T[]) => TopLevelSpec | Promise<TopLevelSpec>;
+    vega?: (data?: T[], factor?: number) => TopLevelSpec | Promise<TopLevelSpec>;
   }
 ) {
+  const factor = req.query.size === 'large' ? 2 : 1;
+  if (format === Formats.vg && options.vega) {
+    return sendVegaSpec(req, res, options.vega(req.query.details == null ? undefined : await data(), factor), options);
+  }
   const d = await data();
   switch (format) {
     case Formats.csv:
       return sendCSV(req, res, d, options.headers, options);
     case Formats.png:
       if (options.vega) {
-        return sendVegaPNG(req, res, options.vega(d), options);
+        return sendVegaPNG(req, res, options.vega(d, factor), options);
       }
       break;
     case Formats.svg:
       if (options.vega) {
-        return sendVegaSVG(req, res, options.vega(d), options);
+        return sendVegaSVG(req, res, options.vega(d, factor), options);
       }
       break;
   }

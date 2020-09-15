@@ -21,6 +21,7 @@ export enum Formats {
   svg = 'svg',
   json = 'json',
   csv = 'csv',
+  vg = 'vg',
 }
 
 export function extractFormat<S extends string, V>(res: IRouterLike, key: S, resolver: (value: string) => V) {
