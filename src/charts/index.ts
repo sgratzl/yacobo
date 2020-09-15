@@ -5,27 +5,6 @@ import { ISignal, ISignalMeta } from '../data/signals';
 import { LayerSpec, UnitSpec } from 'vega-lite/build/src/spec';
 import { startOfToday } from 'date-fns';
 import { DataSource } from 'vega-lite/build/src/data';
-import { registerFont } from 'canvas';
-import { resolve } from 'path';
-import { existsSync } from 'fs';
-
-if (typeof registerFont === 'function') {
-  let path = resolve(process.cwd(), './fonts/Roboto-Regular.ttf');
-  console.log(path);
-  if (process.env.NODE_ENV === 'production' && !existsSync(path)) {
-    path = resolve(process.cwd(), `./node_modules/canvas/Roboto-Regular.ttf`);
-    console.log(path);
-  }
-  if (existsSync(path)) {
-    registerFont(path, {
-      family: 'Roboto',
-      style: 'normal',
-      weight: '400',
-    });
-  } else {
-    console.warn('skip register font');
-  }
-}
 
 const font = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`;
 
