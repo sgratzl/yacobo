@@ -5,6 +5,7 @@ import { createLineChart } from '@/charts';
 import { fetchSignalRegion } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { endOfToday, startOfDay } from 'date-fns';
+import { CacheDuration } from '@/data/constants';
 
 export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
   const { param: signal, format } = extractFormat(req, 'signal', extractSignal);
@@ -15,6 +16,6 @@ export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
     title: `${signal.id}-${region.name}`,
     headers: ['date', 'value', 'stderr'],
     vega: createLineChart.bind(null, signal),
-    cache: 'short',
+    cache: CacheDuration.short,
   });
 });

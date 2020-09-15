@@ -8,6 +8,7 @@
     "url": "https://www.sgratzl.com"
   },
   "scripts": {
+    "compile": "tsc -p tsconfig.json",
     "dev": "next dev",
     "debug": "cross-env NODE_OPTIONS='--inspect' next dev",
     "lint": "eslint src --ext ts,tsx && prettier src/** --check",
