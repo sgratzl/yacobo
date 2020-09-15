@@ -1,7 +1,7 @@
 import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractDate, extractFormat, extractSignal } from '@/api/validator';
-import { createMap } from '@/charts';
+import { createMap } from '@/charts/map';
 import { estimateCacheDuration, fetchAllRegions, formatAPIDate } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { regionByID } from '@/data/regions';

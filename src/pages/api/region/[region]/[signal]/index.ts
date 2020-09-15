@@ -1,7 +1,7 @@
 import { withMiddleware } from '@/api/middleware';
 import { sendFormat } from '@/api/format';
 import { extractFormat, extractRegion, extractSignal } from '@/api/validator';
-import { createLineChart } from '@/charts';
+import { createSignalLineChart } from '@/charts/line';
 import { fetchSignalRegion } from '@/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { endOfToday, startOfDay } from 'date-fns';
@@ -15,7 +15,7 @@ export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
   return sendFormat(req, res, format, data, {
     title: `${signal.id}-${region.name}`,
     headers: ['date', 'value', 'stderr'],
-    vega: createLineChart.bind(null, signal),
+    vega: createSignalLineChart.bind(null, signal),
     cache: CacheDuration.short,
   });
 });

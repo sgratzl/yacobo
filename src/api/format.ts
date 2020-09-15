@@ -8,6 +8,7 @@ import { Formats } from './validator';
 import { CacheDuration } from '../data/constants';
 import { ISignal } from '../data/signals';
 import { IRegion, isCountyRegion } from '../data/regions';
+import { IVegaOptions } from '@/charts';
 
 export interface ICommonOptions {
   title: string;
@@ -117,12 +118,12 @@ export async function sendVegaPNG(
   req: NextApiRequest,
   res: NextApiResponse,
   spec: TopLevelSpec | Promise<TopLevelSpec>,
-  options: ICommonOptions
+  options: ICommonOptions & IVegaOptions
 ) {
   try {
     const view = await createVega(req, spec);
-    const scale = req.query.scale ? Number.parseInt(req.query.scale as string, 10) : 1;
-    const canvas = await view.toCanvas(scale);
+    const dpi = options.devicePixelRatio;
+    const canvas = await view.toCanvas(dpi);
     const stream = ((canvas as unknown) as Canvas).createPNGStream();
     setCommonHeaders(req, res, options, 'png');
     res.setHeader('Content-Type', 'image/png');
@@ -140,11 +141,6 @@ export async function sendVegaSpec(
 ) {
   try {
     const vegaLiteSpec = await spec;
-    if (req.query.details == null) {
-      // delete title and description
-      delete vegaLiteSpec.title;
-      delete vegaLiteSpec.description;
-    }
     setCommonHeaders(req, res, options, 'vg.json');
     res.setHeader('Content-Type', 'application/json');
     res.json(vegaLiteSpec);
@@ -179,27 +175,44 @@ export async function sendFormat<T extends object>(
   data: () => Promise<T[]>,
   options: ICommonOptions & {
     headers: (keyof T)[];
-    vega?: (data?: T[], factor?: number) => TopLevelSpec | Promise<TopLevelSpec>;
+    vega?: (data: T[] | undefined, options: IVegaOptions) => TopLevelSpec | Promise<TopLevelSpec>;
   }
 ) {
-  const factor = req.query.size === 'large' ? 2 : 1;
+  const vegaOptions = extractVegaOptions(req);
   if (format === Formats.vg && options.vega) {
-    return sendVegaSpec(req, res, options.vega(req.query.details == null ? undefined : await data(), factor), options);
+    return sendVegaSpec(
+      req,
+      res,
+      options.vega(req.query.details == null ? undefined : await data(), vegaOptions),
+      options
+    );
   }
+  const fullOptions = {
+    ...options,
+    ...vegaOptions,
+  };
   const d = await data();
   switch (format) {
     case Formats.csv:
       return sendCSV(req, res, d, options.headers, options);
     case Formats.png:
       if (options.vega) {
-        return sendVegaPNG(req, res, options.vega(d, factor), options);
+        return sendVegaPNG(req, res, options.vega(d, vegaOptions), fullOptions);
       }
-      break;
+      return res.status(404).json({ message: 'png format not available' });
     case Formats.svg:
       if (options.vega) {
-        return sendVegaSVG(req, res, options.vega(d, factor), options);
+        return sendVegaSVG(req, res, options.vega(d, vegaOptions), options);
       }
-      break;
+      return res.status(404).json({ message: 'svg format not available' });
   }
   return sendJSON(req, res, d, options);
+}
+
+export function extractVegaOptions(req: NextApiRequest): IVegaOptions {
+  return {
+    scaleFactor: Number.parseInt((req.query.scale as string) ?? '1', 10),
+    details: req.query.details != null,
+    devicePixelRatio: Number.parseInt((req.query.dpr as string) ?? '1', 10),
+  };
 }

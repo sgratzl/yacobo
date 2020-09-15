@@ -1,12 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withMiddleware } from '@/api/middleware';
-import { sendVegaPNG } from '@/api/format';
-import { createSkeletonLineChart } from '@/charts';
+import { sendVegaPNG, extractVegaOptions } from '@/api/format';
+import { createSkeletonLineChart } from '@/charts/line';
 import { CacheDuration } from '@/data/constants';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
-  return sendVegaPNG(req, res, createSkeletonLineChart(req.query.size === 'large' ? 2 : 1), {
+  const options = extractVegaOptions(req);
+  return sendVegaPNG(req, res, createSkeletonLineChart(options), {
     title: 'skeleton',
     cache: CacheDuration.long,
+    ...options,
   });
 });

@@ -4,8 +4,8 @@ import { formatLocal } from '../ui/utils';
 export interface ISignal {
   id: string;
   name: string;
-  description: ReactNode | ((date: Date) => ReactNode);
-  longDescription: ReactNode | ((date: Date) => ReactNode);
+  description: (date?: Date) => string;
+  longDescription: (date?: Date) => ReactNode;
   colorScheme: string;
 
   data: {
@@ -31,13 +31,17 @@ export function hasMeta(signal: ISignal): signal is ISignalWithMeta {
   return (signal as ISignalWithMeta).meta != null;
 }
 
+function dated(prefix: string, date?: Date) {
+  return date ? ` ${prefix} ${formatLocal(date)}` : '';
+}
+
 export const signals: ISignal[] = [
   {
     id: 'fb_survey',
     name: 'Showing Symptoms',
-    description: (date: Date) => `How many out of 100 participants
-       of the daily Facebook survey from ${formatLocal(date)} show COVID-like symptoms`,
-    longDescription: `Each day, Delphi surveys tens of thousands of Facebook users and asks them
+    description: (date?: Date) => `How many out of 100 participants
+       of the daily Facebook survey${dated('from', date)} show COVID-like symptoms`,
+    longDescription: () => `Each day, Delphi surveys tens of thousands of Facebook users and asks them
     if they or anyone in their household are currently experiencing symptoms.
     Based on the survey results, we estimate the percentage of people with COVID-like symptoms.
     A person has "COVID-like" symptoms if they have a fever, along with either cough,
@@ -72,9 +76,9 @@ export const signals: ISignal[] = [
   {
     id: 'doctor_visits',
     name: 'Doctor Visits',
-    description: (date: Date) =>
-      `How many out of 100 doctor visits on ${formatLocal(date)} were due to COVID-like symptoms`,
-    longDescription: 'TODO',
+    description: (date?: Date) =>
+      `How many out of 100 doctor visits${dated('on', date)} were due to COVID-like symptoms`,
+    longDescription: () => 'TODO',
     colorScheme: 'purples',
     data: {
       unit: 'doctor visits',
@@ -87,9 +91,9 @@ export const signals: ISignal[] = [
   {
     id: 'cases',
     name: 'Confirmed Cases',
-    description: (date: Date) =>
-      `How many out of 100,000 people are newly confirmed COVID cases on ${formatLocal(date)} (7-day average)`,
-    longDescription: 'based on data reported by USAFacts and Johns Hopkins University',
+    description: (date?: Date) =>
+      `How many out of 100,000 people are newly confirmed COVID cases${dated('on', date)} (7-day average)`,
+    longDescription: () => 'based on data reported by USAFacts and Johns Hopkins University',
     colorScheme: 'yelloworangered',
     data: {
       unit: 'people',
@@ -102,9 +106,9 @@ export const signals: ISignal[] = [
   {
     id: 'antigen_tests',
     name: 'COVID-19 Antigen Tests',
-    description: (date: Date) =>
-      `How many out of 100 people tested by Quidel, Inc. on ${formatLocal(date)} show for COVID-19 antigens`,
-    longDescription: 'TODO',
+    description: (date?: Date) =>
+      `How many out of 100 people tested by Quidel, Inc.${dated('on', date)} show for COVID-19 antigens`,
+    longDescription: () => 'TODO',
     colorScheme: 'yellowgreen',
     data: {
       unit: 'people',
@@ -117,9 +121,9 @@ export const signals: ISignal[] = [
   {
     id: 'hospital_admissions',
     name: 'Hospital Admissions',
-    description: (date: Date) =>
-      `How many out of 100 hospital admission on ${formatLocal(date)} had a COVID-19 associated diagnoses`,
-    longDescription: 'TODO',
+    description: (date?: Date) =>
+      `How many out of 100 hospital admission${dated('on', date)} had a COVID-19 associated diagnoses`,
+    longDescription: () => 'TODO',
     colorScheme: 'reds',
     data: {
       unit: 'hospital admissions',
@@ -132,9 +136,9 @@ export const signals: ISignal[] = [
   {
     id: 'deaths',
     name: 'Confirmed Deaths',
-    description: (date: Date) =>
-      `How many out of 100,000 people died on ${formatLocal(date)} because of COVID (7-day average)`,
-    longDescription: 'based on data reported by USAFacts and Johns Hopkins University',
+    description: (date?: Date) =>
+      `How many out of 100,000 people died${dated('on', date)} because of COVID (7-day average)`,
+    longDescription: () => 'based on data reported by USAFacts and Johns Hopkins University',
     colorScheme: 'bluepurple',
     data: {
       unit: 'people',
