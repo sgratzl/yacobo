@@ -100,21 +100,6 @@ export const signals: ISignal[] = [
     },
   },
   {
-    id: 'hospital_admissions',
-    name: 'Hospital Admissions',
-    description: (date: Date) =>
-      `How many out of 100 hospital admission on ${formatLocal(date)} had a COVID-19 associated diagnoses`,
-    longDescription: 'TODO',
-    colorScheme: 'reds',
-    data: {
-      unit: 'hospital admissions',
-      maxValue: 100,
-      dataSource: 'hospital-admissions',
-      signal: 'smoothed_adj_covid19',
-      hasStdErr: false,
-    },
-  },
-  {
     id: 'antigen_tests',
     name: 'COVID-19 Antigen Tests',
     description: (date: Date) =>
@@ -127,6 +112,21 @@ export const signals: ISignal[] = [
       dataSource: 'quidel',
       signal: 'covid_ag_smoothed_pct_positive',
       hasStdErr: true,
+    },
+  },
+  {
+    id: 'hospital_admissions',
+    name: 'Hospital Admissions',
+    description: (date: Date) =>
+      `How many out of 100 hospital admission on ${formatLocal(date)} had a COVID-19 associated diagnoses`,
+    longDescription: 'TODO',
+    colorScheme: 'reds',
+    data: {
+      unit: 'hospital admissions',
+      maxValue: 100,
+      dataSource: 'hospital-admissions',
+      signal: 'smoothed_adj_covid19',
+      hasStdErr: false,
     },
   },
   {
