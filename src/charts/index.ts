@@ -7,10 +7,11 @@ import { startOfToday } from 'date-fns';
 import { DataSource } from 'vega-lite/build/src/data';
 import { registerFont } from 'canvas';
 import { resolve } from 'path';
+import { existsSync } from 'fs';
 
 if (typeof registerFont === 'function') {
   let path = resolve(process.cwd(), './public/Roboto-Regular.ttf');
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production' && !existsSync(path)) {
     path = require.resolve('canvas/Roboto-Regular.ttf');
   }
   registerFont(path, {
