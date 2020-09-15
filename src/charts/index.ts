@@ -12,7 +12,7 @@ import { existsSync } from 'fs';
 if (typeof registerFont === 'function') {
   let path = resolve(process.cwd(), './public/Roboto-Regular.ttf');
   if (process.env.NODE_ENV === 'production' && !existsSync(path)) {
-    path = require.resolve('canvas/Roboto-Regular.ttf');
+    path = resolve(`${require.resolve('canvas')}/Roboto-Regular.ttf`);
   }
   registerFont(path, {
     family: 'Roboto',
