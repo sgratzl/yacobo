@@ -108,3 +108,4 @@ AUTHORS text
 # ``shelve``, ``marshal``, ``anydbm``, & ``bsddb``
 # (among others).
 fonts/*.ttf filter=lfs diff=lfs merge=lfs -text
+src/data/raw/*.csv filter=lfs diff=lfs merge=lfs -text
