@@ -195,9 +195,9 @@ function genLayer(
   };
 }
 
-const COUNTIES_URL = {
-  url: 'https://cdn.jsdelivr.net/npm/us-atlas/counties-10m.json',
-};
+// const COUNTIES_URL = {
+//   url: 'https://cdn.jsdelivr.net/npm/us-atlas/counties-10m.json',
+// };
 
 export async function createMap(signal: ISignal, values?: IRegionValue[], factor = 1) {
   const counties = (await import('us-atlas/counties-10m.json')).default;
