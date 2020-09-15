@@ -5,28 +5,22 @@ import { compile, TopLevelSpec } from 'vega-lite';
 import { Canvas } from 'canvas';
 import { CustomHTTPError } from './error';
 import { Formats } from './validator';
-import { ISignal } from '../data/constants';
+import { CacheDuration, ISignal } from '../data/constants';
 import { IRegion, isCountyRegion } from '../data/regions';
 
 export interface ICommonOptions {
   title: string;
-  cache?: 'short' | 'medium' | 'long';
+  cache?: CacheDuration;
   signals?: (signal: string) => ISignal | undefined;
   regions?: (region: string) => IRegion;
 }
-
-const maxAges = {
-  short: 12 * 60 * 60,
-  medium: 48 * 60 * 60, // default
-  long: 96 * 60 * 60,
-};
 
 function setCommonHeaders(req: NextApiRequest, res: NextApiResponse, options: ICommonOptions, extension: string) {
   res.status(200);
   if (req.query.download != null) {
     res.setHeader('Content-Disposition', `attachment; filename="${options.title}.${extension}"`);
   }
-  const maxAge = maxAges[options.cache ?? 'medium'];
+  const maxAge = options.cache ?? CacheDuration.medium;
   res.setHeader('Cache-Control', `public, max-age=${maxAge}, s-max-age=${maxAge}`);
 }
 
