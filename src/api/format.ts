@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { csvFormat } from 'd3-dsv';
-import { View, parse } from 'vega';
-import { compile, TopLevelSpec } from 'vega-lite';
+import { TopLevelSpec } from 'vega-lite';
 import { Canvas } from 'canvas';
 import { CustomHTTPError } from './error';
 import { Formats } from './validator';
@@ -100,13 +99,10 @@ function sendCSV<T extends object>(
   res.end();
 }
 
-async function createVega(req: NextApiRequest, spec: TopLevelSpec | Promise<TopLevelSpec>) {
+async function createVega(spec: TopLevelSpec | Promise<TopLevelSpec>) {
   const vegaLiteSpec = await spec;
-  if (req.query.details == null) {
-    // delete title and description
-    delete vegaLiteSpec.title;
-    delete vegaLiteSpec.description;
-  }
+  const { compile } = await import('vega-lite');
+  const { View, parse } = await import('vega');
   const vegaSpec = compile(vegaLiteSpec).spec;
   const runtime = parse(vegaSpec);
   return new View(runtime, {
@@ -121,7 +117,7 @@ export async function sendVegaPNG(
   options: ICommonOptions & IVegaOptions
 ) {
   try {
-    const view = await createVega(req, spec);
+    const view = await createVega(spec);
     const dpi = options.devicePixelRatio;
     const canvas = await view.toCanvas(dpi);
     const stream = ((canvas as unknown) as Canvas).createPNGStream();
@@ -156,7 +152,7 @@ async function sendVegaSVG(
   options: ICommonOptions
 ) {
   try {
-    const view = await createVega(req, spec);
+    const view = await createVega(spec);
     const svg = await view.toSVG();
     setCommonHeaders(req, res, options, 'svg');
     res.setHeader('Content-Type', 'image/svg+xml');
