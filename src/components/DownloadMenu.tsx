@@ -1,12 +1,17 @@
 import { Button, Dropdown, Menu } from 'antd';
 import { DownloadOutlined, FileImageOutlined, FileOutlined, FileExcelOutlined } from '@ant-design/icons';
 
-export function DownloadMenu({ path, svg = true }: { path: string; svg?: boolean }) {
+export function DownloadMenu({ path, img = true }: { path: string; img?: boolean }) {
   const menu = (
     <Menu>
-      {svg && (
+      {img && (
         <Menu.Item key="svg" icon={<FileImageOutlined />}>
           <a href={`/api${path}.svg?download&details`}>Download SVG</a>
+        </Menu.Item>
+      )}
+      {img && (
+        <Menu.Item key="vg" icon={<FileImageOutlined />}>
+          <a href={`/api${path}.vg?download&details`}>Download Vega Spec</a>
         </Menu.Item>
       )}
       <Menu.Item key="json" icon={<FileOutlined />}>

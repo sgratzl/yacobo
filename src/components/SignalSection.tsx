@@ -33,7 +33,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
           </Tooltip>
         </Link>,
         <BookmarkToggle key="b" signal={signal} />,
-        <DownloadMenu key="d" path={`signal/${signal.id}/${apiDate}`} />,
+        <DownloadMenu key="d" path={`/signal/${signal.id}/${apiDate}`} />,
         <Tooltip key="i" title="show signal information">
           <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />
         </Tooltip>,

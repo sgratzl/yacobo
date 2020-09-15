@@ -19,7 +19,7 @@ export default function RegionSection({ region, date }: { region: IRegion; date?
           </Tooltip>
         </Link>,
         <BookmarkToggle key="b" region={region} />,
-        <DownloadMenu key="d" path={`region/${region.id}/all/${apiDate}`} />,
+        <DownloadMenu key="d" path={`/region/${region.id}/all/${apiDate}`} />,
       ]}
     >
       <Card.Meta title={region.name} />

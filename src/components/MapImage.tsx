@@ -2,20 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './MapImage.module.scss';
 import { classNames } from './utils';
 
-function addParam(url: URL | undefined, key: string, value: string | number) {
+function addParam(url: string | undefined, key: string, value: string | number) {
   if (!url) {
     return undefined;
   }
-  const copy = new URL(url.toString());
-  copy.searchParams.set(key, value.toString());
-  return copy;
+  return `url${url.includes('?') ? '&' : '?'}${key}=${value}`;
 }
 
-function defaultSourceSet(src?: URL) {
+function defaultSourceSet(src?: string) {
   if (!src) {
     return undefined;
   }
-  return `${src} 1x, ${addParam(src, 'scale', 2)} 2x`;
+  return `${src} 1x, ${addParam(src, 'dpr', 2)} 2x`;
 }
 
 function useImageLoading(src?: string) {
@@ -51,10 +49,9 @@ export default function MapImage({
   large?: boolean;
   type?: 'map' | 'line';
 }) {
-  const url = src ? new URL(src, window.location.href) : undefined;
   const [loading, imgRef] = useImageLoading(src);
 
-  const full = large ? addParam(url, 'size', 'large') : url;
+  const full = large ? addParam(src, 'scale', 2) : src;
   const srcSet = defaultSourceSet(full);
 
   return (
@@ -65,7 +62,7 @@ export default function MapImage({
       {loading && (
         <img
           className={classNames(styles.imgPlaceholder, type === 'line' && styles.imgLine)}
-          src={`/api/skeletons/${type}${large ? '?size=large' : ''}`}
+          src={`/api/skeletons/${type}${large ? '?scale=2' : ''}`}
           alt={alt}
         />
       )}

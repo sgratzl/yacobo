@@ -12,7 +12,11 @@ const STROKE = '#eaeaea';
 const MAP_CHART_WIDTH = 500;
 const MAP_CHART_HEIGHT = 300;
 
-function createBaseMap(meta: { title: string; description: string }, options: IVegaOptions): TopLevel<LayerSpec> {
+function createBaseMap(data: { title: string; description: string }, options: IVegaOptions): TopLevel<LayerSpec> {
+  const meta = {
+    title: data.title,
+    description: data.description,
+  };
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     width: MAP_CHART_WIDTH * options.scaleFactor,
@@ -63,11 +67,13 @@ function createLayer(data: {
   firstLayer: boolean;
   hidden?: boolean;
   valuesSource?: NamedData;
+  hasStdErr: boolean;
   mega?: boolean;
 }): UnitSpec | LayerSpec {
   return {
     data: {
       ...data.dataSource,
+      name: data.feature,
       format: {
         type: 'topojson',
         feature: data.feature,
@@ -90,8 +96,11 @@ function createLayer(data: {
                 ...data.valuesSource,
               },
               key: 'region',
-              fields: ['value', 'stderr'],
+              fields: ['value', data.hasStdErr ? ['stderr'] : []].flat(),
             },
+          },
+          {
+            filter: 'datum.value != null',
           },
         ].flat()
       : [],
@@ -103,13 +112,10 @@ function createLayer(data: {
     encoding: {
       color: {
         condition: {
-          test: {
-            field: 'value',
-            valid: false,
-          },
+          test: 'datum.value === 0',
           value: ZERO_COLOR,
         },
-        field: 'id',
+        field: 'value',
         type: 'quantitative',
         ...(data.firstLayer
           ? {
@@ -144,6 +150,7 @@ export async function createMap(signal: ISignal, values: IRegionValue[] | undefi
     colorScheme: signal.colorScheme,
     title: signal.name,
     description: signal.description(),
+    hasStdErr: signal.data.hasStdErr,
     valuesSource: {
       name: 'data',
     },
@@ -158,6 +165,7 @@ export async function createMap(signal: ISignal, values: IRegionValue[] | undefi
       {
         data: {
           ...data.dataSource,
+          name: 'missing',
           format: {
             type: 'topojson',
             feature: 'nation',
@@ -210,10 +218,11 @@ export async function createSkeletonMap(options: IVegaOptions) {
     feature: 'counties',
     maxValue: 10,
     valueTitle: 'of 100 people',
-    colorScheme: [ZERO_COLOR, ZERO_COLOR] as any,
     title: 'US Map',
     description: 'Skeleton Map',
+    colorScheme: [ZERO_COLOR, ZERO_COLOR] as any,
     firstLayer: true,
+    hasStdErr: false,
   };
 
   const spec = createBaseMap(data, options);
