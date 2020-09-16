@@ -5,8 +5,8 @@ import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
 import { extractRegion, extractSignal } from '@/common/validator';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { RegionSignalDate } from '@/components/pages/RegionSignalDate';
 import { withContext } from '@/api/middleware';
+import { RegionSignal } from '../../../../components/pages/RegionSignal';
 
 interface IRegionSignalProps extends ISerializedMinMax {
   region: string;
@@ -33,10 +33,9 @@ export const getStaticPaths: GetStaticPaths<IRegionSignalProps & ParsedUrlQuery>
   };
 };
 
-export default function RegionSignal(props: IRegionSignalProps) {
-  const { min: date } = useFetchMinMaxDate(props);
+export default function RegionSignalWrapper(props: IRegionSignalProps) {
   const region = useFallback(props.region, extractRegion, undefined);
   const signal = useFallback(props.signal, extractSignal, undefined);
 
-  return <RegionSignalDate region={region} signal={signal} date={date} />;
+  return <RegionSignal region={region} signal={signal} />;
 }
