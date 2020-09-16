@@ -7,6 +7,7 @@ import { ICommonOptions, Formats } from '../format';
 import { resolve } from 'path';
 import type { View } from 'vega';
 import type { Canvas } from 'canvas';
+import { IRequestContext } from '../middleware';
 
 // follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
 process.env.PANGOCAIRO_BACKEND = 'fontconfig';
@@ -15,12 +16,13 @@ process.env.FONTCONFIG_PATH = resolve(__dirname, './public/fonts');
 export default async function sendVega<T>(
   req: NextApiRequest,
   res: NextApiResponse,
+  ctx: IRequestContext,
   format: Formats,
   data: () => Promise<T[]>,
   vega: (data: T[] | undefined, options: IVegaOptions) => TopLevelSpec | Promise<TopLevelSpec>,
   options: ICommonOptions
 ) {
-  const vegaOptions = extractVegaOptions(req);
+  const vegaOptions = extractVegaOptions(req, ctx);
   if (format === Formats.vg && !vegaOptions.details) {
     // pure vega without data
     return sendVegaSpec(req, res, vega(undefined, vegaOptions), options);
@@ -102,10 +104,11 @@ async function sendVegaSVG(
   }
 }
 
-export function extractVegaOptions(req: NextApiRequest): IVegaOptions {
+export function extractVegaOptions(req: NextApiRequest, ctx: IRequestContext): IVegaOptions {
   return {
     scaleFactor: Number.parseInt((req.query.scale as string) ?? '1', 10),
     details: req.query.details != null,
     devicePixelRatio: Number.parseInt((req.query.dpr as string) ?? '1', 10),
+    ctx,
   };
 }

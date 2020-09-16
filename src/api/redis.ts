@@ -1,24 +1,48 @@
-import { createClient } from 'redis';
-import { promisify } from 'util';
+import { createClient, RedisClient } from 'redis';
 
-const client = createClient(process.env.REDIS_URL!);
+export class Redis {
+  private client: RedisClient | null = null;
 
-export const getAsync = promisify(client.get).bind(client);
-export const setAsyncImpl = promisify(client.set).bind(client);
+  private getClient() {
+    // lazy init
+    if (this.client) {
+      return this.client;
+    }
+    this.client = createClient(process.env.REDIS_URL!);
+    return this.client;
+  }
 
-export function setAsync(key: string, value: string | Buffer): Promise<'OK'>;
-export function setAsync(key: string, value: string | Buffer, flag: 'NX' | 'XX' | 'KEEPTTL'): Promise<'OK'>;
-export function setAsync(key: string, value: string | Buffer, mode: 'EX' | 'PX', duration: number): Promise<'OK'>;
-export function setAsync(
-  key: string,
-  value: string | Buffer,
-  mode: 'EX' | 'PX',
-  duration: number,
-  flag: 'NX' | 'XX' | 'KEEPTTL'
-): Promise<'OK'>;
-export function setAsync(...args: any[]) {
-  return setAsyncImpl.apply(client, args as any);
+  destroy() {
+    if (!this.client) {
+      return;
+    }
+    this.client.quit();
+    this.client = null;
+  }
+
+  getAsync(key: string): Promise<string | null> {
+    return new Promise<string | null>((resolve, reject) => {
+      const c = this.getClient();
+      c.get(key, (error, value) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(value);
+        }
+      });
+    });
+  }
+
+  setAsync(key: string, value: string | Buffer, mode: 'EX' | 'PX', duration: number): Promise<'OK'> {
+    return new Promise<'OK'>((resolve, reject) => {
+      const c = this.getClient();
+      c.set(key, value as any, mode, duration, (error, value) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(value);
+        }
+      });
+    });
+  }
 }
-
-// export const existsAsync = promisify(client.exists).bind(client);
-export const expireAsync = promisify(client.expire).bind(client);

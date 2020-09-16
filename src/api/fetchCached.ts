@@ -1,13 +1,14 @@
 import fetchImpl from 'cross-fetch';
 import { parseJSON } from 'date-fns';
+import { IRequestContext } from './middleware';
 import { CacheDuration } from './model';
-import { getAsync, setAsync } from './redis';
 
 function identity(v: any) {
   return v;
 }
 
 export default async function fetchCached<T, R = T>(
+  ctx: IRequestContext,
   key: string,
   loader: (key: string) => Promise<T>,
   {
@@ -16,7 +17,7 @@ export default async function fetchCached<T, R = T>(
     parse = identity,
   }: { cache?: CacheDuration; process?: (r: T) => R; parse?: (r: R) => R }
 ): Promise<R> {
-  const r = await getAsync(key);
+  const r = await ctx.redis.getAsync(key);
 
   if (r != null) {
     return parse(JSON.parse(r));
@@ -24,7 +25,7 @@ export default async function fetchCached<T, R = T>(
 
   const loaded = await loader(key);
   const parsed = process(loaded);
-  await setAsync(key, JSON.stringify(parsed), 'EX', cache);
+  await ctx.redis.setAsync(key, JSON.stringify(parsed), 'EX', cache);
   return parsed;
 }
 
@@ -34,11 +35,12 @@ function fetcher(url: string) {
 }
 
 export async function fetchJSON<T, R = T>(
+  ctx: IRequestContext,
   key: string | URL,
   options: { cache?: CacheDuration; process?: (r: T) => R; parse?: (r: R) => R }
 ): Promise<R> {
   const u = key.toString();
-  return fetchCached(u, fetcher, options);
+  return fetchCached(ctx, u, fetcher, options);
 }
 
 // based on https://medium.com/dailyjs/typescript-create-a-condition-based-subset-types-9d902cea5b8c

@@ -4,6 +4,7 @@ import { TopLevelSpec } from 'vega-lite';
 import { CustomHTTPError } from '../common/error';
 import { IRouterLike } from '../common/validator';
 import { IRegion, ISignal } from '../model';
+import { IRequestContext } from './middleware';
 import { CacheDuration } from './model';
 import sendCSV from './send/sendCSV';
 import sendJSON from './send/sendJSON';
@@ -58,6 +59,7 @@ export interface ICommonOptions {
 export async function sendFormat<T extends object>(
   req: NextApiRequest,
   res: NextApiResponse,
+  ctx: IRequestContext,
   format: Formats,
   data: () => Promise<T[]>,
   options: ICommonOptions & {
@@ -75,5 +77,5 @@ export async function sendFormat<T extends object>(
   if (!options.vega) {
     return res.status(404).json({ message: 'image formats not available' });
   }
-  return sendVega(req, res, format, data, options.vega, options);
+  return sendVega(req, res, ctx, format, data, options.vega, options);
 }

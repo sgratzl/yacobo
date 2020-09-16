@@ -78,7 +78,7 @@ export async function createSignalLineChart(
   values: IDateValue[] | undefined,
   options: IVegaOptions
 ): Promise<TopLevelSpec> {
-  const metas = await fetchMeta();
+  const metas = await fetchMeta(options.ctx);
   const meta = metas.find((d) => d.signal === signal.id)!;
   const minDate = selectEarliestDate(metas);
   return createLineChartSpec(
@@ -95,7 +95,7 @@ export async function createSignalLineChart(
 }
 
 export async function createSkeletonLineChart(options: IVegaOptions): Promise<TopLevelSpec> {
-  const metas = await fetchMeta();
+  const metas = await fetchMeta(options.ctx);
   const minDate = selectEarliestDate(metas);
   return createLineChartSpec(
     {

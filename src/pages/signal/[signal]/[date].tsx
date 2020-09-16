@@ -6,6 +6,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { fetchMinMaxDate } from '@/api/data';
 import { SignalDate } from '@/components/pages/SignalDate';
+import { withContext } from '@/api/middleware';
 
 export interface ISignalDateProps {
   signal: string;
@@ -22,7 +23,7 @@ export const getStaticProps: GetStaticProps<ISignalDateProps> = async (context) 
 };
 
 export const getStaticPaths: GetStaticPaths<ISignalDateProps & ParsedUrlQuery> = async () => {
-  const { max } = await fetchMinMaxDate();
+  const { max } = await withContext(fetchMinMaxDate);
   return {
     paths: signals.map((signal) => ({
       params: {

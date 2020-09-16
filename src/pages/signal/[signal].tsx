@@ -7,13 +7,14 @@ import { signals } from '@/model/signals';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { SignalDate } from '@/components/pages/SignalDate';
+import { withContext } from '@/api/middleware';
 
 interface ISignalProps extends ISerializedMinMax {
   signal: string;
 }
 
 export const getStaticProps: GetStaticProps<ISignalProps> = async (context) => {
-  const data = await fetchMinMaxDate();
+  const data = await withContext(fetchMinMaxDate);
   return {
     props: {
       signal: context.params!.signal as string,

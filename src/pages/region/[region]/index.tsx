@@ -5,13 +5,14 @@ import { extractRegion } from '@/common/validator';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { RegionDate } from '@/components/pages/RegionDate';
+import { withContext } from '@/api/middleware';
 
 interface IRegionProps extends ISerializedMinMax {
   region: string;
 }
 
 export const getStaticProps: GetStaticProps<IRegionProps> = async (context) => {
-  const data = await fetchMinMaxDate();
+  const data = await withContext(fetchMinMaxDate);
   return {
     props: {
       min: data.min.getTime(),

@@ -6,6 +6,7 @@ import { useFallback } from '@/client/hooks';
 import { extractDate } from '@/common/validator';
 import { ParsedUrlQuery } from 'querystring';
 import { DateOverview } from '@/components/pages/DateOverview';
+import { withContext } from '@/api/middleware';
 
 interface IDateOverviewProps {
   date: string;
@@ -20,7 +21,7 @@ export const getStaticProps: GetStaticProps<IDateOverviewProps> = async (context
 };
 
 export const getStaticPaths: GetStaticPaths<IDateOverviewProps & ParsedUrlQuery> = async () => {
-  const { max } = await fetchMinMaxDate();
+  const { max } = await withContext(fetchMinMaxDate);
   const datesToRender = estimateDateToPreRender(max);
   return {
     paths: datesToRender.map((date) => ({

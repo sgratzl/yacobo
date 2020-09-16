@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { withMiddleware } from '@/api/middleware';
+import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { createSkeletonLineChart } from '@/charts/line';
 import { CacheDuration } from '@/api/model';
 import sendVega from '@/api/send/sendVega';
@@ -17,13 +17,14 @@ function extractType(type: string): 'line' | 'map' {
   return type;
 }
 
-export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {
+export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
   const { param: type, format } = extractFormat(req, 'type', extractType, Formats.png);
 
   const factory = type === 'line' ? createSkeletonLineChart : createSkeletonMap;
   return sendVega(
     req,
     res,
+    ctx,
     format,
     () => Promise.resolve([]),
     (_data, options) => factory(options),

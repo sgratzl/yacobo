@@ -139,7 +139,7 @@ function createLayer(data: {
 }
 
 export async function createMap(signal: ISignal, values: IRegionValue[] | undefined, options: IVegaOptions) {
-  const meta = await fetchSignalMeta(signal);
+  const meta = await fetchSignalMeta(options.ctx, signal);
   const data = {
     dataSource: await chooseDataSource(options),
     maxValue: Math.min(signal.data.maxValue, Math.ceil(meta.mean + 3 * meta.stdev)),
