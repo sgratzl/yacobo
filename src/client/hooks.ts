@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { NextRouter, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 // // see https://github.com/vercel/next.js/issues/8259
 // function isRouterReady(router: NextRouter) {
@@ -19,9 +18,10 @@ import { NextRouter, useRouter } from 'next/router';
 //   return value;
 // }
 
-// export interface ILatestDateProps {
-//   info: {
-//     min: number;
-//     max: number;
-//   };
-// }
+export function useFallback<T>(value: string | undefined, resolver: (value: string) => T, defaultValue: T): T {
+  const router = useRouter();
+  if (router.isFallback || !value) {
+    return defaultValue;
+  }
+  return resolver(value!);
+}

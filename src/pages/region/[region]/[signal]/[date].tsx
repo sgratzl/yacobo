@@ -1,61 +1,36 @@
-import { useQueryParam } from '@/client/hooks';
+import { useFallback } from '@/client/hooks';
 import { extractDate, extractRegion, extractSignal } from '@/common/validator';
-import BaseLayout, { DateSelect, RegionSelect, SignalSelect } from '@/components/BaseLayout';
-import { formatAPIDate, formatLocal } from '@/common';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { ParsedUrlQuery } from 'querystring';
+import { RegionSignalDate } from '@/components/RegionSignalDate';
 
-export default function Region() {
-  const region = useQueryParam(extractRegion);
-  const signal = useQueryParam(extractSignal);
-  const date = useQueryParam(extractDate);
-  const apiDate = formatAPIDate(date);
-  return (
-    <BaseLayout
-      pageTitle={`COVID ${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}
-      mainActive="region"
-      title="COVID"
-      subTitle={
-        <>
-          <RegionSelect region={region} path="/region/[region]/[signal]/[date]" clearPath="/signal/[signal]/[date]" />
-          -
-          <SignalSelect
-            signal={signal}
-            path="/region/[region]/[signal]/[date]"
-            clearPath="/region/[region]/all/[date]"
-          />
-          as of
-          <DateSelect date={date} path="/region/[region]/[signal]/[date]" clearPath="/region/[region]/[signal]" />
-        </>
-      }
-      breadcrumb={[
-        {
-          breadcrumbName: region?.name ?? '',
-          path: '/region/[region]',
-        },
-        {
-          breadcrumbName: signal?.name ?? '',
-          path: '/region/[region]/[signal]',
-        },
-        {
-          breadcrumbName: apiDate,
-          path: '/region/[region]/[signal]/[date]',
-        },
-      ]}
-    ></BaseLayout>
-  );
+interface IRegionSignalDateProps {
+  region: string;
+  signal: string;
+  date: string;
 }
 
-export const getStaticProps: GetStaticProps<{ queryDate: string }> = async (context) => {
+export const getStaticProps: GetStaticProps<IRegionSignalDateProps> = async (context) => {
   return {
     props: {
-      queryDate: context.params!.date as string,
+      region: context.params!.region as string,
+      signal: context.params!.signal as string,
+      date: context.params!.date as string,
     },
   };
 };
 
-export const getStaticPaths: GetStaticPaths<{ date: string }> = async () => {
+export const getStaticPaths: GetStaticPaths<IRegionSignalDateProps & ParsedUrlQuery> = async () => {
   return {
-    paths: [],
+    paths: [], // no favorite regions yet
     fallback: true,
   };
 };
+
+export default function RegionSignalDateWrapper(props: IRegionSignalDateProps) {
+  const region = useFallback(props.region, extractRegion, undefined);
+  const signal = useFallback(props.signal, extractSignal, undefined);
+  const date = useFallback(props.date, extractDate, undefined);
+
+  return <RegionSignalDate region={region} signal={signal} date={date} />;
+}

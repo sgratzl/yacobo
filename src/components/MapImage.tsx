@@ -6,7 +6,7 @@ function addParam(url: string | undefined, key: string, value: string | number) 
   if (!url) {
     return undefined;
   }
-  return `url${url.includes('?') ? '&' : '?'}${key}=${value}`;
+  return `${url}${url.includes('?') ? '&' : '?'}${key}=${value}`;
 }
 
 function defaultSourceSet(src?: string) {

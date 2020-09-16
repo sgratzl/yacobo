@@ -1,54 +1,41 @@
-import { useQueryParam } from '@/client/hooks';
+import { fetchMinMaxDate } from '@/api/data';
+import { CacheDuration } from '@/api/model';
+import { useFallback } from '@/client/hooks';
+import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
 import { extractRegion, extractSignal } from '@/common/validator';
-import BaseLayout, { RegionSelect, SignalSelect } from '@/components/BaseLayout';
-import { Col, Divider, Row, Typography } from 'antd';
-import MapImage from '@/components/MapImage';
-import { DateTable } from '@/components/SignalTable';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { ParsedUrlQuery } from 'querystring';
+import { RegionSignalDate } from '@/components/RegionSignalDate';
 
-export default function Region() {
-  const region = useQueryParam(extractRegion);
-  const signal = useQueryParam(extractSignal);
+interface IRegionSignalProps extends ISerializedMinMax {
+  region: string;
+  signal: string;
+}
 
-  const image = `/api/region/${region?.id}/${signal?.id}.png`;
+export const getStaticProps: GetStaticProps<IRegionSignalProps> = async (context) => {
+  const data = await fetchMinMaxDate();
+  return {
+    props: {
+      min: data.min.getTime(),
+      max: data.max.getTime(),
+      region: context.params!.region as string,
+      signal: context.params!.signal as string,
+    },
+    revalidate: CacheDuration.short,
+  };
+};
 
-  return (
-    <BaseLayout
-      pageTitle={`COVID ${region?.name} - ${signal?.name}`}
-      mainActive="region"
-      title="COVID"
-      subTitle={
-        <>
-          <RegionSelect region={region} path="/region/[region]/[signal]" clearPath="/signal/[signal]" />
-          -
-          <SignalSelect signal={signal} path="/region/[region]/[signal]" clearPath="/region/[region]" />
-        </>
-      }
-      breadcrumb={[
-        {
-          breadcrumbName: region?.name ?? '',
-          path: '/region/[region]',
-        },
-        {
-          breadcrumbName: signal?.name ?? '',
-          path: '/region/[region]/[signal]',
-        },
-      ]}
-    >
-      <Row>
-        <Col span={24}>
-          <MapImage
-            src={region && signal ? image : undefined}
-            alt={`Line Chart ${signal?.name} for ${region?.name}`}
-            type="line"
-            large
-          />
-        </Col>
-        <Divider />
-        <Col span={24}>
-          <Typography.Title level={2}>Detail Table</Typography.Title>
-          <DateTable signal={signal} region={region} />
-        </Col>
-      </Row>
-    </BaseLayout>
-  );
+export const getStaticPaths: GetStaticPaths<IRegionSignalProps & ParsedUrlQuery> = async () => {
+  return {
+    paths: [], // no favorite regions yet
+    fallback: true,
+  };
+};
+
+export default function RegionSignal(props: IRegionSignalProps) {
+  const { min: date } = useFetchMinMaxDate(props);
+  const region = useFallback(props.region, extractRegion, undefined);
+  const signal = useFallback(props.signal, extractSignal, undefined);
+
+  return <RegionSignalDate region={region} signal={signal} date={date} />;
 }

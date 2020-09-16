@@ -1,57 +1,25 @@
-import BaseLayout, { DateSelect } from '@/components/BaseLayout';
-import SignalSection from '@/components/SignalSection';
-import { signals } from '@/model/signals';
-import { formatAPIDate, formatLocal } from '@/common';
-import { Row } from 'antd';
-import GridColumn from '@/components/GridColumn';
-import { parseISO } from 'date-fns';
+import { formatAPIDate } from '@/common';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { fetchMinMaxDate } from '@/api/data';
 import { estimateDateToPreRender } from '@/api/model';
-import { useRouter } from 'next/router';
+import { useFallback } from '@/client/hooks';
+import { extractDate } from '@/common/validator';
+import { ParsedUrlQuery } from 'querystring';
+import { DateOverview } from '@/components/DateOverview';
 
-export default function History({ queryDate }: { queryDate?: string }) {
-  const router = useRouter();
-  const date = router.isFallback || !queryDate ? undefined : parseISO(queryDate!);
-
-  return (
-    <BaseLayout
-      pageTitle={`COVID as of ${formatLocal(date)}`}
-      mainActive="overview"
-      title="COVID"
-      subTitle={
-        <>
-          as of
-          <DateSelect date={date} path="/date/[date]" />
-        </>
-      }
-      breadcrumb={[
-        {
-          breadcrumbName: formatAPIDate(date),
-          path: `/date/[date]`,
-        },
-      ]}
-    >
-      <Row>
-        {signals.map((s) => (
-          <GridColumn key={s.id}>
-            <SignalSection signal={s} date={date} />
-          </GridColumn>
-        ))}
-      </Row>
-    </BaseLayout>
-  );
+interface IDateOverviewProps {
+  date: string;
 }
 
-export const getStaticProps: GetStaticProps<{ queryDate: string }> = async (context) => {
+export const getStaticProps: GetStaticProps<IDateOverviewProps> = async (context) => {
   return {
     props: {
-      queryDate: context.params!.date as string,
+      date: context.params!.date as string,
     },
   };
 };
 
-export const getStaticPaths: GetStaticPaths<{ date: string }> = async () => {
+export const getStaticPaths: GetStaticPaths<IDateOverviewProps & ParsedUrlQuery> = async () => {
   const { max } = await fetchMinMaxDate();
   const datesToRender = estimateDateToPreRender(max);
   return {
@@ -63,3 +31,9 @@ export const getStaticPaths: GetStaticPaths<{ date: string }> = async () => {
     fallback: true,
   };
 };
+
+export default function DateOverviewWrapper(props: IDateOverviewProps) {
+  const date = useFallback(props.date, extractDate, undefined);
+
+  return <DateOverview date={date} />;
+}
