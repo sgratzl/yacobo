@@ -15,7 +15,9 @@ if (process.env.NODE_ENV === 'production') {
   // process.env.PANGOCAIRO_BACKEND = 'fontconfig';
   // process.env.FONTCONFIG_PATH = resolve('./public/fonts');
   console.error(readdirSync(__dirname));
-  console.error(resolve('./public/fonts/Roboto-Regular.ttf') + existsSync(resolve('./public/fonts/Roboto-Regular.ttf').toString());
+  console.error(
+    resolve('./public/fonts/Roboto-Regular.ttf') + existsSync(resolve('./public/fonts/Roboto-Regular.ttf')).toString()
+  );
   if (existsSync(resolve('./public/fonts/Roboto-Regular.ttf'))) {
     registerFont(resolve('./public/fonts/Roboto-Regular.ttf'), { family: 'Roboto' });
   }
