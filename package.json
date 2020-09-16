@@ -14,7 +14,7 @@
     "lint": "eslint src --ext ts,tsx && prettier src/** --check",
     "fix": "eslint src --ext ts,tsx --fix && prettier src/** --write",
     "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
-    "canvas:fix": "yum install libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/",
+    "canvas:fix": "yum install gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/",
     "vercel-build": "yarn canvas:fix && yarn build",
     "start": "next start"
   },

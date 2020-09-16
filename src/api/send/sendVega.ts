@@ -7,13 +7,16 @@ import { ICommonOptions, Formats } from '../format';
 import type { View } from 'vega';
 import { Canvas, registerFont } from 'canvas';
 import { IRequestContext } from '../middleware';
-import { resolve } from 'path';
+import { existsSync, readdirSync } from 'fs';
 
 // follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
 if (process.env.NODE_ENV === 'production') {
-  process.env.PANGOCAIRO_BACKEND = 'fontconfig';
-  process.env.FONTCONFIG_PATH = resolve('./public/fonts');
-  registerFont(resolve('./public/fonts/Roboto-Regular.ttf'), { family: 'Roboto' });
+  // process.env.PANGOCAIRO_BACKEND = 'fontconfig';
+  // process.env.FONTCONFIG_PATH = resolve('./public/fonts');
+  console.log(readdirSync(__dirname));
+  if (existsSync(__dirname + '/public/fonts/Roboto/Roboto.ttf')) {
+    registerFont(__dirname + '/public/fonts/Roboto/Roboto.ttf', { family: 'Roboto' });
+  }
 }
 
 export default async function sendVega<T>(
