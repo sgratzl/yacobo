@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { fetchMeta } from '@/data';
 import { withMiddleware } from '@/api/middleware';
-import { sendFormat } from '@/api/format';
-import { Formats } from '@/api/validator';
+import { Formats, sendFormat } from '@/api/format';
 import { CacheDuration } from '@/data/constants';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) => {

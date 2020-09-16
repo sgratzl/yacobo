@@ -2,6 +2,7 @@ import { parseISO } from 'date-fns';
 import { CustomHTTPError } from './error';
 import { signalByID } from '../data/signals';
 import { regionByID } from '../data/regions';
+import { Formats } from './format';
 
 interface IRouterLike {
   query: { [key: string]: string | string[] | undefined };
@@ -16,15 +17,12 @@ export function extractSignal(res: string | IRouterLike) {
   return signal;
 }
 
-export enum Formats {
-  png = 'png',
-  svg = 'svg',
-  json = 'json',
-  csv = 'csv',
-  vg = 'vg',
-}
-
-export function extractFormat<S extends string, V>(res: IRouterLike, key: S, resolver: (value: string) => V) {
+export function extractFormat<S extends string, V>(
+  res: IRouterLike,
+  key: S,
+  resolver: (value: string) => V,
+  defaultFormat = Formats.json
+) {
   const param = res.query[key] as string;
   if (!param) {
     throw new CustomHTTPError(400, `missing ${key}`);
@@ -33,7 +31,7 @@ export function extractFormat<S extends string, V>(res: IRouterLike, key: S, res
   if (d < 0) {
     return {
       param: resolver(param),
-      format: Formats.json,
+      format: defaultFormat,
     };
   }
   const format = Formats[(param.slice(d + 1) as unknown) as keyof typeof Formats] as Formats;
