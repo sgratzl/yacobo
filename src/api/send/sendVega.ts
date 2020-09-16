@@ -38,7 +38,7 @@ export default async function sendVega<T>(
   initCanvas();
   try {
     const canvas = ((await view.toCanvas(vegaOptions.devicePixelRatio, {
-      type: format === Formats.pdf ? 'PDF' : 'SVG',
+      type: format === Formats.pdf ? 'pdf' : 'svg',
     })) as unknown) as Canvas;
 
     switch (format) {
@@ -59,6 +59,7 @@ export default async function sendVega<T>(
           .createPDFStream({
             title: options.title,
             keywords: 'covid-19, covidcast',
+            creationDate: new Date(),
           })
           .pipe(res);
         break;
