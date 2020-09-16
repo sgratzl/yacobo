@@ -1,14 +1,13 @@
 import { formatLocal } from '@/common';
 import GridColumn from '@/components/GridColumn';
+import SignalSection from '@/components/SignalSection';
+import { signals } from '@/model';
 import { Row } from 'antd';
 import { useFetchMinMaxDate } from '../client/utils';
 import BaseLayout, { DateSelect } from '../components/BaseLayout';
-import FavoriteSection from '../components/FavoriteSection';
-import { useFavorites } from '../components/useFavorites';
 
 export default function Home() {
   const { max: date } = useFetchMinMaxDate();
-  const [bookmarks] = useFavorites();
   return (
     <BaseLayout
       pageTitle={`COVID-19${date ? ` as of ${formatLocal(date)}` : ''}`}
@@ -26,9 +25,9 @@ export default function Home() {
       breadcrumb={[]}
     >
       <Row>
-        {bookmarks.map((bookmark) => (
-          <GridColumn key={bookmark.id}>
-            <FavoriteSection bookmark={bookmark} date={date} />
+        {signals.map((s) => (
+          <GridColumn key={s.id}>
+            <SignalSection signal={s} date={date} />
           </GridColumn>
         ))}
       </Row>

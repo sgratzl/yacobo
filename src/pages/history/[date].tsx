@@ -4,8 +4,8 @@ import BaseLayout, { DateSelect } from '@/components/BaseLayout';
 import SignalSection from '@/components/SignalSection';
 import { signals } from '@/model/signals';
 import { formatAPIDate, formatLocal } from '@/common';
-import { Col, Row } from 'antd';
-import styles from '../index.module.scss';
+import { Row } from 'antd';
+import GridColumn from '@/components/GridColumn';
 
 export default function History() {
   const date = useQueryParam(extractDate);
@@ -30,9 +30,9 @@ export default function History() {
     >
       <Row>
         {signals.map((s) => (
-          <Col key={s.id} xs={24} sm={24} md={12} lg={8} className={styles.col}>
+          <GridColumn key={s.id}>
             <SignalSection signal={s} date={date} />
-          </Col>
+          </GridColumn>
         ))}
       </Row>
     </BaseLayout>

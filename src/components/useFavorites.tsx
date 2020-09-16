@@ -30,7 +30,7 @@ interface ISerializedFavorite {
 
 export type IFavorite = ISignalFavorite | IRegionFavorite | IRegionSignalFavorite;
 
-const DEFAULT_BOOKMARKS = [
+const DEFAULT_favoriteS = [
   ...signals.map((s) => asFavorite(s)!),
   asFavorite(undefined, regionByID('42')!)!, // Penn
   asFavorite(undefined, regionByID('42003')!)!, // allegheny County
@@ -39,25 +39,25 @@ const DEFAULT_BOOKMARKS = [
   asFavorite(signalByID('cases')!, regionByID('06')!)!, // California Cases
 ].map(formatFavorite);
 
-function parseFavorite(bookmark: ISerializedFavorite): IFavorite | null {
-  if (!bookmark.r && !bookmark.s) {
+function parseFavorite(favorite: ISerializedFavorite): IFavorite | null {
+  if (!favorite.r && !favorite.s) {
     return null;
   }
-  const region = bookmark.r ? regionByID(bookmark.r) : undefined;
-  const signal = bookmark.s ? signalByID(bookmark.s) : undefined;
+  const region = favorite.r ? regionByID(favorite.r) : undefined;
+  const signal = favorite.s ? signalByID(favorite.s) : undefined;
   return asFavorite(signal, region);
 }
 
-function formatFavorite(bookmark: IFavorite): ISerializedFavorite {
-  switch (bookmark.type) {
+function formatFavorite(favorite: IFavorite): ISerializedFavorite {
+  switch (favorite.type) {
     case 'region':
-      return { r: bookmark.region.id };
+      return { r: favorite.region.id };
     case 'signal':
-      return { s: bookmark.signal.id };
+      return { s: favorite.signal.id };
     default:
       return {
-        s: bookmark.signal.id,
-        r: bookmark.region.id,
+        s: favorite.signal.id,
+        r: favorite.region.id,
       };
   }
 }
@@ -88,25 +88,25 @@ function asFavorite(signal?: ISignal, region?: IRegion): IFavorite | null {
   return null;
 }
 
-const usePersistentFavorites = createPersistedState('bookmarks');
+const usePersistentFavorites = createPersistedState('favorites');
 
 export function useFavorites() {
-  const [bookmarks, setFavorites] = usePersistentFavorites(DEFAULT_BOOKMARKS);
+  const [favorites, setFavorites] = usePersistentFavorites(DEFAULT_favoriteS);
 
   // useEffect(() => {
-  //   if (bookmarks.length === 0) {
-  //     setFavorites(DEFAULT_BOOKMARKS);
+  //   if (favorites.length === 0) {
+  //     setFavorites(DEFAULT_favoriteS);
   //   }
-  // }, [bookmarks, setFavorites]);
+  // }, [favorites, setFavorites]);
 
   const setParsedFavorites = useCallback(
-    (bookmarks: IFavorite[]) => {
-      setFavorites(bookmarks.map(formatFavorite));
+    (favorites: IFavorite[]) => {
+      setFavorites(favorites.map(formatFavorite));
     },
     [setFavorites]
   );
 
-  const parsedFavorites = bookmarks.map(parseFavorite).filter((d): d is IFavorite => d != null);
+  const parsedFavorites = favorites.map(parseFavorite).filter((d): d is IFavorite => d != null);
 
   return [parsedFavorites, setParsedFavorites] as const;
 }
@@ -115,12 +115,12 @@ function isSignal(signalOrRegion: ISignal | IRegion): signalOrRegion is ISignal 
   return (signalOrRegion as ISignal).colorScheme != null;
 }
 
-function findFavorite(bookmarks: IFavorite[], bookmark: IFavorite) {
-  return bookmarks.find(
+function findFavorite(favorites: IFavorite[], favorite: IFavorite) {
+  return favorites.find(
     (d) =>
-      d.type === bookmark.type &&
-      (d as IRegionSignalFavorite).region === (bookmark as IRegionSignalFavorite).region &&
-      (d as IRegionSignalFavorite).signal === (bookmark as IRegionSignalFavorite).signal
+      d.type === favorite.type &&
+      (d as IRegionSignalFavorite).region === (favorite as IRegionSignalFavorite).region &&
+      (d as IRegionSignalFavorite).signal === (favorite as IRegionSignalFavorite).signal
   );
 }
 
@@ -129,24 +129,24 @@ function noop() {
 }
 
 function FavoriteUndo({
-  bookmark,
+  favorite,
   index,
   notificationKey,
 }: {
   index: number;
-  bookmark: IFavorite;
+  favorite: IFavorite;
   notificationKey: string;
 }) {
-  const [bookmarks, setFavorites] = useFavorites();
+  const [favorites, setFavorites] = useFavorites();
 
   const restore = useCallback(() => {
-    const old = bookmarks.slice();
-    old.splice(index, 0, bookmark);
+    const old = favorites.slice();
+    old.splice(index, 0, favorite);
     setFavorites(old);
     notification.close(notificationKey);
-  }, [bookmark, bookmarks, index, notificationKey, setFavorites]);
+  }, [favorite, favorites, index, notificationKey, setFavorites]);
   const restoreAll = useCallback(() => {
-    setFavorites(DEFAULT_BOOKMARKS.map(parseFavorite).filter((d): d is IFavorite => d != null));
+    setFavorites(DEFAULT_favoriteS.map(parseFavorite).filter((d): d is IFavorite => d != null));
     notification.close(notificationKey);
   }, [notificationKey, setFavorites]);
   return (
@@ -154,7 +154,7 @@ function FavoriteUndo({
       <Button type="primary" size="small" onClick={restore}>
         Undo
       </Button>
-      {bookmarks.length === 0 && (
+      {favorites.length === 0 && (
         <Button type="primary" size="small" onClick={restoreAll}>
           Restore default
         </Button>
@@ -167,37 +167,37 @@ export function useFavorite(warning: boolean, signal: ISignal): [boolean, () => 
 export function useFavorite(warning: boolean, region: IRegion): [boolean, () => void];
 export function useFavorite(warning: boolean, signal: ISignal, region: IRegion): [boolean, () => void];
 export function useFavorite(warning: boolean, signalOrRegion: ISignal | IRegion, region?: IRegion) {
-  const [bookmarks, setFavorites] = useFavorites();
+  const [favorites, setFavorites] = useFavorites();
 
-  const bookmark = asFavorite(
+  const favorite = asFavorite(
     isSignal(signalOrRegion) ? signalOrRegion : undefined,
     isSignal(signalOrRegion) ? region : signalOrRegion
   )!;
 
-  const savedFavorite = findFavorite(bookmarks, bookmark);
+  const savedFavorite = findFavorite(favorites, favorite);
 
   const removeFavorite = useCallback(() => {
-    const index = bookmarks.indexOf(savedFavorite!);
-    const newFavorites = bookmarks.slice();
+    const index = favorites.indexOf(savedFavorite!);
+    const newFavorites = favorites.slice();
     newFavorites.splice(index, 1);
     setFavorites(newFavorites);
 
-    const key = `bookmark${Date.now()}`;
+    const key = `favorite${Date.now()}`;
     notification.open({
       message: 'Favorite removed',
       key,
       type: 'info',
-      btn: warning && <FavoriteUndo bookmark={savedFavorite!} index={index} notificationKey={key} />,
+      btn: warning && <FavoriteUndo favorite={savedFavorite!} index={index} notificationKey={key} />,
     });
-  }, [savedFavorite, bookmarks, setFavorites, warning]);
+  }, [savedFavorite, favorites, setFavorites, warning]);
 
   const addFavorite = useCallback(() => {
-    setFavorites([...bookmarks, bookmark]);
+    setFavorites([...favorites, favorite]);
     notification.open({
       message: 'Favorite added',
       type: 'info',
     });
-  }, [bookmark, bookmarks, setFavorites]);
+  }, [favorite, favorites, setFavorites]);
 
   if (!signalOrRegion && !region) {
     return [false, noop];
