@@ -4,7 +4,7 @@ import { signals } from '@/model/signals';
 import { formatAPIDate, formatLocal } from '@/common';
 import { Row } from 'antd';
 import GridColumn from '@/components/GridColumn';
-import { parseISO } from 'date-fns/esm';
+import { parseISO } from 'date-fns';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { fetchMinMaxDate } from '@/api/data';
 import { estimateDateToPreRender } from '@/api/model';
@@ -22,13 +22,13 @@ export default function History({ queryDate }: { queryDate?: string }) {
       subTitle={
         <>
           as of
-          <DateSelect date={date} path="/history/[date]" />
+          <DateSelect date={date} path="/date/[date]" />
         </>
       }
       breadcrumb={[
         {
           breadcrumbName: formatAPIDate(date),
-          path: `/history/[date]`,
+          path: `/date/[date]`,
         },
       ]}
     >

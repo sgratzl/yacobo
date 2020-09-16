@@ -14,13 +14,13 @@ module.exports = {
         permanent: true,
       },
       {
-        source: '/history',
+        source: '/date',
         destination: '/',
         permanent: true,
       },
       {
         source: '/signal/all/:date',
-        destination: '/history/:date',
+        destination: '/date/:date',
         permanent: true,
       },
       {

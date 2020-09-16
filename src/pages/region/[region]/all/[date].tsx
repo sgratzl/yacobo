@@ -14,7 +14,7 @@ export default function Region() {
       title="COVID"
       subTitle={
         <>
-          <RegionSelect region={region} path="/region/[region]" clearPath="/history/[date]" />
+          <RegionSelect region={region} path="/region/[region]" clearPath="/date/[date]" />
           as of
           <DateSelect date={date} path="/region/[region]/all/[date]" clearPath="/region/[region]" />
         </>

@@ -1,4 +1,4 @@
-import { addDays, differenceInDays, startOfToday, startOfTomorrow, subDays } from 'date-fns';
+import { addDays, differenceInDays, endOfTomorrow, startOfToday, subDays } from 'date-fns';
 
 // in seconds
 export enum CacheDuration {
@@ -18,12 +18,14 @@ export function estimateDateToPreRender(date: Date) {
   const past = Array(PAST_DAYS)
     .fill(0)
     .map((_, i) => subDays(date, i));
-  const tomorrow = startOfTomorrow();
-
   // and till tomorrow
-  const future = Array(differenceInDays(date, tomorrow))
-    .fill(0)
-    .map((_, i) => addDays(date, i));
+  const difference = differenceInDays(date, endOfTomorrow());
+  const future =
+    difference > 0
+      ? Array(difference)
+          .fill(0)
+          .map((_, i) => addDays(date, i))
+      : [];
 
   return [...past, ...future];
 }

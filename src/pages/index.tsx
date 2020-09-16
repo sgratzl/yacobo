@@ -20,7 +20,7 @@ export default function Home(props: ISerializedMinMax) {
         date ? (
           <>
             as of
-            <DateSelect date={date} path="/history/[date]" />
+            <DateSelect date={date} path="/date/[date]" />
           </>
         ) : undefined
       }

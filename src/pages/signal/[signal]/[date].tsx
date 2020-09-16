@@ -25,7 +25,7 @@ export default function SignalDate() {
       title="COVID"
       subTitle={
         <>
-          <SignalSelect signal={signal} path={`/signal/[signal]/[date]`} clearPath={`/history/[date]`} />
+          <SignalSelect signal={signal} path={`/signal/[signal]/[date]`} clearPath={`/date/[date]`} />
           as of
           <DateSelect date={date} path={`/signal/[signal]/[date]`} clearPath={`/signal/all/[date]`} />
         </>
