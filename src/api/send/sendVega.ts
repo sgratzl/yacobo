@@ -10,16 +10,23 @@ import { IRequestContext } from '../middleware';
 import { existsSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 
-// follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
-if (process.env.NODE_ENV === 'production') {
-  // process.env.PANGOCAIRO_BACKEND = 'fontconfig';
-  // process.env.FONTCONFIG_PATH = resolve('./public/fonts');
-  console.error(readdirSync(__dirname));
-  console.error(
-    resolve('./public/fonts/Roboto-Regular.ttf') + existsSync(resolve('./public/fonts/Roboto-Regular.ttf')).toString()
-  );
-  if (existsSync(resolve('./public/fonts/Roboto-Regular.ttf'))) {
-    registerFont(resolve('./public/fonts/Roboto-Regular.ttf'), { family: 'Roboto' });
+let inited = false;
+function initFont() {
+  if (inited) {
+    return;
+  }
+  inited = true;
+  // follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
+  if (process.env.NODE_ENV === 'production') {
+    // process.env.PANGOCAIRO_BACKEND = 'fontconfig';
+    // process.env.FONTCONFIG_PATH = resolve('./public/fonts');
+    console.error(readdirSync(__dirname));
+    console.error(
+      resolve('./public/fonts/Roboto-Regular.ttf') + existsSync(resolve('./public/fonts/Roboto-Regular.ttf')).toString()
+    );
+    if (existsSync(resolve('./public/fonts/Roboto-Regular.ttf'))) {
+      registerFont(resolve('./public/fonts/Roboto-Regular.ttf'), { family: 'Roboto' });
+    }
   }
 }
 
@@ -38,6 +45,7 @@ export default async function sendVega<T>(
     return sendVegaSpec(req, res, vega(undefined, vegaOptions), options);
   }
 
+  initFont();
   const spec: TopLevelSpec = await vega(await data(), vegaOptions);
 
   if (format === Formats.vg) {
