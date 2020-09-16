@@ -6,7 +6,13 @@ import { IVegaOptions } from '@/charts';
 import { getAsync, setAsync } from '@/data/redis';
 import { setCommonHeaders } from './setCommonHeaders';
 import { ICommonOptions, Formats } from '../format';
-import sharp from 'sharp';
+import { resolve } from 'path';
+import type { View } from 'vega';
+import type { Canvas } from 'canvas';
+
+// follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
+process.env.PANGOCAIRO_BACKEND = 'fontconfig';
+process.env.FONTCONFIG_PATH = resolve(__dirname, './public/fonts');
 
 function generateSpecKey(url: string, format: Formats, options: IVegaOptions) {
   const extension = url.lastIndexOf('.');
@@ -27,24 +33,8 @@ export default async function sendVega<T>(
     // pure vega without data
     return sendVegaSpec(req, res, vega(undefined, vegaOptions), options);
   }
-  // need a spec with data with cached
-  // device pixel ratio doesn't matter
-  console.log(req.url);
 
   const specKey = generateSpecKey(req.url!, Formats.vg, vegaOptions);
-  const svgKey = generateSpecKey(req.url!, Formats.svg, vegaOptions);
-
-  if (format === Formats.png || format === Formats.svg) {
-    // maybe cached the SVG
-    const cachedSVG = await getAsync(svgKey);
-    if (cachedSVG) {
-      if (format === Formats.svg) {
-        return sendVegaSVG(req, res, cachedSVG, options);
-      } else {
-        return sendVegaPNG(req, res, cachedSVG, { ...options, ...vegaOptions });
-      }
-    }
-  }
   const cachedSpec = await getAsync(specKey);
   const spec: TopLevelSpec = cachedSpec ? JSON.parse(cachedSpec) : await vega(await data(), vegaOptions);
   if (!cachedSpec) {
@@ -53,43 +43,38 @@ export default async function sendVega<T>(
   if (format === Formats.vg) {
     return sendVegaSpec(req, res, spec, options);
   }
-  const svg = await createVegaSVG(spec, vegaOptions);
-  await setAsync(svgKey, svg, 'EX', options.cache ?? CacheDuration.short);
+  const view = await createVega(spec);
+
   if (format === Formats.svg) {
-    return sendVegaSVG(req, res, svg, options);
+    return sendVegaSVG(req, res, view, options, vegaOptions);
   }
-  return sendVegaPNG(req, res, svg, { ...options, ...vegaOptions });
+  return sendVegaPNG(req, res, view, options, vegaOptions);
 }
 
-async function createVegaSVG(spec: TopLevelSpec | Promise<TopLevelSpec>, options: IVegaOptions) {
+async function createVega(spec: TopLevelSpec | Promise<TopLevelSpec>) {
   const vegaLiteSpec = await spec;
   const { compile } = await import('vega-lite');
   const s = compile(vegaLiteSpec).spec;
 
   const { View, parse } = await import('vega');
   const runtime = parse(s);
-  const view = new View(runtime, {
+  return new View(runtime, {
     renderer: 'none',
   });
-  return view.toSVG(options.devicePixelRatio);
 }
 
 async function sendVegaPNG(
   req: NextApiRequest,
   res: NextApiResponse,
-  svg: string,
-  options: ICommonOptions & IVegaOptions
+  vega: View,
+  options: ICommonOptions,
+  vegaOptions: IVegaOptions
 ) {
   try {
-    const dpi = options.devicePixelRatio;
-    const svgBuffer = Buffer.from(svg);
+    const canvas = ((await vega.toCanvas(vegaOptions.devicePixelRatio)) as unknown) as Canvas;
     setCommonHeaders(req, res, options, 'png');
     res.setHeader('Content-Type', 'image/png');
-    sharp(svgBuffer, {
-      density: 72 * dpi,
-    })
-      .png()
-      .pipe(res);
+    canvas.createPNGStream().pipe(res);
   } catch (err) {
     throw new CustomHTTPError(500, err.message);
   }
@@ -111,8 +96,15 @@ async function sendVegaSpec(
   }
 }
 
-async function sendVegaSVG(req: NextApiRequest, res: NextApiResponse, svg: string, options: ICommonOptions) {
+async function sendVegaSVG(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  vega: View,
+  options: ICommonOptions,
+  vegaOptions: IVegaOptions
+) {
   try {
+    const svg = await vega.toSVG(vegaOptions.scaleFactor);
     setCommonHeaders(req, res, options, 'svg');
     res.setHeader('Content-Type', 'image/svg+xml');
     res.send(svg);
