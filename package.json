@@ -13,7 +13,7 @@
     "debug": "cross-env NODE_OPTIONS='--inspect' next dev",
     "lint": "eslint src --ext ts,tsx && prettier src/** --check",
     "fix": "eslint src --ext ts,tsx --fix && prettier src/** --write",
-    "build": "next build",
+    "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "canvas:fix": "yum install libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/",
     "vercel-build": "yarn canvas:fix && yarn build",
     "start": "next start"
