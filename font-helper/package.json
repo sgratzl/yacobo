@@ -1,8 +1,10 @@
 {
   "name": "font-helper",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "private": true,
+  "module": "index.esm.js",
   "main": "index.js",
   "sideEffects": true,
   "files": [
