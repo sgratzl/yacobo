@@ -5,7 +5,7 @@ import { estimateDateToPreRender } from '@/api/model';
 import { useFallback } from '@/client/hooks';
 import { extractDate } from '@/common/validator';
 import { ParsedUrlQuery } from 'querystring';
-import { DateOverview } from '@/components/DateOverview';
+import { DateOverview } from '@/routes/DateOverview';
 
 interface IDateOverviewProps {
   date: string;

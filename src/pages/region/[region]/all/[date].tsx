@@ -2,7 +2,7 @@ import { useFallback } from '@/client/hooks';
 import { extractDate, extractRegion } from '@/common/validator';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { RegionDate } from '@/components/RegionDate';
+import { RegionDate } from '@/routes/RegionDate';
 
 interface IRegionDateProps {
   region: string;

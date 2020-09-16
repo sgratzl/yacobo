@@ -2,7 +2,7 @@ import { useFallback } from '@/client/hooks';
 import { extractDate, extractRegion, extractSignal } from '@/common/validator';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { RegionSignalDate } from '@/components/RegionSignalDate';
+import { RegionSignalDate } from '@/routes/RegionSignalDate';
 
 interface IRegionSignalDateProps {
   region: string;

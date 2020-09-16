@@ -5,7 +5,7 @@ import { formatAPIDate } from '@/common';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { fetchMinMaxDate } from '@/api/data';
-import { SignalDate } from '../../../components/SignalDate';
+import { SignalDate } from '@/routes/SignalDate';
 
 export interface ISignalDateProps {
   signal: string;
