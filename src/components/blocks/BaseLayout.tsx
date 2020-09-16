@@ -45,7 +45,7 @@ export default function BaseLayout({
             <Link href="/">Overview</Link>
           </Menu.Item>
           <Menu.Item key="favorites" active={mainActive === 'favorites'}>
-            <Link href="/">Favorites</Link>
+            <Link href="/favorites">Favorites</Link>
           </Menu.Item>
           <Menu.Item key="region" active={mainActive === 'region'}>
             <Link href="/region">Single Region</Link>
