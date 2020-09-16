@@ -1,5 +1,5 @@
-import { useQueryParam } from '@/api/hooks';
-import { extractRegion } from '@/api/validator';
+import { useQueryParam } from '@/client/hooks';
+import { extractRegion } from '@/common/validator';
 import BaseLayout, { RegionSelect } from '@/components/BaseLayout';
 
 export default function Region() {

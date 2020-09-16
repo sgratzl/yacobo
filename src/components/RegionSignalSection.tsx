@@ -1,9 +1,9 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
-import { ISignal } from '../data/signals';
-import { IRegion } from '../data/regions';
-import { formatISODate } from '../ui/utils';
+import { ISignal } from '../model/signals';
+import { IRegion } from '../model/regions';
+import { formatAPIDate } from '@/common';
 import { FavoriteToggle } from './FavoriteToggle';
 import { DownloadMenu } from './DownloadMenu';
 import styles from './SignalSection.module.scss';
@@ -17,7 +17,7 @@ export default function RegionSignalSection({
   signal: ISignal;
   date?: Date;
 }) {
-  const apiDate = formatISODate(date);
+  const apiDate = formatAPIDate(date);
 
   const cover = (
     <>

@@ -1,5 +1,5 @@
+import { formatLocal } from '@/common';
 import { ReactNode } from 'react';
-import { formatLocal } from '../ui/utils';
 
 export interface ISignal {
   id: string;

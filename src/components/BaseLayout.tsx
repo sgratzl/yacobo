@@ -7,10 +7,10 @@ import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
 import DatePicker from '../components/DatePicker';
-import { ISignal, signals } from '../data/signals';
-import { IRegion, states } from '../data/regions';
-import { formatISODate } from '../ui/utils';
+import { ISignal, signals } from '../model/signals';
+import { IRegion, states } from '../model/regions';
 import styles from './BaseLayout.module.scss';
+import { formatAPIDate } from '@/common';
 
 export interface BaseLayoutProps {
   pageTitle: string;
@@ -166,7 +166,7 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
   const onSelect = useCallback(
     (s: Date | null) => {
       if (s) {
-        router.push(path, injectQuery(router, path, { date: formatISODate(s) }));
+        router.push(path, injectQuery(router, path, { date: formatAPIDate(s) }));
       } else if (clearPath) {
         router.push(clearPath, injectQuery(router, clearPath));
       }

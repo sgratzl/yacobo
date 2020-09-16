@@ -1,9 +1,9 @@
-import { useQueryParam } from '@/api/hooks';
-import { extractDate } from '@/api/validator';
+import { useQueryParam } from '@/client/hooks';
+import { extractDate } from '@/common/validator';
 import BaseLayout, { DateSelect } from '@/components/BaseLayout';
 import SignalSection from '@/components/SignalSection';
-import { signals } from '@/data/signals';
-import { formatISODate, formatLocal } from '@/ui/utils';
+import { signals } from '@/model/signals';
+import { formatAPIDate, formatLocal } from '@/common';
 import { Col, Row } from 'antd';
 import styles from '../index.module.scss';
 
@@ -23,7 +23,7 @@ export default function History() {
       }
       breadcrumb={[
         {
-          breadcrumbName: formatISODate(date),
+          breadcrumbName: formatAPIDate(date),
           path: `/history/[date]`,
         },
       ]}

@@ -1,7 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { csvFormat } from 'd3-dsv';
-import { ISignal } from '../../data/signals';
-import { IRegion, isCountyRegion } from '../../data/regions';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { IRegion, isCountyRegion, ISignal } from '../../model';
 import { ICommonOptions } from '../format';
 import { setCommonHeaders } from './setCommonHeaders';
 

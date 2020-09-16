@@ -1,5 +1,4 @@
-import { ISignal } from '../data/signals';
-import { f, formatISODate } from '../ui/utils';
+import { ISignal } from '../model/signals';
 import { Button, Card, Tooltip, Typography, Modal } from 'antd';
 import { QuestionOutlined, EyeOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -9,16 +8,17 @@ import { isValid } from 'date-fns';
 import MapImage from './MapImage';
 import { FavoriteToggle } from './FavoriteToggle';
 import { DownloadMenu } from './DownloadMenu';
+import { formatAPIDate } from '@/common';
 
 export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
-  const apiDate = formatISODate(date);
+  const apiDate = formatAPIDate(date);
   const validDate = isValid(date);
   const image = `/api/signal/${signal.id}/${apiDate}.png`;
 
   const showInfo = useCallback(() => {
     Modal.info({
       title: signal.name,
-      content: <Typography.Paragraph>{f(signal.longDescription, date)}</Typography.Paragraph>,
+      content: <Typography.Paragraph>{signal.longDescription(date)}</Typography.Paragraph>,
     });
   }, [signal, date]);
 
@@ -39,7 +39,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
         </Tooltip>,
       ]}
     >
-      <Card.Meta title={signal.name} description={f(signal.description, date)} />
+      <Card.Meta title={signal.name} description={signal.description(date)} />
     </Card>
   );
 }

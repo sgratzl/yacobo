@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withMiddleware } from '@/api/middleware';
 import { createSkeletonLineChart } from '@/charts/line';
-import { CacheDuration } from '@/data/constants';
+import { CacheDuration } from '@/api/model';
 import sendVega from '@/api/send/sendVega';
-import { extractFormat } from '@/api/validator';
-import { CustomHTTPError } from '@/api/error';
+import { CustomHTTPError } from '@/common/error';
 import { createSkeletonMap } from '@/charts/map';
-import { Formats } from '@/api/format';
+import { Formats, extractFormat } from '@/api/format';
 
 function extractType(type: string): 'line' | 'map' {
   if (!type) {

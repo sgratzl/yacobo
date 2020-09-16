@@ -1,13 +1,13 @@
-import { useQueryParam } from '@/api/hooks';
-import { extractDate, extractRegion, extractSignal } from '@/api/validator';
+import { useQueryParam } from '@/client/hooks';
+import { extractDate, extractRegion, extractSignal } from '@/common/validator';
 import BaseLayout, { DateSelect, RegionSelect, SignalSelect } from '@/components/BaseLayout';
-import { formatISODate, formatLocal } from '@/ui/utils';
+import { formatAPIDate, formatLocal } from '@/common';
 
 export default function Region() {
   const region = useQueryParam(extractRegion);
   const signal = useQueryParam(extractSignal);
   const date = useQueryParam(extractDate);
-  const apiDate = formatISODate(date);
+  const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
       pageTitle={`COVID ${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}

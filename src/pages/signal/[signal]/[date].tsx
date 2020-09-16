@@ -1,20 +1,20 @@
-import { useQueryParam } from '@/api/hooks';
-import { extractDate, extractSignal } from '@/api/validator';
+import { useQueryParam } from '@/client/hooks';
+import { extractDate, extractSignal } from '@/common/validator';
 import BaseLayout, { DateSelect, SignalSelect } from '@/components/BaseLayout';
 import { FavoriteToggle } from '@/components/FavoriteToggle';
 import MapImage from '@/components/MapImage';
 import SignalTable from '@/components/SignalTable';
-import { signals } from '@/data/signals';
-import { f, formatISODate, formatLocal } from '@/ui/utils';
+import { signals } from '@/model/signals';
 import { Col, Divider, Row, Typography } from 'antd';
 import { isValid } from 'date-fns';
 import { DownloadMenu } from '@/components/DownloadMenu';
+import { formatLocal, formatAPIDate } from '@/common';
 
 export default function SignalDate() {
   // TODO could be a fake one
   const signal = useQueryParam(extractSignal) ?? signals[0];
   const date = useQueryParam(extractDate);
-  const apiDate = formatISODate(date);
+  const apiDate = formatAPIDate(date);
   const validDate = isValid(date);
   const image = `/api/signal/${signal.id}/${apiDate}.png`;
 
@@ -47,7 +47,7 @@ export default function SignalDate() {
     >
       <Row>
         <Col span={24}>
-          <Typography.Paragraph>{f(signal.description, date)}</Typography.Paragraph>
+          <Typography.Paragraph>{signal.description(date)}</Typography.Paragraph>
         </Col>
         <Col span={24}>
           <MapImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} large />
@@ -55,12 +55,12 @@ export default function SignalDate() {
         <Divider />
         <Col span={24}>
           <Typography.Title level={2}>Description</Typography.Title>
-          <Typography.Paragraph>{f(signal.longDescription, date)}</Typography.Paragraph>
+          <Typography.Paragraph>{signal.longDescription(date)}</Typography.Paragraph>
         </Col>
 
         <Col span={24}>
           <Typography.Title level={2}>Background</Typography.Title>
-          <Typography.Paragraph>{f(signal.longDescription, date)}</Typography.Paragraph>
+          <Typography.Paragraph>{signal.longDescription(date)}</Typography.Paragraph>
         </Col>
 
         <Col span={24}>

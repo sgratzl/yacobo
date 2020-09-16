@@ -1,5 +1,5 @@
-import { useQueryParam } from '@/api/hooks';
-import { extractRegion, extractSignal } from '@/api/validator';
+import { useQueryParam } from '@/client/hooks';
+import { extractRegion, extractSignal } from '@/common/validator';
 import BaseLayout, { RegionSelect, SignalSelect } from '@/components/BaseLayout';
 import { Col, Divider, Row, Typography } from 'antd';
 import MapImage from '@/components/MapImage';

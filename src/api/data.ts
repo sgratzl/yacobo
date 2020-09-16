@@ -1,56 +1,29 @@
-import fetchCached, { fetchJSON, parseDates } from './fetchCached';
 import { formatISO, parseISO } from 'date-fns';
-import { selectLatestDate, CacheDuration, estimateCacheDuration } from './constants';
-import { signals, ISignal, hasMeta, ISignalMeta } from './signals';
-import { IRegion, isStateRegion, regionByID } from './regions';
-export { estimateCacheDuration } from './constants';
+import {
+  hasMeta,
+  IDateValue,
+  IEpiDataRow,
+  IRegion,
+  IRegionValue,
+  ISignal,
+  ISignalMeta,
+  ISignalValue,
+  isStateRegion,
+  regionByID,
+  selectLatestDate,
+  signals,
+} from '../model';
+import fetchCached, { fetchJSON, parseDates } from './fetchCached';
+import { CacheDuration, estimateCacheDuration } from './model';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';
 
-export function formatAPIDate(date: Date) {
+function formatCCastAPIDate(date: Date) {
   return formatISO(date, { representation: 'date' });
 }
-export function parseAPIDate(v: number | string) {
+
+function parseCCastAPIDate(v: number | string) {
   return parseISO(`${v}T000000-05`);
-}
-
-export interface IValue {
-  value?: number | null;
-  stderr?: number | null;
-}
-
-export interface IRegionValue extends IValue {
-  region: string;
-}
-
-export interface ICountyWithDetailsValue extends IRegionValue {
-  regionName: string;
-  regionPopulation: number;
-  regionState: string;
-}
-
-export interface IStateWithDetailsValue extends IRegionValue {
-  regionName: string;
-  regionPopulation: number;
-}
-
-export interface IDateValue extends IValue {
-  date: Date;
-}
-
-export interface ISignalValue extends IValue {
-  signal: string;
-}
-export interface ISignalWithDetailsValue extends ISignalValue {
-  signalName: string;
-}
-
-export interface IEpiDataRow {
-  signal: string;
-  geo_value: string;
-  time_value: number;
-  value: number;
-  stderr: number;
 }
 
 export function fetchAllRegions(
@@ -65,7 +38,7 @@ export function fetchAllRegions(
   url.searchParams.set('geo_type', level);
   url.searchParams.set('time_type', 'day');
   url.searchParams.set('geo_value', '*');
-  url.searchParams.set('time_values', formatAPIDate(date));
+  url.searchParams.set('time_values', formatCCastAPIDate(date));
   url.searchParams.set('format', 'json');
   url.searchParams.set('fields', ['geo_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
 
@@ -94,7 +67,7 @@ export function fetchSignalRegion(
   url.searchParams.set('geo_value', isStateRegion(region) ? region.short.toLowerCase() : region.id);
   url.searchParams.set(
     'time_values',
-    date instanceof Date ? formatAPIDate(date) : `${formatAPIDate(date[0])}:${formatAPIDate(date[1])}`
+    date instanceof Date ? formatCCastAPIDate(date) : `${formatCCastAPIDate(date[0])}:${formatCCastAPIDate(date[1])}`
   );
   url.searchParams.set('format', 'json');
   url.searchParams.set('fields', ['time_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
@@ -104,7 +77,7 @@ export function fetchSignalRegion(
       r.map(
         (d) =>
           ({
-            date: parseAPIDate(d.time_value),
+            date: parseCCastAPIDate(d.time_value),
             value: d.value,
             stderr: d.stderr,
           } as IDateValue)
@@ -115,7 +88,7 @@ export function fetchSignalRegion(
 
 export function fetchRegion(region: IRegion, date: Date): Promise<ISignalValue[]> {
   return fetchCached(
-    `${region.id}-${formatAPIDate(date)}`,
+    `${region.id}-${formatCCastAPIDate(date)}`,
     () => {
       return Promise.all(signals.map((signal) => fetchSignalRegion(signal.data, region, date))).then((infos) => {
         return signals.map((signal, i) => {
@@ -143,8 +116,8 @@ function injectMeta(data: any[]) {
       {
         mean: d.mean_value,
         stdev: d.stdev_value,
-        minTime: parseAPIDate(d.min_time),
-        maxTime: parseAPIDate(d.max_time),
+        minTime: parseCCastAPIDate(d.min_time),
+        maxTime: parseCCastAPIDate(d.max_time),
       },
     ])
   );

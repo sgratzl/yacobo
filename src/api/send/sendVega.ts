@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TopLevelSpec } from 'vega-lite';
-import { CustomHTTPError } from '../error';
-import { CacheDuration } from '../../data/constants';
+import { CustomHTTPError } from '../../common/error';
+import { CacheDuration } from '../model';
 import { IVegaOptions } from '@/charts';
-import { getAsync, setAsync } from '@/data/redis';
+import { getAsync, setAsync } from '@/api/redis';
 import { setCommonHeaders } from './setCommonHeaders';
 import { ICommonOptions, Formats } from '../format';
 import { resolve } from 'path';

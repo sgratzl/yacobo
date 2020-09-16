@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CustomHTTPError } from './error';
+import { CustomHTTPError } from '../common/error';
 import Cors from 'cors';
 
 // Initialize the cors middleware

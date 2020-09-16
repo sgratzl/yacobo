@@ -1,9 +1,10 @@
-import { IDateValue, fetchMeta } from '../data';
+import { fetchMeta } from '../api/data';
 import { TopLevelSpec } from 'vega-lite';
-import { selectEarliestDate } from '../data/constants';
-import { ISignal } from '../data/signals';
+import { selectEarliestDate } from '../model/constants';
+import { ISignal } from '../model/signals';
 import { startOfToday } from 'date-fns';
 import { IVegaOptions, font } from '.';
+import { IDateValue } from '@/model';
 
 const LINE_CHART_WIDTH = 400;
 const LINE_CHART_HEIGHT = 200;

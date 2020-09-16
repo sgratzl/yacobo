@@ -1,11 +1,11 @@
 import { withMiddleware } from '@/api/middleware';
-import { sendFormat } from '@/api/format';
-import { extractFormat, extractRegion, extractSignal } from '@/api/validator';
+import { sendFormat, extractFormat } from '@/api/format';
+import { extractRegion, extractSignal } from '@/common/validator';
 import { createSignalLineChart } from '@/charts/line';
-import { fetchSignalRegion } from '@/data';
+import { fetchSignalRegion } from '@/api/data';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { endOfToday, startOfDay } from 'date-fns';
-import { CacheDuration } from '@/data/constants';
+import { CacheDuration } from '@/api/model';
 
 export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
   const { param: signal, format } = extractFormat(req, 'signal', extractSignal);

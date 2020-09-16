@@ -1,9 +1,10 @@
+import { IVegaOptions } from '@/charts';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TopLevelSpec } from 'vega-lite';
-import { CacheDuration } from '../data/constants';
-import { ISignal } from '../data/signals';
-import { IRegion } from '../data/regions';
-import { IVegaOptions } from '@/charts';
+import { CustomHTTPError } from '../common/error';
+import { IRouterLike } from '../common/validator';
+import { IRegion, ISignal } from '../model';
+import { CacheDuration } from './model';
 import sendCSV from './send/sendCSV';
 import sendJSON from './send/sendJSON';
 import sendVega from './send/sendVega';
@@ -14,6 +15,36 @@ export enum Formats {
   json = 'json',
   csv = 'csv',
   vg = 'vg',
+}
+
+export function extractFormat<S extends string, V>(
+  res: IRouterLike,
+  key: S,
+  resolver: (value: string) => V,
+  defaultFormat = Formats.json
+) {
+  const param = res.query[key] as string;
+  if (!param) {
+    throw new CustomHTTPError(400, `missing ${key}`);
+  }
+  const d = param.lastIndexOf('.');
+  if (d < 0) {
+    return {
+      param: resolver(param),
+      format: defaultFormat,
+    };
+  }
+  const format = Formats[(param.slice(d + 1) as unknown) as keyof typeof Formats] as Formats;
+  if (!format) {
+    throw new CustomHTTPError(
+      400,
+      `invalid format "${param.slice(d + 1)}", supported: ${Object.keys(Formats).join(',')}`
+    );
+  }
+  return {
+    param: resolver(param.slice(0, d)),
+    format,
+  };
 }
 
 export interface ICommonOptions {

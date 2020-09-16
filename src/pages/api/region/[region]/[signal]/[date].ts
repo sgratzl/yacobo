@@ -1,10 +1,11 @@
 import { withMiddleware } from '@/api/middleware';
-import { sendFormat } from '@/api/format';
-import { extractDate, extractFormat, extractRegion, extractSignal } from '@/api/validator';
-import { estimateCacheDuration, fetchSignalRegion } from '@/data';
+import { extractFormat, sendFormat } from '@/api/format';
+import { extractDate, extractRegion, extractSignal } from '@/common/validator';
+import { fetchSignalRegion } from '@/api/data';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { formatISODate } from '@/ui/utils';
-import { signalByID } from '@/data/signals';
+import { formatAPIDate } from '@/common';
+import { signalByID } from '@/model/signals';
+import { estimateCacheDuration } from '@/api/model';
 
 export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
   const { param: date, format } = extractFormat(req, 'date', extractDate);
@@ -12,7 +13,7 @@ export default withMiddleware((req: NextApiRequest, res: NextApiResponse) => {
   const region = extractRegion(req);
   const data = () => fetchSignalRegion(signal.data, region, date);
   return sendFormat(req, res, format, data, {
-    title: `${region.name}-${signal.id}-${formatISODate(date)}`,
+    title: `${region.name}-${signal.id}-${formatAPIDate(date)}`,
     headers: ['value', 'stderr'],
     cache: estimateCacheDuration(date),
     signals: signalByID.bind(signalByID),

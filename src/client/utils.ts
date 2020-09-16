@@ -1,25 +1,10 @@
-import { format, formatISO, isValid, parseJSON } from 'date-fns';
+import { parseJSON } from 'date-fns';
 import { ReactNode } from 'react';
 import useSWR from 'swr';
-import { selectEarliestDate, selectLatestDate } from '../data/constants';
-import { ISignalMeta, ISignalWithMeta, signalByID } from '../data/signals';
+import { ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../model';
 
 export function fetcher(path: string) {
   return fetch(path).then((r) => r.json());
-}
-
-export function formatISODate(date?: Date) {
-  if (!date || !isValid(date)) {
-    return '?';
-  }
-  return formatISO(date, { representation: 'date' });
-}
-
-export function formatLocal(date?: Date) {
-  if (!date || !isValid(date)) {
-    return '?';
-  }
-  return format(date, 'MMM, d');
 }
 
 function fetchMeta(path: string) {

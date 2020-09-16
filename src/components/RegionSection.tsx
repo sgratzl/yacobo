@@ -1,14 +1,14 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
-import { IRegion } from '../data/regions';
-import { formatISODate } from '../ui/utils';
+import { IRegion } from '../model/regions';
 import { FavoriteToggle } from './FavoriteToggle';
 import { DownloadMenu } from './DownloadMenu';
 import styles from './SignalSection.module.scss';
+import { formatAPIDate } from '@/common';
 
 export default function RegionSection({ region, date }: { region: IRegion; date?: Date }) {
-  const apiDate = formatISODate(date);
+  const apiDate = formatAPIDate(date);
   return (
     <Card
       className={styles.card}

@@ -4,10 +4,8 @@ import { parseJSON, isValid } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
-import { ICountyWithDetailsValue, IDateValue } from '../data';
-import { ISignal } from '../data/signals';
-import { IRegion } from '../data/regions';
-import { formatISODate } from '../ui/utils';
+import { ICountyWithDetailsValue, IDateValue, IRegion, ISignal } from '../model';
+import { formatAPIDate } from '../common';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
 
@@ -78,7 +76,7 @@ function fetchFilter(key: string) {
 }
 
 export default function SignalTable({ signal, date }: { signal: ISignal; date?: Date }) {
-  const apiDate = formatISODate(date);
+  const apiDate = formatAPIDate(date);
   const validDate = isValid(date);
 
   const { data } = useSWR<ICountyWithDetailsValue[]>(
@@ -172,10 +170,10 @@ export function DateTable({ signal, region }: { signal?: ISignal; region?: IRegi
       return (
         <Link
           href="/region/[region]/[signal]/[date]"
-          as={`/region/${region!.id}/${signal!.id}/${formatISODate(value)}`}
+          as={`/region/${region!.id}/${signal!.id}/${formatAPIDate(value)}`}
           passHref
         >
-          <a href="a">{formatISODate(value)}</a>
+          <a href="a">{formatAPIDate(value)}</a>
         </Link>
       );
     },

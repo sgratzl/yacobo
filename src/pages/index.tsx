@@ -2,8 +2,9 @@ import { Col, Row } from 'antd';
 import BaseLayout, { DateSelect } from '../components/BaseLayout';
 import FavoriteSection from '../components/FavoriteSection';
 import { useFavorites } from '../components/useFavorites';
-import { formatLocal, useFetchMinMaxDate } from '../ui/utils';
+import { useFetchMinMaxDate } from '../client/utils';
 import styles from './index.module.scss';
+import { formatLocal } from '@/common';
 
 export default function Home() {
   const { max: date } = useFetchMinMaxDate();

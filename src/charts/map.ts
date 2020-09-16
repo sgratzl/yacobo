@@ -3,8 +3,8 @@ import { InlineData, NamedData } from 'vega-lite/build/src/data';
 import { SchemeParams } from 'vega-lite/build/src/scale';
 import { LayerSpec, TopLevel, UnitSpec } from 'vega-lite/build/src/spec';
 import { font, IVegaOptions } from '.';
-import { fetchSignalMeta, IRegionValue } from '../data';
-import { ISignal } from '../data/signals';
+import { fetchSignalMeta } from '../api/data';
+import { IRegionValue, ISignal } from '../model';
 
 const ZERO_COLOR = 'rgb(242,242,242)';
 const STROKE = '#eaeaea';

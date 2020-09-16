@@ -1,10 +1,13 @@
 import { withMiddleware } from '@/api/middleware';
-import { sendFormat } from '@/api/format';
-import { extractDate, extractFormat } from '@/api/validator';
-import { estimateCacheDuration, fetchAllRegions, formatAPIDate, IRegionValue } from '@/data';
+import { sendFormat, extractFormat } from '@/api/format';
+import { extractDate } from '@/common/validator';
+import { fetchAllRegions } from '@/api/data';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { signals } from '@/data/signals';
-import { regionByID } from '@/data/regions';
+import { signals } from '@/model/signals';
+import { regionByID } from '@/model/regions';
+import { IRegionValue } from '@/model';
+import { formatAPIDate } from '@/common';
+import { estimateCacheDuration } from '@/api/model';
 
 function merge(all: IRegionValue[][]) {
   const regions = new Map<string, { region: string } & Record<string, string | number | undefined | null>>();

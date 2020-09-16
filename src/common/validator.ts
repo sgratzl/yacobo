@@ -1,10 +1,8 @@
 import { parseISO } from 'date-fns';
 import { CustomHTTPError } from './error';
-import { signalByID } from '../data/signals';
-import { regionByID } from '../data/regions';
-import { Formats } from './format';
+import { regionByID, signalByID } from '../model';
 
-interface IRouterLike {
+export interface IRouterLike {
   query: { [key: string]: string | string[] | undefined };
 }
 
@@ -15,36 +13,6 @@ export function extractSignal(res: string | IRouterLike) {
     throw new CustomHTTPError(400, `signal "${querySignal}" not found`);
   }
   return signal;
-}
-
-export function extractFormat<S extends string, V>(
-  res: IRouterLike,
-  key: S,
-  resolver: (value: string) => V,
-  defaultFormat = Formats.json
-) {
-  const param = res.query[key] as string;
-  if (!param) {
-    throw new CustomHTTPError(400, `missing ${key}`);
-  }
-  const d = param.lastIndexOf('.');
-  if (d < 0) {
-    return {
-      param: resolver(param),
-      format: defaultFormat,
-    };
-  }
-  const format = Formats[(param.slice(d + 1) as unknown) as keyof typeof Formats] as Formats;
-  if (!format) {
-    throw new CustomHTTPError(
-      400,
-      `invalid format "${param.slice(d + 1)}", supported: ${Object.keys(Formats).join(',')}`
-    );
-  }
-  return {
-    param: resolver(param.slice(0, d)),
-    format,
-  };
 }
 
 export function extractRegion(res: string | IRouterLike) {

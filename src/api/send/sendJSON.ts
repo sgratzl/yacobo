@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { isCountyRegion } from '../../data/regions';
+import { isCountyRegion } from '../../model/regions';
 import { ICommonOptions } from '../format';
 import { setCommonHeaders } from './setCommonHeaders';
 

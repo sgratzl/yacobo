@@ -1,6 +1,6 @@
 import fetchImpl from 'cross-fetch';
 import { parseJSON } from 'date-fns';
-import { CacheDuration } from './constants';
+import { CacheDuration } from './model';
 import { getAsync, setAsync } from './redis';
 
 function identity(v: any) {
