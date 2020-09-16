@@ -1,13 +1,13 @@
-import { ISignal } from '../model/signals';
+import { ISignal } from '../../model/signals';
 import { Button, Card, Tooltip, Typography, Modal } from 'antd';
 import { QuestionOutlined, EyeOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import styles from './SignalSection.module.scss';
 import { isValid } from 'date-fns';
-import MapImage from './MapImage';
-import { FavoriteToggle } from './FavoriteToggle';
-import { DownloadMenu } from './DownloadMenu';
+import MapImage from '../blocks/MapImage';
+import { FavoriteToggle } from '../blocks/FavoriteToggle';
+import { DownloadMenu } from '../blocks/DownloadMenu';
 import { formatAPIDate } from '@/common';
 
 export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {

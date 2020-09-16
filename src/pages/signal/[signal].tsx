@@ -6,7 +6,7 @@ import { extractSignal } from '@/common/validator';
 import { signals } from '@/model/signals';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { SignalDate } from '@/routes/SignalDate';
+import { SignalDate } from '@/components/pages/SignalDate';
 
 interface ISignalProps extends ISerializedMinMax {
   signal: string;

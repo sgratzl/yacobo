@@ -1,6 +1,6 @@
-import { ISignal, signalByID, signals } from '../model/signals';
+import { ISignal, signalByID, signals } from '../../model/signals';
 import { useCallback } from 'react';
-import { IRegion, regionByID } from '../model/regions';
+import { IRegion, regionByID } from '../../model/regions';
 import createPersistedState from 'use-persisted-state';
 import { Button, notification } from 'antd';
 

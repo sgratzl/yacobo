@@ -1,4 +1,4 @@
-import BaseLayout, { DateSelect, RegionSelect, SignalSelect } from '@/components/BaseLayout';
+import BaseLayout, { DateSelect, RegionSelect, SignalSelect } from '@/components/blocks/BaseLayout';
 import { formatAPIDate, formatLocal } from '@/common';
 import { IRegion, ISignal } from '@/model';
 

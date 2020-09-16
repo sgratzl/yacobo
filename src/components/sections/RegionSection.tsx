@@ -1,9 +1,9 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
-import { IRegion } from '../model/regions';
-import { FavoriteToggle } from './FavoriteToggle';
-import { DownloadMenu } from './DownloadMenu';
+import { IRegion } from '../../model/regions';
+import { FavoriteToggle } from '../blocks/FavoriteToggle';
+import { DownloadMenu } from '../blocks/DownloadMenu';
 import styles from './SignalSection.module.scss';
 import { formatAPIDate } from '@/common';
 

@@ -6,9 +6,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
-import DatePicker from '../components/DatePicker';
-import { ISignal, signals } from '../model/signals';
-import { IRegion, states } from '../model/regions';
+import DatePicker from './DatePicker';
+import { ISignal, signals } from '../../model/signals';
+import { IRegion, states } from '../../model/regions';
 import styles from './BaseLayout.module.scss';
 import { formatAPIDate } from '@/common';
 

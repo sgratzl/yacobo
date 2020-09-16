@@ -1,5 +1,4 @@
 import { parseJSON } from 'date-fns';
-import { ReactNode } from 'react';
 import useSWR from 'swr';
 import { ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../model';
 

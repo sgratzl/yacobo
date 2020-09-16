@@ -1,11 +1,11 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
-import { ISignal } from '../model/signals';
-import { IRegion } from '../model/regions';
+import { ISignal } from '../../model/signals';
+import { IRegion } from '../../model/regions';
 import { formatAPIDate } from '@/common';
-import { FavoriteToggle } from './FavoriteToggle';
-import { DownloadMenu } from './DownloadMenu';
+import { FavoriteToggle } from '../blocks/FavoriteToggle';
+import { DownloadMenu } from '../blocks/DownloadMenu';
 import styles from './SignalSection.module.scss';
 
 export default function RegionSignalSection({

@@ -4,7 +4,7 @@ import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
 import { extractRegion } from '@/common/validator';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { RegionDate } from '@/routes/RegionDate';
+import { RegionDate } from '@/components/pages/RegionDate';
 
 interface IRegionProps extends ISerializedMinMax {
   region: string;

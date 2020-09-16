@@ -2,7 +2,7 @@ import { fetchMinMaxDate } from '@/api/data';
 import { CacheDuration } from '@/api/model';
 import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
 import { GetStaticProps } from 'next';
-import { DateOverview } from '@/routes/DateOverview';
+import { DateOverview } from '@/components/pages/DateOverview';
 
 export const getStaticProps: GetStaticProps<ISerializedMinMax> = async () => {
   const data = await fetchMinMaxDate();

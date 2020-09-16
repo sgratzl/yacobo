@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './MapImage.module.scss';
-import { classNames } from './utils';
+import { classNames } from '../utils';
 
 function addParam(url: string | undefined, key: string, value: string | number) {
   if (!url) {

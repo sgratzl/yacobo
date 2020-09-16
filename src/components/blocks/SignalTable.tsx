@@ -4,8 +4,8 @@ import { parseJSON, isValid } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
-import { ICountyWithDetailsValue, IDateValue, IRegion, ISignal } from '../model';
-import { formatAPIDate } from '../common';
+import { ICountyWithDetailsValue, IDateValue, IRegion, ISignal } from '../../model';
+import { formatAPIDate } from '../../common';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
 

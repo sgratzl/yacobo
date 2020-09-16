@@ -1,9 +1,9 @@
-import BaseLayout, { DateSelect } from '@/components/BaseLayout';
-import SignalSection from '@/components/SignalSection';
+import BaseLayout, { DateSelect } from '@/components/blocks/BaseLayout';
+import SignalSection from '@/components/sections/SignalSection';
 import { signals } from '@/model/signals';
 import { formatAPIDate, formatLocal } from '@/common';
 import { Row } from 'antd';
-import GridColumn from '@/components/GridColumn';
+import GridColumn from '@/components/blocks/GridColumn';
 
 export function DateOverview({ date }: { date?: Date }) {
   return (

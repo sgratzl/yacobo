@@ -1,7 +1,7 @@
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
-import { ISignal } from '../model/signals';
-import { IRegion } from '../model/regions';
+import { ISignal } from '../../model/signals';
+import { IRegion } from '../../model/regions';
 import { useFavorite } from './useFavorites';
 
 export function FavoriteToggle({

@@ -1,11 +1,11 @@
-import BaseLayout, { DateSelect, SignalSelect } from '@/components/BaseLayout';
-import { FavoriteToggle } from '@/components/FavoriteToggle';
-import MapImage from '@/components/MapImage';
-import SignalTable from '@/components/SignalTable';
+import BaseLayout, { DateSelect, SignalSelect } from '@/components/blocks/BaseLayout';
+import { FavoriteToggle } from '@/components/blocks/FavoriteToggle';
+import MapImage from '@/components/blocks/MapImage';
+import SignalTable from '@/components/blocks/SignalTable';
 import { ISignal } from '@/model/signals';
 import { Col, Divider, Row, Typography } from 'antd';
 import { isValid } from 'date-fns';
-import { DownloadMenu } from '@/components/DownloadMenu';
+import { DownloadMenu } from '@/components/blocks/DownloadMenu';
 import { formatLocal, formatAPIDate } from '@/common';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
