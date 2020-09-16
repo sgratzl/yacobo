@@ -1,9 +1,9 @@
-import { IBookmark } from './useBookmarks';
+import { IFavorite } from './useFavorites';
 import RegionSection from './RegionSection';
 import RegionSignalSection from './RegionSignalSection';
 import SignalSection from './SignalSection';
 
-export default function BookmarkSection({ bookmark, date }: { bookmark: IBookmark; date?: Date }) {
+export default function FavoriteSection({ bookmark, date }: { bookmark: IFavorite; date?: Date }) {
   switch (bookmark.type) {
     case 'signal':
       return <SignalSection signal={bookmark.signal} date={date} />;

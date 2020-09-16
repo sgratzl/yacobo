@@ -2,9 +2,9 @@ import { StarFilled, StarOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 import { ISignal } from '../data/signals';
 import { IRegion } from '../data/regions';
-import { useBookmark } from './useBookmarks';
+import { useFavorite } from './useFavorites';
 
-export function BookmarkToggle({
+export function FavoriteToggle({
   signal,
   region,
   warning = true,
@@ -13,14 +13,14 @@ export function BookmarkToggle({
   region?: IRegion;
   warning?: boolean;
 }) {
-  const [bookmarked, toggleBookmark] = useBookmark(warning, signal ?? (region as any), region!);
+  const [bookmarked, toggleFavorite] = useFavorite(warning, signal ?? (region as any), region!);
 
   return (
     <Tooltip title={bookmarked ? 'remove from favorites' : 'mark as favorite'}>
       <Button
         type="default"
         shape="circle"
-        onClick={toggleBookmark}
+        onClick={toggleFavorite}
         icon={bookmarked ? <StarFilled /> : <StarOutlined />}
       />
     </Tooltip>

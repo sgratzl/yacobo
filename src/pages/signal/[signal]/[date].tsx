@@ -1,7 +1,7 @@
 import { useQueryParam } from '@/api/hooks';
 import { extractDate, extractSignal } from '@/api/validator';
 import BaseLayout, { DateSelect, SignalSelect } from '@/components/BaseLayout';
-import { BookmarkToggle } from '@/components/BookmarkToggle';
+import { FavoriteToggle } from '@/components/FavoriteToggle';
 import MapImage from '@/components/MapImage';
 import SignalTable from '@/components/SignalTable';
 import { signals } from '@/data/signals';
@@ -41,7 +41,7 @@ export default function SignalDate() {
         },
       ]}
       extra={[
-        <BookmarkToggle signal={signal} key="bookmark" warning={false} />,
+        <FavoriteToggle signal={signal} key="bookmark" warning={false} />,
         <DownloadMenu key="download" path={`/signal/${signal.id}/${apiDate}`} />,
       ]}
     >

@@ -7,7 +7,7 @@ import { useCallback } from 'react';
 import styles from './SignalSection.module.scss';
 import { isValid } from 'date-fns';
 import MapImage from './MapImage';
-import { BookmarkToggle } from './BookmarkToggle';
+import { FavoriteToggle } from './FavoriteToggle';
 import { DownloadMenu } from './DownloadMenu';
 
 export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
@@ -32,7 +32,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,
-        <BookmarkToggle key="b" signal={signal} />,
+        <FavoriteToggle key="b" signal={signal} />,
         <DownloadMenu key="d" path={`/signal/${signal.id}/${apiDate}`} />,
         <Tooltip key="i" title="show signal information">
           <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />

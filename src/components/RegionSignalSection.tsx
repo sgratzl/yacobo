@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ISignal } from '../data/signals';
 import { IRegion } from '../data/regions';
 import { formatISODate } from '../ui/utils';
-import { BookmarkToggle } from './BookmarkToggle';
+import { FavoriteToggle } from './FavoriteToggle';
 import { DownloadMenu } from './DownloadMenu';
 import styles from './SignalSection.module.scss';
 
@@ -34,7 +34,7 @@ export default function RegionSignalSection({
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,
-        <BookmarkToggle key="b" region={region} signal={signal} />,
+        <FavoriteToggle key="b" region={region} signal={signal} />,
         <DownloadMenu key="d" path={`/region/${region.id}/${signal.id}/${apiDate}`} />,
       ]}
     >

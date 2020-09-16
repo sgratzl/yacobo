@@ -3,7 +3,7 @@ import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
 import { IRegion } from '../data/regions';
 import { formatISODate } from '../ui/utils';
-import { BookmarkToggle } from './BookmarkToggle';
+import { FavoriteToggle } from './FavoriteToggle';
 import { DownloadMenu } from './DownloadMenu';
 import styles from './SignalSection.module.scss';
 
@@ -18,7 +18,7 @@ export default function RegionSection({ region, date }: { region: IRegion; date?
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,
-        <BookmarkToggle key="b" region={region} />,
+        <FavoriteToggle key="b" region={region} />,
         <DownloadMenu key="d" path={`/region/${region.id}/all/${apiDate}`} />,
       ]}
     >
