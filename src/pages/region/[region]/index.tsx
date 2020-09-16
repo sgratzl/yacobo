@@ -1,8 +1,12 @@
+import { fetchMinMaxDate } from '@/api/data';
 import { useQueryParam } from '@/client/hooks';
+import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
 import { extractRegion } from '@/common/validator';
 import BaseLayout, { RegionSelect } from '@/components/BaseLayout';
+import { GetStaticProps } from 'next';
 
-export default function Region() {
+export default function Region(props: ISerializedMinMax) {
+  const date = useFetchMinMaxDate(props);
   const region = useQueryParam(extractRegion);
   return (
     <BaseLayout
@@ -23,3 +27,13 @@ export default function Region() {
     ></BaseLayout>
   );
 }
+
+export const getStaticProps: GetStaticProps<ISerializedMinMax> = async (context) => {
+  const data = await fetchMinMaxDate();
+  return {
+    props: {
+      min: data.min.getTime(),
+      max: data.max.getTime(),
+    },
+  };
+};

@@ -10,6 +10,7 @@ import {
   ISignalValue,
   isStateRegion,
   regionByID,
+  selectEarliestDate,
   selectLatestDate,
   signals,
 } from '../model';
@@ -152,6 +153,9 @@ export function fetchSignalMeta(signal: ISignal) {
   return fetchMeta().then((meta) => meta.find((d) => d.signal === signal.id)!);
 }
 
-export function fetchLatestDate() {
-  return fetchMeta().then(selectLatestDate);
+export function fetchMinMaxDate() {
+  return fetchMeta().then((meta) => ({
+    min: selectEarliestDate(meta),
+    max: selectLatestDate(meta),
+  }));
 }

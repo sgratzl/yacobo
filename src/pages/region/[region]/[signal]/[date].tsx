@@ -2,6 +2,7 @@ import { useQueryParam } from '@/client/hooks';
 import { extractDate, extractRegion, extractSignal } from '@/common/validator';
 import BaseLayout, { DateSelect, RegionSelect, SignalSelect } from '@/components/BaseLayout';
 import { formatAPIDate, formatLocal } from '@/common';
+import { GetStaticPaths, GetStaticProps } from 'next';
 
 export default function Region() {
   const region = useQueryParam(extractRegion);
@@ -43,3 +44,18 @@ export default function Region() {
     ></BaseLayout>
   );
 }
+
+export const getStaticProps: GetStaticProps<{ queryDate: string }> = async (context) => {
+  return {
+    props: {
+      queryDate: context.params!.date as string,
+    },
+  };
+};
+
+export const getStaticPaths: GetStaticPaths<{ date: string }> = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};

@@ -1,13 +1,15 @@
+import { fetchMinMaxDate } from '@/api/data';
+import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
 import { formatLocal } from '@/common';
 import GridColumn from '@/components/GridColumn';
 import SignalSection from '@/components/SignalSection';
 import { signals } from '@/model';
 import { Row } from 'antd';
-import { useFetchMinMaxDate } from '../client/utils';
+import { GetStaticProps } from 'next';
 import BaseLayout, { DateSelect } from '../components/BaseLayout';
 
-export default function Home() {
-  const { max: date } = useFetchMinMaxDate();
+export default function Home(props: ISerializedMinMax) {
+  const { max: date } = useFetchMinMaxDate(props);
   return (
     <BaseLayout
       pageTitle={`COVID-19${date ? ` as of ${formatLocal(date)}` : ''}`}
@@ -34,3 +36,13 @@ export default function Home() {
     </BaseLayout>
   );
 }
+
+export const getStaticProps: GetStaticProps<ISerializedMinMax> = async () => {
+  const data = await fetchMinMaxDate();
+  return {
+    props: {
+      min: data.min.getTime(),
+      max: data.max.getTime(),
+    },
+  };
+};
