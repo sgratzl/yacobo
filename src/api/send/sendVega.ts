@@ -22,6 +22,12 @@ function initVega() {
   // process.env.PANGOCAIRO_BACKEND = 'fontconfig';
   // process.env.FONTCONFIG_PATH = resolve('./public/fonts');
   console.error(readdirSync(__dirname));
+  console.error(readdirSync(process.cwd()));
+  if (existsSync(join(process.cwd(), './public'))) {
+    console.error('public' + readdirSync(process.cwd()));
+  } else {
+    console.error('no public');
+  }
   const file = join(process.cwd(), './public/fonts/Roboto-Regular.ttf');
   console.error(resolve(file) + existsSync(file).toString());
   if (existsSync(file)) {
