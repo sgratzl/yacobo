@@ -99,9 +99,6 @@ function createLayer(data: {
               fields: ['value', data.hasStdErr ? ['stderr'] : []].flat(),
             },
           },
-          {
-            filter: 'datum.value != null',
-          },
         ].flat()
       : [],
     mark: {
@@ -215,7 +212,7 @@ export async function createMap(signal: ISignal, values: IRegionValue[] | undefi
 export async function createSkeletonMap(options: IVegaOptions) {
   const data = {
     dataSource: await chooseDataSource(options),
-    feature: 'counties',
+    feature: 'nation',
     maxValue: 10,
     valueTitle: 'of 100 people',
     title: 'US Map',
@@ -226,6 +223,14 @@ export async function createSkeletonMap(options: IVegaOptions) {
   };
 
   const spec = createBaseMap(data, options);
-  spec.layer.push(createLayer(data));
+  spec.layer.push({
+    ...createLayer(data),
+    transform: [
+      {
+        calculate: '0',
+        as: 'value',
+      },
+    ],
+  });
   return spec;
 }
