@@ -1,6 +1,9 @@
-import { registerFont } from 'canvas';
-import { existsSync, readdirSync } from 'fs';
-import { join, resolve } from 'path';
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-env node */
+
+const { registerFont } = require('canvas');
+const { existsSync, readdirSync } = require('fs');
+const { join, resolve } = require('path');
 
 let canvasInited = false;
 
