@@ -4,14 +4,17 @@ import { CustomHTTPError } from '../../common/error';
 import { IVegaOptions } from '@/charts';
 import { setCommonHeaders } from './setCommonHeaders';
 import { ICommonOptions, Formats } from '../format';
-import { resolve } from 'path';
 import type { View } from 'vega';
-import type { Canvas } from 'canvas';
+import { Canvas, registerFont } from 'canvas';
 import { IRequestContext } from '../middleware';
+import { resolve } from 'path';
 
 // follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
-process.env.PANGOCAIRO_BACKEND = 'fontconfig';
-process.env.FONTCONFIG_PATH = resolve(__dirname, './public/fonts');
+if (process.env.NODE_ENV === 'production') {
+  process.env.PANGOCAIRO_BACKEND = 'fontconfig';
+  process.env.FONTCONFIG_PATH = resolve('./public/fonts');
+  registerFont(resolve('./public/fonts/Roboto-Regular.ttf'), { family: 'Roboto' });
+}
 
 export default async function sendVega<T>(
   req: NextApiRequest,
