@@ -1,12 +1,12 @@
 import { fetchMinMaxDate } from '@/api/data';
 import { CacheDuration } from '@/api/model';
 import { useFallback } from '@/client/hooks';
-import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
+import { ISerializedMinMax } from '@/client/utils';
 import { extractRegion, extractSignal } from '@/common/validator';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { withContext } from '@/api/middleware';
-import { RegionSignal } from '../../../../components/pages/RegionSignal';
+import { RegionSignal } from '@/components/pages/RegionSignal';
 
 interface IRegionSignalProps extends ISerializedMinMax {
   region: string;

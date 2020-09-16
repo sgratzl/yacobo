@@ -2,8 +2,8 @@ import BaseLayout, { DateSelect, RegionSelect } from '@/components/blocks/BaseLa
 import { formatAPIDate, formatLocal } from '@/common';
 import { IRegion, signals } from '@/model';
 import GridColumn from '../blocks/GridColumn';
-import { RegionSignalDate } from './RegionSignalDate';
 import { Row } from 'antd';
+import RegionSignalSection from '../sections/RegionSignalSection';
 
 export function RegionDate({ date, region }: { region?: IRegion; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -33,7 +33,7 @@ export function RegionDate({ date, region }: { region?: IRegion; date?: Date }) 
       <Row>
         {signals.map((s) => (
           <GridColumn key={s.id}>
-            <RegionSignalDate region={region} signal={s} date={date} />
+            <RegionSignalSection region={region} signal={s} date={date} />
           </GridColumn>
         ))}
       </Row>

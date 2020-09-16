@@ -13,8 +13,8 @@ export default function RegionSignalSection({
   signal,
   date,
 }: {
-  region: IRegion;
-  signal: ISignal;
+  region?: IRegion;
+  signal?: ISignal;
   date?: Date;
 }) {
   const apiDate = formatAPIDate(date);
@@ -29,16 +29,16 @@ export default function RegionSignalSection({
       className={styles.card}
       cover={cover}
       actions={[
-        <Link key="d" href="/region/[region]/[signal]/[date]" as={`/region/${region.id}/${signal.id}/${apiDate}`}>
+        <Link key="d" href="/region/[region]/[signal]/[date]" as={`/region/${region?.id}/${signal?.id}/${apiDate}`}>
           <Tooltip title="show region details">
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,
         <FavoriteToggle key="b" region={region} signal={signal} />,
-        <DownloadMenu key="d" path={`/region/${region.id}/${signal.id}/${apiDate}`} />,
+        <DownloadMenu key="d" path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
       ]}
     >
-      <Card.Meta title={region.name} />
+      <Card.Meta title={region?.name} />
     </Card>
   );
 }
