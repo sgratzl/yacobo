@@ -31,7 +31,7 @@
     "cross-fetch": "^3.0.6",
     "d3-dsv": "^2.0.0",
     "date-fns": "^2.16.1",
-    "yacobo-font-helper": "file:./yacobo-font-helper",
+    "yacobo-font-helper-r": "file:./yacobo-font-helper-r",
     "next": "9.5.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
