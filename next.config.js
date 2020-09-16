@@ -1,7 +1,15 @@
 /* eslint-env node */
 
 module.exports = {
-  // TODO
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.node = {
+        net: 'empty',
+      };
+    }
+
+    return config;
+  },
   async redirects() {
     return [
       {
