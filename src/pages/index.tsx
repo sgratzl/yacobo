@@ -1,10 +1,10 @@
-import { Col, Row } from 'antd';
+import { formatLocal } from '@/common';
+import GridColumn from '@/components/GridColumn';
+import { Row } from 'antd';
+import { useFetchMinMaxDate } from '../client/utils';
 import BaseLayout, { DateSelect } from '../components/BaseLayout';
 import FavoriteSection from '../components/FavoriteSection';
 import { useFavorites } from '../components/useFavorites';
-import { useFetchMinMaxDate } from '../client/utils';
-import styles from './index.module.scss';
-import { formatLocal } from '@/common';
 
 export default function Home() {
   const { max: date } = useFetchMinMaxDate();
@@ -27,9 +27,9 @@ export default function Home() {
     >
       <Row>
         {bookmarks.map((bookmark) => (
-          <Col key={bookmark.id} xs={24} sm={24} md={12} lg={8} className={styles.col}>
+          <GridColumn key={bookmark.id}>
             <FavoriteSection bookmark={bookmark} date={date} />
-          </Col>
+          </GridColumn>
         ))}
       </Row>
     </BaseLayout>
