@@ -1,12 +1,18 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TopLevelSpec } from 'vega-lite';
-import { Canvas } from 'canvas';
 import { CustomHTTPError } from '../error';
 import { CacheDuration } from '../../data/constants';
 import { IVegaOptions } from '@/charts';
 import { getAsync, setAsync } from '@/data/redis';
 import { setCommonHeaders } from './setCommonHeaders';
 import { ICommonOptions, Formats } from '../format';
+import sharp from 'sharp';
+
+function generateSpecKey(url: string, format: Formats, options: IVegaOptions) {
+  const extension = url.lastIndexOf('.');
+  const base = extension >= 0 ? url.slice(0, extension - 1) : url;
+  return `${base}.${format}?scale=${options.scaleFactor}${options.details ? '&details' : ''}`;
+}
 
 export default async function sendVega<T>(
   req: NextApiRequest,
@@ -24,8 +30,9 @@ export default async function sendVega<T>(
   // need a spec with data with cached
   // device pixel ratio doesn't matter
   console.log(req.url);
-  const specKey = `${req.url}.vg?d=${vegaOptions.details}&s=${vegaOptions.scaleFactor}`;
-  const svgKey = specKey.replace('.vg', '.svg');
+
+  const specKey = generateSpecKey(req.url!, Formats.vg, vegaOptions);
+  const svgKey = generateSpecKey(req.url!, Formats.svg, vegaOptions);
 
   if (format === Formats.png || format === Formats.svg) {
     // maybe cached the SVG
@@ -75,7 +82,6 @@ async function sendVegaPNG(
 ) {
   try {
     const dpi = options.devicePixelRatio;
-    const { default: sharp } = await import('sharp');
     const svgBuffer = Buffer.from(svg);
     setCommonHeaders(req, res, options, 'png');
     res.setHeader('Content-Type', 'image/png');
