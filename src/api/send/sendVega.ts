@@ -10,8 +10,15 @@ import { IRequestContext } from '../middleware';
 import { existsSync, readdirSync } from 'fs';
 import { join, resolve } from 'path';
 
-// follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
-if (process.env.NODE_ENV === 'production') {
+let vegaInited = false;
+function initVega() {
+  console.error('init canvas');
+  if (vegaInited) {
+    return;
+  }
+  console.error('init canvas do');
+  vegaInited = false;
+  // follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
   // process.env.PANGOCAIRO_BACKEND = 'fontconfig';
   // process.env.FONTCONFIG_PATH = resolve('./public/fonts');
   console.error(readdirSync(__dirname));
@@ -69,6 +76,7 @@ async function sendVegaPNG(
   options: ICommonOptions,
   vegaOptions: IVegaOptions
 ) {
+  initVega();
   try {
     const canvas = ((await vega.toCanvas(vegaOptions.devicePixelRatio)) as unknown) as Canvas;
     setCommonHeaders(req, res, options, 'png');
