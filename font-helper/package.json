@@ -1,0 +1,12 @@
+{
+  "name": "font-helper",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "sideEffects": true,
+  "files": [
+    "*",
+    "fonts/*"
+  ]
+}

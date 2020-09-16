@@ -5,35 +5,9 @@ import { IVegaOptions } from '@/charts';
 import { setCommonHeaders } from './setCommonHeaders';
 import { ICommonOptions, Formats } from '../format';
 import type { View } from 'vega';
-import { Canvas, registerFont } from 'canvas';
+import { Canvas } from 'canvas';
 import { IRequestContext } from '../middleware';
-import { existsSync, readdirSync } from 'fs';
-import { join, resolve } from 'path';
-
-let vegaInited = false;
-function initVega() {
-  console.error('init canvas');
-  if (vegaInited) {
-    return;
-  }
-  console.error('init canvas do');
-  vegaInited = false;
-  // follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
-  // process.env.PANGOCAIRO_BACKEND = 'fontconfig';
-  // process.env.FONTCONFIG_PATH = resolve('./public/fonts');
-  console.error(readdirSync(__dirname));
-  console.error(readdirSync(process.cwd()));
-  if (existsSync(join(process.cwd(), './public'))) {
-    console.error('public' + readdirSync(process.cwd()));
-  } else {
-    console.error('no public');
-  }
-  const file = join(process.cwd(), './public/fonts/Roboto-Regular.ttf');
-  console.error(resolve(file) + existsSync(file).toString());
-  if (existsSync(file)) {
-    registerFont(file, { family: 'Roboto' });
-  }
-}
+import initCanvas from 'font-helper';
 
 export default async function sendVega<T>(
   req: NextApiRequest,
@@ -82,7 +56,7 @@ async function sendVegaPNG(
   options: ICommonOptions,
   vegaOptions: IVegaOptions
 ) {
-  initVega();
+  initCanvas();
   try {
     const canvas = ((await vega.toCanvas(vegaOptions.devicePixelRatio)) as unknown) as Canvas;
     setCommonHeaders(req, res, options, 'png');

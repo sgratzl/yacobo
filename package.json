@@ -42,7 +42,8 @@
     "use-persisted-state": "^0.3.0",
     "use-ssr": "^1.0.23",
     "vega": "^5.15.0",
-    "vega-lite": "^4.15.0"
+    "vega-lite": "^4.15.0",
+    "font-helper": "file:./font-helper"
   },
   "devDependencies": {
     "@types/node": "^14.10.2",
