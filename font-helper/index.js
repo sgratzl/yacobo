@@ -1,10 +1,13 @@
-import { registerFont } from 'canvas';
-import { existsSync, readdirSync } from 'fs';
-import { join, resolve } from 'path';
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-env node */
+
+const { registerFont } = require('canvas');
+const { existsSync, readdirSync } = require('fs');
+const { join, resolve } = require('path');
 
 let canvasInited = false;
 
-export default function initCanvas() {
+module.exports.initCanvas = () => {
   console.error('init canvas');
   if (canvasInited || process.env.NODE_ENV !== 'production') {
     return;
@@ -25,4 +28,4 @@ export default function initCanvas() {
   if (existsSync(file2)) {
     registerFont(file2, { family: 'Roboto' });
   }
-}
+};

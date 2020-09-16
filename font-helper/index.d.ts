@@ -1,1 +1,1 @@
-export default function initCanvas();
+export function initCanvas();

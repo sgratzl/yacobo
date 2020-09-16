@@ -4,7 +4,7 @@ import { join, resolve } from 'path';
 
 let canvasInited = false;
 
-export default function initCanvas() {
+export function initCanvas() {
   console.error('init canvas');
   if (canvasInited || process.env.NODE_ENV !== 'production') {
     return;
