@@ -46,7 +46,7 @@ async function chooseDataSource(options: IVegaOptions) {
 }
 const missingStopCount = 70;
 const missingGradient: LinearGradient = {
-  y2: 0.4,
+  y2: 1,
   gradient: 'linear',
   stops: Array(missingStopCount + 1)
     .fill(0)
