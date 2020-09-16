@@ -10,6 +10,6 @@ export default function FavoriteSection({ bookmark, date }: { bookmark: IFavorit
     case 'region':
       return <RegionSection region={bookmark.region} date={date} />;
     default:
-      return <RegionSignalSection signal={bookmark.signal} region={bookmark.region} date={date} />;
+      return <RegionSignalSection signal={bookmark.signal} region={bookmark.region} date={date} focus="both" />;
   }
 }

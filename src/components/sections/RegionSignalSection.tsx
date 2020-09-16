@@ -7,18 +7,24 @@ import { formatAPIDate } from '@/common';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import styles from './SignalSection.module.scss';
+// import { isValid } from 'date-fns';
 
 export default function RegionSignalSection({
   region,
   signal,
   date,
+  focus = 'both',
 }: {
   region?: IRegion;
   signal?: ISignal;
   date?: Date;
+  focus: 'region' | 'signal' | 'both';
 }) {
+  // const valid = isValid(date) && region != null && signal != null;
   const apiDate = formatAPIDate(date);
 
+  const title =
+    focus === 'both' ? `${region?.name} - ${signal?.name}` : focus === 'region' ? region?.name : signal?.name;
   const cover = (
     <>
       <span>Hello</span>
@@ -38,7 +44,7 @@ export default function RegionSignalSection({
         <DownloadMenu key="d" path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
       ]}
     >
-      <Card.Meta title={region?.name} />
+      <Card.Meta title={title} />
     </Card>
   );
 }

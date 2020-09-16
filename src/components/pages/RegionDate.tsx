@@ -33,7 +33,7 @@ export function RegionDate({ date, region }: { region?: IRegion; date?: Date }) 
       <Row>
         {signals.map((s) => (
           <GridColumn key={s.id}>
-            <RegionSignalSection region={region} signal={s} date={date} />
+            <RegionSignalSection region={region} signal={s} date={date} focus="signal" />
           </GridColumn>
         ))}
       </Row>
