@@ -7,7 +7,7 @@ import { ICommonOptions, Formats } from '../format';
 import type { View } from 'vega';
 import { Canvas } from 'canvas';
 import { IRequestContext } from '../middleware';
-import { initCanvas } from 'font-helper';
+import { initCanvas } from 'yacobo-font-helper';
 
 export default async function sendVega<T>(
   req: NextApiRequest,
