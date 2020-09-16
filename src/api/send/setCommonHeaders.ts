@@ -13,5 +13,7 @@ export function setCommonHeaders(
     res.setHeader('Content-Disposition', `attachment; filename="${options.title}.${extension}"`);
   }
   const maxAge = options.cache ?? CacheDuration.medium;
-  res.setHeader('Cache-Control', `public, max-age=${maxAge}, s-max-age=${maxAge}`);
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Cache-Control', `public, s-maxage=${Math.floor(maxAge / 60)}, stale-while-revalidate`);
+  }
 }
