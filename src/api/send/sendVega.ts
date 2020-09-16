@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TopLevelSpec } from 'vega-lite';
 import { CustomHTTPError } from '../../common/error';
-import { CacheDuration } from '../model';
 import { IVegaOptions } from '@/charts';
-import { getAsync, setAsync } from '@/api/redis';
 import { setCommonHeaders } from './setCommonHeaders';
 import { ICommonOptions, Formats } from '../format';
 import { resolve } from 'path';
@@ -13,12 +11,6 @@ import type { Canvas } from 'canvas';
 // follow https://medium.com/@adamhooper/fonts-in-node-canvas-bbf0b6b0cabf
 process.env.PANGOCAIRO_BACKEND = 'fontconfig';
 process.env.FONTCONFIG_PATH = resolve(__dirname, './public/fonts');
-
-function generateSpecKey(url: string, format: Formats, options: IVegaOptions) {
-  const extension = url.lastIndexOf('.');
-  const base = extension >= 0 ? url.slice(0, extension - 1) : url;
-  return `${base}.${format}?scale=${options.scaleFactor}${options.details ? '&details' : ''}`;
-}
 
 export default async function sendVega<T>(
   req: NextApiRequest,
@@ -34,12 +26,8 @@ export default async function sendVega<T>(
     return sendVegaSpec(req, res, vega(undefined, vegaOptions), options);
   }
 
-  const specKey = generateSpecKey(req.url!, Formats.vg, vegaOptions);
-  const cachedSpec = await getAsync(specKey);
-  const spec: TopLevelSpec = cachedSpec ? JSON.parse(cachedSpec) : await vega(await data(), vegaOptions);
-  if (!cachedSpec) {
-    await setAsync(specKey, JSON.stringify(spec), 'EX', options.cache ?? CacheDuration.short);
-  }
+  const spec: TopLevelSpec = await vega(await data(), vegaOptions);
+
   if (format === Formats.vg) {
     return sendVegaSpec(req, res, spec, options);
   }
