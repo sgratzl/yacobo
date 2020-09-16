@@ -34,7 +34,38 @@ export default async function sendVega<T>(
   if (format === Formats.svg) {
     return sendVegaSVG(req, res, view, options, vegaOptions);
   }
-  return sendVegaPNG(req, res, view, options, vegaOptions);
+
+  initCanvas();
+  try {
+    const canvas = ((await view.toCanvas(vegaOptions.devicePixelRatio, {
+      type: format === Formats.pdf ? 'PDF' : 'SVG',
+    })) as unknown) as Canvas;
+
+    switch (format) {
+      case Formats.jpg:
+        setCommonHeaders(req, res, options, 'jpg');
+        res.setHeader('Content-Type', 'image/jpeg');
+        canvas.createJPEGStream().pipe(res);
+        break;
+      case Formats.png:
+        setCommonHeaders(req, res, options, 'png');
+        res.setHeader('Content-Type', 'image/png');
+        canvas.createPNGStream().pipe(res);
+        break;
+      case Formats.pdf:
+        setCommonHeaders(req, res, options, 'pdf');
+        res.setHeader('Content-Type', 'application/pdf');
+        canvas
+          .createPDFStream({
+            title: options.title,
+            keywords: 'covid-19, covidcast',
+          })
+          .pipe(res);
+        break;
+    }
+  } catch (err) {
+    throw new CustomHTTPError(500, err.message);
+  }
 }
 
 async function createVega(spec: TopLevelSpec | Promise<TopLevelSpec>) {
@@ -47,24 +78,6 @@ async function createVega(spec: TopLevelSpec | Promise<TopLevelSpec>) {
   return new View(runtime, {
     renderer: 'none',
   });
-}
-
-async function sendVegaPNG(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  vega: View,
-  options: ICommonOptions,
-  vegaOptions: IVegaOptions
-) {
-  initCanvas();
-  try {
-    const canvas = ((await vega.toCanvas(vegaOptions.devicePixelRatio)) as unknown) as Canvas;
-    setCommonHeaders(req, res, options, 'png');
-    res.setHeader('Content-Type', 'image/png');
-    canvas.createPNGStream().pipe(res);
-  } catch (err) {
-    throw new CustomHTTPError(500, err.message);
-  }
 }
 
 async function sendVegaSpec(

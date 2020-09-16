@@ -16,6 +16,8 @@ export enum Formats {
   json = 'json',
   csv = 'csv',
   vg = 'vg',
+  jpg = 'jpg',
+  pdf = 'pdf',
 }
 
 export function extractFormat<S extends string, V>(
