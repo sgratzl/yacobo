@@ -1,6 +1,6 @@
 {
   "name": "yacobo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "author": {
     "name": "Samuel Gratzl",
@@ -31,6 +31,7 @@
     "cross-fetch": "^3.0.6",
     "d3-dsv": "^2.0.0",
     "date-fns": "^2.16.1",
+    "font-helper": "file:./font-helper",
     "next": "9.5.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -42,8 +43,7 @@
     "use-persisted-state": "^0.3.0",
     "use-ssr": "^1.0.23",
     "vega": "^5.15.0",
-    "vega-lite": "^4.15.0",
-    "font-helper": "file:./font-helper"
+    "vega-lite": "^4.15.0"
   },
   "devDependencies": {
     "@types/node": "^14.10.2",
