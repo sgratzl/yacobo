@@ -23,7 +23,7 @@ export default function RegionSection({ region, date }: { region: IRegion; date?
         <DownloadMenu key="d" path={`/region/${region.id}/all/${apiDate}`} />,
       ]}
     >
-      <Card.Meta title={region.name} />
+      <Card.Meta title={region.name} className={styles.meta} />
       <KeySignalMultiFacts region={region} date={date} />
     </Card>
   );

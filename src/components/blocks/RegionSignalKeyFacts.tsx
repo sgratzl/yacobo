@@ -8,12 +8,12 @@ import {
   isCountyRegion,
   ISignal,
   ISignalDateValue,
-  noStateLabel,
+  plainLabel,
   RequiredValue,
   signals,
 } from '@/model';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { List, Spin, Statistic, Table } from 'antd';
+import { Spin, Statistic, Table } from 'antd';
 import { formatDistance, isEqual, isValid, subDays } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
@@ -77,7 +77,7 @@ export function RegionSignalKeyFactsTable({
       <Table.Column<IDateTableRow> title="Date" dataIndex="label" render={renderDateLink} />
       <Table.Column<IDateTableRow>
         align="right"
-        title={noStateLabel(region)}
+        title={plainLabel(region)}
         dataIndex="value"
         render={formatFixedValue}
       />

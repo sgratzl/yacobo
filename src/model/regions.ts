@@ -89,7 +89,7 @@ export function isCountyRegion(region?: IRegion): region is ICountyRegion {
   return region != null && (region as ICountyRegion).state != null;
 }
 
-export function noStateLabel(region?: IRegion) {
+export function plainLabel(region?: IRegion) {
   if (!region || isStateRegion(region)) {
     return region?.name;
   }
