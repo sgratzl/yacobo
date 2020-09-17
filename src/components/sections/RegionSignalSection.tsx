@@ -37,7 +37,7 @@ export default function RegionSignalSection({
           </Tooltip>
         </Link>,
         <FavoriteToggle key="b" region={region} signal={signal} />,
-        <DownloadMenu key="d" path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
+        <DownloadMenu key="d" img={false} path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
       ]}
     >
       <Card.Meta

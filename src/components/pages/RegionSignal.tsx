@@ -16,9 +16,9 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
       title="COVID"
       subTitle={
         <>
-          <RegionSelect region={region} path="/region/[region]/[signal]" clearPath="/signal/[signal]" />
+          <RegionSelect region={region} path={`/region/[region]/${signal?.id}`} clearPath={`/signal/${signal?.id}`} />
           -
-          <SignalSelect signal={signal} path="/region/[region]/[signal]" clearPath="/region/[region]" />
+          <SignalSelect signal={signal} path={`/region/${region?.id}/[signal]`} clearPath={`/region/${region?.id}`} />
         </>
       }
       breadcrumb={[

@@ -14,15 +14,23 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
       title="COVID"
       subTitle={
         <>
-          <RegionSelect region={region} path="/region/[region]/[signal]/[date]" clearPath="/signal/[signal]/[date]" />
+          <RegionSelect
+            region={region}
+            path={`/region/[region]/${signal?.id}/${apiDate}`}
+            clearPath={`/signal/${signal?.id}/${apiDate}`}
+          />
           -
           <SignalSelect
             signal={signal}
-            path="/region/[region]/[signal]/[date]"
-            clearPath="/region/[region]/all/[date]"
+            path={`/region/${region?.id}/[signal]/${apiDate}`}
+            clearPath={`/region/${region?.id}/all/${apiDate}`}
           />
           as of
-          <DateSelect date={date} path="/region/[region]/[signal]/[date]" clearPath="/region/[region]/[signal]" />
+          <DateSelect
+            date={date}
+            path={`/region/${region?.id}/${signal?.id}/[date]`}
+            clearPath={`/region/${region?.id}/${signal?.id}`}
+          />
         </>
       }
       breadcrumb={[
