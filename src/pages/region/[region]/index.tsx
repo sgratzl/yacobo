@@ -32,5 +32,5 @@ export const getStaticPaths: GetStaticPaths<IRegionProps & ParsedUrlQuery> = asy
 export default function Region(props: IRegionProps) {
   const { max: date } = useFetchMinMaxDate(props);
   const region = useFallback(props.region, extractRegion, undefined);
-  return <RegionDate region={region} date={date} />;
+  return <RegionDate region={region} date={date} dynamic />;
 }

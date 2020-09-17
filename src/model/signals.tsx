@@ -186,7 +186,7 @@ const base: (ISignal | false)[] = [
     ],
     colorScheme: 'yellowgreen',
     data: {
-      unit: 'people',
+      unit: 'tested people',
       maxValue: 100,
       dataSource: 'quidel',
       signal: 'covid_ag_smoothed_pct_positive',

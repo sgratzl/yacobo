@@ -5,7 +5,7 @@ import { formatAPIDate, formatLocal } from '@/common';
 import { Row } from 'antd';
 import GridColumn from '@/components/blocks/GridColumn';
 
-export function DateOverview({ date }: { date?: Date }) {
+export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean }) {
   return (
     <BaseLayout
       pageTitle={`COVID as of ${formatLocal(date)}`}
@@ -17,12 +17,16 @@ export function DateOverview({ date }: { date?: Date }) {
           <DateSelect date={date} path="/date/[date]" clearPath="/" />
         </>
       }
-      breadcrumb={[
-        {
-          breadcrumbName: formatAPIDate(date),
-          path: `/date/[date]`,
-        },
-      ]}
+      breadcrumb={
+        dynamic
+          ? []
+          : [
+              {
+                breadcrumbName: formatAPIDate(date),
+                path: `/date/[date]`,
+              },
+            ]
+      }
     >
       <Row>
         {signals.map((s) => (

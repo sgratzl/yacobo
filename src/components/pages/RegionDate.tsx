@@ -5,7 +5,7 @@ import GridColumn from '../blocks/GridColumn';
 import { Row } from 'antd';
 import RegionSignalSection from '../sections/RegionSignalSection';
 
-export function RegionDate({ date, region }: { region?: IRegion; date?: Date }) {
+export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: boolean }) {
   const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
@@ -24,11 +24,15 @@ export function RegionDate({ date, region }: { region?: IRegion; date?: Date }) 
           breadcrumbName: region?.name ?? '',
           path: '/region/[region]',
         },
-        {
-          breadcrumbName: apiDate,
-          path: '/region/[region]/all/[date]',
-        },
-      ]}
+        !dynamic
+          ? [
+              {
+                breadcrumbName: apiDate,
+                path: '/region/[region]/all/[date]',
+              },
+            ]
+          : [],
+      ].flat()}
     >
       <Row>
         {signals.map((s) => (
