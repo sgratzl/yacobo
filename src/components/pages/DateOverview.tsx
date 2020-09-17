@@ -14,7 +14,7 @@ export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean
       title="COVID"
       subTitle={
         <>
-          <RegionSelect path={`/region/[region]/${apiDate}`} clearPath={`/date/${apiDate}`} />
+          <RegionSelect path={`/region/[region]/all/${apiDate}`} clearPath={`/date/${apiDate}`} />
           as of
           <DateSelect date={date} path="/date/[date]" clearPath="/" />
         </>

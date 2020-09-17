@@ -168,7 +168,7 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
   const router = useRouter();
   const onSelect = useCallback(
     (s: string | null) => {
-      if (s) {
+      if (s && s !== 'US') {
         router.push(path, injectQuery(router, path, { region: s }));
       } else if (clearPath) {
         router.push(clearPath, injectQuery(router, clearPath));
@@ -181,8 +181,8 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
     () => [
       {
         key: 'US',
-        label: 'US',
-        value: '',
+        label: 'US - whole country',
+        value: 'US',
         children: states.map((state) => ({
           key: state.id,
           label: state.name,
