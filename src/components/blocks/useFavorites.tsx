@@ -39,12 +39,10 @@ interface ISerializedFavorite {
 export type IFavorite = ISignalFavorite | IRegionFavorite | IRegionSignalFavorite | IRegionSignalHistoryFavorite;
 
 const DEFAULT_FAVORITES = [
-  ...signals.map((s) => asFavorite(s)!),
-  asFavorite(undefined, regionByID('42')!)!, // Penn
-  asFavorite(undefined, regionByID('42003')!)!, // allegheny County
-  asFavorite(undefined, regionByID('06')!)!, // California
-  asFavorite(undefined, regionByID('06037')!)!, // Los Angeles County
-  asFavorite(signalByID('cases')!, regionByID('06')!)!, // California Cases
+  ...signals.slice(0, 3).map((s) => asFavorite(s)!),
+  asFavorite(undefined, regionByID('42003')!)!, // Allegheny County
+  asFavorite(signalByID('cases')!, regionByID('42003')!)!, // Allegheny County
+  asFavorite(signalByID('cases')!, regionByID('42003')!, true)!, // Allegheny County History
 ].map(formatFavorite);
 
 function parseFavorite(favorite: ISerializedFavorite): IFavorite | null {
