@@ -198,6 +198,7 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
       allowClear={clearPath != null}
       showSearch
       treeData={treeData}
+      treeNodeFilterProp="label"
       dropdownMatchSelectWidth={300}
     ></TreeSelect>
   );
