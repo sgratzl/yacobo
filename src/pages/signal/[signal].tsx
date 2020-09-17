@@ -27,11 +27,14 @@ export const getStaticProps: GetStaticProps<ISignalProps> = async (context) => {
 
 export const getStaticPaths: GetStaticPaths<{ signal: string } & ParsedUrlQuery> = async () => {
   return {
-    paths: signals.map((signal) => ({
-      params: {
-        signal: signal.id,
-      },
-    })),
+    paths:
+      process.env.NODE_ENV === 'development'
+        ? []
+        : signals.map((signal) => ({
+            params: {
+              signal: signal.id,
+            },
+          })),
     fallback: true,
   };
 };

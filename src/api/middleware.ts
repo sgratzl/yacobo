@@ -25,24 +25,13 @@ export interface IRequestContext {
   redis: Redis;
 }
 
-const sharedContext: IRequestContext | null =
-  process.env.NODE_ENV === 'production'
-    ? null
-    : {
-        redis: new Redis(),
-      };
-
 export async function withContext<R>(handler: (context: IRequestContext) => Promise<R>): Promise<R> {
-  if (sharedContext) {
-    return handler(sharedContext);
-  }
-
   let ctx: IRequestContext | null = null;
   try {
-    ctx = sharedContext ?? { redis: new Redis() };
+    ctx = { redis: new Redis() };
     return await handler(ctx);
   } finally {
-    if (ctx && !sharedContext) {
+    if (ctx) {
       try {
         ctx.redis.destroy();
       } catch (error) {
@@ -56,7 +45,7 @@ export function withMiddleware(handler: (req: NextApiRequest, res: NextApiRespon
   return async (req: NextApiRequest, res: NextApiResponse) => {
     let ctx: IRequestContext | null = null;
     try {
-      ctx = sharedContext ?? { redis: new Redis() };
+      ctx = { redis: new Redis() };
       await runCORS(req, res);
       await handler(req, res, ctx);
     } catch (error: unknown) {
@@ -73,7 +62,7 @@ export function withMiddleware(handler: (req: NextApiRequest, res: NextApiRespon
         throw error;
       }
     } finally {
-      if (ctx && !sharedContext) {
+      if (ctx) {
         try {
           ctx.redis.destroy();
         } catch (error) {
