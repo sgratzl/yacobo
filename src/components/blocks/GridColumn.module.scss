@@ -2,4 +2,6 @@
   display: flex;
   flex-direction: column;
   max-width: 30em;
+  contain: content;
+  content-visibility: auto;
 }
