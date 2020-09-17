@@ -1,5 +1,5 @@
-import { formatLocal } from '@/common';
-import BaseLayout from '@/components/blocks/BaseLayout';
+import { formatAPIDate, formatLocal } from '@/common';
+import BaseLayout, { DateSelect } from '@/components/blocks/BaseLayout';
 import GridColumn from '@/components/blocks/GridColumn';
 import { Row } from 'antd';
 import dynamic from 'next/dynamic';
@@ -27,11 +27,20 @@ export default function FavoritesOverview({ date }: { date?: Date }) {
       pageTitle={`COVID as of ${formatLocal(date)}`}
       mainActive="favorites"
       title="COVID"
-      subTitle={`as of ${formatLocal(date)}`}
+      subTitle={
+        <>
+          as of
+          <DateSelect date={date} path={`/favorites/[date]`} clearPath="/" />
+        </>
+      }
       breadcrumb={[
         {
           breadcrumbName: 'Favorites',
           path: `/favorites`,
+        },
+        {
+          breadcrumbName: formatAPIDate(date),
+          path: `/favorites/[date]`,
         },
       ]}
     >

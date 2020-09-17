@@ -1,4 +1,4 @@
-import BaseLayout, { DateSelect } from '@/components/blocks/BaseLayout';
+import BaseLayout, { DateSelect, RegionSelect } from '@/components/blocks/BaseLayout';
 import SignalSection from '@/components/sections/SignalSection';
 import { signals } from '@/model/signals';
 import { formatAPIDate, formatLocal } from '@/common';
@@ -6,6 +6,7 @@ import { Row } from 'antd';
 import GridColumn from '@/components/blocks/GridColumn';
 
 export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean }) {
+  const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
       pageTitle={`COVID as of ${formatLocal(date)}`}
@@ -13,6 +14,7 @@ export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean
       title="COVID"
       subTitle={
         <>
+          <RegionSelect path={`/region/[region]/${apiDate}`} clearPath={`/date/${apiDate}`} />
           as of
           <DateSelect date={date} path="/date/[date]" clearPath="/" />
         </>

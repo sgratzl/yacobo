@@ -16,7 +16,7 @@ export interface BaseLayoutProps {
   pageTitle: string;
   description?: string;
   previewImage?: { url: string; width: number; height: number };
-  mainActive: 'overview' | 'region' | 'compare' | 'favorites';
+  mainActive: 'overview' | 'compare' | 'favorites';
   breadcrumb: { breadcrumbName: string; path: string }[];
 }
 
@@ -83,9 +83,6 @@ export default function BaseLayout({
           </Menu.Item>
           <Menu.Item key="favorites" active={mainActive === 'favorites'}>
             <Link href="/favorites">Favorites</Link>
-          </Menu.Item>
-          <Menu.Item key="region" active={mainActive === 'region'}>
-            <Link href="/region">Single Region</Link>
           </Menu.Item>
           {/* <Menu.Item key="compare" active={mainActive === 'compare'}>
             <Link href="/compare">Compare Counties</Link>
@@ -181,24 +178,32 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
   );
 
   const treeData = useMemo(
-    () =>
-      states.map((state) => ({
-        key: state.id,
-        label: state.name,
-        value: state.id,
-        children: state.counties.map((county) => ({ key: county.id, label: county.name, value: county.id })),
-      })),
+    () => [
+      {
+        key: 'US',
+        label: 'US',
+        value: '',
+        children: states.map((state) => ({
+          key: state.id,
+          label: state.name,
+          value: state.id,
+          children: state.counties.map((county) => ({ key: county.id, label: county.name, value: county.id })),
+        })),
+      },
+    ],
     []
   );
 
   return (
     <TreeSelect
       className={`${styles.select} ${styles.selectTree}`}
-      value={region?.id}
+      value={region?.id ?? ''}
       onChange={onSelect}
       allowClear={clearPath != null}
       showSearch
       treeData={treeData}
+      placeholder="Select Region"
+      treeDefaultExpandedKeys={['US']}
       treeNodeFilterProp="label"
       dropdownMatchSelectWidth={300}
     ></TreeSelect>
@@ -222,6 +227,7 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
       className={styles.picker}
       value={date || startOfToday()}
       onChange={onSelect}
+      placeholder="Select Date"
       allowClear={clearPath != null}
       format="MMM, d"
     />
