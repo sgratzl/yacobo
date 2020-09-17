@@ -3,8 +3,9 @@ import { Button, Tooltip } from 'antd';
 import { ISignal } from '../../model/signals';
 import { IRegion } from '../../model/regions';
 import { useFavorite } from './useFavorites';
+import dynamic from 'next/dynamic';
 
-export function FavoriteToggle({
+function FavoriteToggleImpl({
   signal,
   region,
   warning = true,
@@ -26,3 +27,5 @@ export function FavoriteToggle({
     </Tooltip>
   );
 }
+
+export const FavoriteToggle = dynamic(() => Promise.resolve(FavoriteToggleImpl), { ssr: false });

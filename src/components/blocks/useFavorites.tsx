@@ -30,7 +30,7 @@ interface ISerializedFavorite {
 
 export type IFavorite = ISignalFavorite | IRegionFavorite | IRegionSignalFavorite;
 
-const DEFAULT_favoriteS = [
+const DEFAULT_FAVORITES = [
   ...signals.map((s) => asFavorite(s)!),
   asFavorite(undefined, regionByID('42')!)!, // Penn
   asFavorite(undefined, regionByID('42003')!)!, // allegheny County
@@ -91,11 +91,11 @@ function asFavorite(signal?: ISignal, region?: IRegion): IFavorite | null {
 const usePersistentFavorites = createPersistedState('favorites');
 
 export function useFavorites() {
-  const [favorites, setFavorites] = usePersistentFavorites(DEFAULT_favoriteS);
+  const [favorites, setFavorites] = usePersistentFavorites(DEFAULT_FAVORITES);
 
   // useEffect(() => {
   //   if (favorites.length === 0) {
-  //     setFavorites(DEFAULT_favoriteS);
+  //     setFavorites(DEFAULT_FAVORITES);
   //   }
   // }, [favorites, setFavorites]);
 
@@ -146,7 +146,7 @@ function FavoriteUndo({
     notification.close(notificationKey);
   }, [favorite, favorites, index, notificationKey, setFavorites]);
   const restoreAll = useCallback(() => {
-    setFavorites(DEFAULT_favoriteS.map(parseFavorite).filter((d): d is IFavorite => d != null));
+    setFavorites(DEFAULT_FAVORITES.map(parseFavorite).filter((d): d is IFavorite => d != null));
     notification.close(notificationKey);
   }, [notificationKey, setFavorites]);
   return (

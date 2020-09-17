@@ -3,7 +3,7 @@ import { CacheDuration } from '@/api/model';
 import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
 import { GetStaticProps } from 'next';
 import { withContext } from '@/api/middleware';
-import dynamic from 'next/dynamic';
+import FavoritesOverview from '@/components/pages/FavoritesOverview';
 
 export const getStaticProps: GetStaticProps<ISerializedMinMax> = async () => {
   const data = await withContext(fetchMinMaxDate);
@@ -17,11 +17,7 @@ export const getStaticProps: GetStaticProps<ISerializedMinMax> = async () => {
   };
 };
 
-const Favorites = dynamic(() => import('@/components/pages/FavoritesOverview'), {
-  ssr: false,
-});
-
 export default function Home(props: ISerializedMinMax) {
   const { max: date } = useFetchMinMaxDate(props);
-  return <Favorites date={date} />;
+  return <FavoritesOverview date={date} />;
 }
