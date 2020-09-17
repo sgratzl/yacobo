@@ -14,7 +14,7 @@ import {
 } from '@/model';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import { Spin, Statistic, Table, Tooltip } from 'antd';
-import { formatDistance, isEqual, isValid, subDays } from 'date-fns';
+import { formatDistance, isValid, subDays } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
@@ -103,14 +103,14 @@ function asDataSource(
   if (!data || !date || !region) {
     return undefined;
   }
-  const lookup = new Map(data?.map((d) => [`${d.region}:${d.date.getTime()}`, d]) ?? []);
+  const lookup = new Map(data?.map((d) => [`${d.region}:${formatAPIDate(d.date)}`, d]) ?? []);
   const dates = regionDateSummaryDates(date);
   return dates.map((d) => ({
     key: d.getTime(),
     label: d === date ? formatLocal(d) : `${formatDistance(d, date, {})} ago`,
     date: d === date ? null : d,
-    value: lookup.get(`${region.id}:${d.getTime()}`)?.value,
-    state: lookup.get(`${isCountyRegion(region) ? region.state.id : ''}:${d.getTime()}`)?.value,
+    value: lookup.get(`${region.id}:${formatAPIDate(d)}`)?.value,
+    state: lookup.get(`${isCountyRegion(region) ? region.state.id : ''}:${formatAPIDate(d)}`)?.value,
   }));
 }
 
@@ -123,7 +123,9 @@ function resolveTrend(current?: RequiredValue<IRegionDateValue> | null, data?: R
     return undefined;
   }
   const yesterdayDate = subDays(current.date, 1);
-  const yesterdayData = data.find((d) => d.region === current.region && isEqual(d.date, yesterdayDate));
+  const yesterdayData = data.find(
+    (d) => d.region === current.region && formatAPIDate(d.date) === formatAPIDate(yesterdayDate)
+  );
   if (!yesterdayData) {
     return undefined;
   }
@@ -141,7 +143,10 @@ function resolveTrend(current?: RequiredValue<IRegionDateValue> | null, data?: R
 export function RegionSignalKeyFacts({ region, signal, date }: { region?: IRegion; signal?: ISignal; date?: Date }) {
   const { data } = useKeyFacts(region, signal, date);
 
-  const current = data && region && date ? data.find((d) => d.region === region.id && isEqual(d.date, date)) : null;
+  const current =
+    data && region && date
+      ? data.find((d) => d.region === region.id && formatAPIDate(d.date) === formatAPIDate(date))
+      : null;
   const prefix = resolveTrend(current, data);
 
   return (
