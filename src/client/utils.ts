@@ -26,7 +26,7 @@ function fetchMeta() {
 }
 export function useFetchMeta() {
   return useSWR('/api/signal', fetchMeta, {
-    refreshInterval: 6 * 60 * 60, // 6h
+    refreshInterval: 6 * 60 * 60 * 1000, // 6h
   });
 }
 
