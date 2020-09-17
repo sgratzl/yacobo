@@ -35,22 +35,16 @@ export default async function sendVega<T>(
     return sendVegaSVG(req, res, view, options, vegaOptions);
   }
 
-  initCanvas();
   try {
-    const canvas = ((await view.toCanvas(vegaOptions.devicePixelRatio, {
-      type: format === Formats.pdf ? 'pdf' : 'svg',
-    })) as unknown) as Canvas;
+    initCanvas();
+    const canvasOptions = format === Formats.pdf ? { type: 'pdf' } : undefined;
+    const canvas = ((await view.toCanvas(vegaOptions.devicePixelRatio, canvasOptions)) as unknown) as Canvas;
 
     switch (format) {
       case Formats.jpg:
         setCommonHeaders(req, res, options, 'jpg');
         res.setHeader('Content-Type', 'image/jpeg');
         canvas.createJPEGStream().pipe(res);
-        break;
-      case Formats.png:
-        setCommonHeaders(req, res, options, 'png');
-        res.setHeader('Content-Type', 'image/png');
-        canvas.createPNGStream().pipe(res);
         break;
       case Formats.pdf:
         setCommonHeaders(req, res, options, 'pdf');
@@ -62,6 +56,11 @@ export default async function sendVega<T>(
             creationDate: new Date(),
           })
           .pipe(res);
+        break;
+      default:
+        setCommonHeaders(req, res, options, 'png');
+        res.setHeader('Content-Type', 'image/png');
+        canvas.createPNGStream().pipe(res);
         break;
     }
   } catch (err) {
