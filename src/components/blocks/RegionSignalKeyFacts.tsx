@@ -73,6 +73,7 @@ export function RegionSignalKeyFactsTable({
       dataSource={dataSource}
       showHeader={!region || isCountyRegion(region)}
       size="small"
+      rowKey="label"
     >
       <Table.Column<IDateTableRow> title="Date" dataIndex="label" render={renderDateLink} />
       <Table.Column<IDateTableRow>
