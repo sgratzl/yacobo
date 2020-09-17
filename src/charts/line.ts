@@ -87,7 +87,7 @@ export async function createSignalLineChart(
       description: signal.description(),
       values: values ?? [],
       minDate,
-      maxValue: Math.min(100, Math.ceil(meta.mean + 3 * meta.stdev)),
+      maxValue: Math.min(signal.data.maxValue, Math.ceil(meta.mean + 3 * meta.stdev)),
       valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
     },
     options
