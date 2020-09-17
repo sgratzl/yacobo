@@ -3,7 +3,7 @@ import { formatAPIDate, formatFixedValue, formatLocal, formatValue } from '@/com
 import { regionDateSummaryDates } from '@/common/helpers';
 import { parseDates } from '@/common/parseDates';
 import { IRegion, IRegionDateValue, isCountyRegion, ISignal, RequiredValue } from '@/model';
-import { Skeleton, Statistic, Table } from 'antd';
+import { Statistic, Table, Spin } from 'antd';
 import { formatDistance, isEqual, isValid } from 'date-fns';
 import useSWR from 'swr';
 import styles from './RegionSignalKeyFacts.module.scss';
@@ -72,25 +72,22 @@ function asDataSource(data?: RequiredValue<IRegionDateValue>[], date?: Date, reg
   }));
 }
 
+function renderSpin() {
+  return <Spin />;
+}
+
 export function RegionSignalKeyFacts({ region, signal, date }: { region?: IRegion; signal?: ISignal; date?: Date }) {
   const { data } = useKeyFacts(region, signal, date);
 
-  if (!data || !region || !signal || !date || !isValid(date)) {
-    return (
-      <div className={styles.root}>
-        <Skeleton paragraph={{ rows: 1 }} />;
-      </div>
-    );
-  }
-
-  const current = data.find((d) => d.region === region.id && isEqual(d.date, date));
+  const current = data && region && date ? data.find((d) => d.region === region.id && isEqual(d.date, date)) : null;
 
   return (
     <div className={styles.root}>
       <Statistic
         className={styles.stats}
         value={formatValue(current?.value)}
-        suffix={`of ${formatValue(signal.data.maxValue)} ${signal.data.unit}`}
+        valueRender={!data ? renderSpin : undefined}
+        suffix={`of ${formatValue(signal?.data.maxValue ?? 100)} ${signal?.data.unit ?? 'people'}`}
       />
     </div>
   );
