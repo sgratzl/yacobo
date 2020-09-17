@@ -3,7 +3,10 @@ import { formatAPIDate, formatLocal } from '@/common';
 import { IRegion, ISignal } from '@/model';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import { RegionSignalKeyFacts } from '../blocks/RegionSignalKeyFacts';
+import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
+import { Col, Divider, Row, Typography } from 'antd';
+import { SignalInfoBlock } from '../blocks/SignalInfoBox';
+import VegaImage from '../blocks/VegaImage';
 
 export function RegionSignalDate({ region, signal, date }: { region?: IRegion; signal?: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -52,7 +55,29 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
         <DownloadMenu key="download" img={false} path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
       ]}
     >
-      <RegionSignalKeyFacts signal={signal} region={region} date={date} />
+      <Row>
+        <Col span={24}>
+          <RegionSignalKeyFacts signal={signal} region={region} date={date} />
+        </Col>
+        <Col span={24}>
+          <RegionSignalKeyFactsTable signal={signal} region={region} date={date} />
+        </Col>
+        <Col span={24}>
+          <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
+        </Col>
+        <Col span={24}>
+          <VegaImage
+            src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}.png` : undefined}
+            alt={`History of ${signal?.name}`}
+            large
+            type="line"
+          />
+        </Col>
+        <Divider />
+        <Col span={24}>
+          <SignalInfoBlock signal={signal} />
+        </Col>
+      </Row>
     </BaseLayout>
   );
 }
