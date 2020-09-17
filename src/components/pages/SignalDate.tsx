@@ -1,6 +1,6 @@
 import BaseLayout, { DateSelect, SignalSelect } from '@/components/blocks/BaseLayout';
 import { FavoriteToggle } from '@/components/blocks/FavoriteToggle';
-import MapImage from '@/components/blocks/MapImage';
+import VegaImage from '@/components/blocks/VegaImage';
 import SignalTable from '@/components/blocks/SignalTable';
 import { ISignal } from '@/model/signals';
 import { Col, Divider, Row, Typography } from 'antd';
@@ -46,7 +46,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
           <Typography.Paragraph>{signal.description(date)}</Typography.Paragraph>
         </Col>
         <Col span={24}>
-          <MapImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} large />
+          <VegaImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} large />
         </Col>
         <Divider />
         <Col span={24}>

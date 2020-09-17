@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useCallback } from 'react';
 import styles from './SignalSection.module.scss';
 import { isValid } from 'date-fns';
-import MapImage from '../blocks/MapImage';
+import VegaImage from '../blocks/VegaImage';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { formatAPIDate } from '@/common';
@@ -23,7 +23,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
   return (
     <Card
       className={styles.card}
-      cover={<MapImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} />}
+      cover={<VegaImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} />}
       actions={[
         <Link key="d" href="/signal/[signal]/[date]" as={`/signal/${signal.id}/${apiDate}`}>
           <Tooltip title="show signal details">

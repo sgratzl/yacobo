@@ -10,15 +10,13 @@
 
 .imgPlaceholder,
 .imgSkeleton,
-.imgImg {
+.imgImg,
+.spin,
+.spin :global(.ant-spin-container) {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-:global(.ant-skeleton.ant-skeleton-active) > .imgSkeleton {
-  background-image: linear-gradient(90deg, transparent 25%, #e6e6e6 37%, transparent 63%);
 }

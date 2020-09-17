@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import styles from './MapImage.module.scss';
+import styles from './VegaImage.module.scss';
 import { classNames } from '../utils';
+import { Spin } from 'antd';
 
 function addParam(url: string | undefined, key: string, value: string | number) {
   if (!url) {
@@ -38,7 +39,7 @@ function useImageLoading(src?: string) {
   return [loading, imgRef] as const;
 }
 
-export default function MapImage({
+export default function VegaImage({
   alt,
   large,
   src,
@@ -55,25 +56,18 @@ export default function MapImage({
   const srcSet = defaultSourceSet(full);
 
   return (
-    <div
-      className={classNames(
-        styles.img,
-        type === 'line' && styles.imgLine,
-        loading && 'ant-skeleton ant-skeleton-active'
-      )}
-    >
+    <div className={classNames(styles.img, type === 'line' && styles.imgLine)}>
       {src && (
         <img ref={imgRef} className={styles.imgImg} data-src={src} src={full?.toString()} srcSet={srcSet} alt={alt} />
       )}
       {loading && (
-        <>
+        <Spin size="large" wrapperClassName={classNames(styles.spin)}>
           <img
             className={classNames(styles.imgPlaceholder, type === 'line' && styles.imgLine)}
-            src={`/api/skeletons/${type}${large ? '?scale=2' : ''}`}
+            src={`/api/skeletons/${type}.png${large ? '?scale=2' : ''}`}
             alt={alt}
           />
-          <div className={classNames(styles.imgSkeleton, 'ant-skeleton-image')} />
-        </>
+        </Spin>
       )}
     </div>
   );

@@ -16,7 +16,7 @@ export default async function sendVega<T>(
   format: Formats,
   data: () => Promise<T[]>,
   vega: (data: T[] | undefined, options: IVegaOptions) => TopLevelSpec | Promise<TopLevelSpec>,
-  options: ICommonOptions
+  options: ICommonOptions & { skeleton?: boolean }
 ) {
   const vegaOptions = extractVegaOptions(req, ctx);
   if (format === Formats.vg && !vegaOptions.details) {
@@ -29,7 +29,7 @@ export default async function sendVega<T>(
   if (format === Formats.vg) {
     return sendVegaSpec(req, res, spec, options);
   }
-  const view = await createVega(spec);
+  const view = await createVega(spec, options.skeleton);
 
   if (format === Formats.svg) {
     return sendVegaSVG(req, res, view, options, vegaOptions);
@@ -68,8 +68,11 @@ export default async function sendVega<T>(
   }
 }
 
-async function createVega(spec: TopLevelSpec | Promise<TopLevelSpec>) {
+async function createVega(spec: TopLevelSpec | Promise<TopLevelSpec>, skeleton?: boolean) {
   const vegaLiteSpec = await spec;
+  if (skeleton) {
+    vegaLiteSpec.background = 'transparent';
+  }
   const { compile } = await import('vega-lite');
   const s = compile(vegaLiteSpec).spec;
 

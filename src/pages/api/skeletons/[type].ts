@@ -30,6 +30,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
     (_data, options) => factory(options),
     {
       title: 'skeleton',
+      skeleton: true,
       cache: CacheDuration.long,
     }
   );

@@ -4,7 +4,7 @@ import { Col, Divider, Row, Typography } from 'antd';
 import { IRegion } from '../../model';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import MapImage from '../blocks/MapImage';
+import VegaImage from '../blocks/VegaImage';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { DateTable } from '../blocks/SignalTable';
 
@@ -41,7 +41,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
           <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
         </Col>
         <Col span={24}>
-          <MapImage
+          <VegaImage
             src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}.png` : undefined}
             alt={`History of ${signal?.name}`}
             large
