@@ -10,6 +10,9 @@ type FilterFlags<Base, Condition> = {
 };
 type AllowedNames<Base, Condition> = FilterFlags<Base, Condition>[keyof Base];
 
+export function parseDate(date: number | string | Date) {
+  return startOfDay(parseJSON(date));
+}
 /**
  * helper method for parsing serialized dates
  * @param fields
@@ -23,7 +26,7 @@ export function parseDates<T>(fields: AllowedNames<T, Date>[]) {
     return (data: T[]) => {
       // parse serialized dates
       for (const row of data) {
-        row[field] = startOfDay(parseJSON(row[field] as any)) as any;
+        row[field] = parseDate(row[field] as any) as any;
       }
       return data;
     };
@@ -33,7 +36,7 @@ export function parseDates<T>(fields: AllowedNames<T, Date>[]) {
     // parse serialized dates
     for (const row of data) {
       for (const field of fields) {
-        row[field] = startOfDay(parseJSON(row[field] as any)) as any;
+        row[field] = parseDate(row[field] as any) as any;
       }
     }
     return data;

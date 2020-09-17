@@ -1,11 +1,12 @@
 import { Table } from 'antd';
 import type { SortOrder } from 'antd/lib/table/interface';
-import { parseJSON, isValid } from 'date-fns';
+import { isValid } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
 import { IRegionWithDetailsValue, IDateValue, IRegion, ISignal } from '../../model';
 import { formatAPIDate } from '../../common';
+import { parseDates } from '@/common/parseDates';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
 
@@ -147,16 +148,10 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
 }
 
 function fetchDated(key: string) {
+  const parse = parseDates<IDateValue>(['date']);
   return fetch(key)
     .then((r) => r.json())
-    .then((r: IDateValue[]) =>
-      r
-        .map((r) => {
-          r.date = parseJSON(r.date);
-          return r;
-        })
-        .sort(compareDate)
-    );
+    .then((r: IDateValue[]) => parse(r).sort(compareDate));
 }
 
 export function DateTable({ signal, region }: { signal?: ISignal; region?: IRegion }) {

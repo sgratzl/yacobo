@@ -1,4 +1,4 @@
-import { parseJSON } from 'date-fns';
+import { parseDate } from '@/common/parseDates';
 import useSWR from 'swr';
 import { ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../model';
 
@@ -17,8 +17,8 @@ function fetchMeta() {
           meta: {
             mean: row.mean,
             stdev: row.stdev,
-            maxTime: parseJSON(row.maxTime),
-            minTime: parseJSON(row.minTime),
+            maxTime: parseDate(row.maxTime),
+            minTime: parseDate(row.minTime),
           },
         } as ISignalWithMeta;
       })
@@ -42,7 +42,7 @@ export function useFetchMinMaxDate(initialData?: { min: number | Date; max: numb
 
   if (!data) {
     if (initialData) {
-      return { min: parseJSON(initialData.min), max: parseJSON(initialData.max) };
+      return { min: parseDate(initialData.min), max: parseDate(initialData.max) };
     }
     return { min: undefined, max: undefined };
   }
