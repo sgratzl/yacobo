@@ -37,6 +37,7 @@ export default function BaseLayout({
   ...pageHeader
 }: React.PropsWithChildren<BaseLayoutProps & Omit<PageHeaderProps, 'breadcrumb'>>) {
   const router = useRouter();
+  const back = useCallback(() => router.back(), [router]);
   return (
     <Layout className={styles.layout}>
       <Head>
@@ -87,7 +88,7 @@ export default function BaseLayout({
         </Menu>
       </Layout.Header>
       <Layout.Content className={styles.content}>
-        <PageHeader onBack={historyBack} breadcrumb={createBreadcrumbProps(router, breadcrumb)} {...pageHeader}>
+        <PageHeader onBack={back} breadcrumb={createBreadcrumbProps(router, breadcrumb)} {...pageHeader}>
           {children}
           <BackTop className={styles.backTop}>
             <UpCircleOutlined />
@@ -213,8 +214,4 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
       format="MMM, d"
     />
   );
-}
-
-function historyBack() {
-  window.history.back();
 }
