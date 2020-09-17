@@ -1,4 +1,12 @@
+.wrapper {
+  max-width: 70em;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
 .img {
+  flex: auto;
   margin-bottom: 1em;
   padding-top: 60%; // around the target aspect ratio
   position: relative;

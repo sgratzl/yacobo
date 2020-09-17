@@ -3,6 +3,7 @@ import { UpCircleOutlined } from '@ant-design/icons';
 import { BackTop, Layout, Menu, Select, TreeSelect, PageHeader } from 'antd';
 import type { BreadcrumbProps } from 'antd/lib/breadcrumb';
 import type { PageHeaderProps } from 'antd/lib/page-header';
+import { startOfToday } from 'date-fns';
 import Head from 'next/head';
 import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
@@ -219,7 +220,7 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
   return (
     <DatePicker
       className={styles.picker}
-      value={date}
+      value={date || startOfToday()}
       onChange={onSelect}
       allowClear={clearPath != null}
       format="MMM, d"
