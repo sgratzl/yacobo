@@ -198,7 +198,7 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
   return (
     <TreeSelect
       className={`${styles.select} ${styles.selectTree}`}
-      value={region?.id ?? ''}
+      value={region?.id ?? 'US'}
       onChange={onSelect}
       allowClear={clearPath != null}
       showSearch
