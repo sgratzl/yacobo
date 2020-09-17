@@ -1,3 +1,4 @@
+import { formatAPIDate } from '@/common';
 import { UpCircleOutlined } from '@ant-design/icons';
 import { BackTop, Layout, Menu, Select, TreeSelect } from 'antd';
 import { BreadcrumbProps } from 'antd/lib/breadcrumb';
@@ -6,14 +7,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
-import DatePicker from './DatePicker';
-import { ISignal, signals } from '../../model/signals';
-import { IRegion, states } from '../../model/regions';
+import { IRegion, ISignal, signals, states } from '../../model';
 import styles from './BaseLayout.module.scss';
-import { formatAPIDate } from '@/common';
+import DatePicker from './DatePicker';
 
 export interface BaseLayoutProps {
   pageTitle: string;
+  description?: string;
+  previewImage?: { url: string; width: number; height: number };
   mainActive: 'overview' | 'region' | 'compare' | 'favorites';
   breadcrumb: { breadcrumbName: string; path: string }[];
 }
@@ -24,9 +25,13 @@ function injectQuery(router: NextRouter, path: string, extras: Record<string, st
   });
 }
 
+const BASE_URL = process.env.VERCEL_URL ?? '';
+
 export default function BaseLayout({
   children,
   pageTitle,
+  previewImage,
+  description,
   mainActive,
   breadcrumb,
   ...pageHeader
@@ -35,11 +40,37 @@ export default function BaseLayout({
   return (
     <Layout className={styles.layout}>
       <Head>
-        <title>YaCoBo - {pageTitle}</title>
+        <title>YaCoBo - Yet another COVID-19 board - {pageTitle}</title>
+        <meta key="description" name="description" content="YaCoBo - Yet another COVID-19 board" />
+        <meta name="author" content="Samuel Gratzl" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="apple-mobile-web-app-title" content="YaCoBo" />
+        <meta name="application-name" content="YaCoBo" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
         {/** generate social media tags */}
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:site_name" content="YaCoBo" />
+        <meta property="og:description" content={description} />
+        {previewImage && (
+          <>
+            <meta property="og:image:width" content={previewImage.width.toString()} />
+            <meta property="og:image:height" content={previewImage.height.toString()} />
+            <meta property="og:url" content={`${BASE_URL}${previewImage.url}`} />
+            <meta property="og:image" content="https://lineup.js.org/app/preview.png" />
+          </>
+        )}
+
+        {/* <!-- Twitter Card data --> */}
+        <meta name="twitter:card" content="summary_large_image" />
+        {/* <meta name="twitter:site" content="@caleydo_org"/> */}
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={description} />
+        {/* <meta name="twitter:creator" content="@caleydo_org"/> */}
+        {previewImage && <meta name="twitter:image:src" content={`${BASE_URL}${previewImage.url}`} />}
       </Head>
       <Layout.Header>
-        <div className={styles.logo}></div>
+        <div className={styles.logo}>YaCoBo</div>
         <Menu theme="dark" mode="horizontal" activeKey={mainActive}>
           <Menu.Item key="overview" active={mainActive === 'overview'}>
             <Link href="/">Overview</Link>
