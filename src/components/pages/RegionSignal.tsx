@@ -32,7 +32,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
         },
       ]}
       extra={[
-        <FavoriteToggle region={region} signal={signal} key="bookmark" warning={false} />,
+        <FavoriteToggle region={region} signal={signal} key="bookmark" warning={false} history />,
         <DownloadMenu key="download" path={`/region/${region?.id}/${signal?.id}`} />,
       ]}
     >

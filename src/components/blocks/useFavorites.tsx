@@ -194,7 +194,7 @@ export function useFavorite(
   warning: boolean,
   signal: ISignal,
   region: IRegion,
-  history: boolean
+  history?: boolean
 ): [boolean, () => void];
 export function useFavorite(warning: boolean, signalOrRegion: ISignal | IRegion, region?: IRegion, history = false) {
   const [favorites, setFavorites] = useFavorites();
