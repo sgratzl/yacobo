@@ -1,6 +1,9 @@
 import BaseLayout, { DateSelect, RegionSelect, SignalSelect } from '@/components/blocks/BaseLayout';
 import { formatAPIDate, formatLocal } from '@/common';
 import { IRegion, ISignal } from '@/model';
+import { DownloadMenu } from '../blocks/DownloadMenu';
+import { FavoriteToggle } from '../blocks/FavoriteToggle';
+import { RegionSignalKeyFacts } from '../blocks/RegionSignalKeyFacts';
 
 export function RegionSignalDate({ region, signal, date }: { region?: IRegion; signal?: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -36,8 +39,12 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
           path: '/region/[region]/[signal]/[date]',
         },
       ]}
+      extra={[
+        <FavoriteToggle signal={signal} region={region} key="bookmark" warning={false} />,
+        <DownloadMenu key="download" img={false} path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
+      ]}
     >
-      TODO
+      <RegionSignalKeyFacts signal={signal} region={region} date={date} />
     </BaseLayout>
   );
 }

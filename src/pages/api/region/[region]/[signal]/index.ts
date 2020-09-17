@@ -10,7 +10,8 @@ import { CacheDuration } from '@/api/model';
 export default withMiddleware((req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
   const { param: signal, format } = extractFormat(req, 'signal', extractSignal);
   const region = extractRegion(req);
-  const data = () => fetchSignalRegion(ctx, signal.data, region, [startOfDay(new Date(2020, 1, 1)), endOfToday()]);
+  const data = () =>
+    fetchSignalRegion(ctx, signal.data, region, { from: startOfDay(new Date(2020, 1, 1)), to: endOfToday() });
 
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${region.name}`,

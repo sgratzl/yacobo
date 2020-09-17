@@ -1,8 +1,8 @@
 import { formatAPIDate } from '@/common';
 import { UpCircleOutlined } from '@ant-design/icons';
-import { BackTop, Layout, Menu, Select, TreeSelect } from 'antd';
-import { BreadcrumbProps } from 'antd/lib/breadcrumb';
-import PageHeader, { PageHeaderProps } from 'antd/lib/page-header';
+import { BackTop, Layout, Menu, Select, TreeSelect, PageHeader } from 'antd';
+import type { BreadcrumbProps } from 'antd/lib/breadcrumb';
+import type { PageHeaderProps } from 'antd/lib/page-header';
 import Head from 'next/head';
 import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';

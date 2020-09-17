@@ -7,31 +7,36 @@ export interface IValue {
   stderr?: number | null;
 }
 
+export type RequiredValue<T> = T & { value: number };
+
 export interface IRegionValue extends IValue {
   region: string;
 }
 
-export interface ICountyWithDetailsValue extends IRegionValue {
+export interface IRegionDetails {
   regionName: string;
   regionPopulation: number;
-  regionState: string;
+  regionState?: string;
 }
 
-export interface IStateWithDetailsValue extends IRegionValue {
-  regionName: string;
-  regionPopulation: number;
-}
+export interface IRegionWithDetailsValue extends IRegionValue, IRegionDetails {}
 
 export interface IDateValue extends IValue {
   date: Date;
 }
+export interface IRegionDateValue extends IDateValue, IRegionValue {}
+
+export interface IRegionDateWithDetailsValue extends IDateValue, IRegionWithDetailsValue {}
 
 export interface ISignalValue extends IValue {
   signal: string;
 }
-export interface ISignalWithDetailsValue extends ISignalValue {
+
+export interface ISignalDetails {
   signalName: string;
 }
+
+export interface ISignalWithDetailsValue extends ISignalValue, ISignalDetails {}
 
 export interface IEpiDataRow {
   signal: string;

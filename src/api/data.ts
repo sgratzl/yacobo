@@ -1,10 +1,14 @@
-import { formatISO, parseISO } from 'date-fns';
+import { regionDateSummaryDates } from '@/common/helpers';
+import { parseDates } from '@/common/parseDates';
+import { compareDesc, formatISO, parseISO } from 'date-fns';
 import {
   hasMeta,
   IDateValue,
   IEpiDataRow,
   IRegion,
+  IRegionDateValue,
   IRegionValue,
+  isCountyRegion,
   ISignal,
   ISignalMeta,
   ISignalValue,
@@ -14,7 +18,7 @@ import {
   selectLatestDate,
   signals,
 } from '../model';
-import fetchCached, { fetchJSON, parseDates } from './fetchCached';
+import fetchCached, { fetchJSON } from './fetchCached';
 import { IRequestContext } from './middleware';
 import { CacheDuration, estimateCacheDuration } from './model';
 
@@ -56,11 +60,21 @@ export function fetchAllRegions(
   });
 }
 
+function formatTimeValues(date: Date | { from: Date; to: Date } | Date[]) {
+  if (date instanceof Date) {
+    return formatCCastAPIDate(date);
+  }
+  if (Array.isArray(date)) {
+    return date.map(formatCCastAPIDate).join(',');
+  }
+  return `${formatCCastAPIDate(date.from)}:${formatCCastAPIDate(date.to)}`;
+}
+
 export function fetchSignalRegion(
   ctx: IRequestContext,
   signal: ISignal['data'],
   region: IRegion,
-  date: Date | [Date, Date]
+  date: Date | { from: Date; to: Date } | Date[]
 ): Promise<IDateValue[]> {
   const url = new URL(ENDPOINT);
   url.searchParams.set('source', 'covidcast');
@@ -69,14 +83,11 @@ export function fetchSignalRegion(
   url.searchParams.set('geo_type', isStateRegion(region) ? 'state' : 'county');
   url.searchParams.set('time_type', 'day');
   url.searchParams.set('geo_value', isStateRegion(region) ? region.short.toLowerCase() : region.id);
-  url.searchParams.set(
-    'time_values',
-    date instanceof Date ? formatCCastAPIDate(date) : `${formatCCastAPIDate(date[0])}:${formatCCastAPIDate(date[1])}`
-  );
+  url.searchParams.set('time_values', formatTimeValues(date));
   url.searchParams.set('format', 'json');
   url.searchParams.set('fields', ['time_value', 'value', signal.hasStdErr && 'stderr'].filter(Boolean).join(','));
   return fetchJSON(ctx, url, {
-    cache: estimateCacheDuration(date instanceof Date ? date : date[1]),
+    cache: estimateCacheDuration(date instanceof Date ? date : Array.isArray(date) ? date[date.length - 1] : date.to),
     process: (r: IEpiDataRow[]) =>
       r.map(
         (d) =>
@@ -88,6 +99,41 @@ export function fetchSignalRegion(
       ),
     parse: parseDates(['date']),
   });
+}
+
+export async function fetchSignalRegionDate(
+  ctx: IRequestContext,
+  signal: ISignal['data'],
+  region: IRegion,
+  date: Date
+): Promise<IRegionDateValue[]> {
+  // fetch multiple time stamps along with state info
+  const dates = regionDateSummaryDates(date);
+
+  const countyData = fetchSignalRegion(ctx, signal, region, dates);
+  // fetch also its state
+  const stateData = isCountyRegion(region) ? fetchSignalRegion(ctx, signal, region.state, dates) : Promise.resolve([]);
+
+  const [county, state] = await Promise.all([countyData, stateData]);
+
+  const result: IRegionDateValue[] = county
+    .map((row) => ({
+      ...row,
+      region: region.id,
+    }))
+    .sort((a, b) => compareDesc(a.date, b.date));
+
+  if (isCountyRegion(region)) {
+    result.push(
+      ...state
+        .map((row) => ({
+          ...row,
+          region: region.state.id,
+        }))
+        .sort((a, b) => compareDesc(a.date, b.date))
+    );
+  }
+  return result;
 }
 
 export function fetchRegion(ctx: IRequestContext, region: IRegion, date: Date): Promise<ISignalValue[]> {

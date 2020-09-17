@@ -15,6 +15,6 @@ export default withMiddleware((req: NextApiRequest, res: NextApiResponse, ctx: I
     title: `${region.name}-${formatAPIDate(date)}`,
     headers: ['signal', 'value', 'stderr'],
     cache: estimateCacheDuration(date),
-    signals: signalByID.bind(signalByID),
+    signals: signalByID,
   });
 });

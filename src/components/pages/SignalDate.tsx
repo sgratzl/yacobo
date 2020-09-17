@@ -3,24 +3,16 @@ import { FavoriteToggle } from '@/components/blocks/FavoriteToggle';
 import MapImage from '@/components/blocks/MapImage';
 import SignalTable from '@/components/blocks/SignalTable';
 import { ISignal } from '@/model/signals';
-import { Col, Divider, Row, Typography, List } from 'antd';
+import { Col, Divider, Row, Typography } from 'antd';
 import { isValid } from 'date-fns';
 import { DownloadMenu } from '@/components/blocks/DownloadMenu';
 import { formatLocal, formatAPIDate } from '@/common';
-import { useCallback } from 'react';
+import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
   const validDate = isValid(date);
   const image = `/api/signal/${signal.id}/${apiDate}.png`;
-
-  const render = useCallback((item: { alt: string; href: string }) => {
-    return (
-      <List.Item>
-        <Typography.Link href={item.href}>{item.alt}</Typography.Link>
-      </List.Item>
-    );
-  }, []);
 
   return (
     <BaseLayout
@@ -58,14 +50,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
         </Col>
         <Divider />
         <Col span={24}>
-          <Typography.Title level={2}>Description</Typography.Title>
-          <Typography.Paragraph>{signal.longDescription(date)}</Typography.Paragraph>
-          <List
-            size="small"
-            header={<Typography.Text>See also</Typography.Text>}
-            dataSource={signal.seeAlso}
-            renderItem={render}
-          />
+          <SignalInfoBlock signal={signal} />
         </Col>
         <Col span={24}>
           <Typography.Title level={2}>Detail Table</Typography.Title>

@@ -27,6 +27,6 @@ export const getStaticPaths: GetStaticPaths<IRegionDateProps & ParsedUrlQuery> =
 
 export default function RegionDateWrapper(props: IRegionDateProps) {
   const region = useFallback(props.region, extractRegion, undefined);
-  const date = useFallback(props.region, extractDate, undefined);
+  const date = useFallback(props.date, extractDate, undefined);
   return <RegionDate date={date} region={region} />;
 }

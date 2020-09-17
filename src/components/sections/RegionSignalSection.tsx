@@ -7,7 +7,7 @@ import { formatAPIDate } from '@/common';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import styles from './SignalSection.module.scss';
-// import { isValid } from 'date-fns';
+import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
 
 export default function RegionSignalSection({
   region,
@@ -25,15 +25,11 @@ export default function RegionSignalSection({
 
   const title =
     focus === 'both' ? `${region?.name} - ${signal?.name}` : focus === 'region' ? region?.name : signal?.name;
-  const cover = (
-    <>
-      <span>Hello</span>
-    </>
-  );
+
   return (
     <Card
       className={styles.card}
-      cover={cover}
+      cover={<RegionSignalKeyFacts date={date} region={region} signal={signal} />}
       actions={[
         <Link key="d" href="/region/[region]/[signal]/[date]" as={`/region/${region?.id}/${signal?.id}/${apiDate}`}>
           <Tooltip title="show region details">
@@ -44,7 +40,10 @@ export default function RegionSignalSection({
         <DownloadMenu key="d" path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
       ]}
     >
-      <Card.Meta title={title} />
+      <Card.Meta
+        title={title}
+        description={<RegionSignalKeyFactsTable date={date} region={region} signal={signal} />}
+      />
     </Card>
   );
 }
