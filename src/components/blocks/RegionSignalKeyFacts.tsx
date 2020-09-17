@@ -2,16 +2,25 @@ import { fetcher } from '@/client/utils';
 import { formatAPIDate, formatFixedValue, formatLocal, formatValue } from '@/common';
 import { regionDateSummaryDates } from '@/common/helpers';
 import { parseDates } from '@/common/parseDates';
-import { IRegion, IRegionDateValue, isCountyRegion, ISignal, noStateLabel, RequiredValue } from '@/model';
+import {
+  IRegion,
+  IRegionDateValue,
+  isCountyRegion,
+  ISignal,
+  ISignalDateValue,
+  noStateLabel,
+  RequiredValue,
+  signals,
+} from '@/model';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { Spin, Statistic, Table } from 'antd';
+import { List, Spin, Statistic, Table } from 'antd';
 import { formatDistance, isEqual, isValid, subDays } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
 import styles from './RegionSignalKeyFacts.module.scss';
 
-interface ITableRow {
+interface IDateTableRow {
   key: number;
   date: Date | null;
   label: string;
@@ -40,7 +49,7 @@ export function RegionSignalKeyFactsTable({
   const dataSource = asDataSource(data, date, region);
 
   const renderDateLink = useCallback(
-    (value: string, row: ITableRow) => {
+    (value: string, row: IDateTableRow) => {
       if (row.date) {
         return (
           <Link
@@ -58,18 +67,23 @@ export function RegionSignalKeyFactsTable({
   );
 
   return (
-    <Table<ITableRow>
+    <Table<IDateTableRow>
       pagination={false}
       loading={!data}
       dataSource={dataSource}
       showHeader={!region || isCountyRegion(region)}
       size="small"
     >
-      <Table.Column<ITableRow> title="Date" dataIndex="label" render={renderDateLink} />
-      <Table.Column<ITableRow> align="right" title={noStateLabel(region)} dataIndex="value" render={formatFixedValue} />
+      <Table.Column<IDateTableRow> title="Date" dataIndex="label" render={renderDateLink} />
+      <Table.Column<IDateTableRow>
+        align="right"
+        title={noStateLabel(region)}
+        dataIndex="value"
+        render={formatFixedValue}
+      />
       {!region ||
         (isCountyRegion(region) && (
-          <Table.Column<ITableRow>
+          <Table.Column<IDateTableRow>
             align="right"
             title={region.state.name}
             dataIndex="state"
@@ -84,7 +98,7 @@ function asDataSource(
   data?: RequiredValue<IRegionDateValue>[],
   date?: Date,
   region?: IRegion
-): ITableRow[] | undefined {
+): IDateTableRow[] | undefined {
   if (!data || !date || !region) {
     return undefined;
   }
@@ -142,5 +156,64 @@ function fetchRegionSignalDate(key: string): Promise<RequiredValue<IRegionDateVa
   const parse = parseDates<RequiredValue<IRegionDateValue>>(['date']);
   return fetcher(key).then((rows: RequiredValue<IRegionDateValue>[]) =>
     parse(rows).filter((d) => typeof d.value === 'number')
+  );
+}
+
+function fetchRegionMultiDate(key: string): Promise<RequiredValue<ISignalDateValue>[]> {
+  const parse = parseDates<RequiredValue<ISignalDateValue>>(['date']);
+  return fetcher(key).then((rows: RequiredValue<ISignalDateValue>[]) =>
+    parse(rows).filter((d) => typeof d.value === 'number')
+  );
+}
+
+function useKeyMultiFacts(region?: IRegion, date?: Date) {
+  const valid = region != null && isValid(date);
+  return useSWR(valid ? `/api/region/${region?.id}/all/${formatAPIDate(date)}.json` : null, fetchRegionMultiDate);
+}
+
+interface ISignalTableRow {
+  label: string;
+  signal: ISignal;
+  value?: number;
+}
+
+function renderStats(value: number | undefined) {
+  return <Statistic className={styles.smallStats} value={formatValue(value)} />;
+}
+function renderSignalOf(signal: ISignal) {
+  return `of ${formatValue(signal.data.maxValue)}`;
+}
+
+export function KeySignalMultiFacts({ region, date }: { region?: IRegion; date?: Date }) {
+  const { data } = useKeyMultiFacts(region, date);
+  const bySignal = new Map(data?.map((row) => [row.signal, row]) ?? []);
+
+  const dataSource: ISignalTableRow[] = signals.map((signal) => ({
+    label: signal.name,
+    signal,
+    value: bySignal.get(signal.id)?.value,
+  }));
+
+  const renderSignalLink = useCallback(
+    (value: string, row: ISignalTableRow) => {
+      return (
+        <Link
+          passHref
+          href="/region/[region]/[signal]/[date]"
+          as={`/region/${region?.id}/${row.signal.id}/${formatAPIDate(date)}`}
+        >
+          <a href="a">{value}</a>
+        </Link>
+      );
+    },
+    [region, date]
+  );
+
+  return (
+    <Table<ISignalTableRow> pagination={false} loading={!data} dataSource={dataSource} size="small" rowKey="label">
+      <Table.Column<ISignalTableRow> title="Signal" dataIndex="label" render={renderSignalLink} />
+      <Table.Column<ISignalTableRow> align="right" title="Value" dataIndex="value" render={renderStats} />
+      <Table.Column<ISignalTableRow> title="Unit" dataIndex="signal" render={renderSignalOf} />
+    </Table>
   );
 }

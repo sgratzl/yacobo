@@ -25,6 +25,7 @@ export interface IDateValue extends IValue {
   date: Date;
 }
 export interface IRegionDateValue extends IDateValue, IRegionValue {}
+export interface ISignalDateValue extends IDateValue, ISignalValue {}
 
 export interface IRegionDateWithDetailsValue extends IDateValue, IRegionWithDetailsValue {}
 

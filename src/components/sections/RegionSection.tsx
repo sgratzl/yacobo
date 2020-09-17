@@ -6,6 +6,7 @@ import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import styles from './SignalSection.module.scss';
 import { formatAPIDate } from '@/common';
+import { KeySignalMultiFacts } from '../blocks/RegionSignalKeyFacts';
 
 export default function RegionSection({ region, date }: { region: IRegion; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -23,6 +24,7 @@ export default function RegionSection({ region, date }: { region: IRegion; date?
       ]}
     >
       <Card.Meta title={region.name} />
+      <KeySignalMultiFacts region={region} date={date} />
     </Card>
   );
 }

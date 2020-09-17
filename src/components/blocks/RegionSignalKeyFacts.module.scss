@@ -8,3 +8,7 @@
 .stats {
   font-size: 36px;
 }
+
+.smallStats :global(.ant-statistic-content) {
+  font-size: 14px;
+}
