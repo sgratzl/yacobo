@@ -82,9 +82,17 @@ export function regionByID(region: string) {
   return fake;
 }
 
-export function isStateRegion(region: IRegion): region is IStateRegion {
-  return Array.isArray((region as IStateRegion).counties);
+export function isStateRegion(region?: IRegion): region is IStateRegion {
+  return region != null && Array.isArray((region as IStateRegion).counties);
 }
-export function isCountyRegion(region: IRegion): region is ICountyRegion {
-  return (region as ICountyRegion).state != null;
+export function isCountyRegion(region?: IRegion): region is ICountyRegion {
+  return region != null && (region as ICountyRegion).state != null;
+}
+
+export function noStateLabel(region?: IRegion) {
+  if (!region || isStateRegion(region)) {
+    return region?.name;
+  }
+  const last = region.name.lastIndexOf(',');
+  return region.name.slice(0, last);
 }

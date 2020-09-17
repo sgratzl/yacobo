@@ -2,17 +2,19 @@ import { fetcher } from '@/client/utils';
 import { formatAPIDate, formatFixedValue, formatLocal, formatValue } from '@/common';
 import { regionDateSummaryDates } from '@/common/helpers';
 import { parseDates } from '@/common/parseDates';
-import { IRegion, IRegionDateValue, isCountyRegion, ISignal, RequiredValue } from '@/model';
-import { Statistic, Table, Spin } from 'antd';
-import { formatDistance, isEqual, isValid } from 'date-fns';
-import { subDays } from 'date-fns';
+import { IRegion, IRegionDateValue, isCountyRegion, ISignal, noStateLabel, RequiredValue } from '@/model';
+import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
+import { Spin, Statistic, Table } from 'antd';
+import { formatDistance, isEqual, isValid, subDays } from 'date-fns';
+import Link from 'next/link';
+import { useCallback } from 'react';
 import useSWR from 'swr';
 import styles from './RegionSignalKeyFacts.module.scss';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 
 interface ITableRow {
   key: number;
-  date: string;
+  date: Date | null;
+  label: string;
   value?: number;
   state?: number;
 }
@@ -35,7 +37,25 @@ export function RegionSignalKeyFactsTable({
   date?: Date;
 }) {
   const { data } = useKeyFacts(region, signal, date);
-  const dataSource: ITableRow[] = asDataSource(data, date, region);
+  const dataSource = asDataSource(data, date, region);
+
+  const renderDateLink = useCallback(
+    (value: string, row: ITableRow) => {
+      if (row.date) {
+        return (
+          <Link
+            passHref
+            href="/region/[region]/[signal]/[date]"
+            as={`/region/${region?.id}/${signal?.id}/${formatAPIDate(row.date)}`}
+          >
+            <a href="a">{value}</a>
+          </Link>
+        );
+      }
+      return value;
+    },
+    [region, signal]
+  );
 
   return (
     <Table<ITableRow>
@@ -45,8 +65,8 @@ export function RegionSignalKeyFactsTable({
       showHeader={!region || isCountyRegion(region)}
       size="small"
     >
-      <Table.Column<ITableRow> title="Date" dataIndex="date" />
-      <Table.Column<ITableRow> align="right" title={region?.name} dataIndex="value" render={formatFixedValue} />
+      <Table.Column<ITableRow> title="Date" dataIndex="label" render={renderDateLink} />
+      <Table.Column<ITableRow> align="right" title={noStateLabel(region)} dataIndex="value" render={formatFixedValue} />
       {!region ||
         (isCountyRegion(region) && (
           <Table.Column<ITableRow>
@@ -60,15 +80,20 @@ export function RegionSignalKeyFactsTable({
   );
 }
 
-function asDataSource(data?: RequiredValue<IRegionDateValue>[], date?: Date, region?: IRegion): ITableRow[] {
+function asDataSource(
+  data?: RequiredValue<IRegionDateValue>[],
+  date?: Date,
+  region?: IRegion
+): ITableRow[] | undefined {
   if (!data || !date || !region) {
-    return [];
+    return undefined;
   }
   const lookup = new Map(data?.map((d) => [`${d.region}:${d.date.getTime()}`, d]) ?? []);
   const dates = regionDateSummaryDates(date);
   return dates.map((d) => ({
     key: d.getTime(),
-    date: d === date ? formatLocal(d) : `${formatDistance(d, date, {})} ago`,
+    label: d === date ? formatLocal(d) : `${formatDistance(d, date, {})} ago`,
+    date: d === date ? null : d,
     value: lookup.get(`${region.id}:${d.getTime()}`)?.value,
     state: lookup.get(`${isCountyRegion(region) ? region.state.id : ''}:${d.getTime()}`)?.value,
   }));
