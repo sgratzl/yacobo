@@ -15,5 +15,7 @@ export function setCommonHeaders(
   const maxAge = options.cache ?? CacheDuration.medium;
   if (process.env.NODE_ENV === 'production') {
     res.setHeader('Cache-Control', `public, s-maxage=${Math.floor(maxAge / 60)}, stale-while-revalidate`);
+  } else {
+    res.setHeader('Cache-Control', `public, max-age=${maxAge}, s-maxage=${Math.floor(maxAge / 60)}`);
   }
 }
