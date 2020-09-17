@@ -1,5 +1,5 @@
 import { ISignal } from '../../model/signals';
-import { Button, Card, Tooltip, Typography, Modal } from 'antd';
+import { Button, Card, Tooltip } from 'antd';
 import { QuestionOutlined, EyeOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { useCallback } from 'react';
@@ -9,6 +9,7 @@ import MapImage from '../blocks/MapImage';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { formatAPIDate } from '@/common';
+import { showInfoBox } from '../blocks/SignalInfoBox';
 
 export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -16,10 +17,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
   const image = `/api/signal/${signal.id}/${apiDate}.png`;
 
   const showInfo = useCallback(() => {
-    Modal.info({
-      title: signal.name,
-      content: <Typography.Paragraph>{signal.longDescription(date)}</Typography.Paragraph>,
-    });
+    showInfoBox(signal, date);
   }, [signal, date]);
 
   return (
