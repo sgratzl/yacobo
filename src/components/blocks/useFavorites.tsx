@@ -111,11 +111,14 @@ export function useFavorites() {
   return [parsedFavorites, setParsedFavorites] as const;
 }
 
-function isSignal(signalOrRegion: ISignal | IRegion): signalOrRegion is ISignal {
-  return (signalOrRegion as ISignal).colorScheme != null;
+function isSignal(signalOrRegion?: ISignal | IRegion): signalOrRegion is ISignal {
+  return signalOrRegion != null && (signalOrRegion as ISignal).colorScheme != null;
 }
 
-function findFavorite(favorites: IFavorite[], favorite: IFavorite) {
+function findFavorite(favorites: IFavorite[], favorite?: IFavorite) {
+  if (!favorite) {
+    return undefined;
+  }
   return favorites.find(
     (d) =>
       d.type === favorite.type &&
@@ -199,7 +202,7 @@ export function useFavorite(warning: boolean, signalOrRegion: ISignal | IRegion,
     });
   }, [favorite, favorites, setFavorites]);
 
-  if (!signalOrRegion && !region) {
+  if (!favorite) {
     return [false, noop];
   }
   return [savedFavorite != null, savedFavorite ? removeFavorite : addFavorite] as const;
