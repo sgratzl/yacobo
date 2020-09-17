@@ -63,12 +63,10 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
           <List
             size="small"
             header={<Typography.Text>See also</Typography.Text>}
-            bordered
             dataSource={signal.seeAlso}
             renderItem={render}
           />
         </Col>
-
         <Col span={24}>
           <Typography.Title level={2}>Detail Table</Typography.Title>
           <SignalTable signal={signal} date={date} />

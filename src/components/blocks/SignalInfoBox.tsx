@@ -16,7 +16,6 @@ export default function SignalInfoBox({ signal, date }: { signal: ISignal; date?
       <List
         size="small"
         header={<Typography.Text>See also</Typography.Text>}
-        bordered
         dataSource={signal.seeAlso}
         renderItem={render}
       />
