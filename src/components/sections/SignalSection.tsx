@@ -14,7 +14,7 @@ import { showInfoBox } from '../blocks/SignalInfoBox';
 export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
   const validDate = isValid(date);
-  const image = `/api/signal/${signal.id}/${apiDate}.png`;
+  const image = `/api/signal/${signal.id}/${apiDate}`;
 
   const showInfo = useCallback(() => {
     showInfoBox(signal, date);

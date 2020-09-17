@@ -23,7 +23,7 @@ export default function RegionSignalHistorySection({
   focus: 'region' | 'signal' | 'both';
 }) {
   const valid = isValid(date) && region != null && signal != null;
-  const image = `/api/region/${region.id}/${signal.id}.png`;
+  const image = `/api/region/${region.id}/${signal.id}`;
 
   const showInfo = useCallback(() => {
     showInfoBox(signal, date);

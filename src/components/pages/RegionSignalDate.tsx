@@ -57,17 +57,17 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
     >
       <Row>
         <Col span={24}>
+          <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
+        </Col>
+        <Col span={24}>
           <RegionSignalKeyFacts signal={signal} region={region} date={date} />
         </Col>
         <Col span={24}>
           <RegionSignalKeyFactsTable signal={signal} region={region} date={date} />
         </Col>
         <Col span={24}>
-          <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
-        </Col>
-        <Col span={24}>
           <VegaImage
-            src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}.png` : undefined}
+            src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}
             alt={`History of ${signal?.name}`}
             large
             type="line"

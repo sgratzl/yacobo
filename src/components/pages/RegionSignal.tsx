@@ -42,7 +42,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
         </Col>
         <Col span={24}>
           <VegaImage
-            src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}.png` : undefined}
+            src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}
             alt={`History of ${signal?.name}`}
             large
             type="line"

@@ -7,7 +7,7 @@ function addParam(url: string | undefined, key: string, value: string | number) 
   if (!url) {
     return undefined;
   }
-  return `${url}${url.includes('?') ? '&' : '?'}${key}=${value}`;
+  return `${url}.png${url.includes('?') ? '&' : '?'}${key}=${value}`;
 }
 
 function defaultSourceSet(src?: string) {
@@ -52,7 +52,7 @@ export default function VegaImage({
 }) {
   const [loading, imgRef] = useImageLoading(src);
 
-  const full = large ? addParam(src, 'scale', 2) : src;
+  const full = large ? addParam(src, 'scale', 2) : `${src}.png`;
   const srcSet = defaultSourceSet(full);
 
   return (

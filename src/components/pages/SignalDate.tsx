@@ -12,7 +12,7 @@ import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
   const validDate = isValid(date);
-  const image = `/api/signal/${signal.id}/${apiDate}.png`;
+  const image = `/api/signal/${signal.id}/${apiDate}`;
 
   return (
     <BaseLayout
