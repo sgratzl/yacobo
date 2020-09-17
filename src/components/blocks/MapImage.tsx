@@ -55,16 +55,25 @@ export default function MapImage({
   const srcSet = defaultSourceSet(full);
 
   return (
-    <div className={classNames(styles.img, type === 'line' && styles.imgLine)}>
+    <div
+      className={classNames(
+        styles.img,
+        type === 'line' && styles.imgLine,
+        loading && 'ant-skeleton ant-skeleton-active'
+      )}
+    >
       {src && (
         <img ref={imgRef} className={styles.imgImg} data-src={src} src={full?.toString()} srcSet={srcSet} alt={alt} />
       )}
       {loading && (
-        <img
-          className={classNames(styles.imgPlaceholder, type === 'line' && styles.imgLine)}
-          src={`/api/skeletons/${type}${large ? '?scale=2' : ''}`}
-          alt={alt}
-        />
+        <>
+          <img
+            className={classNames(styles.imgPlaceholder, type === 'line' && styles.imgLine)}
+            src={`/api/skeletons/${type}${large ? '?scale=2' : ''}`}
+            alt={alt}
+          />
+          <div className={classNames(styles.imgSkeleton, 'ant-skeleton-image')} />
+        </>
       )}
     </div>
   );
