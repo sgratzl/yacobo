@@ -6,5 +6,5 @@ import { fetchMinMaxDate } from '@/api/data';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
   const { max: d } = await fetchMinMaxDate(ctx);
-  return redirectWithFormat(req, res, `all/${formatAPIDate(d)}`);
+  return redirectWithFormat(req, res, `date/${formatAPIDate(d)}`);
 });

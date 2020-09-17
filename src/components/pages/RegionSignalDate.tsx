@@ -26,7 +26,7 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
           <SignalSelect
             signal={signal}
             path={`/region/${region?.id}/[signal]/${apiDate}`}
-            clearPath={`/region/${region?.id}/all/${apiDate}`}
+            clearPath={`/region/${region?.id}/date/${apiDate}`}
           />
           as of
           <DateSelect

@@ -14,9 +14,9 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
       title="COVID"
       subTitle={
         <>
-          <RegionSelect region={region} path={`/region/[region]/all/${apiDate}`} clearPath={`/date/${apiDate}`} />
+          <RegionSelect region={region} path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />
           as of
-          <DateSelect date={date} path={`/region/${region?.id}/all/[date]`} clearPath={`/region/${region?.id}`} />
+          <DateSelect date={date} path={`/region/${region?.id}/date/[date]`} clearPath={`/region/${region?.id}`} />
         </>
       }
       breadcrumb={[
@@ -28,7 +28,7 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
           ? [
               {
                 breadcrumbName: apiDate,
-                path: '/region/[region]/all/[date]',
+                path: '/region/[region]/date/[date]',
               },
             ]
           : [],

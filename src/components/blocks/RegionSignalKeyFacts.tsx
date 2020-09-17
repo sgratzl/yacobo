@@ -173,7 +173,7 @@ function fetchRegionMultiDate(key: string): Promise<RequiredValue<ISignalDateVal
 
 function useKeyMultiFacts(region?: IRegion, date?: Date) {
   const valid = region != null && isValid(date);
-  return useSWR(valid ? `/api/region/${region?.id}/all/${formatAPIDate(date)}.json` : null, fetchRegionMultiDate);
+  return useSWR(valid ? `/api/region/${region?.id}/date/${formatAPIDate(date)}.json` : null, fetchRegionMultiDate);
 }
 
 interface ISignalTableRow {
