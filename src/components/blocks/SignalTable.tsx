@@ -108,7 +108,7 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
 
   return (
     <Table<IRegionWithDetailsValue> dataSource={data} loading={!data} rowKey="region">
-      <Table.Column<IRegionWithDetailsValue> title="ID" dataIndex="region" />
+      <Table.Column<IRegionWithDetailsValue> title="FIPS" dataIndex="region" />
       <Table.Column<IRegionWithDetailsValue>
         title="County"
         dataIndex="regionName"

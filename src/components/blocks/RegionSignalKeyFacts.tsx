@@ -13,7 +13,7 @@ import {
   signals,
 } from '@/model';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { Spin, Statistic, Table } from 'antd';
+import { Spin, Statistic, Table, Tooltip } from 'antd';
 import { formatDistance, isEqual, isValid, subDays } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
@@ -127,9 +127,13 @@ function resolveTrend(current?: RequiredValue<IRegionDateValue> | null, data?: R
     return undefined;
   }
   return current.value > yesterdayData.value ? (
-    <ArrowUpOutlined title={`increased compared to ${formatLocal(yesterdayDate)}`} />
+    <Tooltip title={`increased compared to ${formatLocal(yesterdayDate)}`}>
+      <ArrowUpOutlined />
+    </Tooltip>
   ) : (
-    <ArrowDownOutlined title={`decreased compared to ${formatLocal(yesterdayDate)}`} />
+    <Tooltip title={`decreased compared to ${formatLocal(yesterdayDate)}`}>
+      <ArrowDownOutlined />
+    </Tooltip>
   );
 }
 
