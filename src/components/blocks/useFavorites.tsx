@@ -66,6 +66,7 @@ function formatFavorite(favorite: IFavorite): ISerializedFavorite {
       return {
         s: favorite.signal.id,
         r: favorite.region.id,
+        h: true,
       };
     default:
       return {

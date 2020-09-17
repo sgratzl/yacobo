@@ -71,7 +71,11 @@ export default function BaseLayout({
         {previewImage && <meta name="twitter:image:src" content={`${BASE_URL}${previewImage.url}`} />}
       </Head>
       <Layout.Header>
-        <div className={styles.logo}>YaCoBo</div>
+        <Link href="/" passHref>
+          <a href="/" className={styles.logo}>
+            YaCoBo
+          </a>
+        </Link>
         <Menu theme="dark" mode="horizontal" activeKey={mainActive}>
           <Menu.Item key="overview" active={mainActive === 'overview'}>
             <Link href="/">Overview</Link>

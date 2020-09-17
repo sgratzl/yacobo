@@ -48,7 +48,7 @@ export default function RegionSignalHistorySection({
         </Tooltip>,
       ]}
     >
-      <Card.Meta title={title} />
+      <Card.Meta title={title} description={focus !== 'region' ? signal.description(date) : undefined} />
     </Card>
   );
 }
