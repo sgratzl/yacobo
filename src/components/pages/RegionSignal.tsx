@@ -12,7 +12,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
   return (
     <BaseLayout
       pageTitle={`COVID ${region?.name} - ${signal?.name}`}
-      mainActive="region"
+      mainActive="overview"
       title="COVID"
       subTitle={
         <>

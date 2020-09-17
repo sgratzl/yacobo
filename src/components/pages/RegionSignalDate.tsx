@@ -13,7 +13,7 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
   return (
     <BaseLayout
       pageTitle={`COVID ${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}
-      mainActive="region"
+      mainActive="overview"
       title="COVID"
       subTitle={
         <>

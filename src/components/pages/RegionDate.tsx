@@ -10,7 +10,7 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
   return (
     <BaseLayout
       pageTitle={`COVID ${region?.name} as of ${formatLocal(date)}`}
-      mainActive="region"
+      mainActive="overview"
       title="COVID"
       subTitle={
         <>

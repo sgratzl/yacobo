@@ -45,6 +45,7 @@
   font-size: inherit;
   background-color: unset;
   margin: 0 0.5em;
+  min-width: 15em;
 
   &:global(.ant-select) {
     > :global(.ant-select-selector) {

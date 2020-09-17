@@ -152,6 +152,7 @@ export function SignalSelect({ signal, path, clearPath }: { signal?: ISignal; pa
       className={styles.select}
       value={signal?.id}
       onChange={onSelect}
+      placeholder="All Signals"
       allowClear={clearPath != null}
       dropdownMatchSelectWidth={200}
     >
