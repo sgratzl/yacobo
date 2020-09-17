@@ -5,8 +5,10 @@ import { parseDates } from '@/common/parseDates';
 import { IRegion, IRegionDateValue, isCountyRegion, ISignal, RequiredValue } from '@/model';
 import { Statistic, Table, Spin } from 'antd';
 import { formatDistance, isEqual, isValid } from 'date-fns';
+import { subDays } from 'date-fns';
 import useSWR from 'swr';
 import styles from './RegionSignalKeyFacts.module.scss';
+import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 
 interface ITableRow {
   key: number;
@@ -76,15 +78,33 @@ function renderSpin() {
   return <Spin />;
 }
 
+function resolveTrend(current?: RequiredValue<IRegionDateValue> | null, data?: RequiredValue<IRegionDateValue>[]) {
+  if (!current || !data) {
+    return undefined;
+  }
+  const yesterdayDate = subDays(current.date, 1);
+  const yesterdayData = data.find((d) => d.region === current.region && isEqual(d.date, yesterdayDate));
+  if (!yesterdayData) {
+    return undefined;
+  }
+  return current.value > yesterdayData.value ? (
+    <ArrowUpOutlined title={`increased compared to ${formatLocal(yesterdayDate)}`} />
+  ) : (
+    <ArrowDownOutlined title={`decreased compared to ${formatLocal(yesterdayDate)}`} />
+  );
+}
+
 export function RegionSignalKeyFacts({ region, signal, date }: { region?: IRegion; signal?: ISignal; date?: Date }) {
   const { data } = useKeyFacts(region, signal, date);
 
   const current = data && region && date ? data.find((d) => d.region === region.id && isEqual(d.date, date)) : null;
+  const prefix = resolveTrend(current, data);
 
   return (
     <div className={styles.root}>
       <Statistic
         className={styles.stats}
+        prefix={prefix}
         value={formatValue(current?.value)}
         valueRender={!data ? renderSpin : undefined}
         suffix={`of ${formatValue(signal?.data.maxValue ?? 100)} ${signal?.data.unit ?? 'people'}`}
