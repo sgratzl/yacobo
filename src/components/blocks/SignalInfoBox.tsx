@@ -13,10 +13,9 @@ export default function SignalInfoBox({ signal, date }: { signal: ISignal; date?
   return (
     <>
       <Typography.Paragraph>{signal.longDescription(date)}</Typography.Paragraph>
-
       <List
         size="small"
-        header={<Typography.Title level={4}>See also:</Typography.Title>}
+        header={<Typography.Text>See also</Typography.Text>}
         bordered
         dataSource={signal.seeAlso}
         renderItem={render}
@@ -29,5 +28,6 @@ export function showInfoBox(signal: ISignal, date?: Date) {
   Modal.info({
     title: signal.name,
     content: <SignalInfoBox signal={signal} date={date} />,
+    width: '50em',
   });
 }
