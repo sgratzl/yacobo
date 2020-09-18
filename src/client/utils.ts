@@ -2,7 +2,7 @@ import { parseDate } from '@/common/parseDates';
 import useSWR from 'swr';
 import { ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../model';
 
-export function fetcher(path: string) {
+export function fetcher<T = any>(path: string): Promise<T> {
   return fetch(path).then((r) => r.json());
 }
 

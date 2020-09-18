@@ -35,7 +35,35 @@ function createBaseMap(data: { title: string; description: string }, options: IV
   };
 }
 
+export const COUNTIES_URL: UrlData = {
+  name: 'data',
+  url: 'https://cdn.jsdelivr.net/npm/us-atlas/counties-10m.json',
+};
+
+const FAKE_GEO = {
+  type: 'Topology',
+  objects: {
+    nation: {
+      type: 'GeometryCollection',
+      geometries: [],
+    },
+    states: {
+      type: 'GeometryCollection',
+      geometries: [],
+    },
+    counties: {
+      type: 'GeometryCollection',
+      geometries: [],
+    },
+  },
+};
+
 async function chooseDataSource(options: IVegaOptions) {
+  if (options.forApp) {
+    return {
+      values: FAKE_GEO,
+    };
+  }
   if (options.details) {
     return COUNTIES_URL;
   }
@@ -51,11 +79,6 @@ const missingGradient: LinearGradient = {
   stops: Array(missingStopCount + 1)
     .fill(0)
     .map((_, i) => ({ offset: i / missingStopCount, color: i % 2 === 0 ? '#eeeeee' : 'white' })),
-};
-
-const COUNTIES_URL: UrlData = {
-  name: 'data',
-  url: 'https://cdn.jsdelivr.net/npm/us-atlas/counties-10m.json',
 };
 
 function createLayer(data: {
@@ -105,6 +128,9 @@ function createLayer(data: {
       type: 'geoshape',
       stroke: STROKE,
       opacity: data.hidden ? 0 : 1,
+      tooltip: {
+        content: 'data',
+      },
     },
     encoding: {
       color: {

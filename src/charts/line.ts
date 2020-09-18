@@ -124,6 +124,9 @@ function createLineChartSpec(
           point: 'transparent',
           strokeCap: 'square',
           color: 'grey',
+          tooltip: {
+            content: 'data',
+          },
         },
       },
     ],

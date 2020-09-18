@@ -1,7 +1,7 @@
 import { compareDate, compareRegionName, compareRegionState, compareStdErr, compareValue } from '@/client/compare';
 import { Table } from 'antd';
 import Link from 'next/link';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { IRegionObjectValue, useDateValue, useRegionValue } from '../../client/data';
 import { formatAPIDate, formatFixedValue } from '../../common';
 import { IDateValue, IRegion, ISignal } from '../../model';
@@ -34,6 +34,7 @@ const renderStdErr = (value: number | null) => {
 export default function SignalTable({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
   const { data } = useRegionValue(signal, date);
+  const filtered = useMemo(() => data?.filter((d) => !d.region.endsWith('000')), [data]);
 
   const renderRegion = useCallback(
     (value: string, row: IRegionObjectValue) => {
@@ -57,7 +58,7 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
   );
 
   return (
-    <Table<IRegionObjectValue> dataSource={data} loading={!data} rowKey="region">
+    <Table<IRegionObjectValue> dataSource={filtered} loading={!data} rowKey="region">
       <Table.Column<IRegionObjectValue> title="FIPS" dataIndex="region" />
       <Table.Column<IRegionObjectValue>
         title="County"

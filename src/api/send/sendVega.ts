@@ -122,6 +122,7 @@ export function extractVegaOptions(req: NextApiRequest, ctx: IRequestContext): I
     scaleFactor: Number.parseInt((req.query.scale as string) ?? '1', 10),
     details: req.query.details != null,
     devicePixelRatio: Number.parseInt((req.query.dpr as string) ?? '1', 10),
+    forApp: req.query.app != null,
     ctx,
   };
 }

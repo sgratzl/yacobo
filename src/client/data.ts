@@ -27,16 +27,17 @@ function fetchFilter(key: string) {
   return fetch(key)
     .then((r) => r.json())
     .then((r: IRegionValue[]) =>
-      r
-        .filter((d) => !d.region.endsWith('000'))
-        .sort(compareValue)
-        .map((row) => ({ ...row, regionObj: regionByID(row.region) } as IRegionObjectValue))
+      r.sort(compareValue).map((row) => ({ ...row, regionObj: regionByID(row.region) } as IRegionObjectValue))
     );
 }
 
-export function useRegionValue(signal: ISignal, date?: Date) {
+export function useRegionValue(signal?: ISignal, date?: Date) {
   const apiDate = formatAPIDate(date);
   const validDate = isValid(date);
 
-  return useSWR<IRegionObjectValue[]>(validDate ? `/api/signal/${signal.id}/${apiDate}.json` : null, fetchFilter, {});
+  return useSWR<IRegionObjectValue[]>(
+    validDate && signal != null ? `/api/signal/${signal.id}/${apiDate}.json` : null,
+    fetchFilter,
+    {}
+  );
 }

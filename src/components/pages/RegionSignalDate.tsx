@@ -72,7 +72,7 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
         <SignalInfoBlock signal={signal} />
         <Divider />
         <Typography.Title level={2}>History</Typography.Title>
-        <LineImage region={region} signal={signal} />
+        <LineImage scale={2} interactive region={region} signal={signal} />
       </ContentLayout>
     </BaseLayout>
   );

@@ -40,7 +40,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
       <ContentLayout>
         <Typography.Title>{signal?.name}</Typography.Title>
         <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
-        <LineImage region={region} signal={signal} />
+        <LineImage scale={2} interactive region={region} signal={signal} />
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />

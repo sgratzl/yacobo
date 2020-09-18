@@ -44,7 +44,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
       <ContentLayout>
         <Typography.Title>{signal.name}</Typography.Title>
         <Typography.Paragraph>{signal.description(date)}</Typography.Paragraph>
-        <MapImage signal={signal} date={date} />
+        <MapImage scale={2} interactive signal={signal} date={date} />
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />

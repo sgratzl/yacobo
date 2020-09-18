@@ -37,7 +37,7 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
       {dynamic && (
         <>
           <Typography.Title level={2}>History of {refSignal.name}</Typography.Title>
-          <LineImage region={region} signal={refSignal} />
+          <LineImage scale={2} interactive region={region} signal={refSignal} />
           <Typography.Title level={2}>All Signals</Typography.Title>
         </>
       )}

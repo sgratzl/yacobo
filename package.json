@@ -31,8 +31,8 @@
     "cross-fetch": "^3.0.6",
     "d3-dsv": "^2.0.0",
     "date-fns": "^2.16.1",
-    "yacobo-font-canvas-helper": "file:./yacobo-font-canvas-helper",
     "next": "9.5.3",
+    "rc-resize-observer": "^0.2.5",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-vega": "^7.4.1",
@@ -43,7 +43,8 @@
     "use-persisted-state": "^0.3.0",
     "use-ssr": "^1.0.23",
     "vega": "^5.15.0",
-    "vega-lite": "^4.15.0"
+    "vega-lite": "^4.15.0",
+    "yacobo-font-canvas-helper": "file:./yacobo-font-canvas-helper"
   },
   "devDependencies": {
     "@types/node": "^14.10.3",
