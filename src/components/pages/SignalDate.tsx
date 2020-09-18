@@ -49,7 +49,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
         <VegaImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} large />
         <Divider />
         <SignalInfoBlock signal={signal} />
-        <Typography.Title level={2}>Detail Table</Typography.Title>
+        <Typography.Title level={2}>Data Table</Typography.Title>
         <SignalTable signal={signal} date={date} />
       </ContentLayout>
     </BaseLayout>

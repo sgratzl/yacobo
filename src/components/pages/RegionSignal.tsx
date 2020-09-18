@@ -47,7 +47,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
         />
         <Divider />
         <SignalInfoBlock signal={signal} />
-        <Typography.Title level={2}>Detail Table</Typography.Title>
+        <Typography.Title level={2}>Data Table</Typography.Title>
         <DateTable signal={signal} region={region} />
       </ContentLayout>
     </BaseLayout>
