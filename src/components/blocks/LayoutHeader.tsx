@@ -2,7 +2,8 @@ import { Layout, Menu, TreeSelect } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { memo, useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
+import styles from './BaseLayout.module.css';
 import { treeData } from './RegionSelect';
 
 export function Search() {
@@ -21,7 +22,7 @@ export function Search() {
   return (
     <TreeSelect
       size="large"
-      className="search"
+      className={styles.search}
       onChange={onSelect}
       allowClear
       showSearch
@@ -30,36 +31,13 @@ export function Search() {
       treeDefaultExpandedKeys={['US']}
       treeNodeFilterProp="label"
       dropdownMatchSelectWidth={300}
-    >
-      <style jsx>{`
-        .search {
-          min-width: 15em;
-        }
-      `}</style>
-    </TreeSelect>
+    ></TreeSelect>
   );
 }
 
 export const LayoutHeader = memo(({ mainActive }: { mainActive: string }) => {
   return (
-    <Layout.Header className="topHeader">
-      <style jsx>{`
-        .logo {
-          float: left;
-          padding-right: 20px;
-          cursor: pointer;
-          color: rgba(255, 255, 255, 0.65);
-        }
-
-        .topHeader {
-          display: flex;
-          align-items: center;
-        }
-
-        .span {
-          flex: 1 1 0;
-        }
-      `}</style>
+    <Layout.Header>
       <Head>
         <meta name="author" content="Samuel Gratzl" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -73,7 +51,7 @@ export const LayoutHeader = memo(({ mainActive }: { mainActive: string }) => {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Link href="/" passHref>
-        <a href="/" className="logo">
+        <a href="/" className={styles.logo}>
           YaCoBo
         </a>
       </Link>
@@ -85,8 +63,6 @@ export const LayoutHeader = memo(({ mainActive }: { mainActive: string }) => {
           <Link href="/favorites">Favorites</Link>
         </Menu.Item>
       </Menu>
-      <div className="span" />
-      <Search />
     </Layout.Header>
   );
 });

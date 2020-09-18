@@ -1,0 +1,16 @@
+.card {
+  margin: 0.5em 0.2em;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+}
+.card > :global(.ant-card-body) {
+  flex: auto;
+}
+.card > :global(.ant-card-actions) {
+  flex-grow: 0;
+}
+
+.meta {
+  margin-bottom: 1em;
+}

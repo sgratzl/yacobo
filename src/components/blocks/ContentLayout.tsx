@@ -1,14 +1,6 @@
 import { ReactNode } from 'react';
+import styles from './BaseLayout.module.css';
 
 export default function ContentLayout(props: { children?: ReactNode }) {
-  return (
-    <div className="contentDetail">
-      <style jsx>{`
-        .contentDetail {
-          max-width: 70em;
-        }
-      `}</style>
-      {props.children}
-    </div>
-  );
+  return <div className={styles.contentDetail}>{props.children}</div>;
 }

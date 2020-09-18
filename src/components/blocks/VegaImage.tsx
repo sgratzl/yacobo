@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import styles from './VegaImage.module.css';
 import { classNames } from '../utils';
 import { Spin } from 'antd';
 
@@ -55,41 +56,14 @@ export default function VegaImage({
   const srcSet = defaultSourceSet(full);
 
   return (
-    <div className={classNames('img', type === 'line' && 'imgLine')}>
-      <style jsx>{`
-        .img {
-          flex: auto;
-          margin-bottom: 1em;
-          padding-top: 60%; // around the target aspect ratio
-          position: relative;
-        }
-
-        .imgLine {
-          padding-top: 50%; // 1:2 aspect ratio
-        }
-
-        .imgPlaceholder,
-        .imgSkeleton,
-        .imgImg,
-        .spin,
-        .spin :global(.ant-spin-container) {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-
-        .spin :global(.ant-spin-container) {
-          opacity: 1;
-        }
-      `}</style>
-      {src && <img ref={imgRef} className="imgImg" data-src={src} src={full?.toString()} srcSet={srcSet} alt={alt} />}
+    <div className={classNames(styles.img, type === 'line' && styles.imgLine)}>
+      {src && (
+        <img ref={imgRef} className={styles.imgImg} data-src={src} src={full?.toString()} srcSet={srcSet} alt={alt} />
+      )}
       {loading && (
-        <Spin size="large" wrapperClassName="spin">
+        <Spin size="large" wrapperClassName={classNames(styles.spin)}>
           <img
-            className={classNames('imgPlaceholder', type === 'line' && 'imgLine')}
+            className={classNames(styles.imgPlaceholder, type === 'line' && styles.imgLine)}
             src={`/api/skeletons/${type}.png${large ? '?scale=2' : ''}`}
             alt={alt}
           />

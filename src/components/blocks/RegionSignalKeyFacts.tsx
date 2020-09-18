@@ -18,6 +18,7 @@ import { formatDistance, isValid, subDays } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
+import styles from './RegionSignalKeyFacts.module.css';
 
 interface IDateTableRow {
   key: number;
@@ -149,21 +150,9 @@ export function RegionSignalKeyFacts({ region, signal, date }: { region?: IRegio
   const prefix = resolveTrend(current, data);
 
   return (
-    <div className="root">
-      <style jsx>{`
-        .root {
-          display: flex;
-          place-items: center;
-          flex-direction: column;
-          margin: 32px 0;
-        }
-
-        .stats {
-          font-size: 36px;
-        }
-      `}</style>
+    <div className={styles.root}>
       <Statistic
-        className="stats"
+        className={styles.stats}
         prefix={prefix}
         value={formatValue(current?.value)}
         valueRender={!data ? renderSpin : undefined}
@@ -199,15 +188,7 @@ interface ISignalTableRow {
 }
 
 function renderStats(value: number | undefined) {
-  return (
-    <Statistic className="smallStats" value={formatValue(value)}>
-      <style jsx>{`
-        .smallStats :global(.ant-statistic-content) {
-          font-size: 14px;
-        }
-      `}</style>
-    </Statistic>
-  );
+  return <Statistic className={styles.smallStats} value={formatValue(value)} />;
 }
 function renderSignalOf(signal: ISignal) {
   return `of ${formatValue(signal.data.maxValue)}`;

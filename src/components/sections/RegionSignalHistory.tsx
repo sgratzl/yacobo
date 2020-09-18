@@ -7,9 +7,9 @@ import { IRegion } from '../../model/regions';
 import { ISignal } from '../../model/signals';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import { SectionCard } from '../blocks/SectionCard';
 import { showInfoBox } from '../blocks/SignalInfoBox';
 import VegaImage from '../blocks/VegaImage';
+import styles from './SignalSection.module.css';
 
 export default function RegionSignalHistorySection({
   region,
@@ -32,7 +32,8 @@ export default function RegionSignalHistorySection({
   const title = focus === 'both' ? `${region.name} - ${signal.name}` : focus === 'region' ? region.name : signal.name;
 
   return (
-    <SectionCard
+    <Card
+      className={styles.card}
       cover={<VegaImage src={valid ? image : undefined} alt={`History of ${signal.name}`} />}
       actions={[
         <Link key="d" href="/region/[region]/[signal]/" as={`/region/${region.id}/${signal.id}`}>
@@ -48,6 +49,6 @@ export default function RegionSignalHistorySection({
       ]}
     >
       <Card.Meta title={title} description={focus !== 'region' ? signal.description(date) : undefined} />
-    </SectionCard>
+    </Card>
   );
 }

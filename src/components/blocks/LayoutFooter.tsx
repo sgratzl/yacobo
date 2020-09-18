@@ -1,16 +1,10 @@
 import { CopyrightOutlined, DatabaseOutlined, GithubOutlined, HeartOutlined } from '@ant-design/icons';
 import { Layout, Typography } from 'antd';
+import styles from './LayoutFooter.module.css';
 
 export default function LayoutFooter() {
   return (
-    <Layout.Footer className="footer">
-      <style jsx>{`
-        .footer {
-          display: flex;
-          justify-content: space-between;
-          flex-wrap: wrap;
-        }
-      `}</style>
+    <Layout.Footer className={styles.footer}>
       <div>
         Made with <HeartOutlined />
         {' by '}

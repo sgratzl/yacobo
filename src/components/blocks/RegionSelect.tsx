@@ -2,10 +2,10 @@ import { TreeSelect } from 'antd';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { IRegion, states } from '../../model';
+import styles from './BaseLayout.module.css';
 import { injectQuery } from './BaseLayout';
-import type { DataNode } from 'antd/lib/tree';
 
-export const treeData: (DataNode & { label: string; value: string })[] = [
+export const treeData = [
   {
     key: 'US',
     label: 'US - whole country',
@@ -34,7 +34,7 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
 
   return (
     <TreeSelect
-      className="select"
+      className={`${styles.select} ${styles.selectTree}`}
       value={region?.id ?? 'US'}
       onChange={onSelect}
       allowClear={clearPath != null}
@@ -44,26 +44,6 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
       treeDefaultExpandedKeys={['US']}
       treeNodeFilterProp="label"
       dropdownMatchSelectWidth={300}
-    >
-      <style jsx>{`
-        .select {
-          font-size: inherit;
-          background-color: unset;
-          margin: 0;
-          min-width: 12em;
-        }
-
-        .select .select:global(.ant-select) > :global(.ant-select-selector) {
-          background-color: unset;
-          font-size: inherit;
-          font-weight: inherit;
-          height: unset;
-        }
-
-        .select:global(.ant-select) > :global(.ant-select-selector) :global(.ant-select-selection-search-input) {
-          height: unset;
-        }
-      `}</style>
-    </TreeSelect>
+    ></TreeSelect>
   );
 }

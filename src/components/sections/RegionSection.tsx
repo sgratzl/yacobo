@@ -4,14 +4,15 @@ import Link from 'next/link';
 import { IRegion } from '../../model/regions';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
+import styles from './SignalSection.module.css';
 import { formatAPIDate } from '@/common';
 import { KeySignalMultiFacts } from '../blocks/RegionSignalKeyFacts';
-import { SectionCard } from '../blocks/SectionCard';
 
 export default function RegionSection({ region, date }: { region: IRegion; date?: Date }) {
   const apiDate = formatAPIDate(date);
   return (
-    <SectionCard
+    <Card
+      className={styles.card}
       actions={[
         <Link key="d" href="/region/[region]/date/[date]" as={`/region/${region.id}/date/${apiDate}`}>
           <Tooltip title="show region details">
@@ -22,13 +23,8 @@ export default function RegionSection({ region, date }: { region: IRegion; date?
         <DownloadMenu key="d" path={`/region/${region.id}/date/${apiDate}`} />,
       ]}
     >
-      <style jsx>{`
-        .meta {
-          margin-bottom: 1em;
-        }
-      `}</style>
-      <Card.Meta title={region.name} className="meta" />
+      <Card.Meta title={region.name} className={styles.meta} />
       <KeySignalMultiFacts region={region} date={date} />
-    </SectionCard>
+    </Card>
   );
 }

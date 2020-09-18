@@ -2,6 +2,7 @@ import { Select } from 'antd';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { ISignal, signals } from '../../model';
+import styles from './BaseLayout.module.css';
 import { injectQuery } from './BaseLayout';
 
 export function SignalSelect({ signal, path, clearPath }: { signal?: ISignal; path: string; clearPath?: string }) {
@@ -19,28 +20,8 @@ export function SignalSelect({ signal, path, clearPath }: { signal?: ISignal; pa
 
   return (
     <span>
-      <style jsx>{`
-        .select {
-          font-size: inherit;
-          background-color: unset;
-          margin: 0;
-          min-width: 12em;
-          margin-right: 0.5em;
-        }
-
-        .select .select:global(.ant-select) > :global(.ant-select-selector) {
-          background-color: unset;
-          font-size: inherit;
-          font-weight: inherit;
-          height: unset;
-        }
-
-        .select:global(.ant-select) > :global(.ant-select-selector) :global(.ant-select-selection-search-input) {
-          height: unset;
-        }
-      `}</style>
       <Select
-        className="select"
+        className={styles.select}
         value={signal?.id}
         onChange={onSelect}
         placeholder="All Signals"
