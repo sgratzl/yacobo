@@ -1,4 +1,7 @@
-import BaseLayout, { DateSelect, RegionSelect, SignalSelect } from '@/components/blocks/BaseLayout';
+import BaseLayout from '@/components/blocks/BaseLayout';
+import { DateSelect } from '@/components/blocks/DateSelect';
+import { RegionSelect } from '@/components/blocks/RegionSelect';
+import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { formatAPIDate, formatLocal } from '@/common';
 import { IRegion, ISignal } from '@/model';
 import { DownloadMenu } from '../blocks/DownloadMenu';

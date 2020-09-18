@@ -1,5 +1,6 @@
 import { formatAPIDate, formatLocal } from '@/common';
-import BaseLayout, { DateSelect } from '@/components/blocks/BaseLayout';
+import BaseLayout from '@/components/blocks/BaseLayout';
+import { DateSelect } from '@/components/blocks/DateSelect';
 import GridColumn from '@/components/blocks/GridColumn';
 import { Row } from 'antd';
 import dynamic from 'next/dynamic';

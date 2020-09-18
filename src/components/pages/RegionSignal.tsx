@@ -1,4 +1,6 @@
-import BaseLayout, { RegionSelect, SignalSelect } from '@/components/blocks/BaseLayout';
+import BaseLayout from '@/components/blocks/BaseLayout';
+import { RegionSelect } from '@/components/blocks/RegionSelect';
+import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { ISignal } from '@/model/signals';
 import { Col, Divider, Row, Typography } from 'antd';
 import { IRegion } from '../../model';

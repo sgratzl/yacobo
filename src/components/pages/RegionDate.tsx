@@ -1,4 +1,6 @@
-import BaseLayout, { DateSelect, RegionSelect } from '@/components/blocks/BaseLayout';
+import BaseLayout from '@/components/blocks/BaseLayout';
+import { DateSelect } from '@/components/blocks/DateSelect';
+import { RegionSelect } from '@/components/blocks/RegionSelect';
 import { formatAPIDate, formatLocal } from '@/common';
 import { IRegion, signals } from '@/model';
 import GridColumn from '../blocks/GridColumn';

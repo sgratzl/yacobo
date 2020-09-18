@@ -1,4 +1,6 @@
-import BaseLayout, { DateSelect, SignalSelect } from '@/components/blocks/BaseLayout';
+import BaseLayout from '@/components/blocks/BaseLayout';
+import { DateSelect } from '@/components/blocks/DateSelect';
+import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { FavoriteToggle } from '@/components/blocks/FavoriteToggle';
 import VegaImage from '@/components/blocks/VegaImage';
 import SignalTable from '@/components/blocks/SignalTable';
