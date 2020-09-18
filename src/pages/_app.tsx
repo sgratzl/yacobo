@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app';
-import '../client/globals.scss';
+import '../client/globals.css';
 
 function YaCoBo({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;

@@ -6,8 +6,8 @@ import { IRegion } from '../../model/regions';
 import { formatAPIDate } from '@/common';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
-import styles from './SignalSection.module.scss';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
+import { SectionCard } from '../blocks/SectionCard';
 
 export default function RegionSignalSection({
   region,
@@ -27,8 +27,7 @@ export default function RegionSignalSection({
     focus === 'both' ? `${region?.name} - ${signal?.name}` : focus === 'region' ? region?.name : signal?.name;
 
   return (
-    <Card
-      className={styles.card}
+    <SectionCard
       cover={<RegionSignalKeyFacts date={date} region={region} signal={signal} />}
       actions={[
         <Link key="d" href="/region/[region]/[signal]/[date]" as={`/region/${region?.id}/${signal?.id}/${apiDate}`}>
@@ -44,6 +43,6 @@ export default function RegionSignalSection({
         title={title}
         description={<RegionSignalKeyFactsTable date={date} region={region} signal={signal} />}
       />
-    </Card>
+    </SectionCard>
   );
 }

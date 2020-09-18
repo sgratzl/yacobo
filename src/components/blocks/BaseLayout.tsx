@@ -5,8 +5,6 @@ import type { PageHeaderProps } from 'antd/lib/page-header';
 import Head from 'next/head';
 import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
-import { useCallback } from 'react';
-import styles from './BaseLayout.module.scss';
 import FooterLayout from './LayoutFooter';
 import { LayoutHeader } from './LayoutHeader';
 
@@ -37,9 +35,43 @@ export default function BaseLayout({
 }: React.PropsWithChildren<BaseLayoutProps & Omit<PageHeaderProps, 'breadcrumb'>>) {
   const router = useRouter();
   return (
-    <Layout className={styles.layout}>
+    <Layout className="layout">
+      <style jsx>{`
+        .layout {
+          min-height: 100vh;
+        }
+
+        .content {
+          padding: 0 2%;
+          flex: auto;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .header :global(.ant-page-header-heading-left) {
+          flex-wrap: wrap;
+        }
+        .header :global(.ant-page-header-heading-title) {
+          line-height: 40px;
+        }
+        .header :global(.ant-page-header-heading-sub-title) {
+          display: flex;
+          flex-wrap: wrap;
+          // margin-left: 32px;
+          line-height: 36px;
+        }
+
+        .backTop {
+          height: 40px;
+          width: 40px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 20px;
+        }
+      `}</style>
       <LayoutHeader mainActive={mainActive} />
-      <Layout.Content className={styles.content}>
+      <Layout.Content className="content">
         <Head>
           <title>YaCoBo - Yet another COVID-19 board - {pageTitle}</title>
           <meta name="description" content={description} />
@@ -60,9 +92,9 @@ export default function BaseLayout({
           {/* <meta name="twitter:creator" content="@caleydo_org"/> */}
           {previewImage && <meta name="twitter:image:src" content={`${BASE_URL}${previewImage.url}`} />}
         </Head>
-        <PageHeader className={styles.header} breadcrumb={createBreadcrumbProps(router, breadcrumb)} {...pageHeader}>
+        <PageHeader className="header" breadcrumb={createBreadcrumbProps(router, breadcrumb)} {...pageHeader}>
           {children}
-          <BackTop className={styles.backTop}>
+          <BackTop className="backTop">
             <UpCircleOutlined />
           </BackTop>
         </PageHeader>
