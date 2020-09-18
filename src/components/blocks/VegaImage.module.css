@@ -1,12 +1,12 @@
 .img {
   flex: auto;
   margin-bottom: 1em;
-  padding-top: 60%; // around the target aspect ratio
+  padding-top: 60%; /* around the target aspect ratio */
   position: relative;
 }
 
 .imgLine {
-  padding-top: 50%; // 1:2 aspect ratio
+  padding-top: 50%; /* 1:2 aspect ratio */
 }
 
 .imgPlaceholder,
