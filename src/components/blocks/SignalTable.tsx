@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
 import { IRegionWithDetailsValue, IDateValue, IRegion, ISignal } from '../../model';
-import { formatAPIDate } from '../../common';
+import { formatAPIDate, formatFixedValue } from '../../common';
 import { parseDates } from '@/common/parseDates';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
@@ -40,15 +40,7 @@ function compareDate(a: IDateValue, b: IDateValue, sortOrder?: SortOrder) {
 }
 
 const renderValue = (value: number | null) => {
-  return (
-    <span>
-      {value == null
-        ? 'Missing'
-        : value.toLocaleString(undefined, {
-            maximumFractionDigits: 0,
-          })}
-    </span>
-  );
+  return <span>{value == null ? 'Missing' : formatFixedValue(value)}</span>;
 };
 
 const renderStdErr = (value: number | null) => {

@@ -36,12 +36,8 @@ export function SignalInfoBlock({ signal, date }: { signal?: ISignal; date?: Dat
     <>
       <Typography.Title level={2}>Description</Typography.Title>
       <Typography.Paragraph>{signal?.longDescription(date)}</Typography.Paragraph>
-      <List
-        size="small"
-        header={<Typography.Text>See also</Typography.Text>}
-        dataSource={signal?.seeAlso}
-        renderItem={renderLink}
-      />
+      <Typography.Title level={3}>See Also</Typography.Title>
+      <List size="small" dataSource={signal?.seeAlso} renderItem={renderLink} />
     </>
   );
 }
