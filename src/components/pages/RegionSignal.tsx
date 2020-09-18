@@ -2,13 +2,14 @@ import BaseLayout from '@/components/blocks/BaseLayout';
 import { RegionSelect } from '@/components/blocks/RegionSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { ISignal } from '@/model/signals';
-import { Col, Divider, Row, Typography } from 'antd';
+import { Divider, Typography } from 'antd';
 import { IRegion } from '../../model';
+import ContentLayout from '../blocks/ContentLayout';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import VegaImage from '../blocks/VegaImage';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { DateTable } from '../blocks/SignalTable';
+import VegaImage from '../blocks/VegaImage';
 
 export function RegionSignal({ region, signal }: { region?: IRegion; signal?: ISignal }) {
   return (
@@ -36,27 +37,19 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
         <DownloadMenu key="download" path={`/region/${region?.id}/${signal?.id}`} />,
       ]}
     >
-      <Row>
-        <Col span={24}>
-          <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
-        </Col>
-        <Col span={24}>
-          <VegaImage
-            src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}
-            alt={`History of ${signal?.name}`}
-            large
-            type="line"
-          />
-        </Col>
+      <ContentLayout>
+        <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
+        <VegaImage
+          src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}
+          alt={`History of ${signal?.name}`}
+          large
+          type="line"
+        />
         <Divider />
-        <Col span={24}>
-          <SignalInfoBlock signal={signal} />
-        </Col>
-        <Col span={24}>
-          <Typography.Title level={2}>Detail Table</Typography.Title>
-          <DateTable signal={signal} region={region} />
-        </Col>
-      </Row>
+        <SignalInfoBlock signal={signal} />
+        <Typography.Title level={2}>Detail Table</Typography.Title>
+        <DateTable signal={signal} region={region} />
+      </ContentLayout>
     </BaseLayout>
   );
 }

@@ -5,12 +5,13 @@ import { FavoriteToggle } from '@/components/blocks/FavoriteToggle';
 import VegaImage from '@/components/blocks/VegaImage';
 import SignalTable from '@/components/blocks/SignalTable';
 import { ISignal } from '@/model/signals';
-import { Col, Divider, Row, Typography } from 'antd';
+import { Divider, Typography } from 'antd';
 import { isValid } from 'date-fns';
 import { DownloadMenu } from '@/components/blocks/DownloadMenu';
 import { formatLocal, formatAPIDate } from '@/common';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { RegionSelect } from '../blocks/RegionSelect';
+import ContentLayout from '../blocks/ContentLayout';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -43,22 +44,14 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
         <DownloadMenu key="download" path={`/signal/${signal.id}/${apiDate}`} />,
       ]}
     >
-      <Row>
-        <Col span={24}>
-          <Typography.Paragraph>{signal.description(date)}</Typography.Paragraph>
-        </Col>
-        <Col span={24}>
-          <VegaImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} large />
-        </Col>
+      <ContentLayout>
+        <Typography.Paragraph>{signal.description(date)}</Typography.Paragraph>
+        <VegaImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} large />
         <Divider />
-        <Col span={24}>
-          <SignalInfoBlock signal={signal} />
-        </Col>
-        <Col span={24}>
-          <Typography.Title level={2}>Detail Table</Typography.Title>
-          <SignalTable signal={signal} date={date} />
-        </Col>
-      </Row>
+        <SignalInfoBlock signal={signal} />
+        <Typography.Title level={2}>Detail Table</Typography.Title>
+        <SignalTable signal={signal} date={date} />
+      </ContentLayout>
     </BaseLayout>
   );
 }

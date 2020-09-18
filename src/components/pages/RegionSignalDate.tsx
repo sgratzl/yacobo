@@ -7,9 +7,10 @@ import { IRegion, ISignal } from '@/model';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
-import { Col, Divider, Row, Typography } from 'antd';
+import { Divider, Typography } from 'antd';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import VegaImage from '../blocks/VegaImage';
+import ContentLayout from '../blocks/ContentLayout';
 
 export function RegionSignalDate({ region, signal, date }: { region?: IRegion; signal?: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -62,29 +63,19 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
         <DownloadMenu key="download" img={false} path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
       ]}
     >
-      <Row>
-        <Col span={24}>
-          <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
-        </Col>
-        <Col span={24}>
-          <RegionSignalKeyFacts signal={signal} region={region} date={date} />
-        </Col>
-        <Col span={24}>
-          <RegionSignalKeyFactsTable signal={signal} region={region} date={date} />
-        </Col>
-        <Col span={24}>
-          <VegaImage
-            src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}
-            alt={`History of ${signal?.name}`}
-            large
-            type="line"
-          />
-        </Col>
+      <ContentLayout>
+        <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
+        <RegionSignalKeyFacts signal={signal} region={region} date={date} />
+        <RegionSignalKeyFactsTable signal={signal} region={region} date={date} />
+        <VegaImage
+          src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}
+          alt={`History of ${signal?.name}`}
+          large
+          type="line"
+        />
         <Divider />
-        <Col span={24}>
-          <SignalInfoBlock signal={signal} />
-        </Col>
-      </Row>
+        <SignalInfoBlock signal={signal} />
+      </ContentLayout>
     </BaseLayout>
   );
 }

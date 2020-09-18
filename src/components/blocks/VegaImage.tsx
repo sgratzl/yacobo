@@ -56,21 +56,19 @@ export default function VegaImage({
   const srcSet = defaultSourceSet(full);
 
   return (
-    <div className={styles.wrapper}>
-      <div className={classNames(styles.img, type === 'line' && styles.imgLine)}>
-        {src && (
-          <img ref={imgRef} className={styles.imgImg} data-src={src} src={full?.toString()} srcSet={srcSet} alt={alt} />
-        )}
-        {loading && (
-          <Spin size="large" wrapperClassName={classNames(styles.spin)}>
-            <img
-              className={classNames(styles.imgPlaceholder, type === 'line' && styles.imgLine)}
-              src={`/api/skeletons/${type}.png${large ? '?scale=2' : ''}`}
-              alt={alt}
-            />
-          </Spin>
-        )}
-      </div>
+    <div className={classNames(styles.img, type === 'line' && styles.imgLine)}>
+      {src && (
+        <img ref={imgRef} className={styles.imgImg} data-src={src} src={full?.toString()} srcSet={srcSet} alt={alt} />
+      )}
+      {loading && (
+        <Spin size="large" wrapperClassName={classNames(styles.spin)}>
+          <img
+            className={classNames(styles.imgPlaceholder, type === 'line' && styles.imgLine)}
+            src={`/api/skeletons/${type}.png${large ? '?scale=2' : ''}`}
+            alt={alt}
+          />
+        </Spin>
+      )}
     </div>
   );
 }
