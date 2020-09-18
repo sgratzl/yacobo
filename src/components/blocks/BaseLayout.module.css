@@ -13,13 +13,6 @@
   min-height: 100vh;
 }
 
-.logo {
-  float: left;
-  padding-right: 20px;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.65);
-}
-
 .backTop {
   height: 40px;
   width: 40px;
@@ -27,40 +20,6 @@
   justify-content: center;
   align-items: center;
   font-size: 20px;
-}
-
-.picker {
-  font-size: inherit;
-  background-color: unset;
-  margin: 0 0.5em;
-}
-.picker :global(input) {
-  font-size: inherit;
-  font-weight: inherit;
-  line-height: inherit;
-}
-
-.select {
-  font-size: inherit;
-  background-color: unset;
-  margin: 0;
-  min-width: 12em;
-  margin-right: 0.5em;
-}
-
-:global(.ant-select).select > :global(.ant-select-selector) {
-  background-color: unset;
-  font-size: inherit;
-  font-weight: inherit;
-  height: unset;
-}
-
-:global(.ant-select).select > :global(.ant-select-selector) :global(.ant-select-selection-search-input) {
-  height: unset;
-}
-
-.selectTree {
-  margin: 0;
 }
 
 .header :global(.ant-page-header-heading-left) {
@@ -77,15 +36,4 @@
 
 .contentDetail {
   max-width: 70em;
-}
-.topHeader {
-  display: flex;
-  align-items: center;
-}
-
-.search {
-  min-width: 15em;
-}
-.span {
-  flex: 1 1 0;
 }

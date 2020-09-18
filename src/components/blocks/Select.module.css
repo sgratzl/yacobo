@@ -1,0 +1,33 @@
+.picker {
+  font-size: inherit;
+  background-color: unset;
+  margin: 0 0.5em;
+}
+.picker :global(input) {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.select {
+  font-size: inherit;
+  background-color: unset;
+  margin: 0;
+  min-width: 12em;
+  margin-right: 0.5em;
+}
+
+:global(.ant-select).select > :global(.ant-select-selector) {
+  background-color: unset;
+  font-size: inherit;
+  font-weight: inherit;
+  height: unset;
+}
+
+:global(.ant-select).select > :global(.ant-select-selector) :global(.ant-select-selection-search-input) {
+  height: unset;
+}
+
+.selectTree {
+  margin: 0;
+}

@@ -2,7 +2,7 @@ import { formatAPIDate } from '@/common';
 import { startOfToday } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import styles from './BaseLayout.module.css';
+import styles from './Select.module.css';
 import DatePicker from './DatePicker';
 import { injectQuery } from './BaseLayout';
 

@@ -2,7 +2,7 @@ import { TreeSelect } from 'antd';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { IRegion, states } from '../../model';
-import styles from './BaseLayout.module.css';
+import styles from './Select.module.css';
 import { injectQuery } from './BaseLayout';
 
 export const treeData = [
