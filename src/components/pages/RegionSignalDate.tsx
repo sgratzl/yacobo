@@ -15,17 +15,17 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
   const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
-      pageTitle={`COVID ${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}
+      pageTitle={`${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}
       mainActive="overview"
-      title="COVID"
+      title={
+        <RegionSelect
+          region={region}
+          path={`/region/[region]/${signal?.id}/${apiDate}`}
+          clearPath={`/signal/${signal?.id}/${apiDate}`}
+        />
+      }
       subTitle={
         <>
-          <RegionSelect
-            region={region}
-            path={`/region/[region]/${signal?.id}/${apiDate}`}
-            clearPath={`/signal/${signal?.id}/${apiDate}`}
-          />
-          -
           <SignalSelect
             signal={signal}
             path={`/region/${region?.id}/[signal]/${apiDate}`}

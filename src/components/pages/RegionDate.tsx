@@ -11,12 +11,11 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
   const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
-      pageTitle={`COVID ${region?.name} as of ${formatLocal(date)}`}
+      pageTitle={`${region?.name} as of ${formatLocal(date)}`}
       mainActive="overview"
-      title="COVID"
+      title={<RegionSelect region={region} path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
       subTitle={
         <>
-          <RegionSelect region={region} path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />
           as of
           <DateSelect date={date} path={`/region/${region?.id}/date/[date]`} clearPath={`/region/${region?.id}`} />
         </>

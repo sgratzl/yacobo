@@ -10,6 +10,7 @@ import { isValid } from 'date-fns';
 import { DownloadMenu } from '@/components/blocks/DownloadMenu';
 import { formatLocal, formatAPIDate } from '@/common';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
+import { RegionSelect } from '../blocks/RegionSelect';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -18,9 +19,9 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
 
   return (
     <BaseLayout
-      pageTitle={`COVID ${signal.name} as of ${formatLocal(date)}`}
+      pageTitle={`${signal.name} as of ${formatLocal(date)}`}
       mainActive="overview"
-      title="COVID"
+      title={<RegionSelect path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
       subTitle={
         <>
           <SignalSelect signal={signal} path={`/signal/[signal]/${apiDate}`} clearPath={`/date/${apiDate}`} />

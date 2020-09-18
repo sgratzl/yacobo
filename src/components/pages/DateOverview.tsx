@@ -11,12 +11,11 @@ export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean
   const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
-      pageTitle={`COVID as of ${formatLocal(date)}`}
+      pageTitle={`${formatLocal(date)}`}
       mainActive="overview"
-      title="COVID"
+      title={<RegionSelect path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
       subTitle={
         <>
-          <RegionSelect path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />
           as of
           <DateSelect date={date} path="/date/[date]" clearPath="/" />
         </>

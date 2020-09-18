@@ -25,9 +25,9 @@ const FavoritesGridNoSSR = dynamic(() => Promise.resolve(FavoritesGrid), { ssr: 
 export default function FavoritesOverview({ date }: { date?: Date }) {
   return (
     <BaseLayout
-      pageTitle={`COVID as of ${formatLocal(date)}`}
+      pageTitle={`My Favorites as of ${formatLocal(date)}`}
       mainActive="favorites"
-      title="COVID"
+      title="My Favorites"
       subTitle={
         <>
           as of

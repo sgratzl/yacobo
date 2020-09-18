@@ -13,15 +13,13 @@ import { DateTable } from '../blocks/SignalTable';
 export function RegionSignal({ region, signal }: { region?: IRegion; signal?: ISignal }) {
   return (
     <BaseLayout
-      pageTitle={`COVID ${region?.name} - ${signal?.name}`}
+      pageTitle={`${region?.name} - ${signal?.name}`}
       mainActive="overview"
-      title="COVID"
+      title={
+        <RegionSelect region={region} path={`/region/[region]/${signal?.id}`} clearPath={`/signal/${signal?.id}`} />
+      }
       subTitle={
-        <>
-          <RegionSelect region={region} path={`/region/[region]/${signal?.id}`} clearPath={`/signal/${signal?.id}`} />
-          -
-          <SignalSelect signal={signal} path={`/region/${region?.id}/[signal]`} clearPath={`/region/${region?.id}`} />
-        </>
+        <SignalSelect signal={signal} path={`/region/${region?.id}/[signal]`} clearPath={`/region/${region?.id}`} />
       }
       breadcrumb={[
         {

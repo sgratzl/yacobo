@@ -24,11 +24,11 @@ export const LayoutHeader = memo(({ mainActive }: { mainActive: string }) => {
           YaCoBo
         </a>
       </Link>
-      <Menu theme="dark" mode="horizontal" activeKey={mainActive}>
-        <Menu.Item key="overview" active={mainActive === 'overview'}>
+      <Menu theme="dark" mode="horizontal" selectedKeys={[mainActive]}>
+        <Menu.Item key="overview">
           <Link href="/">Overview</Link>
         </Menu.Item>
-        <Menu.Item key="favorites" active={mainActive === 'favorites'}>
+        <Menu.Item key="favorites">
           <Link href="/favorites">Favorites</Link>
         </Menu.Item>
       </Menu>
