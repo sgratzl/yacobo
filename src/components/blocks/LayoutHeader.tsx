@@ -26,6 +26,7 @@ export function Search() {
       onChange={onSelect}
       allowClear
       showSearch
+      value={undefined}
       treeData={treeData}
       placeholder="Search for Region"
       treeDefaultExpandedKeys={['US']}

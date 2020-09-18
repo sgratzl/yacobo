@@ -11,8 +11,14 @@
 }
 
 .search {
-  min-width: 15em;
+  min-width: 20em;
 }
 .span {
   flex: 1 1 0;
+}
+
+@media (max-width: 768px) {
+  .search {
+    display: none;
+  }
 }
