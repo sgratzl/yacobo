@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { IDateValue, IRegion, IRegionValue, ISignal, IValue, regionByID } from '../model';
+import { IDateValue, IRegion, IRegionValue, ISignal, regionByID } from '../model';
 import { parseDates } from '@/common/parseDates';
 import { compareDate, compareValue } from './compare';
 import { formatAPIDate } from '@/common';
@@ -19,6 +19,10 @@ export function useDateValue(region?: IRegion, signal?: ISignal) {
   );
 }
 
+export interface IRegionObjectValue extends IRegionValue {
+  regionObj: IRegion;
+}
+
 function fetchFilter(key: string) {
   return fetch(key)
     .then((r) => r.json())
@@ -26,12 +30,8 @@ function fetchFilter(key: string) {
       r
         .filter((d) => !d.region.endsWith('000'))
         .sort(compareValue)
-        .map((row) => ({ ...row, region: regionByID(row.region) } as IRegionObjectValue))
+        .map((row) => ({ ...row, regionObj: regionByID(row.region) } as IRegionObjectValue))
     );
-}
-
-export interface IRegionObjectValue extends IValue {
-  region: IRegion;
 }
 
 export function useRegionValue(signal: ISignal, date?: Date) {

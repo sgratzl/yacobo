@@ -6,7 +6,7 @@ import { IRegion, refSignal, signals } from '@/model';
 import GridColumn from '../blocks/GridColumn';
 import { Row, Typography } from 'antd';
 import RegionSignalSection from '../sections/RegionSignalSection';
-import VegaImage from '../blocks/VegaImage';
+import { LineImage } from '../blocks/VegaImage';
 
 export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: boolean }) {
   const apiDate = formatAPIDate(date);
@@ -37,12 +37,7 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
       {dynamic && (
         <>
           <Typography.Title level={2}>History of {refSignal.name}</Typography.Title>
-          <VegaImage
-            src={region != null ? `/api/region/${region?.id}/${refSignal.id}` : undefined}
-            alt={`History of ${refSignal.name}`}
-            large
-            type="line"
-          />
+          <LineImage region={region} signal={refSignal} />
           <Typography.Title level={2}>All Signals</Typography.Title>
         </>
       )}

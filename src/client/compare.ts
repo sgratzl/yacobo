@@ -14,13 +14,13 @@ function compare<T>(a?: T | null, b?: T | null, sortOrder?: SortOrder) {
   return a < b ? -1 : +1;
 }
 
-export function compareRegionName(a: { region: IRegion }, b: { region: IRegion }, sortOrder?: SortOrder) {
-  return compare(a.region.name, b.region.name, sortOrder);
+export function compareRegionName(a: { regionObj: IRegion }, b: { regionObj: IRegion }, sortOrder?: SortOrder) {
+  return compare(a.regionObj.name, b.regionObj.name, sortOrder);
 }
-export function compareRegionState(a: { region: IRegion }, b: { region: IRegion }, sortOrder?: SortOrder) {
+export function compareRegionState(a: { regionObj: IRegion }, b: { regionObj: IRegion }, sortOrder?: SortOrder) {
   return compare(
-    isCountyRegion(a.region) ? a.region.state.name : null,
-    isCountyRegion(b.region) ? b.region.state.name : null,
+    isCountyRegion(a.regionObj) ? a.regionObj.state.name : null,
+    isCountyRegion(b.regionObj) ? b.regionObj.state.name : null,
     sortOrder
   );
 }

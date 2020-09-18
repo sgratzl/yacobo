@@ -1,6 +1,5 @@
 import { EyeOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
-import { isValid } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import { IRegion } from '../../model/regions';
@@ -8,7 +7,7 @@ import { ISignal } from '../../model/signals';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { showInfoBox } from '../blocks/SignalInfoBox';
-import VegaImage from '../blocks/VegaImage';
+import { MapImage } from '../blocks/VegaImage';
 import styles from './SignalSection.module.css';
 
 export default function RegionSignalHistorySection({
@@ -22,9 +21,6 @@ export default function RegionSignalHistorySection({
   date?: Date;
   focus: 'region' | 'signal' | 'both';
 }) {
-  const valid = isValid(date) && region != null && signal != null;
-  const image = `/api/region/${region.id}/${signal.id}`;
-
   const showInfo = useCallback(() => {
     showInfoBox(signal, date);
   }, [signal, date]);
@@ -34,7 +30,7 @@ export default function RegionSignalHistorySection({
   return (
     <Card
       className={styles.card}
-      cover={<VegaImage src={valid ? image : undefined} alt={`History of ${signal.name}`} />}
+      cover={<MapImage signal={signal} date={date} />}
       actions={[
         <Link key="d" href="/region/[region]/[signal]/" as={`/region/${region.id}/${signal.id}`}>
           <Tooltip title="show signal details">

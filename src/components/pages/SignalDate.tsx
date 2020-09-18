@@ -2,21 +2,18 @@ import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { FavoriteToggle } from '@/components/blocks/FavoriteToggle';
-import VegaImage from '@/components/blocks/VegaImage';
 import SignalTable from '@/components/blocks/SignalTable';
 import { ISignal } from '@/model/signals';
 import { Divider, Typography } from 'antd';
-import { isValid } from 'date-fns';
 import { DownloadMenu } from '@/components/blocks/DownloadMenu';
 import { formatLocal, formatAPIDate } from '@/common';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { RegionSelect } from '../blocks/RegionSelect';
 import ContentLayout from '../blocks/ContentLayout';
+import { MapImage } from '../blocks/VegaImage';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
-  const validDate = isValid(date);
-  const image = `/api/signal/${signal.id}/${apiDate}`;
 
   return (
     <BaseLayout
@@ -47,7 +44,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
       <ContentLayout>
         <Typography.Title>{signal.name}</Typography.Title>
         <Typography.Paragraph>{signal.description(date)}</Typography.Paragraph>
-        <VegaImage src={validDate ? image : undefined} alt={`US Map of ${signal.name}`} large />
+        <MapImage signal={signal} date={date} />
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />

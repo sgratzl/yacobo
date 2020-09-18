@@ -9,11 +9,9 @@
   padding-top: 50%; /* 1:2 aspect ratio */
 }
 
-.imgPlaceholder,
-.imgSkeleton,
 .imgImg,
-.spin,
-.spin :global(.ant-spin-container) {
+.mapOverlay,
+.lineOverlay {
   position: absolute;
   left: 0;
   top: 0;
@@ -22,6 +20,20 @@
   object-fit: contain;
 }
 
-.spin :global(.ant-spin-container) {
-  opacity: 1;
+.mapOverlay,
+.lineOverlay {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapOverlay {
+  background-image: url(/api/skeletons/map.png);
+}
+
+.lineOverlay {
+  background-image: url(/api/skeletons/line.png);
 }

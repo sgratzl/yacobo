@@ -9,7 +9,7 @@ import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { DateTable } from '../blocks/SignalTable';
-import VegaImage from '../blocks/VegaImage';
+import { LineImage } from '../blocks/VegaImage';
 
 export function RegionSignal({ region, signal }: { region?: IRegion; signal?: ISignal }) {
   return (
@@ -40,12 +40,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
       <ContentLayout>
         <Typography.Title>{signal?.name}</Typography.Title>
         <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
-        <VegaImage
-          src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}
-          alt={`History of ${signal?.name}`}
-          large
-          type="line"
-        />
+        <LineImage region={region} signal={signal} />
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />

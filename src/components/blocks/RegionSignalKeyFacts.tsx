@@ -12,7 +12,7 @@ import {
   RequiredValue,
   signals,
 } from '@/model';
-import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
+import { FallOutlined, RiseOutlined } from '@ant-design/icons';
 import { Spin, Statistic, Table, Tooltip } from 'antd';
 import { formatDistance, isValid, subDays } from 'date-fns';
 import Link from 'next/link';
@@ -131,11 +131,11 @@ function resolveTrend(current?: RequiredValue<IRegionDateValue> | null, data?: R
   }
   return current.value > yesterdayData.value ? (
     <Tooltip title={`increased compared to ${formatLocal(yesterdayDate)}`}>
-      <ArrowUpOutlined />
+      <RiseOutlined />
     </Tooltip>
   ) : (
     <Tooltip title={`decreased compared to ${formatLocal(yesterdayDate)}`}>
-      <ArrowDownOutlined />
+      <FallOutlined />
     </Tooltip>
   );
 }

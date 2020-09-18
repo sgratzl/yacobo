@@ -9,7 +9,7 @@ import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
 import { Divider, Typography } from 'antd';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
-import VegaImage from '../blocks/VegaImage';
+import { LineImage } from '../blocks/VegaImage';
 import ContentLayout from '../blocks/ContentLayout';
 
 export function RegionSignalDate({ region, signal, date }: { region?: IRegion; signal?: ISignal; date?: Date }) {
@@ -72,12 +72,7 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
         <SignalInfoBlock signal={signal} />
         <Divider />
         <Typography.Title level={2}>History</Typography.Title>
-        <VegaImage
-          src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}
-          alt={`History of ${signal?.name}`}
-          large
-          type="line"
-        />
+        <LineImage region={region} signal={signal} />
       </ContentLayout>
     </BaseLayout>
   );
