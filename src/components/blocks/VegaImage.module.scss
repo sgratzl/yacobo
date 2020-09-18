@@ -21,3 +21,7 @@
   height: 100%;
   object-fit: contain;
 }
+
+.spin :global(.ant-spin-container) {
+  opacity: 1;
+}
