@@ -10,7 +10,6 @@ import useSWR from 'swr';
 import { fetcher } from '@/client/utils';
 import dynamic from 'next/dynamic';
 import type { TopLevelSpec } from 'vega-lite';
-import { COUNTIES_URL } from '@/client/chart';
 
 function addParam(url: string | undefined, key: string, value: string | number) {
   if (!url) {
@@ -128,37 +127,27 @@ function InteractiveLineVega({ signal, region, scale }: ILineProps) {
 
 function fetchMap(key: string) {
   return Promise.all([fetcher<TopLevelSpec>(key), import('us-atlas/counties-10m.json')]).then(([spec, counties]) => {
-    return { spec, counties: counties.default };
+    for (const layer of (spec as any).layer) {
+      if (layer.data.format) {
+        layer.data.values = counties.default;
+      }
+    }
+    return spec;
   });
 }
 
 function InteractiveMapVega({ signal, date, scale }: { signal?: ISignal; date?: Date; scale?: number }) {
   const { data, error } = useRegionValue(signal, date);
   const specUrl = `/api/signal/${signal?.id}/${formatAPIDate(date)}.vg?app${scale ? `&scale=${scale}` : ''}`;
-  const { data: spec, error: specError } = useSWR<{ spec: TopLevelSpec; counties: any }>(
+  const { data: spec, error: specError } = useSWR<TopLevelSpec>(
     isValid(date) && signal != null ? specUrl : null,
     fetchMap
   );
 
-  const fullData = useMemo(() => {
-    if (!spec || !data) {
-      return null;
-    }
-    const r: Record<string, any> = {
-      data,
-    };
-    for (const layer of (spec.spec as any).layer) {
-      if (layer.data.format) {
-        r[layer.data.name] = spec.counties;
-      }
-    }
-    return r;
-  }, [spec, data]);
-
-  if (!fullData || !spec) {
+  if (!data || !spec) {
     return <LoadingImage error={error ?? specError} className={styles.lineOverlay} loading />;
   }
-  return <VegaLoader spec={spec.spec} data={fullData} />;
+  return <VegaLoader spec={spec} data={data} />;
 }
 
 function InteractiveWrapper({ children }: { children?: ReactNode }) {
