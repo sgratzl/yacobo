@@ -104,11 +104,21 @@ interface ILineProps {
   scale?: number;
 }
 
-const VegaLoader = dynamic(() => import('./VegaWrapper'), {
-  loading: ({ error, isLoading }) => (
-    <LoadingImage error={error != null} loading={isLoading ?? false} className={styles.lineOverlay} />
-  ),
-});
+// function fetchLine(key: string) {
+//   return fetcher<TopLevelSpec>(key).then(
+//     (spec) =>
+//       ({
+//         ...spec,
+//         width: 'container',
+//         height: 'container',
+//         autosize: {
+//           contains: 'padding',
+//         },
+//       } as TopLevelSpec)
+//   );
+// }
+
+const VegaLoader = dynamic(() => import('./VegaWrapper'));
 
 function InteractiveLineVega({ signal, region, scale }: ILineProps) {
   const { data, error } = useDateValue(region, signal);
@@ -118,11 +128,17 @@ function InteractiveLineVega({ signal, region, scale }: ILineProps) {
     fetcher
   );
   const numberData = useMemo(() => data?.map((d) => ({ ...d, date: d.date.getTime() })), [data]);
+  const [ready, setReady] = useState(false);
 
-  if (!data || !spec || !numberData) {
-    return <LoadingImage error={error ?? specError} className={styles.lineOverlay} loading />;
-  }
-  return <VegaLoader spec={spec} data={numberData} />;
+  const onReady = useCallback(() => setReady(true), [setReady]);
+  return (
+    <>
+      {data && spec && numberData && <VegaLoader spec={spec} data={numberData} onReady={onReady} />}
+      {(!data || !spec || !numberData || !ready) && (
+        <LoadingImage error={error ?? specError} className={styles.lineOverlay} loading />
+      )}
+    </>
+  );
 }
 
 function fetchMap(key: string) {

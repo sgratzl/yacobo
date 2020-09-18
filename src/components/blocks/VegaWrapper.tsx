@@ -18,7 +18,14 @@ export default function VegaWrapper({
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const vegaLiteSpec = spec;
+    const vegaLiteSpec = {
+      ...spec,
+      width: 'container',
+      height: 'container',
+      autosize: {
+        contains: 'padding',
+      },
+    } as TopLevelSpec;
     const vegaSpec = compile(vegaLiteSpec);
     const view = new View(parse(vegaSpec.spec), {
       renderer: 'canvas',
