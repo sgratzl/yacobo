@@ -37,7 +37,7 @@ export function Search() {
 
 export const LayoutHeader = memo(({ mainActive }: { mainActive: string }) => {
   return (
-    <Layout.Header>
+    <Layout.Header className={styles.topHeader}>
       <Head>
         <meta name="author" content="Samuel Gratzl" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -63,6 +63,8 @@ export const LayoutHeader = memo(({ mainActive }: { mainActive: string }) => {
           <Link href="/favorites">Favorites</Link>
         </Menu.Item>
       </Menu>
+      <div className={styles.span} />
+      <Search />
     </Layout.Header>
   );
 });

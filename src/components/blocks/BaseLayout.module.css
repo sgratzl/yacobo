@@ -78,3 +78,14 @@
 .contentDetail {
   max-width: 70em;
 }
+.topHeader {
+  display: flex;
+  align-items: center;
+}
+
+.search {
+  min-width: 15em;
+}
+.span {
+  flex: 1 1 0;
+}
