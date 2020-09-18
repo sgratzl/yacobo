@@ -1,6 +1,6 @@
 import { regionDateSummaryDates } from '@/common/helpers';
 import { parseDates } from '@/common/parseDates';
-import { compareDesc, formatISO, parseISO } from 'date-fns';
+import { compareAsc, compareDesc, formatISO, parseISO } from 'date-fns';
 import {
   hasMeta,
   IDateValue,
@@ -89,14 +89,16 @@ export function fetchSignalRegion(
   return fetchJSON(ctx, url, {
     cache: estimateCacheDuration(date instanceof Date ? date : Array.isArray(date) ? date[date.length - 1] : date.to),
     process: (r: IEpiDataRow[]) =>
-      r.map(
-        (d) =>
-          ({
-            date: parseCCastAPIDate(d.time_value),
-            value: d.value,
-            stderr: d.stderr,
-          } as IDateValue)
-      ),
+      r
+        .map(
+          (d) =>
+            ({
+              date: parseCCastAPIDate(d.time_value),
+              value: d.value,
+              stderr: d.stderr,
+            } as IDateValue)
+        )
+        .sort((a, b) => compareAsc(a.date, b.date)),
     parse: parseDates(['date']),
   });
 }
@@ -142,13 +144,15 @@ export function fetchRegion(ctx: IRequestContext, region: IRegion, date: Date): 
     `${region.id}-${formatCCastAPIDate(date)}`,
     () => {
       return Promise.all(signals.map((signal) => fetchSignalRegion(ctx, signal.data, region, date))).then((infos) => {
-        return signals.map((signal, i) => {
-          const info = infos[i];
-          return {
-            signal: signal.id,
-            ...(info[0] ?? {}),
-          } as ISignalValue;
-        });
+        return signals
+          .map((signal, i) => {
+            const info = infos[i];
+            return {
+              signal: signal.id,
+              ...(info[0] ?? {}),
+            } as ISignalValue;
+          })
+          .sort((a, b) => a.signal.localeCompare(b.signal));
       });
     },
     {

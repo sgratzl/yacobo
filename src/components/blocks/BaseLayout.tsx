@@ -5,7 +5,6 @@ import type { PageHeaderProps } from 'antd/lib/page-header';
 import Head from 'next/head';
 import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
-import { useCallback } from 'react';
 import styles from './BaseLayout.module.css';
 import FooterLayout from './LayoutFooter';
 import { LayoutHeader } from './LayoutHeader';
