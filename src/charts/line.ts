@@ -35,10 +35,6 @@ function createLineChartSpec(
     ...(options.details ? meta : {}),
     width: LINE_CHART_WIDTH * options.scaleFactor,
     height: LINE_CHART_HEIGHT * options.scaleFactor,
-
-    datasets: {
-      data: data.values.map((d) => ({ ...d, date: d.date.getTime() })),
-    },
     data: {
       sequence: {
         start: dataMin.getTime() + MS_PER_DAY,
@@ -53,6 +49,7 @@ function createLineChartSpec(
         from: {
           data: {
             name: 'data',
+            values: data.values.map((d) => ({ ...d, date: d.date.getTime() })),
           },
           key: 'date',
           fields: ['value', data.hasStdErr ? ['stderr'] : []].flat(),

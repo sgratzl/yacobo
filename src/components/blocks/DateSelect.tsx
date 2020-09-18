@@ -6,6 +6,8 @@ import styles from './Select.module.css';
 import DatePicker from './DatePicker';
 import { injectQuery } from './BaseLayout';
 
+const start = startOfToday();
+
 export function DateSelect({ date, path, clearPath }: { date?: Date; path: string; clearPath?: string }) {
   const router = useRouter();
   const onSelect = useCallback(
@@ -23,7 +25,7 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
       {' as of '}
       <DatePicker
         className={styles.picker}
-        value={date || startOfToday()}
+        value={date == null ? start : date}
         onChange={onSelect}
         placeholder="Select Date"
         allowClear={clearPath != null}

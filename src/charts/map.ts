@@ -119,7 +119,7 @@ function createLayer(data: {
                 ...data.valuesSource,
               },
               key: 'region',
-              fields: ['value', data.hasStdErr ? ['stderr'] : []].flat(),
+              fields: ['region', 'value', data.hasStdErr ? ['stderr'] : []].flat(),
             },
           },
         ].flat()

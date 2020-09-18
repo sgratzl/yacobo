@@ -10,6 +10,8 @@ import useSWR from 'swr';
 import { fetcher } from '@/client/utils';
 import dynamic from 'next/dynamic';
 import type { TopLevelSpec } from 'vega-lite';
+import { dateValueTooltip, regionValueTooltip } from './VegaTooltip';
+import type { VegaWrapperProps } from './VegaWrapper';
 
 function addParam(url: string | undefined, key: string, value: string | number) {
   if (!url) {
@@ -118,7 +120,7 @@ interface ILineProps {
 //   );
 // }
 
-const VegaLoader = dynamic(() => import('./VegaWrapper'));
+const VegaLoader = dynamic(() => import('./VegaWrapper')) as <T>(props: VegaWrapperProps<T>) => JSX.Element;
 
 function InteractiveLineVega({ signal, region, scale }: ILineProps) {
   const { data, error } = useDateValue(region, signal);
@@ -133,7 +135,9 @@ function InteractiveLineVega({ signal, region, scale }: ILineProps) {
   const onReady = useCallback(() => setReady(true), [setReady]);
   return (
     <>
-      {data && spec && numberData && <VegaLoader spec={spec} data={numberData} onReady={onReady} />}
+      {data && spec && numberData && (
+        <VegaLoader spec={spec} data={numberData} onReady={onReady} tooltip={dateValueTooltip} />
+      )}
       {(!data || !spec || !numberData || !ready) && (
         <LoadingImage error={error ?? specError} className={styles.lineOverlay} loading />
       )}
@@ -159,11 +163,15 @@ function InteractiveMapVega({ signal, date, scale }: { signal?: ISignal; date?: 
     isValid(date) && signal != null ? specUrl : null,
     fetchMap
   );
+  const [ready, setReady] = useState(false);
 
-  if (!data || !spec) {
-    return <LoadingImage error={error ?? specError} className={styles.lineOverlay} loading />;
-  }
-  return <VegaLoader spec={spec} data={data} />;
+  const onReady = useCallback(() => setReady(true), [setReady]);
+  return (
+    <>
+      {data && spec && <VegaLoader spec={spec} data={data} onReady={onReady} tooltip={regionValueTooltip} />}
+      {(!data || !spec || !ready) && <LoadingImage error={error ?? specError} className={styles.mapOverlay} loading />}
+    </>
+  );
 }
 
 function InteractiveWrapper({ children }: { children?: ReactNode }) {
