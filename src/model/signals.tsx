@@ -272,3 +272,5 @@ const byID = new Map(signals.map((d) => [d.id, d]));
 export function signalByID(signal: string) {
   return !signal ? undefined : byID.get(signal.toLowerCase());
 }
+
+export const refSignal = signals.find((d) => d.id === 'cases')!;

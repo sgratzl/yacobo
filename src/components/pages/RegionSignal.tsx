@@ -38,6 +38,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
       ]}
     >
       <ContentLayout>
+        <Typography.Title>{signal?.name}</Typography.Title>
         <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
         <VegaImage
           src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}

@@ -69,14 +69,15 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
         <RegionSignalKeyFacts signal={signal} region={region} date={date} />
         <RegionSignalKeyFactsTable signal={signal} region={region} date={date} />
         <Divider />
+        <SignalInfoBlock signal={signal} />
+        <Divider />
+        <Typography.Title level={2}>History</Typography.Title>
         <VegaImage
           src={region != null && signal != null ? `/api/region/${region?.id}/${signal?.id}` : undefined}
           alt={`History of ${signal?.name}`}
           large
           type="line"
         />
-        <Divider />
-        <SignalInfoBlock signal={signal} />
       </ContentLayout>
     </BaseLayout>
   );
