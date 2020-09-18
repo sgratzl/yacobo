@@ -25,7 +25,6 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
       subTitle={
         <>
           <SignalSelect signal={signal} path={`/signal/[signal]/${apiDate}`} clearPath={`/date/${apiDate}`} />
-          as of
           <DateSelect date={date} path={`/signal/${signal.id}/[date]`} clearPath={`/signal/${signal.id}`} />
         </>
       }

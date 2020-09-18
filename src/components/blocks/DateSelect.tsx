@@ -19,13 +19,16 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
     [router, path, clearPath]
   );
   return (
-    <DatePicker
-      className={styles.picker}
-      value={date || startOfToday()}
-      onChange={onSelect}
-      placeholder="Select Date"
-      allowClear={clearPath != null}
-      format="MMM, d"
-    />
+    <span>
+      {' as of '}
+      <DatePicker
+        className={styles.picker}
+        value={date || startOfToday()}
+        onChange={onSelect}
+        placeholder="Select Date"
+        allowClear={clearPath != null}
+        format="MMM, d"
+      />
+    </span>
   );
 }

@@ -19,19 +19,21 @@ export function SignalSelect({ signal, path, clearPath }: { signal?: ISignal; pa
   );
 
   return (
-    <Select
-      className={styles.select}
-      value={signal?.id}
-      onChange={onSelect}
-      placeholder="All Signals"
-      allowClear={clearPath != null}
-      dropdownMatchSelectWidth={200}
-    >
-      {signals.map((s) => (
-        <Select.Option key={s.id} value={s.id}>
-          {s.name}
-        </Select.Option>
-      ))}
-    </Select>
+    <span>
+      <Select
+        className={styles.select}
+        value={signal?.id}
+        onChange={onSelect}
+        placeholder="All Signals"
+        allowClear={clearPath != null}
+        dropdownMatchSelectWidth={200}
+      >
+        {signals.map((s) => (
+          <Select.Option key={s.id} value={s.id}>
+            {s.name}
+          </Select.Option>
+        ))}
+      </Select>
+    </span>
   );
 }

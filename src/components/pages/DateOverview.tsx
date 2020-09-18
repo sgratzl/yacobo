@@ -14,12 +14,7 @@ export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean
       pageTitle={`${formatLocal(date)}`}
       mainActive="overview"
       title={<RegionSelect path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
-      subTitle={
-        <>
-          as of
-          <DateSelect date={date} path="/date/[date]" clearPath="/" />
-        </>
-      }
+      subTitle={<DateSelect date={date} path="/date/[date]" clearPath="/" />}
       breadcrumb={
         dynamic
           ? []

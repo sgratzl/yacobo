@@ -15,10 +15,7 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
       mainActive="overview"
       title={<RegionSelect region={region} path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
       subTitle={
-        <>
-          as of
-          <DateSelect date={date} path={`/region/${region?.id}/date/[date]`} clearPath={`/region/${region?.id}`} />
-        </>
+        <DateSelect date={date} path={`/region/${region?.id}/date/[date]`} clearPath={`/region/${region?.id}`} />
       }
       breadcrumb={[
         {

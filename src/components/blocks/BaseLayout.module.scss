@@ -44,8 +44,9 @@
 .select {
   font-size: inherit;
   background-color: unset;
-  margin: 0 0.5em;
-  min-width: 15em;
+  margin: 0;
+  min-width: 12em;
+  margin-right: 0.5em;
 
   &:global(.ant-select) {
     > :global(.ant-select-selector) {
@@ -62,4 +63,20 @@
 }
 
 .selectTree {
+  margin: 0;
+}
+
+.header {
+  :global(.ant-page-header-heading-left) {
+    flex-wrap: wrap;
+  }
+  :global(.ant-page-header-heading-title) {
+    line-height: 40px;
+  }
+  :global(.ant-page-header-heading-sub-title) {
+    display: flex;
+    flex-wrap: wrap;
+    // margin-left: 32px;
+    line-height: 36px;
+  }
 }

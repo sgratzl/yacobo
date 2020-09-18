@@ -36,7 +36,6 @@ export default function BaseLayout({
   ...pageHeader
 }: React.PropsWithChildren<BaseLayoutProps & Omit<PageHeaderProps, 'breadcrumb'>>) {
   const router = useRouter();
-  const back = useCallback(() => router.back(), [router]);
   return (
     <Layout className={styles.layout}>
       <LayoutHeader mainActive={mainActive} />
@@ -61,11 +60,7 @@ export default function BaseLayout({
           {/* <meta name="twitter:creator" content="@caleydo_org"/> */}
           {previewImage && <meta name="twitter:image:src" content={`${BASE_URL}${previewImage.url}`} />}
         </Head>
-        <PageHeader
-          onBack={router.pathname === '/' ? false : back}
-          breadcrumb={createBreadcrumbProps(router, breadcrumb)}
-          {...pageHeader}
-        >
+        <PageHeader className={styles.header} breadcrumb={createBreadcrumbProps(router, breadcrumb)} {...pageHeader}>
           {children}
           <BackTop className={styles.backTop}>
             <UpCircleOutlined />

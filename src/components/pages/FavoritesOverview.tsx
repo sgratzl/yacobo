@@ -22,28 +22,27 @@ function FavoritesGrid({ date }: { date?: Date }) {
 
 const FavoritesGridNoSSR = dynamic(() => Promise.resolve(FavoritesGrid), { ssr: false });
 
-export default function FavoritesOverview({ date }: { date?: Date }) {
+export default function FavoritesOverview({ date, dynamic }: { date?: Date; dynamic?: boolean }) {
   return (
     <BaseLayout
       pageTitle={`My Favorites as of ${formatLocal(date)}`}
       mainActive="favorites"
       title="My Favorites"
-      subTitle={
-        <>
-          as of
-          <DateSelect date={date} path={`/favorites/[date]`} clearPath="/" />
-        </>
-      }
+      subTitle={<DateSelect date={date} path={`/favorites/[date]`} clearPath="/" />}
       breadcrumb={[
         {
           breadcrumbName: 'Favorites',
           path: `/favorites`,
         },
-        {
-          breadcrumbName: formatAPIDate(date),
-          path: `/favorites/[date]`,
-        },
-      ]}
+        dynamic
+          ? []
+          : [
+              {
+                breadcrumbName: formatAPIDate(date),
+                path: `/favorites/[date]`,
+              },
+            ],
+      ].flat()}
     >
       <FavoritesGridNoSSR date={date} />
     </BaseLayout>
