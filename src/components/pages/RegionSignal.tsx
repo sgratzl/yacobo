@@ -16,6 +16,12 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
     <BaseLayout
       pageTitle={`${region?.name} - ${signal?.name}`}
       mainActive="overview"
+      description={`${region?.name}: ${signal?.description()}`}
+      previewImage={{
+        url: `/api/region/${region?.name}/${signal?.name}.png`,
+        width: 450,
+        height: 247,
+      }}
       title={
         <RegionSelect region={region} path={`/region/[region]/${signal?.id}`} clearPath={`/signal/${signal?.id}`} />
       }

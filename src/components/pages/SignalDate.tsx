@@ -20,6 +20,12 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
       pageTitle={`${signal.name} as of ${formatLocal(date)}`}
       mainActive="overview"
       title={<RegionSelect path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
+      description={signal.description(date)}
+      previewImage={{
+        url: `/api/signal/${signal.name}/${apiDate}.png`,
+        width: 570,
+        height: 310,
+      }}
       subTitle={
         <>
           <SignalSelect signal={signal} path={`/signal/[signal]/${apiDate}`} clearPath={`/date/${apiDate}`} />

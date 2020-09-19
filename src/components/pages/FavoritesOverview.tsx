@@ -28,6 +28,7 @@ export default function FavoritesOverview({ date, dynamic }: { date?: Date; dyna
       pageTitle={`My Favorites as of ${formatLocal(date)}`}
       mainActive="favorites"
       title="My Favorites"
+      description={`Overview of the United States as of ${formatAPIDate(date)} showing the personal favorites`}
       subTitle={<DateSelect date={date} path={`/favorites/[date]`} clearPath="/" />}
       breadcrumb={[
         {
