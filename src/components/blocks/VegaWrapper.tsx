@@ -121,9 +121,17 @@ export interface VegaWrapperProps<T> extends ITooltipProps<T> {
   spec: TopLevelSpec;
   data: T[];
   onReady?: () => void;
+  onClick?: (data: T) => void;
 }
 
-export default function VegaWrapper<T>({ spec, data, onReady, tooltipTitle, tooltipContent }: VegaWrapperProps<T>) {
+export default function VegaWrapper<T>({
+  spec,
+  data,
+  onReady,
+  tooltipTitle,
+  tooltipContent,
+  onClick,
+}: VegaWrapperProps<T>) {
   const vegaInstance = useRef<View | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<TooltipHandler>(null);
@@ -146,6 +154,14 @@ export default function VegaWrapper<T>({ spec, data, onReady, tooltipTitle, tool
       hover: true,
       tooltip: tooltipRef.current ?? undefined,
     });
+    if (onClick) {
+      view.addEventListener('click', (_, item) => {
+        if (!item) {
+          return;
+        }
+        onClick(resolveDatum(item));
+      });
+    }
     vegaInstance.current = view;
     view.runAsync().then(() => {
       if (onReady) {
@@ -155,7 +171,7 @@ export default function VegaWrapper<T>({ spec, data, onReady, tooltipTitle, tool
     return () => {
       view.finalize();
     };
-  }, [vegaInstance, spec, onReady, tooltipRef]);
+  }, [vegaInstance, spec, onReady, tooltipRef, onClick]);
 
   useEffect(() => {
     if (!vegaInstance.current) {

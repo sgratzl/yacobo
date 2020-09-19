@@ -1,6 +1,6 @@
 import { format, formatISO, isValid } from 'date-fns';
 
-export function formatAPIDate(date?: Date) {
+export function formatAPIDate(date?: Date | number) {
   if (!date || !isValid(date)) {
     return '?';
   }

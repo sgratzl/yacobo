@@ -1,7 +1,7 @@
 import { ReactNode, Ref, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './VegaImage.module.css';
 import { classNames } from '../utils';
-import { IRegion, ISignal } from '@/model';
+import { IRegion, isFakeRegion, ISignal } from '@/model';
 import { formatAPIDate, formatLocal } from '@/common';
 import { isValid } from 'date-fns';
 import { WarningOutlined, InteractionOutlined } from '@ant-design/icons';
@@ -12,6 +12,7 @@ import dynamic from 'next/dynamic';
 import type { TopLevelSpec } from 'vega-lite';
 import { dateValueTooltip, valueTooltipContent, regionValueTooltip } from './VegaTooltip';
 import type { VegaWrapperProps } from './VegaWrapper';
+import { useRouter } from 'next/router';
 
 function addParam(url: string | undefined, key: string, value: string | number) {
   if (!url) {
@@ -133,7 +134,15 @@ function InteractiveLineVega({ signal, region, scale }: ILineProps) {
   const [ready, setReady] = useState(false);
 
   const content = useMemo(() => valueTooltipContent.bind(null, signal), [signal]);
-
+  const router = useRouter();
+  const onClick = useCallback(
+    (d: { date: number }) => {
+      if (signal && d.date && region && !isFakeRegion(region)) {
+        router.push('/region/[region]/[signal]/[date]', `/region/${region}/${signal.id}/${formatAPIDate(d.date)}`);
+      }
+    },
+    [signal, region, router]
+  );
   const onReady = useCallback(() => setReady(true), [setReady]);
   return (
     <>
@@ -142,6 +151,7 @@ function InteractiveLineVega({ signal, region, scale }: ILineProps) {
           spec={spec}
           data={numberData}
           onReady={onReady}
+          onClick={onClick}
           tooltipTitle={dateValueTooltip}
           tooltipContent={content}
         />
@@ -174,6 +184,15 @@ function InteractiveMapVega({ signal, date, scale }: { signal?: ISignal; date?: 
   const content = useMemo(() => valueTooltipContent.bind(null, signal), [signal]);
 
   const onReady = useCallback(() => setReady(true), [setReady]);
+  const router = useRouter();
+  const onClick = useCallback(
+    (d: { region: string }) => {
+      if (signal && date && d.region) {
+        router.push('/region/[region]/[signal]/[date]', `/region/${d.region}/${signal.id}/${formatAPIDate(date)}`);
+      }
+    },
+    [signal, date, router]
+  );
   return (
     <>
       {data && spec && (
@@ -181,6 +200,7 @@ function InteractiveMapVega({ signal, date, scale }: { signal?: ISignal; date?: 
           spec={spec}
           data={data}
           onReady={onReady}
+          onClick={onClick}
           tooltipTitle={regionValueTooltip}
           tooltipContent={content}
         />

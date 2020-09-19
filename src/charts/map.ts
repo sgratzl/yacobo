@@ -142,6 +142,15 @@ function createLayer(data: {
       },
       value: 1,
     };
+  } else if (data.mega) {
+    r.selection = {
+      hoverMega: {
+        type: 'single',
+        on: 'mouseover',
+        empty: 'none',
+        fields: ['region'],
+      },
+    };
   }
 
   if (data.valuesSource) {

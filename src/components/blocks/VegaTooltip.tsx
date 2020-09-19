@@ -1,14 +1,14 @@
 import { formatLocal, formatValue } from '@/common';
-import { ISignal, regionByID } from '@/model';
+import { isFakeRegion, ISignal, regionByID } from '@/model';
 import { Statistic } from 'antd';
 
 export function dateValueTooltip(datum: { date: number; value?: number | null; stderr?: number | null }) {
-  return formatLocal(new Date(datum.date));
+  return `${formatLocal(new Date(datum.date))} (Click to select)`;
 }
 
 export function regionValueTooltip(datum: { region: string; value?: number | null }) {
   const region = regionByID(datum.region);
-  return region.name;
+  return `${region.name}${!isFakeRegion(region) ? ' (Click to select)' : ''}`;
 }
 
 export function valueTooltipContent(

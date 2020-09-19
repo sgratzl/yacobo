@@ -4,6 +4,7 @@ export interface IRegion {
   id: string;
   name: string;
   population: number | null;
+  fake?: boolean;
 }
 
 export interface ICountyRegion extends IRegion {
@@ -45,6 +46,7 @@ const { counties, states, byId } = (() => {
       name: `Rest of ${state.name}`,
       population: null,
       state,
+      fake: true,
     } as ICountyRegion);
   }
 
@@ -67,6 +69,7 @@ export function regionByID(region: string) {
       counties: [],
       population: null,
       short: search.toUpperCase(),
+      fake: true,
     };
     byId.set(search, fake);
     return fake;
@@ -77,9 +80,14 @@ export function regionByID(region: string) {
     name: search,
     state: regionByID(search.slice(0, 2)) as IStateRegion,
     population: null,
+    fake: true,
   };
   byId.set(search, fake);
   return fake;
+}
+
+export function isFakeRegion(region?: IRegion) {
+  return region?.fake === true;
 }
 
 export function isStateRegion(region?: IRegion): region is IStateRegion {
