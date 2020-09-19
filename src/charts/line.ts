@@ -4,7 +4,7 @@ import { selectEarliestDate } from '../model/constants';
 import { getValueDomain, ISignal } from '../model/signals';
 import { IVegaOptions, font } from '.';
 import { IDateValue, IRegion } from '@/model';
-import { parseDate, startOfISODate, startOfISOToday } from '@/common/parseDates';
+import { startOfISODate, startOfISOToday } from '@/common/parseDates';
 import { parseISO } from 'date-fns';
 
 const LINE_CHART_WIDTH = 400;
