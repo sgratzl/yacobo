@@ -225,7 +225,7 @@ function InteractiveMapVega({ signal, date, region, scale }: IParams) {
 function InteractiveWrapper({ children }: { children?: ReactNode }) {
   const [interactive, setInteractive] = useState(false);
   if (!interactive) {
-    <MakeInteractive setInteractive={setInteractive} />;
+    return <MakeInteractive setInteractive={setInteractive} />;
   }
   return <>{children}</>;
 }
