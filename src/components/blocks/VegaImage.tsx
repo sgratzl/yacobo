@@ -10,7 +10,7 @@ import useSWR from 'swr';
 import { fetcher } from '@/client/utils';
 import dynamic from 'next/dynamic';
 import type { TopLevelSpec } from 'vega-lite';
-import { dateValueTooltip, regionValueTooltip } from './VegaTooltip';
+import { dateValueTooltip, valueTooltipContent, regionValueTooltip } from './VegaTooltip';
 import type { VegaWrapperProps } from './VegaWrapper';
 
 function addParam(url: string | undefined, key: string, value: string | number) {
@@ -132,11 +132,19 @@ function InteractiveLineVega({ signal, region, scale }: ILineProps) {
   const numberData = useMemo(() => data?.map((d) => ({ ...d, date: d.date.getTime() })), [data]);
   const [ready, setReady] = useState(false);
 
+  const content = useMemo(() => valueTooltipContent.bind(null, signal), [signal]);
+
   const onReady = useCallback(() => setReady(true), [setReady]);
   return (
     <>
       {data && spec && numberData && (
-        <VegaLoader spec={spec} data={numberData} onReady={onReady} tooltip={dateValueTooltip} />
+        <VegaLoader
+          spec={spec}
+          data={numberData}
+          onReady={onReady}
+          tooltipTitle={dateValueTooltip}
+          tooltipContent={content}
+        />
       )}
       {(!data || !spec || !numberData || !ready) && (
         <LoadingImage error={error ?? specError} className={styles.lineOverlay} loading />
@@ -164,11 +172,20 @@ function InteractiveMapVega({ signal, date, scale }: { signal?: ISignal; date?: 
     fetchMap
   );
   const [ready, setReady] = useState(false);
+  const content = useMemo(() => valueTooltipContent.bind(null, signal), [signal]);
 
   const onReady = useCallback(() => setReady(true), [setReady]);
   return (
     <>
-      {data && spec && <VegaLoader spec={spec} data={data} onReady={onReady} tooltip={regionValueTooltip} />}
+      {data && spec && (
+        <VegaLoader
+          spec={spec}
+          data={data}
+          onReady={onReady}
+          tooltipTitle={regionValueTooltip}
+          tooltipContent={content}
+        />
+      )}
       {(!data || !spec || !ready) && <LoadingImage error={error ?? specError} className={styles.mapOverlay} loading />}
     </>
   );

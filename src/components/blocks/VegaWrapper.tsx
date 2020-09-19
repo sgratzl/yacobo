@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, Ref, useState, RefObject, MutableRefObject } from 'react';
+import { ReactNode, useEffect, useRef, useState, MutableRefObject } from 'react';
 import { parse, TooltipHandler, View } from 'vega';
 import { Error as ErrorLevel } from 'vega';
 import { compile, TopLevelSpec } from 'vega-lite';
@@ -13,14 +13,36 @@ function resolveDatum(item: any): any {
   return item;
 }
 
+const popperToAntdPlacments = {
+  top: 'top',
+  bottom: 'bottom',
+  right: 'right',
+  left: 'left',
+
+  'top-start': 'topLeft',
+  'top-end': 'topRight',
+  'bottom-start': 'bottomLeft',
+  'bottom-end': 'bottomRight',
+  'right-start': 'rightTop',
+  'right-end': 'rightBottom',
+  'left-start': 'leftTop',
+  'left-end': 'leftBottom',
+};
+
+interface ITooltipProps<T> {
+  tooltipTitle: (datum: T) => ReactNode;
+  tooltipContent: (datum: T) => ReactNode;
+}
+
 function TooltipAdapter<T>({
   handler,
-  render,
-}: {
+  tooltipContent,
+  tooltipTitle,
+}: ITooltipProps<T> & {
   handler: MutableRefObject<TooltipHandler | null>;
-  render: (datum: T) => ReactNode;
 }) {
   const [datum, setDatum] = useState(null as T | null);
+  const [placement, setPlacement] = useState('bottom' as keyof typeof popperToAntdPlacments);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,17 +61,38 @@ function TooltipAdapter<T>({
       },
       contextElement: tooltipRef.current!.parentElement!,
     };
-    const popper = createPopper(ref, tooltipRef.current!);
+    // create a tooltip item with a virtual element
+    const popper = createPopper(ref, tooltipRef.current!, {
+      placement: 'top',
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [10, 10],
+          },
+        },
+      ],
+    });
+
+    // handle an vega item
     handler.current = (_, event, item) => {
       if (!event) {
-        tooltipRef.current!.style.display = 'none';
+        if (tooltipRef.current) {
+          tooltipRef.current!.style.display = 'none';
+        }
         return;
       }
       tooltipRef.current!.style.display = '';
       x = event.clientX;
       y = event.clientY;
       setDatum(resolveDatum(item));
-      popper.update();
+      popper.update().then((r) => {
+        setPlacement(
+          r.placement === 'auto' || r.placement === 'auto-end' || r.placement === 'auto-start'
+            ? 'bottom'
+            : r.placement ?? 'bottom'
+        );
+      });
     };
 
     return () => {
@@ -57,17 +100,30 @@ function TooltipAdapter<T>({
     };
   }, [setDatum, tooltipRef, handler]);
 
-  return <div ref={tooltipRef}>{datum && render(datum)}</div>;
+  const placementClass = `ant-popover-placement-${popperToAntdPlacments[placement]}`;
+  // fake a antd popover
+  return (
+    <div ref={tooltipRef} className={classNames('ant-popover', placementClass)}>
+      <div className="ant-popover-content">
+        <div className="ant-popover-arrow">
+          <span className="ant-popover-arrow-content"></span>
+        </div>
+        <div className="ant-popover-inner" role="tooltip">
+          <div className="ant-popover-title">{datum && tooltipTitle(datum)}</div>
+          <div className="ant-popover-inner-content">{datum && tooltipContent(datum)}</div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export interface VegaWrapperProps<T> {
+export interface VegaWrapperProps<T> extends ITooltipProps<T> {
   spec: TopLevelSpec;
   data: T[];
   onReady?: () => void;
-  tooltip?: (datum: T) => ReactNode;
 }
 
-export default function VegaWrapper<T>({ spec, data, onReady, tooltip }: VegaWrapperProps<T>) {
+export default function VegaWrapper<T>({ spec, data, onReady, tooltipTitle, tooltipContent }: VegaWrapperProps<T>) {
   const vegaInstance = useRef<View | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<TooltipHandler>(null);
@@ -119,7 +175,7 @@ export default function VegaWrapper<T>({ spec, data, onReady, tooltip }: VegaWra
   return (
     <div className={classNames(styles.abs, styles.overlay)}>
       <div ref={containerRef} className={styles.abs}></div>
-      {tooltip && <TooltipAdapter handler={tooltipRef} render={tooltip} />}
+      <TooltipAdapter handler={tooltipRef} tooltipContent={tooltipContent} tooltipTitle={tooltipTitle} />
     </div>
   );
 }

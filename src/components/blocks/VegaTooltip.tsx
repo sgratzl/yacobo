@@ -1,11 +1,24 @@
-import { regionByID } from '@/model';
-import { Typography } from 'antd';
+import { formatLocal, formatValue } from '@/common';
+import { ISignal, regionByID } from '@/model';
+import { Statistic } from 'antd';
 
-export const dateValueTooltip = (datum: { date: number; value?: number | null; stderr?: number | null }) => {
-  return <div>{datum.date}</div>;
-};
+export function dateValueTooltip(datum: { date: number; value?: number | null; stderr?: number | null }) {
+  return formatLocal(new Date(datum.date));
+}
 
-export const regionValueTooltip = (datum: { region: string; value?: number | null }) => {
+export function regionValueTooltip(datum: { region: string; value?: number | null }) {
   const region = regionByID(datum.region);
-  return <Typography.Text>{region.name}</Typography.Text>;
-};
+  return region.name;
+}
+
+export function valueTooltipContent(
+  signal: ISignal | undefined,
+  datum: { value?: number | null; stderr?: number | null }
+) {
+  return (
+    <Statistic
+      value={formatValue(datum.value)}
+      suffix={`of ${formatValue(signal?.data.maxValue ?? 100)} ${signal?.data.unit ?? 'people'}`}
+    />
+  );
+}

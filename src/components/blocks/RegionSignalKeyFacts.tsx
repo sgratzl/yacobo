@@ -187,12 +187,12 @@ interface ISignalTableRow {
   value?: number;
 }
 
-function renderStats(value: number | undefined) {
-  return <Statistic className={styles.smallStats} value={formatValue(value)} />;
-}
 function renderSignalOf(signal: ISignal) {
   return `of ${formatValue(signal.data.maxValue)}`;
 }
+const renderValue = (value: number | null) => {
+  return <span>{value == null ? 'Missing' : formatFixedValue(value)}</span>;
+};
 
 export function KeySignalMultiFacts({ region, date }: { region?: IRegion; date?: Date }) {
   const { data } = useKeyMultiFacts(region, date);
@@ -222,7 +222,7 @@ export function KeySignalMultiFacts({ region, date }: { region?: IRegion; date?:
   return (
     <Table<ISignalTableRow> pagination={false} loading={!data} dataSource={dataSource} size="small" rowKey="label">
       <Table.Column<ISignalTableRow> title="Signal" dataIndex="label" render={renderSignalLink} />
-      <Table.Column<ISignalTableRow> align="right" title="Value" dataIndex="value" render={renderStats} />
+      <Table.Column<ISignalTableRow> align="right" title="Value" dataIndex="value" render={renderValue} />
       <Table.Column<ISignalTableRow> title="Unit" dataIndex="signal" render={renderSignalOf} />
     </Table>
   );
