@@ -69,7 +69,7 @@ function TooltipAdapter<T>({
         {
           name: 'offset',
           options: {
-            offset: [10, 10],
+            offset: [x, 10],
           },
         },
       ],
