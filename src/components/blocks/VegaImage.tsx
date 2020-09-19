@@ -146,7 +146,7 @@ function InteractiveLineVega({ signal, region, scale, date }: IParams) {
   const onClick = useCallback(
     (d: { date: number }) => {
       if (signal && d.date && region && !isFakeRegion(region)) {
-        router.push('/region/[region]/[signal]/[date]', `/region/${region}/${signal.id}/${formatAPIDate(d.date)}`);
+        router.push('/region/[region]/[signal]/[date]', `/region/${region.id}/${signal.id}/${formatAPIDate(d.date)}`);
       }
     },
     [signal, region, router]
