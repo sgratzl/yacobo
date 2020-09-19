@@ -1,21 +1,39 @@
 import { compareDate, compareRegionName, compareRegionState, compareStdErr, compareValue } from '@/client/compare';
+import { useFetchSignalMeta } from '@/client/utils';
 import { Table } from 'antd';
 import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
 import { IRegionObjectValue, useDateValue, useRegionValue } from '../../client/data';
 import { formatAPIDate, formatFixedValue } from '../../common';
-import { IDateValue, IRegion, ISignal } from '../../model';
+import { getValueScale, IDateValue, IRegion, ISignal, ISignalWithMeta } from '../../model';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
-
-const renderValue = (value: number | null) => {
-  return <span>{value == null ? 'Missing' : formatFixedValue(value)}</span>;
-};
 
 const renderStdErr = (value: number | null) => {
   return <span>{value == null ? 'Missing' : value.toFixed(2)}</span>;
 };
 
+function generateGradient(meta?: ISignalWithMeta, value?: number | null) {
+  if (!meta || value == null) {
+    return undefined;
+  }
+  const scale = getValueScale(meta, meta.meta);
+  const p = Math.round(1000 * scale(value)) / 10;
+  return `linear-gradient(to right, rgba(0,0,0,0.25) ${p}%, transparent ${p}%)`;
+}
+
+function useRenderBarValue(signal?: ISignal) {
+  const meta = useFetchSignalMeta(signal);
+  return useCallback(
+    (value?: number | null) => {
+      if (value == null) {
+        return <div>Missing</div>;
+      }
+      return <div style={{ background: generateGradient(meta, value) }}>{formatFixedValue(value)}</div>;
+    },
+    [meta]
+  );
+}
 // export const columns: ColumnsType<ISignalMultiRow> = [
 //   {
 //     title: 'Region',
@@ -56,6 +74,7 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
     },
     [signal, apiDate]
   );
+  const renderBarValue = useRenderBarValue(signal);
 
   return (
     <Table<IRegionObjectValue> dataSource={filtered} loading={!data} rowKey="region">
@@ -77,7 +96,7 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
       <Table.Column<IRegionObjectValue>
         title={signal.name}
         dataIndex="value"
-        render={renderValue}
+        render={renderBarValue}
         align="right"
         defaultSortOrder="descend"
         sorter={compareValue}
@@ -114,6 +133,7 @@ export function DateTable({ signal, region }: { signal?: ISignal; region?: IRegi
     },
     [signal, region]
   );
+  const renderBarValue = useRenderBarValue(signal);
 
   return (
     <Table<IDateValue> dataSource={data} loading={!data} rowKey="date">
@@ -128,7 +148,7 @@ export function DateTable({ signal, region }: { signal?: ISignal; region?: IRegi
       <Table.Column<IDateValue>
         title={signal?.name ?? 'Signal'}
         dataIndex="value"
-        render={renderValue}
+        render={renderBarValue}
         align="right"
         sorter={compareValue}
         sortDirections={['descend', 'ascend']}

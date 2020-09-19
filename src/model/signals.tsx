@@ -279,3 +279,9 @@ export const refSignal = signals.find((d) => d.id === 'cases')!;
 export function getValueDomain(signal: ISignal, meta: ISignalMeta) {
   return [0, Math.min(signal.data.maxValue, Math.ceil(meta.mean + 3 * meta.stdev))] as const;
 }
+
+export function getValueScale(signal: ISignal, meta: ISignalMeta) {
+  const domain = getValueDomain(signal, meta);
+  const range = domain[1] - domain[0];
+  return (value: number) => Math.min(1, Math.max(0, (value - domain[0]) / range));
+}

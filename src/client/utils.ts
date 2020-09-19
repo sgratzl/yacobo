@@ -1,6 +1,6 @@
 import { parseDate } from '@/common/parseDates';
 import useSWR from 'swr';
-import { ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../model';
+import { ISignal, ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../model';
 
 export function fetcher<T = any>(path: string): Promise<T> {
   return fetch(path).then((r) => r.json());
@@ -50,4 +50,9 @@ export function useFetchMinMaxDate(initialData?: { min: number | Date; max: numb
     min: selectEarliestDate(data.map((d) => d.meta)),
     max: selectLatestDate(data.map((d) => d.meta)),
   };
+}
+
+export function useFetchSignalMeta(signal?: ISignal) {
+  const { data } = useFetchMeta();
+  return data && signal ? data.find((d) => d.id === signal.id) : undefined;
 }
