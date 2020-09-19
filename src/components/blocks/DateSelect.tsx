@@ -1,12 +1,10 @@
 import { formatAPIDate } from '@/common';
-import { startOfToday } from 'date-fns';
+import { isValid } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import styles from './Select.module.css';
 import DatePicker from './DatePicker';
 import { injectQuery } from './BaseLayout';
-
-const start = startOfToday();
 
 export function DateSelect({ date, path, clearPath }: { date?: Date; path: string; clearPath?: string }) {
   const router = useRouter();
@@ -20,12 +18,13 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
     },
     [router, path, clearPath]
   );
+  const dd = !date || !isValid(date) ? undefined : date;
   return (
     <span>
       {' as of '}
       <DatePicker
         className={styles.picker}
-        value={date == null ? start : date}
+        value={dd}
         onChange={onSelect}
         placeholder="Select Date"
         allowClear={clearPath != null}
