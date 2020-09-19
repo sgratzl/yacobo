@@ -14,14 +14,17 @@ import { dateValueTooltip, valueTooltipContent, regionValueTooltip } from './Veg
 import type { VegaWrapperProps } from './VegaWrapper';
 import { useRouter } from 'next/router';
 
-function addParam(url: string | undefined, key: string, value: string | number) {
-  if (!url) {
-    return undefined;
+function addParam(url: string | undefined, key: string, value?: string | number) {
+  if (!url || value == null) {
+    return url;
   }
-  return `${url}.png${url.includes('?') ? '&' : '?'}${key}=${value}`;
+  return `${url}${url.includes('?') ? '&' : '?'}${key}=${value}`;
 }
 
-function sourceSet(src: string) {
+function sourceSet(src?: string) {
+  if (!src) {
+    return undefined;
+  }
   return `${src} 1x, ${addParam(src, 'dpr', 2)} 2x`;
 }
 
@@ -85,7 +88,7 @@ function Image({
   alt: string;
   scale?: number;
 }) {
-  const img = `${src}.png${scale ? `?scale=${scale}` : ''}`;
+  const img = addParam(src, 'scale', scale);
   return <img ref={imgRef} className={styles.abs} data-src={src} src={img} srcSet={sourceSet(img)} alt={alt} />;
 }
 
@@ -101,9 +104,10 @@ export function MakeInteractive({ setInteractive }: { setInteractive: (v: boolea
   );
 }
 
-interface ILineProps {
+interface IParams {
   signal?: ISignal;
   region?: IRegion;
+  date?: Date;
   scale?: number;
 }
 
@@ -123,9 +127,13 @@ interface ILineProps {
 
 const VegaLoader = dynamic(() => import('./VegaWrapper')) as <T>(props: VegaWrapperProps<T>) => JSX.Element;
 
-function InteractiveLineVega({ signal, region, scale }: ILineProps) {
+function InteractiveLineVega({ signal, region, scale, date }: IParams) {
   const { data, error } = useDateValue(region, signal);
-  const specUrl = `/api/region/${region?.id}/${signal?.id}.vg${scale ? `?scale=${scale}` : ''}`;
+  const specUrl = addParam(
+    addParam(`/api/region/${region?.id}/${signal?.id}.vg`, 'scale', scale),
+    'highlight',
+    date ? formatAPIDate(date) : undefined
+  )!;
   const { data: spec, error: specError } = useSWR<TopLevelSpec>(
     region != null && signal != null ? specUrl : null,
     fetcher
@@ -173,9 +181,13 @@ function fetchMap(key: string) {
   });
 }
 
-function InteractiveMapVega({ signal, date, scale }: { signal?: ISignal; date?: Date; scale?: number }) {
+function InteractiveMapVega({ signal, date, region, scale }: IParams) {
   const { data, error } = useRegionValue(signal, date);
-  const specUrl = `/api/signal/${signal?.id}/${formatAPIDate(date)}.vg${scale ? `?scale=${scale}` : ''}`;
+  const specUrl = addParam(
+    addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.vg`, 'scale', scale),
+    'highlight',
+    region?.id
+  )!;
   const { data: spec, error: specError } = useSWR<TopLevelSpec>(
     isValid(date) && signal != null ? specUrl : null,
     fetchMap
@@ -221,13 +233,16 @@ function InteractiveWrapper({ children }: { children?: ReactNode }) {
 export function LineImage({
   signal,
   region,
+  date, // highlight
   scale,
   interactive,
-}: ILineProps & {
+}: IParams & {
   interactive?: boolean;
 }) {
   const valid = signal != null && region != null;
-  const src = valid ? `/api/region/${region?.id}/${signal?.id}` : undefined;
+  const src = valid
+    ? addParam(`/api/region/${region?.id}/${signal?.id}.png`, 'highlight', date ? formatAPIDate(date) : undefined)
+    : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
   return (
@@ -235,7 +250,7 @@ export function LineImage({
       {src && <Image imgRef={imgRef} src={src} alt={`History of ${signal?.name} in ${region?.name}`} scale={scale} />}
       {valid && !loading && !error && interactive && (
         <InteractiveWrapper>
-          <InteractiveLineVega signal={signal} region={region} scale={scale} />
+          <InteractiveLineVega signal={signal} region={region} scale={scale} date={date} />
         </InteractiveWrapper>
       )}
       <LoadingImage loading={loading} error={error} className={styles.lineOverlay} />
@@ -246,16 +261,16 @@ export function LineImage({
 export function MapImage({
   signal,
   date,
+  region, // highlight
   scale,
   interactive,
-}: {
-  signal?: ISignal;
-  date?: Date;
-  scale?: number;
+}: IParams & {
   interactive?: boolean;
 }) {
   const valid = signal != null && isValid(date);
-  const src = valid ? `/api/signal/${signal?.id}/${formatAPIDate(date)}` : undefined;
+  const src = valid
+    ? addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.png`, 'highlight', region?.id)
+    : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
   return (
@@ -265,7 +280,7 @@ export function MapImage({
       )}
       {valid && !loading && !error && interactive && (
         <InteractiveWrapper>
-          <InteractiveMapVega signal={signal} date={date} scale={scale} />
+          <InteractiveMapVega signal={signal} date={date} scale={scale} region={region} />
         </InteractiveWrapper>
       )}
       <LoadingImage loading={loading} error={error} className={styles.mapOverlay} />

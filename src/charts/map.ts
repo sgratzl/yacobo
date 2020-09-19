@@ -58,19 +58,22 @@ const missingGradient: LinearGradient = {
     .map((_, i) => ({ offset: i / missingStopCount, color: i % 2 === 0 ? '#eeeeee' : 'white' })),
 };
 
-function createLayer(data: {
-  dataSource: UrlData | InlineData;
-  feature: string;
-  colorScheme: string | SchemeParams;
-  maxValue: number;
-  valueTitle: string;
-  firstLayer: boolean;
-  hidden?: boolean;
-  valuesSource?: NamedData;
-  hasStdErr: boolean;
-  mega?: boolean;
-  interactive?: boolean;
-}): UnitSpec | LayerSpec {
+function createLayer(
+  data: {
+    dataSource: UrlData | InlineData;
+    feature: string;
+    colorScheme: string | SchemeParams;
+    maxValue: number;
+    valueTitle: string;
+    firstLayer: boolean;
+    hidden?: boolean;
+    valuesSource?: NamedData;
+    hasStdErr: boolean;
+    mega?: boolean;
+    interactive?: boolean;
+  },
+  options: IVegaOptions
+): UnitSpec | LayerSpec {
   const r: UnitSpec | LayerSpec = {
     data: {
       ...data.dataSource,
@@ -126,6 +129,13 @@ function createLayer(data: {
         on: 'mouseover',
         empty: 'none',
         fields: ['region'],
+        ...(options.highlight
+          ? {
+              init: {
+                region: options.highlight,
+              },
+            }
+          : {}),
       },
     };
     r.encoding!.stroke = {
@@ -232,31 +242,40 @@ export async function createMap(signal: ISignal, values: IRegionValue[] | undefi
 
   if (!values || (values && values.length > 0)) {
     spec.layer.push(
-      createLayer({
-        ...data,
-        feature: 'states',
-        firstLayer: true,
-        mega: true,
-      })
+      createLayer(
+        {
+          ...data,
+          feature: 'states',
+          firstLayer: true,
+          mega: true,
+        },
+        options
+      )
     );
 
     spec.layer.push(
-      createLayer({
-        ...data,
-        feature: 'counties',
-        firstLayer: false,
-        interactive: true,
-      })
+      createLayer(
+        {
+          ...data,
+          feature: 'counties',
+          firstLayer: false,
+          interactive: true,
+        },
+        options
+      )
     );
   } else {
     // add a dummy layer such that we have the legend
     spec.layer.unshift(
-      createLayer({
-        ...data,
-        feature: 'nation',
-        firstLayer: true,
-        hidden: true,
-      })
+      createLayer(
+        {
+          ...data,
+          feature: 'nation',
+          firstLayer: true,
+          hidden: true,
+        },
+        options
+      )
     );
   }
 
@@ -279,7 +298,7 @@ export async function createSkeletonMap(options: IVegaOptions) {
 
   const spec = createBaseMap(data, options);
   spec.layer.push({
-    ...createLayer(data),
+    ...createLayer(data, options),
     transform: [
       {
         calculate: '0',

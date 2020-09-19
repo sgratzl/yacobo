@@ -4,7 +4,8 @@ import { selectEarliestDate } from '../model/constants';
 import { getValueDomain, ISignal } from '../model/signals';
 import { IVegaOptions, font } from '.';
 import { IDateValue, IRegion } from '@/model';
-import { startOfISODate, startOfISOToday } from '@/common/parseDates';
+import { parseDate, startOfISODate, startOfISOToday } from '@/common/parseDates';
+import { parseISO } from 'date-fns';
 
 const LINE_CHART_WIDTH = 400;
 const LINE_CHART_HEIGHT = 200;
@@ -130,6 +131,14 @@ function createLineChartSpec(
             on: 'mouseover',
             empty: 'none',
             nearest: true,
+            fields: ['date'],
+            ...(options.highlight
+              ? {
+                  init: {
+                    date: parseISO(options.highlight).valueOf(),
+                  },
+                }
+              : {}),
           },
         },
         mark: {

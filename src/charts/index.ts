@@ -8,4 +8,5 @@ export interface IVegaOptions {
   devicePixelRatio: number;
   ctx: IRequestContext;
   forImage: boolean;
+  highlight?: string;
 }

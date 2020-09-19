@@ -123,6 +123,7 @@ export function extractVegaOptions(req: NextApiRequest, ctx: IRequestContext, fo
     details: req.query.details != null,
     devicePixelRatio: Number.parseInt((req.query.dpr as string) ?? '1', 10),
     forImage: format !== Formats.vg,
+    highlight: req.query.highlight as string,
     ctx,
   };
 }
