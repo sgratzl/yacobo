@@ -1,7 +1,7 @@
 import { fetchMeta } from '../api/data';
 import { TopLevelSpec } from 'vega-lite';
 import { selectEarliestDate } from '../model/constants';
-import { ISignal } from '../model/signals';
+import { getValueDomain, ISignal } from '../model/signals';
 import { IVegaOptions, font } from '.';
 import { IDateValue, IRegion } from '@/model';
 import { startOfISODate, startOfISOToday } from '@/common/parseDates';
@@ -178,7 +178,7 @@ export async function createSignalLineChart(
       description: signal.description(),
       values: values ?? [],
       minDate,
-      maxValue: Math.min(signal.data.maxValue, Math.ceil(meta.mean + 3 * meta.stdev)),
+      maxValue: getValueDomain(signal, meta)[1],
       valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
       hasStdErr: signal.data.hasStdErr,
     },

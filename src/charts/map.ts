@@ -4,7 +4,7 @@ import { SchemeParams } from 'vega-lite/build/src/scale';
 import { LayerSpec, TopLevel, UnitSpec } from 'vega-lite/build/src/spec';
 import { font, IVegaOptions } from '.';
 import { fetchSignalMeta } from '../api/data';
-import { IRegionValue, ISignal } from '../model';
+import { getValueDomain, IRegionValue, ISignal } from '../model';
 
 const ZERO_COLOR = 'rgb(242,242,242)';
 const STROKE = '#eaeaea';
@@ -194,7 +194,7 @@ export async function createMap(signal: ISignal, values: IRegionValue[] | undefi
   const meta = await fetchSignalMeta(options.ctx, signal);
   const data = {
     dataSource: await chooseDataSource(options),
-    maxValue: Math.min(signal.data.maxValue, Math.ceil(meta.mean + 3 * meta.stdev)),
+    maxValue: getValueDomain(signal, meta)[1],
     valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
     colorScheme: signal.colorScheme,
     title: signal.name,
