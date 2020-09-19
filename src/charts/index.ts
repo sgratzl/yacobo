@@ -7,5 +7,5 @@ export interface IVegaOptions {
   details: boolean;
   devicePixelRatio: number;
   ctx: IRequestContext;
-  forApp: boolean;
+  forImage: boolean;
 }

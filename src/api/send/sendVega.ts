@@ -18,7 +18,7 @@ export default async function sendVega<T>(
   vega: (data: T[] | undefined, options: IVegaOptions) => TopLevelSpec | Promise<TopLevelSpec>,
   options: ICommonOptions & { skeleton?: boolean }
 ) {
-  const vegaOptions = extractVegaOptions(req, ctx);
+  const vegaOptions = extractVegaOptions(req, ctx, format);
   if (format === Formats.vg && !vegaOptions.details) {
     // pure vega without data
     return sendVegaSpec(req, res, vega(undefined, vegaOptions), options);
@@ -117,12 +117,12 @@ async function sendVegaSVG(
   }
 }
 
-export function extractVegaOptions(req: NextApiRequest, ctx: IRequestContext): IVegaOptions {
+export function extractVegaOptions(req: NextApiRequest, ctx: IRequestContext, format: Formats): IVegaOptions {
   return {
     scaleFactor: Number.parseInt((req.query.scale as string) ?? '1', 10),
     details: req.query.details != null,
     devicePixelRatio: Number.parseInt((req.query.dpr as string) ?? '1', 10),
-    forApp: req.query.app != null,
+    forImage: format !== Formats.vg,
     ctx,
   };
 }

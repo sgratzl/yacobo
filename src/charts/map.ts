@@ -40,31 +40,8 @@ export const COUNTIES_URL: UrlData = {
   url: 'https://cdn.jsdelivr.net/npm/us-atlas/counties-10m.json',
 };
 
-const FAKE_GEO = {
-  type: 'Topology',
-  objects: {
-    nation: {
-      type: 'GeometryCollection',
-      geometries: [],
-    },
-    states: {
-      type: 'GeometryCollection',
-      geometries: [],
-    },
-    counties: {
-      type: 'GeometryCollection',
-      geometries: [],
-    },
-  },
-};
-
 async function chooseDataSource(options: IVegaOptions) {
-  if (options.forApp) {
-    return {
-      values: FAKE_GEO,
-    };
-  }
-  if (options.details) {
+  if (options.details || !options.forImage) {
     return COUNTIES_URL;
   }
   const values = (await import('us-atlas/counties-10m.json')).default;
@@ -92,8 +69,9 @@ function createLayer(data: {
   valuesSource?: NamedData;
   hasStdErr: boolean;
   mega?: boolean;
+  interactive?: boolean;
 }): UnitSpec | LayerSpec {
-  return {
+  const r: UnitSpec | LayerSpec = {
     data: {
       ...data.dataSource,
       name: data.feature,
@@ -102,28 +80,6 @@ function createLayer(data: {
         feature: data.feature,
       },
     },
-    transform: data.valuesSource
-      ? [
-          data.mega
-            ? [
-                {
-                  calculate: "datum.id + '000'",
-                  as: 'mega',
-                },
-              ]
-            : [],
-          {
-            lookup: data.mega ? 'mega' : 'id',
-            from: {
-              data: {
-                ...data.valuesSource,
-              },
-              key: 'region',
-              fields: ['region', 'value', data.hasStdErr ? ['stderr'] : []].flat(),
-            },
-          },
-        ].flat()
-      : [],
     mark: {
       type: 'geoshape',
       stroke: STROKE,
@@ -162,6 +118,67 @@ function createLayer(data: {
       },
     },
   };
+
+  if (data.interactive) {
+    r.selection = {
+      hover: {
+        type: 'single',
+        on: 'mouseover',
+        empty: 'none',
+        fields: ['region'],
+      },
+    };
+    r.encoding!.stroke = {
+      condition: {
+        selection: 'hover',
+        value: 'orange',
+      },
+      value: STROKE,
+    };
+    r.encoding!.strokeWidth = {
+      condition: {
+        selection: 'hover',
+        value: 2,
+      },
+      value: 1,
+    };
+  }
+
+  if (data.valuesSource) {
+    if (data.mega) {
+      r.transform = [
+        {
+          calculate: "datum.id + '000'",
+          as: 'mega',
+        },
+        {
+          lookup: 'mega',
+          from: {
+            data: {
+              ...data.valuesSource,
+            },
+            key: 'region',
+            fields: ['region', 'value', data.hasStdErr ? ['stderr'] : []].flat(),
+          },
+        },
+      ];
+    } else {
+      r.transform = [
+        {
+          lookup: 'id',
+          from: {
+            data: {
+              ...data.valuesSource,
+            },
+            key: 'region',
+            fields: ['region', 'value', data.hasStdErr ? ['stderr'] : []].flat(),
+          },
+        },
+      ];
+    }
+  }
+
+  return r;
 }
 
 export async function createMap(signal: ISignal, values: IRegionValue[] | undefined, options: IVegaOptions) {
@@ -174,6 +191,7 @@ export async function createMap(signal: ISignal, values: IRegionValue[] | undefi
     title: signal.name,
     description: signal.description(),
     hasStdErr: signal.data.hasStdErr,
+    forImage: true,
     valuesSource: {
       name: 'data',
     },
@@ -218,6 +236,7 @@ export async function createMap(signal: ISignal, values: IRegionValue[] | undefi
         ...data,
         feature: 'counties',
         firstLayer: false,
+        interactive: true,
       })
     );
   } else {
@@ -246,6 +265,7 @@ export async function createSkeletonMap(options: IVegaOptions) {
     colorScheme: [ZERO_COLOR, ZERO_COLOR] as any,
     firstLayer: true,
     hasStdErr: false,
+    forImage: true,
   };
 
   const spec = createBaseMap(data, options);

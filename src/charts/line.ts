@@ -121,8 +121,29 @@ function createLineChartSpec(
           point: 'transparent',
           strokeCap: 'square',
           color: 'grey',
-          tooltip: {
-            content: 'data',
+        },
+      },
+      {
+        selection: {
+          hover: {
+            type: 'single',
+            on: 'mouseover',
+            empty: 'none',
+            nearest: true,
+          },
+        },
+        mark: {
+          type: 'point',
+          stroke: null,
+          tooltip: { content: 'data' },
+        },
+        encoding: {
+          fill: {
+            condition: {
+              selection: 'hover',
+              value: 'orange',
+            },
+            value: 'grey',
           },
         },
       },

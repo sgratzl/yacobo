@@ -156,6 +156,7 @@ function fetchMap(key: string) {
     for (const layer of (spec as any).layer) {
       if (layer.data.format) {
         layer.data.values = counties.default;
+        delete layer.data.url;
       }
     }
     return spec;
@@ -164,7 +165,7 @@ function fetchMap(key: string) {
 
 function InteractiveMapVega({ signal, date, scale }: { signal?: ISignal; date?: Date; scale?: number }) {
   const { data, error } = useRegionValue(signal, date);
-  const specUrl = `/api/signal/${signal?.id}/${formatAPIDate(date)}.vg?app${scale ? `&scale=${scale}` : ''}`;
+  const specUrl = `/api/signal/${signal?.id}/${formatAPIDate(date)}.vg${scale ? `?scale=${scale}` : ''}`;
   const { data: spec, error: specError } = useSWR<TopLevelSpec>(
     isValid(date) && signal != null ? specUrl : null,
     fetchMap
