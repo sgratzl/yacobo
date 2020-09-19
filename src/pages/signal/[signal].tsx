@@ -18,8 +18,8 @@ export const getStaticProps: GetStaticProps<ISignalProps> = async (context) => {
   return {
     props: {
       signal: context.params!.signal as string,
-      min: data.min.getTime(),
-      max: data.max.getTime(),
+      min: data.min.valueOf(),
+      max: data.max.valueOf(),
     },
     revalidate: CacheDuration.short,
   };

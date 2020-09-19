@@ -9,8 +9,8 @@ export const getStaticProps: GetStaticProps<ISerializedMinMax> = async () => {
   const data = await withContext(fetchMinMaxDate);
   return {
     props: {
-      min: data.min.getTime(),
-      max: data.max.getTime(),
+      min: data.min.valueOf(),
+      max: data.max.valueOf(),
     },
     // re generate every 12h or so
     revalidate: CacheDuration.short,

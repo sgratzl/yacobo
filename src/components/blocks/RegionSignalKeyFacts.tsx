@@ -106,7 +106,7 @@ function asDataSource(
   const lookup = new Map(data?.map((d) => [`${d.region}:${formatAPIDate(d.date)}`, d]) ?? []);
   const dates = regionDateSummaryDates(date);
   return dates.map((d) => ({
-    key: d.getTime(),
+    key: d.valueOf(),
     label: d === date ? formatLocal(d) : `${formatDistance(d, date, {})} ago`,
     date: d === date ? null : d,
     value: lookup.get(`${region.id}:${formatAPIDate(d)}`)?.value,

@@ -1,4 +1,4 @@
-import { parseJSON, startOfDay } from 'date-fns';
+import { parseJSON } from 'date-fns';
 
 function identity(v: any) {
   return v;
@@ -10,8 +10,17 @@ type FilterFlags<Base, Condition> = {
 };
 type AllowedNames<Base, Condition> = FilterFlags<Base, Condition>[keyof Base];
 
+export function startOfISOToday() {
+  return startOfISODate(new Date());
+}
+
+export function startOfISODate(date: Date) {
+  const time = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0);
+  return new Date(time);
+}
+
 export function parseDate(date: number | string | Date) {
-  return startOfDay(parseJSON(date));
+  return startOfISODate(parseJSON(date));
 }
 /**
  * helper method for parsing serialized dates

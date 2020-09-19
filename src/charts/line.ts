@@ -2,9 +2,9 @@ import { fetchMeta } from '../api/data';
 import { TopLevelSpec } from 'vega-lite';
 import { selectEarliestDate } from '../model/constants';
 import { ISignal } from '../model/signals';
-import { startOfToday } from 'date-fns';
 import { IVegaOptions, font } from '.';
 import { IDateValue, IRegion } from '@/model';
+import { startOfISODate, startOfISOToday } from '@/common/parseDates';
 
 const LINE_CHART_WIDTH = 400;
 const LINE_CHART_HEIGHT = 200;
@@ -27,9 +27,9 @@ function createLineChartSpec(
     title: data.title,
     description: data.description,
   };
-  const max = startOfToday();
-  const dataMin = data.values[0]?.date ?? data.minDate;
-  const dataMax = data.values[data.values.length - 1]?.date ?? max;
+  const max = startOfISOToday();
+  const dataMin = startOfISODate(data.values[0]?.date ?? data.minDate);
+  const dataMax = startOfISODate(data.values[data.values.length - 1]?.date ?? max);
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     ...(options.details ? meta : {}),
@@ -37,8 +37,8 @@ function createLineChartSpec(
     height: LINE_CHART_HEIGHT * options.scaleFactor,
     data: {
       sequence: {
-        start: dataMin.getTime() + MS_PER_DAY,
-        stop: dataMax.getTime() + MS_PER_DAY,
+        start: dataMin.valueOf(),
+        stop: dataMax.valueOf() + MS_PER_DAY,
         step: MS_PER_DAY, // 1 day
         as: 'date',
       },
@@ -49,7 +49,7 @@ function createLineChartSpec(
         from: {
           data: {
             name: 'data',
-            values: data.values.map((d) => ({ ...d, date: d.date.getTime() })),
+            values: data.values.map((d) => ({ ...d, date: d.date.valueOf() })),
           },
           key: 'date',
           fields: ['value', data.hasStdErr ? ['stderr'] : []].flat(),
@@ -69,8 +69,8 @@ function createLineChartSpec(
         field: 'date',
         type: 'temporal',
         scale: {
-          domainMin: data.minDate.getTime(),
-          domainMax: max.getTime(),
+          domainMin: data.minDate.valueOf(),
+          domainMax: max.valueOf(),
           clamp: true,
         },
         axis: {

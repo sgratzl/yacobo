@@ -15,8 +15,8 @@ export const getStaticProps: GetStaticProps<IRegionProps> = async (context) => {
   const data = await withContext(fetchMinMaxDate);
   return {
     props: {
-      min: data.min.getTime(),
-      max: data.max.getTime(),
+      min: data.min.valueOf(),
+      max: data.max.valueOf(),
       region: context.params!.region as string,
     },
   };

@@ -65,7 +65,7 @@ function Loading() {
   );
 }
 
-function LoadingImage({ loading, className, error }: { loading: boolean; error: boolean; className: string }) {
+function LoadingImage({ loading, className, error }: { loading: boolean; error: boolean; className?: string }) {
   return loading || error ? (
     <div className={classNames(styles.abs, styles.overlay, className, 'ant-spin-lg')}>
       {error ? <WarningOutlined /> : <Loading />}
@@ -129,7 +129,7 @@ function InteractiveLineVega({ signal, region, scale }: ILineProps) {
     region != null && signal != null ? specUrl : null,
     fetcher
   );
-  const numberData = useMemo(() => data?.map((d) => ({ ...d, date: d.date.getTime() })), [data]);
+  const numberData = useMemo(() => data?.map((d) => ({ ...d, date: d.date.valueOf() })), [data]);
   const [ready, setReady] = useState(false);
 
   const content = useMemo(() => valueTooltipContent.bind(null, signal), [signal]);
@@ -146,9 +146,7 @@ function InteractiveLineVega({ signal, region, scale }: ILineProps) {
           tooltipContent={content}
         />
       )}
-      {(!data || !spec || !numberData || !ready) && (
-        <LoadingImage error={error ?? specError} className={styles.lineOverlay} loading />
-      )}
+      {(!data || !spec || !numberData || !ready) && <LoadingImage error={error ?? specError} loading />}
     </>
   );
 }
@@ -186,7 +184,7 @@ function InteractiveMapVega({ signal, date, scale }: { signal?: ISignal; date?: 
           tooltipContent={content}
         />
       )}
-      {(!data || !spec || !ready) && <LoadingImage error={error ?? specError} className={styles.mapOverlay} loading />}
+      {(!data || !spec || !ready) && <LoadingImage error={error ?? specError} loading />}
     </>
   );
 }

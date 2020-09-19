@@ -26,7 +26,7 @@ export function extractRegion(res: string | IRouterLike) {
 export function extractDate(res: string | IRouterLike) {
   const queryDate = typeof res === 'string' ? res : (res.query.date as string);
   const date = parseISO(queryDate);
-  if (!date || Number.isNaN(date.getTime())) {
+  if (!date || Number.isNaN(date.valueOf())) {
     throw new CustomHTTPError(400, `bad date "${queryDate}"`);
   }
   return date;
