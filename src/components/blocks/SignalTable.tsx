@@ -62,14 +62,14 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
       <Table.Column<IRegionObjectValue> title="FIPS" dataIndex="region" />
       <Table.Column<IRegionObjectValue>
         title="County"
-        dataIndex={['region', 'name']}
+        dataIndex={['regionObj', 'name']}
         render={renderRegion}
         sorter={compareRegionName}
         sortDirections={['ascend', 'descend']}
       />
       <Table.Column<IRegionObjectValue>
         title="State"
-        dataIndex={['region', 'state', 'name']}
+        dataIndex={['regionObj', 'state', 'name']}
         render={renderState}
         sorter={compareRegionState}
         sortDirections={['ascend', 'descend']}
