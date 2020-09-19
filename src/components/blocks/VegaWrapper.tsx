@@ -41,8 +41,9 @@ function TooltipAdapter<T>({
 }: ITooltipProps<T> & {
   handler: MutableRefObject<TooltipHandler | null>;
 }) {
+  const [visible, setVisible] = useState(false);
   const [datum, setDatum] = useState(null as T | null);
-  const [placement, setPlacement] = useState('bottom' as keyof typeof popperToAntdPlacments);
+  const [placement, setPlacement] = useState('top' as keyof typeof popperToAntdPlacments);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -75,17 +76,16 @@ function TooltipAdapter<T>({
     });
 
     // handle an vega item
-    handler.current = (_, event, item) => {
-      if (!event) {
-        if (tooltipRef.current) {
-          tooltipRef.current!.style.display = 'none';
-        }
+    handler.current = (_, event, item, value) => {
+      if (!event || !item || value == null || value === '') {
+        setVisible(false);
         return;
       }
-      tooltipRef.current!.style.display = '';
+      setVisible(true);
+      setDatum(resolveDatum(item));
+
       x = event.clientX;
       y = event.clientY;
-      setDatum(resolveDatum(item));
       popper.update().then((r) => {
         setPlacement(
           r.placement === 'auto' || r.placement === 'auto-end' || r.placement === 'auto-start'
@@ -98,12 +98,12 @@ function TooltipAdapter<T>({
     return () => {
       popper.destroy();
     };
-  }, [setDatum, tooltipRef, handler]);
+  }, [setDatum, tooltipRef, handler, setVisible, setPlacement]);
 
   const placementClass = `ant-popover-placement-${popperToAntdPlacments[placement]}`;
   // fake a antd popover
   return (
-    <div ref={tooltipRef} className={classNames('ant-popover', placementClass)}>
+    <div ref={tooltipRef} className={classNames('ant-popover', placementClass, !visible && 'ant-popover-hidden')}>
       <div className="ant-popover-content">
         <div className="ant-popover-arrow">
           <span className="ant-popover-arrow-content"></span>
