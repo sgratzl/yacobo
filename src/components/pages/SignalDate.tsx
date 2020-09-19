@@ -22,7 +22,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
       title={<RegionSelect path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
       description={signal.description(date)}
       previewImage={{
-        url: `/api/signal/${signal.name}/${apiDate}.png`,
+        url: `/api/signal/${signal.id}/${apiDate}.png`,
         width: 570,
         height: 310,
       }}

@@ -2,7 +2,7 @@ import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { RegionSelect } from '@/components/blocks/RegionSelect';
 import SignalSection from '@/components/sections/SignalSection';
-import { signals } from '@/model/signals';
+import { refSignal, signals } from '@/model/signals';
 import { formatAPIDate, formatLocal } from '@/common';
 import { Row } from 'antd';
 import GridColumn from '@/components/blocks/GridColumn';
@@ -16,6 +16,11 @@ export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean
       title={<RegionSelect path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
       subTitle={<DateSelect date={date} path="/date/[date]" clearPath="/" />}
       description={`Overview of the United States as of ${formatAPIDate(date)} showing multiple signals`}
+      previewImage={{
+        url: `/api/signal/${refSignal.id}/${apiDate}.png`,
+        width: 570,
+        height: 310,
+      }}
       breadcrumb={
         dynamic
           ? []

@@ -2,6 +2,7 @@ import { formatAPIDate, formatLocal } from '@/common';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import GridColumn from '@/components/blocks/GridColumn';
+import { refSignal } from '@/model';
 import { Row } from 'antd';
 import dynamic from 'next/dynamic';
 import { useFavorites } from '../blocks/useFavorites';
@@ -29,6 +30,11 @@ export default function FavoritesOverview({ date, dynamic }: { date?: Date; dyna
       mainActive="favorites"
       title="My Favorites"
       description={`Overview of the United States as of ${formatAPIDate(date)} showing the personal favorites`}
+      previewImage={{
+        url: `/api/signal/${refSignal.id}/${formatAPIDate(date)}.png`,
+        width: 570,
+        height: 310,
+      }}
       subTitle={<DateSelect date={date} path={`/favorites/[date]`} clearPath="/" />}
       breadcrumb={[
         {

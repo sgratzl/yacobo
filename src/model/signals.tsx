@@ -40,8 +40,8 @@ const base: (ISignal | false)[] = [
   {
     id: 'fb_survey',
     name: 'Showing Symptoms',
-    description: (date?: Date) => `How many out of 100 participants
-       of the daily Facebook survey${dated('from', date)} show COVID-like symptoms`,
+    description: (date?: Date) =>
+      `How many out of 100 participants of the daily Facebook survey${dated('from', date)} show COVID-like symptoms`,
     longDescription: () => `Each day, Delphi surveys tens of thousands of Facebook users
     and asks them if they or anyone in their household are currently experiencing symptoms.
     Based on the survey results, we estimate the percentage of people with COVID-like
@@ -72,9 +72,10 @@ const base: (ISignal | false)[] = [
     id: 'fb-survey-community',
     name: 'Knowing Someone in Community with Symptoms',
     description: (date?: Date) =>
-      `How many out of 100 participants
-       of the daily Facebook surveyy${dated('from', date)} survey
-       know someone in their local community with COVID-like symptoms`,
+      `How many out of 100 participants of the daily Facebook survey${dated(
+        'from',
+        date
+      )} survey know someone in their local community with COVID-like symptoms`,
     longDescription: () => `Each day, Delphi surveys tens of thousands of Facebook users
     and asks them if they know anyone in their local community who is sick -- with
     fever and either sore throat, cough, shortness of breath, or difficulty breathing.

@@ -18,6 +18,11 @@ export function RegionSignalDate({ region, signal, date }: { region?: IRegion; s
     <BaseLayout
       pageTitle={`${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}
       description={signal?.description(date)}
+      previewImage={{
+        url: `/api/region/${region?.id}/${signal?.id}.png`,
+        width: 450,
+        height: 247,
+      }}
       mainActive="overview"
       title={
         <RegionSelect

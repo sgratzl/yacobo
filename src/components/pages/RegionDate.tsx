@@ -15,6 +15,11 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
       pageTitle={`${region?.name} as of ${formatLocal(date)}`}
       mainActive="overview"
       description={`${region?.name} as of ${formatLocal(date)}`}
+      previewImage={{
+        url: `/api/region/${region?.id}/${refSignal.id}.png`,
+        width: 450,
+        height: 247,
+      }}
       title={<RegionSelect region={region} path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
       subTitle={
         <DateSelect date={date} path={`/region/${region?.id}/date/[date]`} clearPath={`/region/${region?.id}`} />
