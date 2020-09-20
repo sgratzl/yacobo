@@ -2,12 +2,11 @@ import { EyeOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
 import { useCallback } from 'react';
-import { IRegion } from '../../model/regions';
-import { ISignal } from '../../model/signals';
+import { IRegion, ISignal } from '../../model';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { showInfoBox } from '../blocks/SignalInfoBox';
-import { MapImage } from '../blocks/VegaImage';
+import { LineImage } from '../blocks/VegaImage';
 import styles from './SignalSection.module.css';
 
 export default function RegionSignalHistorySection({
@@ -30,7 +29,7 @@ export default function RegionSignalHistorySection({
   return (
     <Card
       className={styles.card}
-      cover={<MapImage signal={signal} date={date} />}
+      cover={<LineImage signal={signal} date={date} region={region} />}
       actions={[
         <Link key="d" href="/region/[region]/[signal]/" as={`/region/${region.id}/${signal.id}`}>
           <Tooltip title="show signal details">

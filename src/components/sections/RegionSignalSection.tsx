@@ -1,8 +1,7 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
-import { ISignal } from '../../model/signals';
-import { IRegion } from '../../model/regions';
+import { ITriple } from '@/model';
 import { formatAPIDate } from '@/common';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
@@ -14,10 +13,7 @@ export default function RegionSignalSection({
   signal,
   date,
   focus = 'both',
-}: {
-  region?: IRegion;
-  signal?: ISignal;
-  date?: Date;
+}: ITriple & {
   focus: 'region' | 'signal' | 'both';
 }) {
   // const valid = isValid(date) && region != null && signal != null;

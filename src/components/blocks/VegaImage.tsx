@@ -1,25 +1,18 @@
 import { ReactNode, Ref, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './VegaImage.module.css';
 import { classNames } from '../utils';
-import { IRegion, isFakeRegion, ISignal } from '@/model';
+import { ITriple, isFakeRegion } from '@/model';
 import { formatAPIDate, formatLocal } from '@/common';
 import { isValid } from 'date-fns';
 import { WarningOutlined, InteractionOutlined } from '@ant-design/icons';
 import { useDateValue, useRegionValue } from '@/client/data';
 import useSWR from 'swr';
-import { fetcher } from '@/client/utils';
+import { addParam, fetcher } from '@/client/utils';
 import dynamic from 'next/dynamic';
 import type { TopLevelSpec } from 'vega-lite';
 import { dateValueTooltip, valueTooltipContent, regionValueTooltip } from './VegaTooltip';
 import type { VegaWrapperProps } from './VegaWrapper';
 import { useRouter } from 'next/router';
-
-function addParam(url: string | undefined, key: string, value?: string | number) {
-  if (!url || value == null) {
-    return url;
-  }
-  return `${url}${url.includes('?') ? '&' : '?'}${key}=${value}`;
-}
 
 function sourceSet(src?: string) {
   if (!src) {
@@ -104,26 +97,9 @@ export function MakeInteractive({ setInteractive }: { setInteractive: (v: boolea
   );
 }
 
-interface IParams {
-  signal?: ISignal;
-  region?: IRegion;
-  date?: Date;
+interface IParams extends ITriple {
   scale?: number;
 }
-
-// function fetchLine(key: string) {
-//   return fetcher<TopLevelSpec>(key).then(
-//     (spec) =>
-//       ({
-//         ...spec,
-//         width: 'container',
-//         height: 'container',
-//         autosize: {
-//           contains: 'padding',
-//         },
-//       } as TopLevelSpec)
-//   );
-// }
 
 const VegaLoader = dynamic(() => import('./VegaWrapper')) as <T>(props: VegaWrapperProps<T>) => JSX.Element;
 

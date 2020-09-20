@@ -2,6 +2,13 @@ import { parseDate } from '@/common/parseDates';
 import useSWR from 'swr';
 import { ISignal, ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../model';
 
+export function addParam(url: string | undefined, key: string, value?: string | number) {
+  if (!url || value == null) {
+    return url;
+  }
+  return `${url}${url.includes('?') ? '&' : '?'}${key}=${value}`;
+}
+
 export function fetcher<T = any>(path: string): Promise<T> {
   return fetch(path).then((r) => r.json());
 }

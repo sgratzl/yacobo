@@ -11,6 +11,7 @@ import {
   plainLabel,
   RequiredValue,
   signals,
+  ITriple,
 } from '@/model';
 import { FallOutlined, RiseOutlined } from '@ant-design/icons';
 import { Spin, Statistic, Table, Tooltip } from 'antd';
@@ -18,6 +19,7 @@ import { formatDistance, isValid, subDays } from 'date-fns';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
+import { classNames } from '../utils';
 import styles from './RegionSignalKeyFacts.module.css';
 
 interface IDateTableRow {
@@ -28,7 +30,7 @@ interface IDateTableRow {
   state?: number;
 }
 
-function useKeyFacts(region?: IRegion, signal?: ISignal, date?: Date) {
+function useKeyFacts({ region, signal, date }: ITriple = {}) {
   const valid = region != null && signal != null && isValid(date);
   return useSWR(
     valid ? `/api/region/${region?.id}/${signal?.id}/${formatAPIDate(date)}.json` : null,
@@ -36,16 +38,8 @@ function useKeyFacts(region?: IRegion, signal?: ISignal, date?: Date) {
   );
 }
 
-export function RegionSignalKeyFactsTable({
-  region,
-  signal,
-  date,
-}: {
-  region?: IRegion;
-  signal?: ISignal;
-  date?: Date;
-}) {
-  const { data } = useKeyFacts(region, signal, date);
+export function RegionSignalKeyFactsTable({ region, signal, date }: ITriple) {
+  const { data } = useKeyFacts({ region, signal, date });
   const dataSource = asDataSource(data, date, region);
 
   const renderDateLink = useCallback(
@@ -140,8 +134,8 @@ function resolveTrend(current?: RequiredValue<IRegionDateValue> | null, data?: R
   );
 }
 
-export function RegionSignalKeyFacts({ region, signal, date }: { region?: IRegion; signal?: ISignal; date?: Date }) {
-  const { data } = useKeyFacts(region, signal, date);
+export function RegionSignalKeyFacts({ region, signal, date }: ITriple) {
+  const { data } = useKeyFacts({ region, signal, date });
 
   const current =
     data && region && date
@@ -176,7 +170,7 @@ function fetchRegionMultiDate(key: string): Promise<RequiredValue<ISignalDateVal
   );
 }
 
-function useKeyMultiFacts(region?: IRegion, date?: Date) {
+function useKeyMultiFacts({ region, date }: { region?: IRegion; date?: Date } = {}) {
   const valid = region != null && isValid(date);
   return useSWR(valid ? `/api/region/${region?.id}/date/${formatAPIDate(date)}.json` : null, fetchRegionMultiDate);
 }
@@ -194,8 +188,8 @@ const renderValue = (value: number | null) => {
   return <span>{value == null ? 'Missing' : formatFixedValue(value)}</span>;
 };
 
-export function KeySignalMultiFacts({ region, date }: { region?: IRegion; date?: Date }) {
-  const { data } = useKeyMultiFacts(region, date);
+export function KeySignalMultiFacts({ region, date, signal }: ITriple) {
+  const { data } = useKeyMultiFacts({ region, date });
   const bySignal = new Map(data?.map((row) => [row.signal, row]) ?? []);
 
   const dataSource: ISignalTableRow[] = signals.map((signal) => ({
@@ -212,11 +206,13 @@ export function KeySignalMultiFacts({ region, date }: { region?: IRegion; date?:
           href="/region/[region]/[signal]/[date]"
           as={`/region/${region?.id}/${row.signal.id}/${formatAPIDate(date)}`}
         >
-          <a href="a">{value}</a>
+          <a href="a" className={classNames(signal?.id === row.signal.id && styles.highlight)}>
+            {value}
+          </a>
         </Link>
       );
     },
-    [region, date]
+    [region, date, signal]
   );
 
   return (

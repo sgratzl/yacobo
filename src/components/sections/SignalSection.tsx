@@ -1,4 +1,4 @@
-import { ISignal } from '../../model/signals';
+import { ITriple, ISignal } from '@/model';
 import { Button, Card, Tooltip } from 'antd';
 import { QuestionOutlined, EyeOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import { DownloadMenu } from '../blocks/DownloadMenu';
 import { formatAPIDate } from '@/common';
 import { showInfoBox } from '../blocks/SignalInfoBox';
 
-export default function SignalSection({ signal, date }: { signal: ISignal; date?: Date }) {
+export default function SignalSection({ signal, date, region }: ITriple & { signal: ISignal }) {
   const apiDate = formatAPIDate(date);
 
   const showInfo = useCallback(() => {
@@ -20,7 +20,7 @@ export default function SignalSection({ signal, date }: { signal: ISignal; date?
   return (
     <Card
       className={styles.card}
-      cover={<MapImage signal={signal} date={date} />}
+      cover={<MapImage signal={signal} date={date} region={region} />}
       actions={[
         <Link key="d" href="/signal/[signal]/[date]" as={`/signal/${signal.id}/${apiDate}`}>
           <Tooltip title="show signal details">

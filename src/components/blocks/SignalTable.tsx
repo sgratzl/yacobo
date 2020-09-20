@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
 import { IRegionObjectValue, useDateValue, useRegionValue } from '../../client/data';
 import { formatAPIDate, formatFixedValue } from '../../common';
-import { getValueScale, IDateValue, IRegion, ISignal, ISignalWithMeta } from '../../model';
+import { getValueScale, IDateValue, IRegion, ISignal, ISignalWithMeta, ITriple } from '../../model';
+import { classNames } from '../utils';
 import styles from './SignalTable.module.css';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
@@ -54,7 +55,7 @@ function useRenderBarValue(signal?: ISignal) {
 //   })),
 // ];
 
-export default function SignalTable({ signal, date }: { signal: ISignal; date?: Date }) {
+export default function SignalTable({ signal, date, region }: ITriple) {
   const apiDate = formatAPIDate(date);
   const { data } = useRegionValue(signal, date);
   const filtered = useMemo(() => data?.filter((d) => !d.region.endsWith('000')), [data]);
@@ -62,17 +63,19 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
   const renderRegion = useCallback(
     (value: string, row: IRegionObjectValue) => {
       return (
-        <Link href="/region/[region]/[signal]/[date]" as={`/region/${row.region}/${signal.id}/${apiDate}`} passHref>
-          <a href="a">{value}</a>
+        <Link href="/region/[region]/[signal]/[date]" as={`/region/${row.region}/${signal?.id}/${apiDate}`} passHref>
+          <a href="a" className={classNames(region?.id === row.region && styles.highlight)}>
+            {value}
+          </a>
         </Link>
       );
     },
-    [signal, apiDate]
+    [signal, apiDate, region]
   );
   const renderState = useCallback(
     (value: string) => {
       return (
-        <Link href="/region/[region]/[signal]/[date]" as={`/region/${value}/${signal.id}/${apiDate}`} passHref>
+        <Link href="/region/[region]/[signal]/[date]" as={`/region/${value}/${signal?.id}/${apiDate}`} passHref>
           <a href="a">{value}</a>
         </Link>
       );
@@ -98,7 +101,7 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
         sortDirections={['ascend', 'descend']}
       />
       <Table.Column<IRegionObjectValue>
-        title={signal.name}
+        title={signal?.name}
         dataIndex="value"
         render={renderBarValue}
         align="right"
@@ -106,7 +109,7 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
         sorter={compareValue}
         sortDirections={['descend', 'ascend']}
       />
-      {signal.data.hasStdErr && (
+      {signal?.data.hasStdErr && (
         <Table.Column<IRegionObjectValue>
           title="Standard Error"
           dataIndex="stderr"
@@ -120,7 +123,7 @@ export default function SignalTable({ signal, date }: { signal: ISignal; date?: 
   );
 }
 
-export function DateTable({ signal, region }: { signal?: ISignal; region?: IRegion }) {
+export function DateTable({ signal, region, date }: ITriple) {
   const { data } = useDateValue(region, signal);
 
   const renderDate = useCallback(
@@ -131,11 +134,13 @@ export function DateTable({ signal, region }: { signal?: ISignal; region?: IRegi
           as={`/region/${region!.id}/${signal!.id}/${formatAPIDate(value)}`}
           passHref
         >
-          <a href="a">{formatAPIDate(value)}</a>
+          <a href="a" className={classNames(formatAPIDate(value) === formatAPIDate(date) && styles.highlight)}>
+            {formatAPIDate(value)}
+          </a>
         </Link>
       );
     },
-    [signal, region]
+    [signal, region, date]
   );
   const renderBarValue = useRenderBarValue(signal);
 

@@ -3,7 +3,7 @@ import { DateSelect } from '@/components/blocks/DateSelect';
 import { RegionSelect } from '@/components/blocks/RegionSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { formatAPIDate, formatLocal } from '@/common';
-import { IRegion, ISignal } from '@/model';
+import { ITriple } from '@/model';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
@@ -12,7 +12,7 @@ import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { LineImage, MapImage } from '../blocks/VegaImage';
 import ContentLayout from '../blocks/ContentLayout';
 
-export function RegionSignalDate({ region, signal, date }: { region?: IRegion; signal?: ISignal; date?: Date }) {
+export function RegionSignalDate({ region, signal, date }: ITriple) {
   const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
