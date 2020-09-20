@@ -11,19 +11,39 @@
   },
   "servers": [
     {
+      "url": "http://localhost:3000/api",
+      "description": "Local server"
+    },
+    {
       "url": "https://yacobo.vercel.app/api",
       "description": "Production server"
     },
     {
       "url": "https://yacobo-git-develop.sgratzl.vercel.app/",
       "description": "Development server"
-    },
-    {
-      "url": "http://localhost:3000/api",
-      "description": "Local server"
     }
   ],
   "paths": {
+    "/signal": {
+      "get": {
+        "summary": "returns signal meta data",
+        "responses": {
+          "200": {
+            "description": "signal meta data info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SignalMeta"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/region/{region}": {
       "get": {
         "summary": "redirects to the latest date",
@@ -51,7 +71,7 @@
           }
         ],
         "responses": {
-          "400": {
+          "200": {
             "description": "signal date info",
             "content": {
               "application/json": {
@@ -64,6 +84,174 @@
                       },
                       {
                         "$ref": "#/components/schemas/Signal"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Date"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/region/{region}/{signal}": {
+      "get": {
+        "summary": "returns region signal history",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/region"
+          },
+          {
+            "$ref": "#/components/parameters/signal"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "signal date info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Value"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Date"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/region/{region}/{signal}/{date}": {
+      "get": {
+        "summary": "returns region signal history",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/region"
+          },
+          {
+            "$ref": "#/components/parameters/signal"
+          },
+          {
+            "$ref": "#/components/parameters/date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "signal date info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Value"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Region"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Date"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signal/{signal}": {
+      "get": {
+        "summary": "redirects to the latest date",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/signal"
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "redirect to the latest date"
+          }
+        }
+      }
+    },
+    "/signal/date/{date}": {
+      "get": {
+        "summary": "returns alls signals",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/signal"
+          },
+          {
+            "$ref": "#/components/parameters/date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "signal region info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Value"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Region"
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signal/{signal}/{date}": {
+      "get": {
+        "summary": "returns signal for all regions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/signal"
+          },
+          {
+            "$ref": "#/components/parameters/date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "signal region info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Value"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Region"
                       }
                     ]
                   }
@@ -77,6 +265,29 @@
   },
   "components": {
     "schemas": {
+      "SignalMeta": {
+        "type": "object",
+        "properties": {
+          "signal": {
+            "type": "string"
+          },
+          "mean": {
+            "type": "number"
+          },
+          "stdev": {
+            "type": "number"
+          },
+          "minTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maxTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["signal", "mean", "stdev", "minTime", "maxTime"]
+      },
       "Value": {
         "type": "object",
         "properties": {
@@ -113,7 +324,7 @@
         "properties": {
           "date": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
           }
         },
         "required": ["date"]
@@ -130,30 +341,64 @@
     "parameters": {
       "region": {
         "name": "region",
-        "in": "query",
+        "in": "path",
         "description": "The region to query",
         "required": true,
-        "example": ["01", "01010"],
+        "examples": {
+          "42": {
+            "description": "42 - Pennsylvania",
+            "value": "42"
+          },
+          "42003": {
+            "description": "42003 - Allegheny County",
+            "value": "42003"
+          }
+        },
         "schema": {
           "type": "string"
         }
       },
       "signal": {
         "name": "signal",
-        "in": "query",
+        "in": "path",
         "description": "The signal to query",
         "required": true,
-        "example": ["fb_survey", "doctors_visits"],
+        "examples": {
+          "fb_survey": {
+            "description": "Showing Symptoms",
+            "value": "fb_survey"
+          },
+          "doctors_visits": {
+            "description": "Doctor Visits",
+            "value": "doctors_visits"
+          },
+          "cases": {
+            "description": "Confirmed Cases",
+            "value": "cases"
+          },
+          "antigen_tests": {
+            "description": "COVID-19 Antigen Tests",
+            "value": "antigen_tests"
+          },
+          "hospital_admissions": {
+            "description": "Hospital Admissions",
+            "value": "hospital_admissions"
+          },
+          "deaths": {
+            "description": "Confirmed Deaths",
+            "value": "deaths"
+          }
+        },
         "schema": {
           "type": "string"
         }
       },
       "date": {
         "name": "date",
-        "in": "query",
+        "in": "path",
         "description": "The date to query",
         "required": true,
-        "example": ["2020-07-02"],
+        "example": "2020-07-02",
         "schema": {
           "type": "string",
           "format": "date"
