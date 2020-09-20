@@ -1,10 +1,12 @@
 import { formatAPIDate } from '@/common';
-import { isValid } from 'date-fns';
+import { isValid, subDays, addDays } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import styles from './Select.module.css';
 import DatePicker from './DatePicker';
 import { injectQuery } from './BaseLayout';
+import { Button, Tooltip } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 export function DateSelect({ date, path, clearPath }: { date?: Date; path: string; clearPath?: string }) {
   const router = useRouter();
@@ -18,6 +20,16 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
     },
     [router, path, clearPath]
   );
+  const previous = useCallback(() => {
+    if (date) {
+      onSelect(subDays(date, 1));
+    }
+  }, [date, onSelect]);
+  const next = useCallback(() => {
+    if (date) {
+      onSelect(addDays(date, 1));
+    }
+  }, [date, onSelect]);
   const dd = !date || !isValid(date) ? undefined : date;
   return (
     <span>
@@ -30,6 +42,16 @@ export function DateSelect({ date, path, clearPath }: { date?: Date; path: strin
         allowClear={clearPath != null}
         format="MMM, d"
       />
+      <Tooltip title="Go to the previous day">
+        <Button onClick={previous}>
+          <LeftOutlined />
+        </Button>
+      </Tooltip>
+      <Tooltip title="Go to the next day">
+        <Button onClick={next}>
+          <RightOutlined />
+        </Button>
+      </Tooltip>
     </span>
   );
 }
