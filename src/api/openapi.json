@@ -27,6 +27,7 @@
     "/signal": {
       "get": {
         "summary": "returns signal meta data",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "signal meta data info",
@@ -53,6 +54,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/region"
+          },
+          {
+            "$ref": "#/components/parameters/details"
           }
         ],
         "responses": {
@@ -74,6 +78,9 @@
           },
           {
             "$ref": "#/components/parameters/date"
+          },
+          {
+            "$ref": "#/components/parameters/details"
           }
         ],
         "responses": {
@@ -90,6 +97,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/Signal"
+                      },
+                      {
+                        "$ref": "#/components/schemas/SignalDetails"
                       },
                       {
                         "$ref": "#/components/schemas/Date"
@@ -144,27 +154,6 @@
         }
       }
     },
-    "/region/{region}/{signal}.csv": {
-      "get": {
-        "summary": "returns region signal history in CSV format",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/region"
-          },
-          {
-            "$ref": "#/components/parameters/signal"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/CSVFile"
-          },
-          "5XX": {
-            "$ref": "#/components/responses/GeneralError"
-          }
-        }
-      }
-    },
     "/region/{region}/{signal}/{date}": {
       "get": {
         "summary": "returns region signal history",
@@ -177,6 +166,9 @@
           },
           {
             "$ref": "#/components/parameters/date"
+          },
+          {
+            "$ref": "#/components/parameters/details"
           }
         ],
         "responses": {
@@ -193,6 +185,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/Region"
+                      },
+                      {
+                        "$ref": "#/components/schemas/RegionDetails"
                       },
                       {
                         "$ref": "#/components/schemas/Date"
@@ -215,6 +210,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/signal"
+          },
+          {
+            "$ref": "#/components/parameters/details"
           }
         ],
         "responses": {
@@ -236,6 +234,9 @@
           },
           {
             "$ref": "#/components/parameters/date"
+          },
+          {
+            "$ref": "#/components/parameters/details"
           }
         ],
         "responses": {
@@ -252,6 +253,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/Region"
+                      },
+                      {
+                        "$ref": "#/components/schemas/RegionDetails"
                       },
                       {
                         "$ref": "#/components/schemas/MultiSignal"
@@ -277,6 +281,9 @@
           },
           {
             "$ref": "#/components/parameters/date"
+          },
+          {
+            "$ref": "#/components/parameters/details"
           }
         ],
         "responses": {
@@ -293,6 +300,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/Region"
+                      },
+                      {
+                        "$ref": "#/components/schemas/RegionDetails"
                       }
                     ]
                   }
@@ -456,6 +466,75 @@
         "schema": {
           "type": "string",
           "format": "date"
+        }
+      },
+      "scale": {
+        "name": "scale",
+        "in": "query",
+        "description": "Scale the returned image by the given factor",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "dpr": {
+        "name": "dpr",
+        "in": "query",
+        "description": "Render the image X times in the resolution to accommodate device pixel ratio (dpr)",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "details": {
+        "name": "details",
+        "in": "query",
+        "description": "Return more details in the JSON/CSV file",
+        "required": false,
+        "allowEmptyValue": true,
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "detailsVG": {
+        "name": "details",
+        "in": "query",
+        "description": "Includes data in the VEGA spec file",
+        "required": false,
+        "allowEmptyValue": true,
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "highlightRegion": {
+        "name": "highlight",
+        "in": "query",
+        "description": "Highlight the given region in the image",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "highlightDate": {
+        "name": "highlight",
+        "in": "query",
+        "description": "Highlight the given date in the image",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "download": {
+        "name": "download",
+        "in": "query",
+        "description": "set the content-disposition header to trigger a download",
+        "required": false,
+        "allowEmptyValue": true,
+        "schema": {
+          "type": "boolean"
         }
       }
     },

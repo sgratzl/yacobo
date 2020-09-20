@@ -20,19 +20,19 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
     ...api.paths,
   };
 
-  // parameters
-  // details
-  // scale
-  // download
-  // highlight
-  // dpr
-
   if (process.env.NODE_ENV === 'production') {
     api.servers.shift(); // shift local host
   }
 
   // generate CSV entries
   generateFormatPaths(paths);
+
+  Object.values(paths).forEach((paths) => {
+    // inject download option
+    paths.get.parameters.push({
+      $ref: '#/components/parameters/download',
+    });
+  });
 
   // inject valid signals
   api.components.parameters.signal.schema.enum = signals.map((d) => d.id);
@@ -63,13 +63,16 @@ function generateFormatPath(
   paths: Record<string, any>,
   format: string,
   key: string,
-  value: { get: { summary: string; parameters?: any[]; responses: any } }
+  value: { get: { summary: string; parameters?: any[]; responses: any } },
+  parameters: { $ref: string }[] = [],
+  details = true
 ) {
   const g = value.get;
+  const cleaned = (g.parameters ?? []).filter((d) => details || !d.$ref.endsWith('details'));
   paths[`${key}.${format}`] = {
     get: {
       summary: `${g.summary} as ${format.toUpperCase()} file`,
-      parameters: g.parameters ?? [],
+      parameters: [...cleaned, ...parameters],
       responses: {
         ...g.responses,
         '200': {
@@ -82,16 +85,48 @@ function generateFormatPath(
 
 const noImages = ['/signal/date/{date}', '/signal'];
 
+const imageParams = [
+  {
+    $ref: '#/components/parameters/scale',
+  },
+  {
+    $ref: '#/components/parameters/dpr',
+  },
+  // parameters
+  // highlightRegion
+  // highlightDate
+];
+
 function generateFormatPaths(paths: Record<string, any>) {
   Object.entries(api.paths).forEach(([key, value]) => {
     generateFormatPath(paths, 'csv', key, value);
     // image formats
-    if (!noImages.includes(key)) {
-      generateFormatPath(paths, 'png', key, value);
-      generateFormatPath(paths, 'vg', key, value);
-      generateFormatPath(paths, 'jpg', key, value);
-      generateFormatPath(paths, 'pdf', key, value);
+    if (noImages.includes(key)) {
+      return;
     }
+    const params = [
+      ...imageParams,
+      {
+        $ref: `#/components/parameters/highlight${key.includes('{date}') ? 'Region' : 'Date'}`,
+      },
+    ];
+    generateFormatPath(paths, 'png', key, value, params);
+    generateFormatPath(paths, 'jpg', key, value, params);
+    generateFormatPath(paths, 'pdf', key, value, params);
+
+    generateFormatPath(
+      paths,
+      'vg',
+      key,
+      value,
+      [
+        ...params,
+        {
+          $ref: '#/components/parameters/detailsVG',
+        },
+      ],
+      false
+    );
   });
   delete paths['/signal.csv'];
 }
