@@ -7,6 +7,7 @@ import GridColumn from '../blocks/GridColumn';
 import { Row, Typography } from 'antd';
 import RegionSignalSection from '../sections/RegionSignalSection';
 import { LineImage } from '../blocks/VegaImage';
+import ContentLayout from '../blocks/ContentLayout';
 
 export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: boolean }) {
   const apiDate = formatAPIDate(date);
@@ -39,21 +40,23 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
           : [],
       ].flat()}
     >
-      <Typography.Title>{region?.name}</Typography.Title>
-      {dynamic && (
-        <>
-          <Typography.Title level={2}>History of {refSignal.name}</Typography.Title>
-          <LineImage scale={2} interactive region={region} signal={refSignal} date={date} />
-          <Typography.Title level={2}>All Signals</Typography.Title>
-        </>
-      )}
-      <Row>
-        {signals.map((s) => (
-          <GridColumn key={s.id}>
-            <RegionSignalSection region={region} signal={s} date={date} focus="signal" />
-          </GridColumn>
-        ))}
-      </Row>
+      <ContentLayout>
+        <Typography.Title>{region?.name}</Typography.Title>
+        {dynamic && (
+          <>
+            <Typography.Title level={2}>History of {refSignal.name}</Typography.Title>
+            <LineImage scale={2} interactive region={region} signal={refSignal} date={date} />
+            <Typography.Title level={2}>All Signals</Typography.Title>
+          </>
+        )}
+        <Row>
+          {signals.map((s) => (
+            <GridColumn key={s.id}>
+              <RegionSignalSection region={region} signal={s} date={date} focus="signal" />
+            </GridColumn>
+          ))}
+        </Row>
+      </ContentLayout>
     </BaseLayout>
   );
 }
