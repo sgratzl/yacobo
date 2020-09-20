@@ -71,18 +71,29 @@ function LoadingImage({ loading, className, error }: { loading: boolean; error: 
 }
 
 function Image({
+  className,
   src,
   imgRef,
   alt,
   scale,
 }: {
+  className?: string;
   src?: string;
   imgRef: Ref<HTMLImageElement>;
   alt: string;
   scale?: number;
 }) {
   const img = addParam(src, 'scale', scale);
-  return <img ref={imgRef} className={styles.abs} data-src={src} src={img} srcSet={sourceSet(img)} alt={alt} />;
+  return (
+    <img
+      ref={imgRef}
+      className={classNames(styles.abs, className)}
+      data-src={src}
+      src={img}
+      srcSet={sourceSet(img)}
+      alt={alt}
+    />
+  );
 }
 
 export function MakeInteractive({ setInteractive }: { setInteractive: (v: boolean) => void }) {
@@ -223,7 +234,15 @@ export function LineImage({
 
   return (
     <div className={classNames(styles.img, styles.imgLine)}>
-      {src && <Image imgRef={imgRef} src={src} alt={`History of ${signal?.name} in ${region?.name}`} scale={scale} />}
+      {src && (
+        <Image
+          className={classNames(loading && styles.loadingImage)}
+          imgRef={imgRef}
+          src={src}
+          alt={`History of ${signal?.name} in ${region?.name}`}
+          scale={scale}
+        />
+      )}
       {valid && !loading && !error && interactive && (
         <InteractiveWrapper>
           <InteractiveLineVega signal={signal} region={region} scale={scale} date={date} />
@@ -256,7 +275,13 @@ export function MapImage({
   return (
     <div className={classNames(styles.img)}>
       {src && (
-        <Image imgRef={imgRef} src={src} alt={`US Map of ${signal?.name} as of ${formatLocal(date)}`} scale={scale} />
+        <Image
+          className={classNames(loading && styles.loadingImage)}
+          imgRef={imgRef}
+          src={src}
+          alt={`US Map of ${signal?.name} as of ${formatLocal(date)}`}
+          scale={scale}
+        />
       )}
       {valid && !loading && !error && interactive && (
         <InteractiveWrapper>

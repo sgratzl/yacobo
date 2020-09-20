@@ -18,6 +18,10 @@
   object-fit: contain;
 }
 
+.loadingImage {
+  opacity: 0;
+}
+
 .overlay {
   background-size: contain;
   background-position: center;
