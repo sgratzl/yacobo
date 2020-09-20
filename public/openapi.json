@@ -1,0 +1,179 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "YaCoBo REST API",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Samuel Gratzl",
+      "email": "sam@sgratzl.com",
+      "url": "https://www.sgratzl.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://yacobo.vercel.app/api",
+      "description": "Production server"
+    },
+    {
+      "url": "https://yacobo-git-develop.sgratzl.vercel.app/",
+      "description": "Development server"
+    },
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/region/{region}": {
+      "get": {
+        "summary": "redirects to the latest date",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/region"
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "redirect to the latest date"
+          }
+        }
+      }
+    },
+    "/region/{region}/date/{date}": {
+      "get": {
+        "summary": "returns region summary",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/region"
+          },
+          {
+            "$ref": "#/components/parameters/date"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "signal date info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Value"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Signal"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Value": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "nullable": true
+          },
+          "stderr": {
+            "type": "number",
+            "nullable": true
+          }
+        }
+      },
+      "Region": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": ["region"]
+      },
+      "Signal": {
+        "type": "object",
+        "properties": {
+          "signal": {
+            "type": "string"
+          }
+        },
+        "required": ["signal"]
+      },
+      "Date": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": ["date"]
+      },
+      "GeneralError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "region": {
+        "name": "region",
+        "in": "query",
+        "description": "The region to query",
+        "required": true,
+        "example": ["01", "01010"],
+        "schema": {
+          "type": "string"
+        }
+      },
+      "signal": {
+        "name": "signal",
+        "in": "query",
+        "description": "The signal to query",
+        "required": true,
+        "example": ["fb_survey", "doctors_visits"],
+        "schema": {
+          "type": "string"
+        }
+      },
+      "date": {
+        "name": "date",
+        "in": "query",
+        "description": "The date to query",
+        "required": true,
+        "example": ["2020-07-02"],
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "responses": {
+      "NotFound": {
+        "description": "Entity not found."
+      },
+      "GeneralError": {
+        "description": "General Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GeneralError"
+            }
+          }
+        }
+      }
+    }
+  }
+}
