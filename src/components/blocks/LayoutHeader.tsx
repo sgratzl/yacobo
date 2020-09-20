@@ -64,7 +64,7 @@ export const LayoutHeader = memo(({ mainActive }: { mainActive: 'overview' | 'co
           <Link href="/favorites">Favorites</Link>
         </Menu.Item>
         <Menu.Item key="api">
-          <Link href="/api">API</Link>
+          <Link href="/openapi">API</Link>
         </Menu.Item>
       </Menu>
       <div className={styles.span} />
