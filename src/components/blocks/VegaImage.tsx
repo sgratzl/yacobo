@@ -229,7 +229,11 @@ export function LineImage({
           <InteractiveLineVega signal={signal} region={region} scale={scale} date={date} />
         </InteractiveWrapper>
       )}
-      <LoadingImage loading={loading} error={error} className={styles.lineOverlay} />
+      <LoadingImage
+        loading={loading}
+        error={error}
+        className={scale === 2 ? styles.lineOverlay2 : styles.lineOverlay}
+      />
     </div>
   );
 }
@@ -259,7 +263,7 @@ export function MapImage({
           <InteractiveMapVega signal={signal} date={date} scale={scale} region={region} />
         </InteractiveWrapper>
       )}
-      <LoadingImage loading={loading} error={error} className={styles.mapOverlay} />
+      <LoadingImage loading={loading} error={error} className={scale === 2 ? styles.mapOverlay2 : styles.mapOverlay} />
     </div>
   );
 }

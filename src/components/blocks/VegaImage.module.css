@@ -57,9 +57,15 @@
 .mapOverlay {
   background-image: url(/api/skeletons/map.png);
 }
+.mapOverlay2 {
+  background-image: url(/api/skeletons/map.png?scale=2);
+}
 
 .lineOverlay {
   background-image: url(/api/skeletons/line.png);
+}
+.lineOverlay2 {
+  background-image: url(/api/skeletons/line.png?scale=2);
 }
 
 .tooltip {
