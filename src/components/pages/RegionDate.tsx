@@ -8,6 +8,8 @@ import { Row, Typography } from 'antd';
 import RegionSignalSection from '../sections/RegionSignalSection';
 import { LineImage } from '../blocks/VegaImage';
 import ContentLayout from '../blocks/ContentLayout';
+import { Fragment } from 'react';
+import RegionSignalHistorySection from '../sections/RegionSignalHistory';
 
 export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: boolean }) {
   const apiDate = formatAPIDate(date);
@@ -51,9 +53,14 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
         )}
         <Row>
           {signals.map((s) => (
-            <GridColumn key={s.id}>
-              <RegionSignalSection region={region} signal={s} date={date} focus="signal" />
-            </GridColumn>
+            <Fragment key={s.id}>
+              <GridColumn>
+                <RegionSignalSection region={region} signal={s} date={date} focus="signal" />
+              </GridColumn>
+              <GridColumn>
+                <RegionSignalHistorySection region={region} signal={s} date={date} focus="signal" />
+              </GridColumn>
+            </Fragment>
           ))}
         </Row>
       </ContentLayout>
