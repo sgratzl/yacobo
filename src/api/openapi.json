@@ -40,6 +40,9 @@
                 }
               }
             }
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
           }
         }
       }
@@ -55,6 +58,9 @@
         "responses": {
           "403": {
             "description": "redirect to the latest date"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
           }
         }
       }
@@ -93,6 +99,9 @@
                 }
               }
             }
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
           }
         }
       }
@@ -128,6 +137,30 @@
                 }
               }
             }
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
+          }
+        }
+      }
+    },
+    "/region/{region}/{signal}.csv": {
+      "get": {
+        "summary": "returns region signal history in CSV format",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/region"
+          },
+          {
+            "$ref": "#/components/parameters/signal"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CSVFile"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
           }
         }
       }
@@ -169,6 +202,9 @@
                 }
               }
             }
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
           }
         }
       }
@@ -184,6 +220,9 @@
         "responses": {
           "403": {
             "description": "redirect to the latest date"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
           }
         }
       }
@@ -215,14 +254,16 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "type": "object",
-                        "additionalProperties": true
+                        "$ref": "#/components/schemas/MultiSignal"
                       }
                     ]
                   }
                 }
               }
             }
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
           }
         }
       }
@@ -258,6 +299,9 @@
                 }
               }
             }
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
           }
         }
       }
@@ -310,6 +354,22 @@
         },
         "required": ["region"]
       },
+      "RegionDetails": {
+        "type": "object",
+        "properties": {
+          "regionName": {
+            "type": "string"
+          },
+          "regionPopulation": {
+            "type": "number",
+            "nullable": true
+          },
+          "regionState": {
+            "type": "string"
+          }
+        },
+        "required": ["regionName"]
+      },
       "Signal": {
         "type": "object",
         "properties": {
@@ -318,6 +378,15 @@
           }
         },
         "required": ["signal"]
+      },
+      "SignalDetails": {
+        "type": "object",
+        "properties": {
+          "signalName": {
+            "type": "string"
+          }
+        },
+        "required": ["signalName"]
       },
       "Date": {
         "type": "object",
@@ -328,6 +397,10 @@
           }
         },
         "required": ["date"]
+      },
+      "MultiSignal": {
+        "type": "object",
+        "properties": {}
       },
       "GeneralError": {
         "type": "object",
@@ -367,30 +440,11 @@
           "fb_survey": {
             "description": "Showing Symptoms",
             "value": "fb_survey"
-          },
-          "doctors_visits": {
-            "description": "Doctor Visits",
-            "value": "doctors_visits"
-          },
-          "cases": {
-            "description": "Confirmed Cases",
-            "value": "cases"
-          },
-          "antigen_tests": {
-            "description": "COVID-19 Antigen Tests",
-            "value": "antigen_tests"
-          },
-          "hospital_admissions": {
-            "description": "Hospital Admissions",
-            "value": "hospital_admissions"
-          },
-          "deaths": {
-            "description": "Confirmed Deaths",
-            "value": "deaths"
           }
         },
         "schema": {
-          "type": "string"
+          "type": "string",
+          "enum": ["fb_survey"]
         }
       },
       "date": {
@@ -407,7 +461,17 @@
     },
     "responses": {
       "NotFound": {
-        "description": "Entity not found."
+        "description": "Entity not found"
+      },
+      "CSV": {
+        "description": "CSV File",
+        "content": {
+          "text/csv": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
       },
       "GeneralError": {
         "description": "General Error",

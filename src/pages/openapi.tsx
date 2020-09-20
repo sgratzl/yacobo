@@ -1,5 +1,5 @@
 import SwaggerUI from 'swagger-ui-react';
 
 export default function OpenAPI() {
-  return <SwaggerUI url="./openapi.json" />;
+  return <SwaggerUI url="./api/openapi.json" />;
 }

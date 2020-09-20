@@ -6,5 +6,5 @@ export function redirectWithFormat(req: NextApiRequest, res: NextApiResponse, su
   if (format < 0) {
     return res.redirect(`${url}/${suffix}`);
   }
-  return res.redirect(`${url.slice(0, format - 1)}/${suffix}${url.slice(format)}`);
+  return res.redirect(`${url.slice(0, format)}/${suffix}${url.slice(format)}`);
 }
