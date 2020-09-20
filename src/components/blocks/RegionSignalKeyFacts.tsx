@@ -185,7 +185,7 @@ function renderSignalOf(signal: ISignal) {
   return `of ${formatValue(signal.data.maxValue)}`;
 }
 const renderValue = (value: number | null) => {
-  return <span>{value == null ? 'Missing' : formatFixedValue(value)}</span>;
+  return <span>{value == null ? '?' : formatFixedValue(value)}</span>;
 };
 
 export function KeySignalMultiFacts({ region, date, signal }: ITriple) {

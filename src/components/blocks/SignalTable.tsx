@@ -12,7 +12,7 @@ import styles from './SignalTable.module.css';
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
 
 const renderStdErr = (value: number | null) => {
-  return <span>{value == null ? 'Missing' : value.toFixed(2)}</span>;
+  return <span>{value == null ? '?' : value.toFixed(2)}</span>;
 };
 
 function generateGradient(meta?: ISignalWithMeta, value?: number | null) {
@@ -29,7 +29,7 @@ function useRenderBarValue(signal?: ISignal) {
   return useCallback(
     (value?: number | null) => {
       if (value == null) {
-        return <div>Missing</div>;
+        return <div>?</div>;
       }
       return (
         <div className={styles.gradient} style={{ background: generateGradient(meta, value) }}>

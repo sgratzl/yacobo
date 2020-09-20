@@ -20,7 +20,7 @@ export default function RegionSection({ region, date, signal }: ITriple) {
           </Tooltip>
         </Link>,
         <FavoriteToggle key="b" region={region} />,
-        <DownloadMenu key="d" path={`/region/${region?.id}/date/${apiDate}`} />,
+        <DownloadMenu img={false} key="d" path={`/region/${region?.id}/date/${apiDate}`} />,
       ]}
     >
       <Card.Meta title={region?.name} className={styles.meta} />
