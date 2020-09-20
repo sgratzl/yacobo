@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
 import { IRegionObjectValue, useDateValue, useRegionValue } from '../../client/data';
 import { formatAPIDate, formatFixedValue } from '../../common';
-import { getValueScale, IDateValue, ISignal, ISignalWithMeta, ITriple } from '../../model';
+import { getValueScale, ICountyRegion, IDateValue, ISignal, ISignalWithMeta, ITriple } from '../../model';
 import { classNames } from '../utils';
 import styles from './SignalTable.module.css';
 
@@ -73,9 +73,13 @@ export default function SignalTable({ signal, date, region }: ITriple) {
     [signal, apiDate, region]
   );
   const renderState = useCallback(
-    (value: string) => {
+    (value: string, row: IRegionObjectValue) => {
       return (
-        <Link href="/region/[region]/[signal]/[date]" as={`/region/${value}/${signal?.id}/${apiDate}`} passHref>
+        <Link
+          href="/region/[region]/[signal]/[date]"
+          as={`/region/${(row.regionObj as ICountyRegion).state.id}/${signal?.id}/${apiDate}`}
+          passHref
+        >
           <a href="a">{value}</a>
         </Link>
       );
