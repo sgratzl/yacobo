@@ -45,6 +45,14 @@
 .interactive:hover {
   opacity: 1;
 }
+/**
+ * hide interactive on mobile devices
+ */
+@media (hover: none) {
+  .interactive {
+    display: none !important;
+  }
+}
 
 .mapOverlay {
   background-image: url(/api/skeletons/map.png);
