@@ -6,6 +6,7 @@ import { useCallback, useMemo } from 'react';
 import { IRegionObjectValue, useDateValue, useRegionValue } from '../../client/data';
 import { formatAPIDate, formatFixedValue } from '../../common';
 import { getValueScale, IDateValue, IRegion, ISignal, ISignalWithMeta } from '../../model';
+import styles from './SignalTable.module.css';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
 
@@ -19,7 +20,7 @@ function generateGradient(meta?: ISignalWithMeta, value?: number | null) {
   }
   const scale = getValueScale(meta, meta.meta);
   const p = Math.round(1000 * scale(value)) / 10;
-  return `linear-gradient(to right, rgba(0,0,0,0.25) ${p}%, transparent ${p}%)`;
+  return `linear-gradient(to right, var(--color) ${p}%, transparent ${p}%)`;
 }
 
 function useRenderBarValue(signal?: ISignal) {
@@ -29,7 +30,11 @@ function useRenderBarValue(signal?: ISignal) {
       if (value == null) {
         return <div>Missing</div>;
       }
-      return <div style={{ background: generateGradient(meta, value) }}>{formatFixedValue(value)}</div>;
+      return (
+        <div className={styles.gradient} style={{ background: generateGradient(meta, value) }}>
+          {formatFixedValue(value)}
+        </div>
+      );
     },
     [meta]
   );

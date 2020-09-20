@@ -1,0 +1,9 @@
+.gradient {
+  --color: #ececec;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gradient {
+    --color: rgba(0, 0, 0, 0.25);
+  }
+}
