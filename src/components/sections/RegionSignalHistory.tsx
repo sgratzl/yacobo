@@ -33,7 +33,7 @@ export default function RegionSignalHistorySection({
       cover={<RegionSignalKeyFacts date={date} region={region} signal={signal} />}
       actions={[
         <Link key="d" href="/region/[region]/[signal]/" as={`/region/${region?.id}/${signal?.id}`}>
-          <Tooltip title="show signal details">
+          <Tooltip title="show details">
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,

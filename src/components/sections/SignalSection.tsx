@@ -23,7 +23,7 @@ export default function SignalSection({ signal, date, region }: ITriple & { sign
       cover={<MapImage signal={signal} date={date} region={region} />}
       actions={[
         <Link key="d" href="/signal/[signal]/[date]" as={`/signal/${signal.id}/${apiDate}`}>
-          <Tooltip title="show signal details">
+          <Tooltip title="show details">
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </Link>,
