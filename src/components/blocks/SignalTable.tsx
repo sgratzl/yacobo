@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
 import { IRegionObjectValue, useDateValue, useRegionValue } from '../../client/data';
 import { formatAPIDate, formatFixedValue } from '../../common';
-import { getValueScale, IDateValue, IRegion, ISignal, ISignalWithMeta, ITriple } from '../../model';
+import { getValueScale, IDateValue, ISignal, ISignalWithMeta, ITriple } from '../../model';
 import { classNames } from '../utils';
 import styles from './SignalTable.module.css';
 
