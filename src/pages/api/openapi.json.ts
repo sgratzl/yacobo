@@ -10,7 +10,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
     req,
     res,
     {
-      title: 'OpenAPI Spec',
+      title: 'openapi',
       cache: CacheDuration.long,
     },
     'json'
@@ -20,18 +20,29 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
     ...api.paths,
   };
 
+  // parameters
+  // details
+  // scale
+  // download
+  // highlight
+  // dpr
+
+  if (process.env.NODE_ENV === 'production') {
+    api.servers.shift(); // shift local host
+  }
+
   // generate CSV entries
-  generateCSVPaths(paths);
+  generateFormatPaths(paths);
 
   // inject valid signals
   api.components.parameters.signal.schema.enum = signals.map((d) => d.id);
   signals.forEach((signal) => {
-    api.components.schemas.MultiSignal.properties[signal.id] = {
+    (api.components.schemas.MultiSignal.properties as any)[signal.id] = {
       type: 'number',
       nullable: true,
     };
     if (signal.data.hasStdErr) {
-      api.components.schemas.MultiSignal.properties[`${signal.id}_stderr`] = {
+      (api.components.schemas.MultiSignal.properties as any)[`${signal.id}_stderr`] = {
         type: 'number',
         nullable: true,
       };
@@ -48,21 +59,39 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
   });
 });
 
-function generateCSVPaths(paths: Record<string, any>) {
-  Object.entries(api.paths).forEach(([key, value]) => {
-    const g = value.get;
-    paths[`${key}.csv`] = {
-      get: {
-        summary: `${g.summary} as CSV file`,
-        parameters: (g as any).parameters ?? [],
-        responses: {
-          ...g.responses,
-          '200': {
-            $ref: '#/components/responses/CSVFile',
-          },
+function generateFormatPath(
+  paths: Record<string, any>,
+  format: string,
+  key: string,
+  value: { get: { summary: string; parameters?: any[]; responses: any } }
+) {
+  const g = value.get;
+  paths[`${key}.${format}`] = {
+    get: {
+      summary: `${g.summary} as ${format.toUpperCase()} file`,
+      parameters: g.parameters ?? [],
+      responses: {
+        ...g.responses,
+        '200': {
+          $ref: `#/components/responses/${format.toUpperCase()}`,
         },
       },
-    };
+    },
+  };
+}
+
+const noImages = ['/signal/date/{date}', '/signal'];
+
+function generateFormatPaths(paths: Record<string, any>) {
+  Object.entries(api.paths).forEach(([key, value]) => {
+    generateFormatPath(paths, 'csv', key, value);
+    // image formats
+    if (!noImages.includes(key)) {
+      generateFormatPath(paths, 'png', key, value);
+      generateFormatPath(paths, 'vg', key, value);
+      generateFormatPath(paths, 'jpg', key, value);
+      generateFormatPath(paths, 'pdf', key, value);
+    }
   });
   delete paths['/signal.csv'];
 }

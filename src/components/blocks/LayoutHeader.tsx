@@ -36,7 +36,7 @@ export function Search() {
   );
 }
 
-export const LayoutHeader = memo(({ mainActive }: { mainActive: string }) => {
+export const LayoutHeader = memo(({ mainActive }: { mainActive: 'overview' | 'compare' | 'favorites' | 'api' }) => {
   return (
     <Layout.Header className={styles.topHeader}>
       <Head>
@@ -62,6 +62,9 @@ export const LayoutHeader = memo(({ mainActive }: { mainActive: string }) => {
         </Menu.Item>
         <Menu.Item key="favorites">
           <Link href="/favorites">Favorites</Link>
+        </Menu.Item>
+        <Menu.Item key="api">
+          <Link href="/api">API</Link>
         </Menu.Item>
       </Menu>
       <div className={styles.span} />
