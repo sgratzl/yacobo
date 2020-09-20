@@ -72,7 +72,6 @@ function createLineChartSpec(
         scale: {
           domainMin: data.minDate.valueOf(),
           domainMax: max.valueOf(),
-          clamp: true,
         },
         axis: {
           titleFontWeight: 'normal',
@@ -126,6 +125,11 @@ function createLineChartSpec(
       },
       {
         selection: {
+          grid: {
+            type: 'interval',
+            bind: 'scales',
+            encodings: ['x'],
+          },
           hover: {
             type: 'single',
             on: 'mouseover',
