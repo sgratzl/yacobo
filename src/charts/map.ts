@@ -5,10 +5,7 @@ import { SchemeParams } from 'vega-lite/build/src/scale';
 import { LayerSpec, TopLevel, UnitSpec } from 'vega-lite/build/src/spec';
 import { font, IVegaOptions } from '.';
 import { fetchSignalMeta } from '../api/data';
-import { getValueDomain, IRegionValue, ISignal } from '../model';
-
-const ZERO_COLOR = 'rgb(242,242,242)';
-const STROKE = '#eaeaea';
+import { getValueDomain, HIGHLIGHT_COLOR, IRegionValue, ISignal, ZERO_COLOR, MAP_STROKE } from '../model';
 
 const MAP_CHART_WIDTH = 500;
 const MAP_CHART_HEIGHT = 300;
@@ -86,7 +83,7 @@ function createLayer(
     },
     mark: {
       type: 'geoshape',
-      stroke: STROKE,
+      stroke: MAP_STROKE,
       opacity: data.hidden ? 0 : 1,
       tooltip: {
         content: 'data',
@@ -142,9 +139,9 @@ function createLayer(
     r.encoding!.stroke = {
       condition: {
         selection: 'hover',
-        value: 'orange',
+        value: HIGHLIGHT_COLOR,
       },
-      value: STROKE,
+      value: MAP_STROKE,
     };
     r.encoding!.strokeWidth = {
       condition: {
@@ -239,7 +236,7 @@ export async function createMap(
         },
         mark: {
           type: 'geoshape',
-          stroke: STROKE,
+          stroke: MAP_STROKE,
           color: missingGradient,
         },
       },

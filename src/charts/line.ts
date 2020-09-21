@@ -1,9 +1,14 @@
 import { fetchMeta } from '../api/data';
 import { TopLevelSpec } from 'vega-lite';
-import { selectEarliestDate } from '../model/constants';
+import {
+  DEFAULT_CHART_AREA_OPACITY,
+  DEFAULT_CHART_COLOR,
+  HIGHLIGHT_COLOR,
+  selectEarliestDate,
+} from '../model/constants';
 import { getValueDomain, ISignal } from '../model/signals';
 import { IVegaOptions, font } from '.';
-import { IDateValue, IRegion } from '@/model';
+import { IDateValue, IRegion, IRegionDateValue } from '@/model';
 import { startOfISODate, startOfISOToday } from '@/common/parseDates';
 import { parseISO } from 'date-fns';
 
@@ -102,8 +107,8 @@ function createLineChartSpec(
         mark: {
           type: 'area',
           interpolate: 'linear',
-          color: 'grey',
-          opacity: 0.25,
+          color: DEFAULT_CHART_COLOR,
+          opacity: DEFAULT_CHART_AREA_OPACITY,
         },
         encoding: {
           y: {
@@ -120,7 +125,7 @@ function createLineChartSpec(
           interpolate: 'linear',
           point: 'transparent',
           strokeCap: 'square',
-          color: 'grey',
+          color: DEFAULT_CHART_COLOR,
         },
       },
       {
@@ -154,9 +159,9 @@ function createLineChartSpec(
           fill: {
             condition: {
               selection: 'hover',
-              value: 'orange',
+              value: HIGHLIGHT_COLOR,
             },
-            value: 'grey',
+            value: DEFAULT_CHART_COLOR,
           },
         },
       },
@@ -188,6 +193,30 @@ export async function createSignalLineChart(
   return createLineChartSpec(
     {
       title: `${region.name} - ${signal.name}`,
+      description: signal.description(),
+      values: values ?? [],
+      minDate,
+      maxValue: getValueDomain(signal, meta)[1],
+      valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
+      hasStdErr: signal.data.hasStdErr,
+    },
+    options
+  );
+}
+
+export async function createSignalMultiLineChart(
+  signal: ISignal,
+  regions: IRegion[],
+  values: IRegionDateValue[] | undefined,
+  options: IVegaOptions
+): Promise<TopLevelSpec> {
+  const metas = await fetchMeta(options.ctx);
+  const meta = metas.find((d) => d.signal === signal.id)!;
+  const minDate = selectEarliestDate(metas);
+  // TODO
+  return createLineChartSpec(
+    {
+      title: `${regions.map((r) => r.name).join(',')} - ${signal.name}`,
       description: signal.description(),
       values: values ?? [],
       minDate,
