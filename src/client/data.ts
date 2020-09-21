@@ -18,6 +18,17 @@ function fetchInjectRegion<T extends IRegionValue>(key: string): Promise<(T & { 
     .then((r: T[]) => r.sort(compareValue).map((row) => ({ ...row, regionObj: regionByID(row.region) })));
 }
 
+function fetchRegionDates(key: string): Promise<(IRegionDateValue & { regionObj: IRegion })[]> {
+  const parse = parseDates<IRegionDateValue>(['date']);
+  return fetch(key)
+    .then((r) => r.json())
+    .then((r: IRegionDateValue[]) =>
+      parse(r)
+        .sort(compareDate)
+        .map((row) => ({ ...row, regionObj: regionByID(row.region) }))
+    );
+}
+
 export function useDateValue(region?: IRegion, signal?: ISignal) {
   return useSWR<IDateValue[]>(signal && region ? `/api/region/${region.id}/${signal.id}.json` : null, fetchDated);
 }
@@ -29,7 +40,7 @@ export interface IRegionObjectDateValue extends IRegionDateValue {
 export function useDateMultiRegionValue(regions: IRegion[], signal?: ISignal) {
   return useSWR<IRegionDateValue[]>(
     signal && regions.length > 0 ? `/api/compare/${regions.map((d) => d.id).join(',')}/${signal.id}.json` : null,
-    fetchInjectRegion
+    fetchRegionDates
   );
 }
 export interface IRegionObjectValue extends IRegionValue {

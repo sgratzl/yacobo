@@ -1,9 +1,10 @@
 import { TreeSelect } from 'antd';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import { IRegion, states } from '../../model';
+import { COMPARE_COLORS, IRegion, states } from '../../model';
 import styles from './Select.module.css';
 import { injectQuery } from './BaseLayout';
+import { TreeSelectProps } from 'antd/lib/tree-select';
 
 export const treeData = [
   {
@@ -51,22 +52,26 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
 export function RegionsSelect({ regions, path, clearPath }: { regions: IRegion[]; path: string; clearPath?: string }) {
   const router = useRouter();
   const onSelect = useCallback(
-    (s: string | null) => {
-      console.log(s);
-      // if (s && s !== 'US') {
-      //   router.push(path, injectQuery(router, path, { region: s }));
-      // } else if (clearPath) {
-      //   router.push(clearPath, injectQuery(router, clearPath));
-      // }
+    (s: string | null | string[]) => {
+      const validRegions = Array.isArray(s) ? s.filter((d) => d !== 'US') : [];
+      if (validRegions.length > 4) {
+        validRegions.splice(3, validRegions.length - 3 - 1);
+      }
+      if (validRegions.length > 0) {
+        router.push(path, injectQuery(router, path, { regions: validRegions.join(',') }));
+      } else if (clearPath) {
+        router.push(clearPath, injectQuery(router, clearPath));
+      }
     },
     [router, path, clearPath]
   );
 
   return (
     <TreeSelect
-      multiple
-      className={`${styles.select} ${styles.selectTree}`}
-      value={regions.map((r) => r.id) as any}
+      multiple={true}
+      maxTagCount={COMPARE_COLORS.length}
+      className={`${styles.select} ${styles.selectTreeMultiple}`}
+      value={regions.length === 0 ? undefined : (regions.map((r) => r.id) as any)}
       onChange={onSelect}
       allowClear={clearPath != null}
       showSearch

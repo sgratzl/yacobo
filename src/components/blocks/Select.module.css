@@ -31,3 +31,37 @@
 .selectTree {
   margin: 0;
 }
+
+.selectTreeMultiple {
+  margin: 0;
+  min-width: 24em;
+}
+
+.selectTreeMultiple :global(.ant-select-selection-item) {
+  position: relative;
+  padding-left: 14px;
+}
+
+.selectTreeMultiple :global(.ant-select-selection-item)::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  top: 50%;
+  left: 2px;
+  transform: translate(0, -50%);
+}
+
+.selectTreeMultiple :global(.ant-select-selection-item):nth-child(1)::before {
+  background: var(--compare-color1);
+}
+.selectTreeMultiple :global(.ant-select-selection-item):nth-child(2)::before {
+  background: var(--compare-color2);
+}
+.selectTreeMultiple :global(.ant-select-selection-item):nth-child(3)::before {
+  background: var(--compare-color3);
+}
+.selectTreeMultiple :global(.ant-select-selection-item):nth-child(4)::before {
+  background: var(--compare-color4);
+}

@@ -1,6 +1,5 @@
 import { IDateValue } from '@/model';
-import { addDays, compareAsc, differenceInDays, parseJSON, subDays } from 'date-fns';
-import { formatAPIDate } from '.';
+import { addDays, compareAsc, differenceInDays, parseJSON } from 'date-fns';
 
 function identity(v: any) {
   return v;
@@ -67,28 +66,11 @@ export function imputeMissingImpl<T extends IDateValue>(data: T[], mixin: Omit<T
       continue;
     }
     // impute one or two dates for the missing values
-    if (diff === 2) {
-      imputed.splice(i, 0, {
-        ...mixin,
-        date: addDays(prev.date, 1),
-      } as any);
-      i++; // skip
-    } else {
-      imputed.splice(
-        i,
-        0,
-        {
-          ...mixin,
-          date: addDays(prev.date, 1),
-        } as any,
-        {
-          ...mixin,
-          date: subDays(current.date, 1),
-        } as any
-      );
-      // start end
-      i += 2;
-    }
+    imputed.splice(i, 0, {
+      ...mixin,
+      date: addDays(prev.date, 1),
+    } as any);
+    i++; // skip
   }
   return imputed;
 }

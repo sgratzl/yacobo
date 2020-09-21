@@ -24,8 +24,16 @@ export function RegionsCompareOverview({
     <BaseLayout
       pageTitle={`${formatLocal(date)}`}
       mainActive="overview"
-      title={<RegionsSelect regions={regions} path={`/compare/[regions]/${apiDate}`} clearPath={`/date/${apiDate}`} />}
-      subTitle={<DateSelect date={date} path={`/compare/${apiRegions}/[date]`} clearPath={`/compare/${apiRegions}`} />}
+      title={
+        <RegionsSelect
+          regions={regions}
+          path={`/compare/[regions]/date/${apiDate}`}
+          clearPath={`/compare/date/${apiDate}`}
+        />
+      }
+      subTitle={
+        <DateSelect date={date} path={`/compare/${apiRegions}/date/[date]`} clearPath={`/compare/${apiRegions}`} />
+      }
       breadcrumb={[
         {
           breadcrumbName: 'Compare',
