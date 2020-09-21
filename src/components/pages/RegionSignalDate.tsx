@@ -9,7 +9,8 @@ import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
 import { Divider, Typography } from 'antd';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
-import { LineImage, MapImage } from '../blocks/VegaImage';
+import { MapImage } from '../blocks/MapImage';
+import { LineImage } from '../blocks/LineImage';
 import ContentLayout from '../blocks/ContentLayout';
 
 export function RegionSignalDate({ region, signal, date }: ITriple) {

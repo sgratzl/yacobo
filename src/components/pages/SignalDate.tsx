@@ -10,7 +10,7 @@ import { formatLocal, formatAPIDate } from '@/common';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { RegionSelect } from '../blocks/RegionSelect';
 import ContentLayout from '../blocks/ContentLayout';
-import { MapImage } from '../blocks/VegaImage';
+import { MapImage } from '../blocks/MapImage';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);

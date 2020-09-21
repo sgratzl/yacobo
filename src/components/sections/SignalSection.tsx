@@ -5,7 +5,7 @@ import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import styles from './Section.module.css';
-import { MapImage } from '../blocks/VegaImage';
+import { MapImage } from '../blocks/MapImage';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { formatAPIDate } from '@/common';
