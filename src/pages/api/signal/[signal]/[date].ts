@@ -16,7 +16,7 @@ export default withMiddleware((req: NextApiRequest, res: NextApiResponse, ctx: I
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${formatAPIDate(date)}`,
     headers: ['region', 'value', 'stderr'],
-    vega: createMap.bind(null, signal),
+    vega: createMap.bind(null, signal, date),
     cache: estimateCacheDuration(date),
     regions: regionByID,
   });

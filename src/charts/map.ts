@@ -1,3 +1,4 @@
+import { formatLocal } from '@/common';
 import { LinearGradient, UrlData } from 'vega';
 import { InlineData, NamedData } from 'vega-lite/build/src/data';
 import { SchemeParams } from 'vega-lite/build/src/scale';
@@ -200,15 +201,20 @@ function createLayer(
   return r;
 }
 
-export async function createMap(signal: ISignal, values: IRegionValue[] | undefined, options: IVegaOptions) {
+export async function createMap(
+  signal: ISignal,
+  date: Date,
+  values: IRegionValue[] | undefined,
+  options: IVegaOptions
+) {
   const meta = await fetchSignalMeta(options.ctx, signal);
   const data = {
     dataSource: await chooseDataSource(options),
     maxValue: getValueDomain(signal, meta)[1],
     valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
     colorScheme: signal.colorScheme,
-    title: signal.name,
-    description: signal.description(),
+    title: `${signal.name} as of ${formatLocal(date)}`,
+    description: signal.description(date),
     hasStdErr: signal.data.hasStdErr,
     forImage: true,
     valuesSource: {
