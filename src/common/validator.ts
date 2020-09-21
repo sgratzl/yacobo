@@ -1,6 +1,6 @@
 import { parseISO } from 'date-fns';
 import { CustomHTTPError } from './error';
-import { regionByID, signalByID } from '../model';
+import { COMPARE_COLORS, regionByID, signalByID } from '../model';
 
 export interface IRouterLike {
   query: { [key: string]: string | string[] | undefined };
@@ -31,6 +31,9 @@ export function extractRegions(res: string | IRouterLike) {
   const regionObjects = regions.split(',').map(regionByID);
   if (regionObjects.length === 0 || regionObjects.some((d) => d == null)) {
     throw new CustomHTTPError(400, `regions "${regions}" missing or some are not valid`);
+  }
+  if (regionObjects.length > COMPARE_COLORS.length) {
+    throw new CustomHTTPError(400, `regions "${regions}" at most ${COMPARE_COLORS.length} values`);
   }
   return regionObjects;
 }

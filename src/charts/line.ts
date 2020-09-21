@@ -202,7 +202,7 @@ export async function createSignalMultiLineChart(
 
   const spec = createLineChartSpec(
     {
-      title: `${regions.map((r) => r.name).join(',')} - ${signal.name}`,
+      title: `${regions.map((r) => r.name).join(' vs. ')} - ${signal.name}`,
       description: signal.description(),
       values: imputeMissing(values ?? [], { region: 'T' }, 'region'),
       minDate,
@@ -224,11 +224,13 @@ export async function createSignalMultiLineChart(
       domain: regions.map((d) => d.id),
       range: COMPARE_COLORS,
     },
-    legend: {
-      title: 'Region',
-      symbolOpacity: 1,
-      labelExpr: `${JSON.stringify(regionLookup)}[datum.value]`,
-    },
+    legend: options.details
+      ? {
+          title: 'Region',
+          symbolOpacity: 1,
+          labelExpr: `${JSON.stringify(regionLookup)}[datum.value]`,
+        }
+      : null,
   };
   spec.layer[spec.layer.length - 1].encoding!.color = {
     condition: {
