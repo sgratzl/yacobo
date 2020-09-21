@@ -4,7 +4,6 @@ import { useCallback } from 'react';
 import { COMPARE_COLORS, IRegion, states } from '../../model';
 import styles from './Select.module.css';
 import { injectQuery } from './BaseLayout';
-import { TreeSelectProps } from 'antd/lib/tree-select';
 
 export const treeData = [
   {
@@ -20,6 +19,33 @@ export const treeData = [
   },
 ];
 
+export function RegionCustomSelect({
+  region,
+  onSelect,
+  allowClear,
+  defaultValue = true,
+}: {
+  region?: IRegion;
+  defaultValue?: boolean;
+  onSelect: (v: string | null) => void;
+  allowClear?: boolean;
+}) {
+  return (
+    <TreeSelect
+      className={`${styles.select} ${styles.selectTree}`}
+      value={region?.id ?? (defaultValue ? 'US' : undefined)}
+      onChange={onSelect}
+      allowClear={allowClear}
+      showSearch
+      treeData={treeData}
+      placeholder="Select Region"
+      treeDefaultExpandedKeys={['US']}
+      treeNodeFilterProp="label"
+      dropdownMatchSelectWidth={300}
+    ></TreeSelect>
+  );
+}
+
 export function RegionSelect({ region, path, clearPath }: { region?: IRegion; path: string; clearPath?: string }) {
   const router = useRouter();
   const onSelect = useCallback(
@@ -33,20 +59,7 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
     [router, path, clearPath]
   );
 
-  return (
-    <TreeSelect
-      className={`${styles.select} ${styles.selectTree}`}
-      value={region?.id ?? 'US'}
-      onChange={onSelect}
-      allowClear={clearPath != null}
-      showSearch
-      treeData={treeData}
-      placeholder="Select Region"
-      treeDefaultExpandedKeys={['US']}
-      treeNodeFilterProp="label"
-      dropdownMatchSelectWidth={300}
-    ></TreeSelect>
-  );
+  return <RegionCustomSelect region={region} onSelect={onSelect} allowClear={clearPath != null} />;
 }
 
 export function RegionsSelect({ regions, path, clearPath }: { regions: IRegion[]; path: string; clearPath?: string }) {

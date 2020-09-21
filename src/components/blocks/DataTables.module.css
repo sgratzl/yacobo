@@ -13,6 +13,11 @@
   }
 }
 
+.compareHint {
+  position: relative;
+  padding-left: 16px;
+}
+
 .compareHint::before {
   content: '';
   position: absolute;
@@ -20,7 +25,7 @@
   width: 10px;
   height: 10px;
   top: 50%;
-  left: 4px;
+  left: 2px;
   transform: translate(0, -50%);
 }
 
