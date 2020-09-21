@@ -50,7 +50,7 @@ function createLineChartSpec(
         from: {
           data: {
             name: 'data',
-            values: data.values.map((d) => ({ ...d, date: d.date.valueOf() })),
+            values: data.values.map((d) => ({ ...d, date: startOfISODate(d.date).valueOf() })),
           },
           key: 'date',
           fields: ['value', data.hasStdErr ? ['stderr'] : []].flat(),
@@ -139,7 +139,7 @@ function createLineChartSpec(
             ...(options.highlight
               ? {
                   init: {
-                    date: parseISO(options.highlight).valueOf(),
+                    date: startOfISODate(parseISO(options.highlight)).valueOf(),
                   },
                 }
               : {}),
