@@ -4,18 +4,13 @@ import { extractRegion, extractSignal } from '@/common/validator';
 import { createSignalLineChart } from '@/charts/line';
 import { fetchSignalRegion } from '@/api/data';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { startOfTomorrow } from 'date-fns';
 import { CacheDuration } from '@/api/model';
-import { startOfISODate } from '@/common/parseDates';
+import { historyRange } from '@/model';
 
 export default withMiddleware((req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
   const { param: signal, format } = extractFormat(req, 'signal', extractSignal);
   const region = extractRegion(req);
-  const data = () =>
-    fetchSignalRegion(ctx, signal.data, region, {
-      from: startOfISODate(new Date(2020, 1, 1)),
-      to: startOfISODate(startOfTomorrow()),
-    });
+  const data = () => fetchSignalRegion(ctx, signal.data, region, historyRange());
 
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${region.name}`,

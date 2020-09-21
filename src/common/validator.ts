@@ -23,6 +23,18 @@ export function extractRegion(res: string | IRouterLike) {
   return regionByID(region);
 }
 
+export function extractRegions(res: string | IRouterLike) {
+  const regions = typeof res === 'string' ? res : (res.query.regions as string);
+  if (!regions) {
+    throw new CustomHTTPError(400, `regions "${regions}" missing`);
+  }
+  const regionObjects = regions.split(',').map(regionByID);
+  if (regionObjects.length === 0 || regionObjects.some((d) => d == null)) {
+    throw new CustomHTTPError(400, `regions "${regions}" missing or some are not valid`);
+  }
+  return regionObjects;
+}
+
 export function extractDate(res: string | IRouterLike) {
   const queryDate = typeof res === 'string' ? res : (res.query.date as string);
   const date = parseISO(queryDate);

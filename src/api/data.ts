@@ -3,6 +3,7 @@ import { parseDates } from '@/common/parseDates';
 import { compareAsc, compareDesc, formatISO, parseISO } from 'date-fns';
 import {
   hasMeta,
+  historyRange,
   IDateValue,
   IEpiDataRow,
   IRegion,
@@ -101,6 +102,44 @@ export function fetchSignalRegion(
         .sort((a, b) => compareAsc(a.date, b.date)),
     parse: parseDates(['date']),
   });
+}
+
+export function fetchSignalRegions(
+  ctx: IRequestContext,
+  signal: ISignal,
+  regions: IRegion[]
+): Promise<IRegionDateValue[]> {
+  const range = historyRange();
+  const key = `${signal.id}-${regions
+    .map((d) => d.id)
+    .sort()
+    .join(',')}`;
+  return fetchCached(
+    ctx,
+    key,
+    () => {
+      return Promise.all(regions.map((region) => fetchSignalRegion(ctx, signal.data, region, range))).then(
+        (regionRows) => {
+          return regions
+            .map((region, i) => {
+              const rows = regionRows[i];
+              return rows.map(
+                (row) =>
+                  ({
+                    region: region.id,
+                    ...row,
+                  } as IRegionDateValue)
+              );
+            })
+            .flat();
+        }
+      );
+    },
+    {
+      cache: CacheDuration.short,
+      parse: parseDates(['date']),
+    }
+  );
 }
 
 export async function fetchSignalRegionDate(
