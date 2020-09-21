@@ -1,5 +1,5 @@
 import BaseLayout from '@/components/blocks/BaseLayout';
-import { DownloadOutlined } from '@ant-design/icons';
+import DownloadOutlined from '@ant-design/icons/DownloadOutlined';
 import { Button, Tooltip } from 'antd';
 import SwaggerUI from 'swagger-ui-react';
 

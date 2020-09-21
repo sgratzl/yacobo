@@ -1,4 +1,8 @@
-import { CopyrightOutlined, DatabaseOutlined, GithubOutlined, HeartOutlined } from '@ant-design/icons';
+import CopyrightOutlined from '@ant-design/icons/CopyrightOutlined';
+import DatabaseOutlined from '@ant-design/icons/DatabaseOutlined';
+import GithubOutlined from '@ant-design/icons/GithubOutlined';
+import HeartOutlined from '@ant-design/icons/HeartOutlined';
+
 import { Layout, Typography } from 'antd';
 import styles from './LayoutFooter.module.css';
 

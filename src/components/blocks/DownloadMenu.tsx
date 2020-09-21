@@ -1,11 +1,9 @@
 import { Button, Dropdown, Menu, notification, Typography } from 'antd';
-import {
-  DownloadOutlined,
-  FileImageOutlined,
-  FileOutlined,
-  FileExcelOutlined,
-  FilePdfOutlined,
-} from '@ant-design/icons';
+import DownloadOutlined from '@ant-design/icons/DownloadOutlined';
+import FileImageOutlined from '@ant-design/icons/FileImageOutlined';
+import FileOutlined from '@ant-design/icons/FileOutlined';
+import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
+import FilePdfOutlined from '@ant-design/icons/FilePdfOutlined';
 import { useCallback } from 'react';
 
 export function DownloadMenu({ path, img = true }: { path: string; img?: boolean }) {

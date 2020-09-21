@@ -1,4 +1,5 @@
-import { StarFilled, StarOutlined } from '@ant-design/icons';
+import StarFilled from '@ant-design/icons/StarFilled';
+import StarOutlined from '@ant-design/icons/StarOutlined';
 import { Button, Tooltip } from 'antd';
 import { ISignal } from '../../model/signals';
 import { IRegion } from '../../model/regions';

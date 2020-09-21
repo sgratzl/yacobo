@@ -6,7 +6,8 @@ import styles from './Select.module.css';
 import DatePicker from './DatePicker';
 import { injectQuery } from './BaseLayout';
 import { Button, Tooltip } from 'antd';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import LeftOutlined from '@ant-design/icons/LeftOutlined';
+import RightOutlined from '@ant-design/icons/RightOutlined';
 
 export function DateSelect({ date, path, clearPath }: { date?: Date; path: string; clearPath?: string }) {
   const router = useRouter();

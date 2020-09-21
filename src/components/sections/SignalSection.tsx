@@ -1,6 +1,7 @@
 import { ITriple, ISignal } from '@/model';
 import { Button, Card, Tooltip } from 'antd';
-import { QuestionOutlined, EyeOutlined } from '@ant-design/icons';
+import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
+import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import styles from './SignalSection.module.css';

@@ -13,7 +13,8 @@ import {
   signals,
   ITriple,
 } from '@/model';
-import { FallOutlined, RiseOutlined } from '@ant-design/icons';
+import FallOutlined from '@ant-design/icons/FallOutlined';
+import RiseOutlined from '@ant-design/icons/RiseOutlined';
 import { Spin, Statistic, Table, Tooltip } from 'antd';
 import { formatDistance, isValid, subDays } from 'date-fns';
 import Link from 'next/link';

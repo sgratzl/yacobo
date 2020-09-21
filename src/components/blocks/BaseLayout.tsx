@@ -1,4 +1,4 @@
-import { UpCircleOutlined } from '@ant-design/icons';
+import UpCircleOutlined from '@ant-design/icons/UpCircleOutlined';
 import { BackTop, Layout, PageHeader } from 'antd';
 import type { BreadcrumbProps } from 'antd/lib/breadcrumb';
 import type { PageHeaderProps } from 'antd/lib/page-header';

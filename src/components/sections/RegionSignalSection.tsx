@@ -1,4 +1,4 @@
-import { EyeOutlined } from '@ant-design/icons';
+import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
 import { ITriple } from '@/model';

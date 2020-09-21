@@ -1,4 +1,5 @@
-import { EyeOutlined, QuestionOutlined } from '@ant-design/icons';
+import EyeOutlined from '@ant-design/icons/EyeOutlined';
+import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
 import { useCallback } from 'react';
