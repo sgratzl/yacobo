@@ -228,7 +228,7 @@ export function LineImage({
 }) {
   const valid = signal != null && region != null;
   const src = valid
-    ? addParam(`/api/region/${region?.id}/${signal?.id}.png`, 'highlight', date ? formatAPIDate(date) : undefined)
+    ? addParam(`/api/region/${region?.id}/${signal?.id}.jpg`, 'highlight', date ? formatAPIDate(date) : undefined)
     : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
@@ -268,7 +268,7 @@ export function MapImage({
 }) {
   const valid = signal != null && isValid(date);
   const src = valid
-    ? addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.png`, 'highlight', region?.id)
+    ? addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.jpg`, 'highlight', region?.id)
     : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
