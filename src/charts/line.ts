@@ -93,7 +93,7 @@ function createLineChartSpec(
           titleFontWeight: 'normal',
           title: data.valueTitle,
           minExtent: 25,
-          tickMinStep: 1,
+          tickMinStep: 0.1,
         },
       },
     },

@@ -114,7 +114,7 @@ function createLayer(
                 titleOrient: 'left',
                 title: data.valueTitle,
                 labelLimit: 30,
-                tickMinStep: 1,
+                tickMinStep: 0.1,
               },
             }
           : {}),
