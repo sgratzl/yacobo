@@ -2,12 +2,12 @@ import { useCallback, useMemo, useState } from 'react';
 import styles from './VegaImage.module.css';
 import { classNames } from '../utils';
 import { isFakeRegion, ITriple } from '@/model';
-import { formatAPIDate } from '@/common';
+import { formatAPIDate, formatLocal } from '@/common';
 import { useDateValue } from '@/client/data';
 import useSWR from 'swr';
 import { addParam, fetcher } from '@/client/utils';
 import { TopLevelSpec } from 'vega-lite';
-import { dateValueTooltip, valueTooltipContent } from './VegaTooltip';
+import { valueTooltipContent } from './VegaTooltip';
 import { useRouter } from 'next/router';
 import { imputeMissing } from '@/common/parseDates';
 import { useImageLoading, Image } from './Image';
@@ -57,6 +57,11 @@ export function LineImage({
     </div>
   );
 }
+
+function dateValueTooltip(datum: { date: number }) {
+  return `${formatLocal(new Date(datum.date))} (Click to select)`;
+}
+
 function InteractiveLineVega({ signal, region, scale, date }: IParams) {
   const { data, error } = useDateValue(region, signal);
   const specUrl = addParam(

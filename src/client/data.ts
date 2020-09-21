@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { IDateValue, IRegion, IRegionValue, ISignal, regionByID } from '../model';
+import { IDateValue, IRegion, IRegionDateValue, IRegionValue, ISignal, regionByID } from '../model';
 import { parseDates } from '@/common/parseDates';
 import { compareDate, compareValue } from './compare';
 import { formatAPIDate } from '@/common';
@@ -12,23 +12,28 @@ function fetchDated(key: string) {
     .then((r: IDateValue[]) => parse(r).sort(compareDate));
 }
 
-export function useDateValue(region?: IRegion, signal?: ISignal) {
-  return useSWR<IDateValue[]>(
-    signal && region ? `/api/region/${region.id}/${signal.id}.json?details` : null,
-    fetchDated
-  );
+function fetchInjectRegion<T extends IRegionValue>(key: string): Promise<(T & { regionObj: IRegion })[]> {
+  return fetch(key)
+    .then((r) => r.json())
+    .then((r: T[]) => r.sort(compareValue).map((row) => ({ ...row, regionObj: regionByID(row.region) })));
 }
 
-export interface IRegionObjectValue extends IRegionValue {
+export function useDateValue(region?: IRegion, signal?: ISignal) {
+  return useSWR<IDateValue[]>(signal && region ? `/api/region/${region.id}/${signal.id}.json` : null, fetchDated);
+}
+
+export interface IRegionObjectDateValue extends IRegionDateValue {
   regionObj: IRegion;
 }
 
-function fetchFilter(key: string) {
-  return fetch(key)
-    .then((r) => r.json())
-    .then((r: IRegionValue[]) =>
-      r.sort(compareValue).map((row) => ({ ...row, regionObj: regionByID(row.region) } as IRegionObjectValue))
-    );
+export function useDateMultiRegionValue(regions: IRegion[], signal?: ISignal) {
+  return useSWR<IRegionDateValue[]>(
+    signal && regions.length > 0 ? `/api/signal/${signal.id}/${regions.map((d) => d.id).join(',')}.json` : null,
+    fetchInjectRegion
+  );
+}
+export interface IRegionObjectValue extends IRegionValue {
+  regionObj: IRegion;
 }
 
 export function useRegionValue(signal?: ISignal, date?: Date) {
@@ -37,7 +42,7 @@ export function useRegionValue(signal?: ISignal, date?: Date) {
 
   return useSWR<IRegionObjectValue[]>(
     validDate && signal != null ? `/api/signal/${signal.id}/${apiDate}.json` : null,
-    fetchFilter,
+    fetchInjectRegion,
     {}
   );
 }

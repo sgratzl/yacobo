@@ -7,12 +7,12 @@ import { useRegionValue } from '@/client/data';
 import useSWR from 'swr';
 import { addParam, fetcher } from '@/client/utils';
 import { TopLevelSpec } from 'vega-lite';
-import { valueTooltipContent, regionValueTooltip } from './VegaTooltip';
+import { valueTooltipContent } from './VegaTooltip';
 import { useRouter } from 'next/router';
 import { useImageLoading, Image } from './Image';
 import { LoadingImage } from './LoadingImage';
 import { InteractiveWrapper, VegaLoader } from './MakeInteractive';
-import { ITriple } from '@/model';
+import { isFakeRegion, ITriple, regionByID } from '@/model';
 
 interface IParams extends ITriple {
   scale?: number;
@@ -64,6 +64,11 @@ function fetchMap(key: string) {
     }
     return spec;
   });
+}
+
+function regionValueTooltip(datum: { region: string }) {
+  const region = regionByID(datum.region);
+  return `${region.name}${!isFakeRegion(region) ? ' (Click to select)' : ''}`;
 }
 
 function InteractiveMapVega({ signal, date, region, scale }: IParams) {
