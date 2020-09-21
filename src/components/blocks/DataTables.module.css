@@ -1,0 +1,38 @@
+.gradient {
+  --color: #ececec;
+  text-align: right;
+}
+
+.gradientMissing {
+  text-align: right;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gradient {
+    --color: #2f2f2f;
+  }
+}
+
+.compareHint::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  top: 50%;
+  left: 4px;
+  transform: translate(0, -50%);
+}
+
+.compareHint[data-i='0']::before {
+  background: var(--compare-color1);
+}
+.compareHint[data-i='1']::before {
+  background: var(--compare-color2);
+}
+.compareHint[data-i='2']::before {
+  background: var(--compare-color3);
+}
+.compareHint[data-i='3']::before {
+  background: var(--compare-color4);
+}

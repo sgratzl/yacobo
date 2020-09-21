@@ -1,7 +1,7 @@
 import type { SortOrder } from 'antd/lib/table/interface';
 import { IDateValue, IRegion, isCountyRegion, IValue } from '../model';
 
-function compare<T>(a?: T | null, b?: T | null, sortOrder?: SortOrder) {
+export function compare<T>(a?: T | null, b?: T | null, sortOrder?: SortOrder) {
   if (a === b) {
     return 0;
   }

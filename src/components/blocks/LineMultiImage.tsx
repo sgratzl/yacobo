@@ -84,7 +84,11 @@ function InteractiveMultiLineVega({ signal, regions, scale, date }: IParams) {
     fetcher
   );
   const numberData = useMemo(
-    () => imputeMissing(data ?? [], { region: 'T' }, 'region').map((d) => ({ ...d, date: d.date.valueOf() })),
+    () =>
+      imputeMissing(data ?? [], { region: 'T', regionObj: undefined as any }, 'region').map((d) => ({
+        ...d,
+        date: d.date.valueOf(),
+      })),
     [data]
   );
   const [ready, setReady] = useState(false);

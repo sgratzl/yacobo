@@ -8,7 +8,7 @@ import ContentLayout from '../blocks/ContentLayout';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
-import { DateTable } from '../blocks/SignalTable';
+import { DateTable } from '../blocks/DataTables';
 import { LineImage } from '../blocks/LineImage';
 
 export function RegionSignal({ region, signal }: { region?: IRegion; signal?: ISignal }) {

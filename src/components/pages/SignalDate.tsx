@@ -2,7 +2,7 @@ import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { FavoriteToggle } from '@/components/blocks/FavoriteToggle';
-import SignalTable from '@/components/blocks/SignalTable';
+import SignalTable from '@/components/blocks/DataTables';
 import { ISignal } from '@/model/signals';
 import { Divider, Typography } from 'antd';
 import { DownloadMenu } from '@/components/blocks/DownloadMenu';

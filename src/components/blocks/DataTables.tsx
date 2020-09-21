@@ -1,13 +1,27 @@
-import { compareDate, compareRegionName, compareRegionState, compareStdErr, compareValue } from '@/client/compare';
+import {
+  compare,
+  compareDate,
+  compareRegionName,
+  compareRegionState,
+  compareStdErr,
+  compareValue,
+} from '@/client/compare';
 import { useFetchSignalMeta } from '@/client/utils';
 import { Table } from 'antd';
 import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
-import { IRegionObjectValue, useDateMultiRegionValue, useDateValue, useRegionValue } from '../../client/data';
+import type { SortOrder } from 'antd/lib/table/interface';
+import {
+  IRegionObjectDateValue,
+  IRegionObjectValue,
+  useDateMultiRegionValue,
+  useDateValue,
+  useRegionValue,
+} from '../../client/data';
 import { formatAPIDate, formatFixedValue } from '../../common';
 import { getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ISignalWithMeta, ITriple } from '../../model';
 import { classNames } from '../utils';
-import styles from './SignalTable.module.css';
+import styles from './DataTables.module.css';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
 
@@ -29,7 +43,7 @@ function useRenderBarValue(signal?: ISignal) {
   return useCallback(
     (value?: number | null) => {
       if (value == null) {
-        return <div>?</div>;
+        return <div className={styles.gradientMissing}>?</div>;
       }
       return (
         <div className={styles.gradient} style={{ background: generateGradient(meta, value) }}>
@@ -180,6 +194,38 @@ export function DateTable({ signal, region, date }: ITriple) {
   );
 }
 
+interface IMultiDateValue {
+  date: Date;
+  values: { [id: string]: number | null | undefined };
+}
+
+function groupByRegion(data: IRegionObjectDateValue[]): IMultiDateValue[] {
+  const rows: IMultiDateValue[] = [];
+  const lookup = new Map<string, IMultiDateValue>();
+  for (const row of data) {
+    const key = formatAPIDate(row.date);
+    if (lookup.has(key)) {
+      lookup.get(key)!.values[row.region] = row.value;
+    } else {
+      const r: IMultiDateValue = {
+        date: row.date,
+        values: {
+          [row.region]: row.value,
+        },
+      };
+      lookup.set(key, r);
+      rows.push(r);
+    }
+  }
+  return rows;
+}
+
+function compareRegionValue(region: IRegion) {
+  return (a: IMultiDateValue, b: IMultiDateValue, sortOrder?: SortOrder) => {
+    return compare(a.values[region.id], b.values[region.id], sortOrder);
+  };
+}
+
 export function DateMultiTable({ signal, regions, date }: { signal?: ISignal; regions: IRegion[]; date?: Date }) {
   const { data } = useDateMultiRegionValue(regions, signal);
   const apiRegions = regions.map((d) => d.id).join(',');
@@ -202,10 +248,14 @@ export function DateMultiTable({ signal, regions, date }: { signal?: ISignal; re
   );
   const renderBarValue = useRenderBarValue(signal);
 
+  const grouped = data ? groupByRegion(data) : undefined;
+
+  const comparators = useMemo(() => regions.map((region) => compareRegionValue(region)), [regions]);
+
   // TODO group by region and show in separate columns
   return (
-    <Table<IDateValue> dataSource={data} loading={!data} rowKey="date">
-      <Table.Column<IDateValue>
+    <Table<IMultiDateValue> dataSource={grouped} loading={!data} rowKey="date">
+      <Table.Column<IMultiDateValue>
         title="Date"
         dataIndex="date"
         render={renderDate}
@@ -213,24 +263,21 @@ export function DateMultiTable({ signal, regions, date }: { signal?: ISignal; re
         defaultSortOrder="descend"
         sortDirections={['ascend', 'descend']}
       />
-      <Table.Column<IDateValue>
-        title={signal?.name ?? 'Signal'}
-        dataIndex="value"
-        render={renderBarValue}
-        align="right"
-        sorter={compareValue}
-        sortDirections={['descend', 'ascend']}
-      />
-      {signal?.data.hasStdErr && (
-        <Table.Column<IDateValue>
-          title="Standard Error"
-          dataIndex="stderr"
-          align="right"
-          render={renderStdErr}
-          sorter={compareStdErr}
+      {regions.map((region, i) => (
+        <Table.Column<IMultiDateValue>
+          key={region.id}
+          align="center"
+          title={
+            <span className={styles.compareHint} data-i={i}>
+              {region.name}
+            </span>
+          }
+          dataIndex={['values', region.id]}
+          render={renderBarValue}
+          sorter={comparators[i]}
           sortDirections={['descend', 'ascend']}
         />
-      )}
+      ))}
     </Table>
   );
 }

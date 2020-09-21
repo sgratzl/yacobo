@@ -8,7 +8,7 @@ import ContentLayout from '../blocks/ContentLayout';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
-import { DateMultiTable } from '../blocks/SignalTable';
+import { DateMultiTable } from '../blocks/DataTables';
 import { LineMultiImage } from '../blocks/LineMultiImage';
 
 export function RegionsSignalCompare({ regions, signal }: { regions: IRegion[]; signal?: ISignal }) {
