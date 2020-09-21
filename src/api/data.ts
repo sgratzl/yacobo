@@ -107,9 +107,9 @@ export function fetchSignalRegion(
 export function fetchSignalRegions(
   ctx: IRequestContext,
   signal: ISignal,
-  regions: IRegion[]
+  regions: IRegion[],
+  range: { from: Date; to: Date } | Date[]
 ): Promise<IRegionDateValue[]> {
-  const range = historyRange();
   const key = `${signal.id}-${regions
     .map((d) => d.id)
     .sort()

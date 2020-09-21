@@ -13,11 +13,11 @@ function FavoriteToggleImpl({
   history,
 }: {
   signal?: ISignal;
-  region?: IRegion;
+  region?: IRegion | IRegion[];
   warning?: boolean;
   history?: boolean;
 }) {
-  const [bookmarked, toggleFavorite] = useFavorite(warning, signal ?? (region as any), region!, history);
+  const [bookmarked, toggleFavorite] = useFavorite(warning, signal ?? (region as any), region! as IRegion, history);
 
   return (
     <Tooltip title={bookmarked ? 'remove from favorites' : 'mark as favorite'}>

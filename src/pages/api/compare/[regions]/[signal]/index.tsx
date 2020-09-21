@@ -6,11 +6,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { regionByID } from '@/model/regions';
 import { CacheDuration } from '@/api/model';
 import { createSignalMultiLineChart } from '@/charts/line';
+import { historyRange } from '@/model';
 
 export default withMiddleware((req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
-  const { param: regions, format } = extractFormat(req, 'regions', extractRegions);
-  const signal = extractSignal(req);
-  const data = () => fetchSignalRegions(ctx, signal, regions);
+  const { param: signal, format } = extractFormat(req, 'signal', extractSignal);
+  const regions = extractRegions(req);
+  const data = () => fetchSignalRegions(ctx, signal, regions, historyRange());
 
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${regions.map((d) => d.name).join(',')}`,

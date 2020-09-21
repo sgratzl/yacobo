@@ -35,7 +35,7 @@ export default function FavoritesOverview({ date, dynamic }: { date?: Date; dyna
       title="My Favorites"
       description={`Overview of the United States as of ${formatAPIDate(date)} showing the personal favorites`}
       previewImage={{
-        url: `/api/signal/${refSignal.id}/${formatAPIDate(date)}.png`,
+        url: `/api/signal/${refSignal.id}/${formatAPIDate(date)}.jpg`,
         width: 570,
         height: 310,
       }}

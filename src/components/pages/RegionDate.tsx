@@ -19,7 +19,7 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
       mainActive="overview"
       description={`${region?.name} as of ${formatLocal(date)}`}
       previewImage={{
-        url: `/api/region/${region?.id}/${refSignal.id}.png?highlight=${formatAPIDate(date)}`,
+        url: `/api/region/${region?.id}/${refSignal.id}.jpg?highlight=${formatAPIDate(date)}`,
         width: 450,
         height: 247,
       }}

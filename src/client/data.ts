@@ -28,7 +28,7 @@ export interface IRegionObjectDateValue extends IRegionDateValue {
 
 export function useDateMultiRegionValue(regions: IRegion[], signal?: ISignal) {
   return useSWR<IRegionDateValue[]>(
-    signal && regions.length > 0 ? `/api/signal/${signal.id}/${regions.map((d) => d.id).join(',')}.json` : null,
+    signal && regions.length > 0 ? `/api/compare/${regions.map((d) => d.id).join(',')}/${signal.id}.json` : null,
     fetchInjectRegion
   );
 }

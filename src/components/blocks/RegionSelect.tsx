@@ -47,3 +47,34 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
     ></TreeSelect>
   );
 }
+
+export function RegionsSelect({ regions, path, clearPath }: { regions: IRegion[]; path: string; clearPath?: string }) {
+  const router = useRouter();
+  const onSelect = useCallback(
+    (s: string | null) => {
+      console.log(s);
+      // if (s && s !== 'US') {
+      //   router.push(path, injectQuery(router, path, { region: s }));
+      // } else if (clearPath) {
+      //   router.push(clearPath, injectQuery(router, clearPath));
+      // }
+    },
+    [router, path, clearPath]
+  );
+
+  return (
+    <TreeSelect
+      multiple
+      className={`${styles.select} ${styles.selectTree}`}
+      value={regions.map((r) => r.id) as any}
+      onChange={onSelect}
+      allowClear={clearPath != null}
+      showSearch
+      treeData={treeData}
+      placeholder="Select Region"
+      treeDefaultExpandedKeys={['US']}
+      treeNodeFilterProp="label"
+      dropdownMatchSelectWidth={300}
+    ></TreeSelect>
+  );
+}

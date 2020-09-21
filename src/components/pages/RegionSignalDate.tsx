@@ -20,7 +20,7 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
       pageTitle={`${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}
       description={signal?.description(date)}
       previewImage={{
-        url: `/api/region/${region?.id}/${signal?.id}.png`,
+        url: `/api/region/${region?.id}/${signal?.id}.jpg`,
         width: 450,
         height: 247,
       }}
@@ -67,7 +67,7 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
     >
       <ContentLayout>
         <Typography.Title>{signal?.name}</Typography.Title>
-        <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
+        <Typography.Paragraph>{signal?.description(date)}</Typography.Paragraph>
         <RegionSignalKeyFacts signal={signal} region={region} date={date} />
         <RegionSignalKeyFactsTable signal={signal} region={region} date={date} />
         <Divider />

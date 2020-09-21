@@ -60,6 +60,9 @@ export const LayoutHeader = memo(({ mainActive }: { mainActive: 'overview' | 'co
         <Menu.Item key="overview">
           <Link href="/">Overview</Link>
         </Menu.Item>
+        <Menu.Item key="compare">
+          <Link href="/compare">Compare</Link>
+        </Menu.Item>
         <Menu.Item key="favorites">
           <Link href="/favorites">Favorites</Link>
         </Menu.Item>

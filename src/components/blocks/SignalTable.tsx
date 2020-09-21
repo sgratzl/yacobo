@@ -3,9 +3,9 @@ import { useFetchSignalMeta } from '@/client/utils';
 import { Table } from 'antd';
 import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
-import { IRegionObjectValue, useDateValue, useRegionValue } from '../../client/data';
+import { IRegionObjectValue, useDateMultiRegionValue, useDateValue, useRegionValue } from '../../client/data';
 import { formatAPIDate, formatFixedValue } from '../../common';
-import { getValueScale, ICountyRegion, IDateValue, ISignal, ISignalWithMeta, ITriple } from '../../model';
+import { getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ISignalWithMeta, ITriple } from '../../model';
 import { classNames } from '../utils';
 import styles from './SignalTable.module.css';
 
@@ -148,6 +148,61 @@ export function DateTable({ signal, region, date }: ITriple) {
   );
   const renderBarValue = useRenderBarValue(signal);
 
+  return (
+    <Table<IDateValue> dataSource={data} loading={!data} rowKey="date">
+      <Table.Column<IDateValue>
+        title="Date"
+        dataIndex="date"
+        render={renderDate}
+        sorter={compareDate}
+        defaultSortOrder="descend"
+        sortDirections={['ascend', 'descend']}
+      />
+      <Table.Column<IDateValue>
+        title={signal?.name ?? 'Signal'}
+        dataIndex="value"
+        render={renderBarValue}
+        align="right"
+        sorter={compareValue}
+        sortDirections={['descend', 'ascend']}
+      />
+      {signal?.data.hasStdErr && (
+        <Table.Column<IDateValue>
+          title="Standard Error"
+          dataIndex="stderr"
+          align="right"
+          render={renderStdErr}
+          sorter={compareStdErr}
+          sortDirections={['descend', 'ascend']}
+        />
+      )}
+    </Table>
+  );
+}
+
+export function DateMultiTable({ signal, regions, date }: { signal?: ISignal; regions: IRegion[]; date?: Date }) {
+  const { data } = useDateMultiRegionValue(regions, signal);
+  const apiRegions = regions.map((d) => d.id).join(',');
+
+  const renderDate = useCallback(
+    (value: Date) => {
+      return (
+        <Link
+          href="/compare/[regions]/[signal]/[date]"
+          as={`/compare/${apiRegions}/${signal!.id}/${formatAPIDate(value)}`}
+          passHref
+        >
+          <a href="a" className={classNames(formatAPIDate(value) === formatAPIDate(date) && styles.highlight)}>
+            {formatAPIDate(value)}
+          </a>
+        </Link>
+      );
+    },
+    [signal, apiRegions, date]
+  );
+  const renderBarValue = useRenderBarValue(signal);
+
+  // TODO group by region and show in separate columns
   return (
     <Table<IDateValue> dataSource={data} loading={!data} rowKey="date">
       <Table.Column<IDateValue>

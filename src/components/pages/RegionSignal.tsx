@@ -18,7 +18,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
       mainActive="overview"
       description={`${region?.name}: ${signal?.description()}`}
       previewImage={{
-        url: `/api/region/${region?.id}/${signal?.id}.png`,
+        url: `/api/region/${region?.id}/${signal?.id}.jpg`,
         width: 450,
         height: 247,
       }}

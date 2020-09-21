@@ -59,17 +59,17 @@
 }
 
 .mapOverlay {
-  background-image: url(/api/skeletons/map.png);
+  background-image: url(/api/skeletons/map.jpg);
 }
 .mapOverlay2 {
-  background-image: url(/api/skeletons/map.png?scale=2);
+  background-image: url(/api/skeletons/map.jpg?scale=2);
 }
 
 .lineOverlay {
-  background-image: url(/api/skeletons/line.png);
+  background-image: url(/api/skeletons/line.jpg);
 }
 .lineOverlay2 {
-  background-image: url(/api/skeletons/line.png?scale=2);
+  background-image: url(/api/skeletons/line.jpg?scale=2);
 }
 
 .tooltip {
