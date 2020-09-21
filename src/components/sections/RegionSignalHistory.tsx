@@ -8,7 +8,7 @@ import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { showInfoBox } from '../blocks/SignalInfoBox';
 import { LineImage } from '../blocks/VegaImage';
-import styles from './SignalSection.module.css';
+import styles from './Section.module.css';
 import { RegionSignalKeyFacts } from '../blocks/RegionSignalKeyFacts';
 
 export default function RegionSignalHistorySection({

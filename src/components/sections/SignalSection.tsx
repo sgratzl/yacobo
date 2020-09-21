@@ -4,7 +4,7 @@ import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import Link from 'next/link';
 import { useCallback } from 'react';
-import styles from './SignalSection.module.css';
+import styles from './Section.module.css';
 import { MapImage } from '../blocks/VegaImage';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';

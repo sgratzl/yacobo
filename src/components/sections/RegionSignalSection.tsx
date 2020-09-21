@@ -5,7 +5,7 @@ import { ITriple } from '@/model';
 import { formatAPIDate } from '@/common';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
-import styles from './SignalSection.module.css';
+import styles from './Section.module.css';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
 
 export default function RegionSignalSection({
