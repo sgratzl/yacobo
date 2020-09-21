@@ -14,3 +14,21 @@
 .meta {
   margin-bottom: 1em;
 }
+
+.coverIcon {
+  padding-top: 60%;
+  position: relative;
+}
+
+.coverIcon > :global(span) {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 10%;
+  bottom: 10%;
+}
+.coverIcon :global(svg) {
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+}

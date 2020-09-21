@@ -6,7 +6,7 @@ import { refSignal } from '@/model';
 import { Row } from 'antd';
 import dynamic from 'next/dynamic';
 import { useFavorites } from '../blocks/useFavorites';
-import AddFavorite from '../sections/AddFavorite';
+// import AddFavorite from '../sections/AddFavorite';
 import FavoriteSection from '../sections/FavoriteSection';
 
 function FavoritesGrid({ date }: { date?: Date }) {
@@ -18,9 +18,9 @@ function FavoritesGrid({ date }: { date?: Date }) {
           <FavoriteSection favorite={favorite} date={date} />
         </GridColumn>
       ))}
-      <GridColumn>
-        <AddFavorite />
-      </GridColumn>
+      {/* <GridColumn>
+          <AddFavorite />
+        </GridColumn> */}
     </Row>
   );
 }
