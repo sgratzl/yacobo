@@ -3,7 +3,6 @@ import { parseDates } from '@/common/parseDates';
 import { compareAsc, compareDesc, formatISO, parseISO } from 'date-fns';
 import {
   hasMeta,
-  historyRange,
   IDateValue,
   IEpiDataRow,
   IRegion,

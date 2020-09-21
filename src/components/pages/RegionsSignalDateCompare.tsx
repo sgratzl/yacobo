@@ -4,13 +4,15 @@ import { DateSelect } from '@/components/blocks/DateSelect';
 import { RegionsSelect } from '@/components/blocks/RegionSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { IRegion, ISignal } from '@/model';
-import { Divider, Typography } from 'antd';
+import { Divider, Row, Typography } from 'antd';
+import { Comparing } from '../blocks/Comparing';
 import ContentLayout from '../blocks/ContentLayout';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
+import GridColumn from '../blocks/GridColumn';
 import { LineMultiImage } from '../blocks/LineMultiImage';
-import { MapImage } from '../blocks/MapImage';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
+import RegionSignalSection from '../sections/RegionSignalSection';
 
 export function RegionsSignalDateCompare({
   regions,
@@ -80,13 +82,21 @@ export function RegionsSignalDateCompare({
       <ContentLayout>
         <Typography.Title>{signal?.name}</Typography.Title>
         <Typography.Paragraph>{signal?.description(date)}</Typography.Paragraph>
-        {/* <Regions signal={signal} region={region} date={date} /> */}
-        {/* <RegionSignalKeyFactsTable signal={signal} region={region} date={date} /> */}
+        <Divider />
+        <Comparing
+          regions={regions}
+          path={`/compare/[regions]/${signal?.id}/${apiDate}`}
+          clearPath={`/signal/${signal?.id}/${apiDate}`}
+        />
+        <Row>
+          {regions.map((region) => (
+            <GridColumn key={region.id}>
+              <RegionSignalSection region={region} signal={signal} date={date} focus="region" />
+            </GridColumn>
+          ))}
+        </Row>
         <Divider />
         <SignalInfoBlock signal={signal} />
-        <Divider />
-        <Typography.Title level={2}>Overview</Typography.Title>
-        <MapImage scale={2} interactive signal={signal} date={date} />
         <Divider />
         <Typography.Title level={2}>History</Typography.Title>
         <LineMultiImage scale={2} interactive regions={regions} signal={signal} date={date} />

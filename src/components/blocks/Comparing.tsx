@@ -79,7 +79,15 @@ export function Comparing({ regions, path, clearPath }: { regions: IRegion[]; pa
         <List.Item.Meta
           style={{ alignItems: 'center' }}
           avatar={<CircleIcon i={item.i} />}
-          title={<RegionCustomSelect region={item.region} onSelect={item.select} allowClear defaultValue={false} />}
+          title={
+            <RegionCustomSelect
+              region={item.region}
+              onSelect={item.select}
+              allowClear
+              defaultValue={false}
+              open={item.i === 0 && !item.region ? true : undefined}
+            />
+          }
         />
       </List.Item>
     );
@@ -87,7 +95,7 @@ export function Comparing({ regions, path, clearPath }: { regions: IRegion[]; pa
 
   return (
     <>
-      <Typography.Title level={2}>Selected Regions</Typography.Title>
+      <Typography.Title level={2}>{regions.length === 0 ? 'Select' : 'Selected'} Regions</Typography.Title>
       <List
         grid={{
           gutter: 16,

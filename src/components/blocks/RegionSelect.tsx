@@ -24,11 +24,13 @@ export function RegionCustomSelect({
   onSelect,
   allowClear,
   defaultValue = true,
+  open,
 }: {
   region?: IRegion;
   defaultValue?: boolean;
   onSelect: (v: string | null) => void;
   allowClear?: boolean;
+  open?: boolean;
 }) {
   return (
     <TreeSelect
@@ -41,6 +43,7 @@ export function RegionCustomSelect({
       placeholder="Select Region"
       treeDefaultExpandedKeys={['US']}
       treeNodeFilterProp="label"
+      open={open}
       dropdownMatchSelectWidth={300}
     ></TreeSelect>
   );

@@ -1,13 +1,12 @@
 import { formatAPIDate, formatLocal } from '@/common';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
-import { IRegion, signals } from '@/model';
-import { Row } from 'antd';
-import { Fragment } from 'react';
+import { IRegion, refSignal, signals } from '@/model';
+import { Row, Typography } from 'antd';
+import { Comparing } from '../blocks/Comparing';
 import GridColumn from '../blocks/GridColumn';
 import { RegionsSelect } from '../blocks/RegionSelect';
 import RegionsSignalCompareHistorySection from '../sections/RegionsSignalCompareHistory';
-import RegionsSignalCompareSection from '../sections/RegionsSignalCompareSection';
 
 export function RegionsCompareOverview({
   regions,
@@ -23,7 +22,13 @@ export function RegionsCompareOverview({
   return (
     <BaseLayout
       pageTitle={`${formatLocal(date)}`}
-      mainActive="overview"
+      description={refSignal.description(date)}
+      previewImage={{
+        url: `/api/compare/${apiRegions}/${refSignal?.id}.jpg?highlight=${apiDate}`,
+        width: 450,
+        height: 247,
+      }}
+      mainActive="compare"
       title={
         <RegionsSelect
           regions={regions}
@@ -53,16 +58,13 @@ export function RegionsCompareOverview({
             ]),
       ]}
     >
+      <Typography.Title>{regions.map((r) => r.name).join(' vs. ')}</Typography.Title>
+      <Comparing regions={regions} path={`/compare/[regions]/date/${apiDate}`} clearPath={`/compare/date/${apiDate}`} />
       <Row>
         {signals.map((s) => (
-          <Fragment key={s.id}>
-            <GridColumn>
-              <RegionsSignalCompareSection regions={regions} signal={s} date={date} focus="signal" />
-            </GridColumn>
-            <GridColumn>
-              <RegionsSignalCompareHistorySection regions={regions} signal={s} date={date} focus="signal" />
-            </GridColumn>
-          </Fragment>
+          <GridColumn key={s.id}>
+            <RegionsSignalCompareHistorySection regions={regions} signal={s} date={date} focus="signal" />
+          </GridColumn>
         ))}
       </Row>
     </BaseLayout>
