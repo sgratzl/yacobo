@@ -14,6 +14,7 @@ import type { TopLevelSpec } from 'vega-lite';
 import { dateValueTooltip, valueTooltipContent, regionValueTooltip } from './VegaTooltip';
 import type { VegaWrapperProps } from './VegaWrapper';
 import { useRouter } from 'next/router';
+import { imputeMissing } from '@/common/parseDates';
 
 function sourceSet(src?: string) {
   if (!src) {
@@ -126,7 +127,9 @@ function InteractiveLineVega({ signal, region, scale, date }: IParams) {
     region != null && signal != null ? specUrl : null,
     fetcher
   );
-  const numberData = useMemo(() => data?.map((d) => ({ ...d, date: d.date.valueOf() })), [data]);
+  const numberData = useMemo(() => imputeMissing(data ?? [], {}).map((d) => ({ ...d, date: d.date.valueOf() })), [
+    data,
+  ]);
   const [ready, setReady] = useState(false);
 
   const content = useMemo(() => valueTooltipContent.bind(null, signal), [signal]);

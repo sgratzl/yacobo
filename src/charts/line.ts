@@ -1,6 +1,7 @@
 import { fetchMeta } from '../api/data';
 import { TopLevelSpec } from 'vega-lite';
 import {
+  COMPARE_COLORS,
   DEFAULT_CHART_AREA_OPACITY,
   DEFAULT_CHART_COLOR,
   HIGHLIGHT_COLOR,
@@ -9,13 +10,12 @@ import {
 import { getValueDomain, ISignal } from '../model/signals';
 import { IVegaOptions, font } from '.';
 import { IDateValue, IRegion, IRegionDateValue } from '@/model';
-import { startOfISODate, startOfISOToday } from '@/common/parseDates';
+import { imputeMissing, startOfISODate, startOfISOToday } from '@/common/parseDates';
 import { parseISO } from 'date-fns';
+import type { LayerSpec, TopLevel } from 'vega-lite/build/src/spec';
 
 const LINE_CHART_WIDTH = 400;
 const LINE_CHART_HEIGHT = 200;
-
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function createLineChartSpec(
   data: {
@@ -26,41 +26,26 @@ function createLineChartSpec(
     maxValue: number;
     valueTitle: string;
     hasStdErr: boolean;
+    hasRegion?: boolean;
   },
   options: IVegaOptions
-): TopLevelSpec {
+): TopLevel<LayerSpec> {
   const meta = {
     title: data.title,
     description: data.description,
   };
   const max = startOfISOToday();
-  const dataMin = startOfISODate(data.values[0]?.date ?? data.minDate);
-  const dataMax = startOfISODate(data.values[data.values.length - 1]?.date ?? max);
-  const spec: TopLevelSpec = {
+
+  const spec: TopLevel<LayerSpec> = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     ...(options.details ? meta : {}),
     width: LINE_CHART_WIDTH * options.scaleFactor,
     height: LINE_CHART_HEIGHT * options.scaleFactor,
     data: {
-      sequence: {
-        start: dataMin.valueOf(),
-        stop: dataMax.valueOf() + MS_PER_DAY,
-        step: MS_PER_DAY, // 1 day
-        as: 'date',
-      },
+      name: 'data',
+      values: data.values.map((d) => ({ ...d, date: startOfISODate(d.date).valueOf() })),
     },
     transform: [
-      {
-        lookup: 'date',
-        from: {
-          data: {
-            name: 'data',
-            values: data.values.map((d) => ({ ...d, date: startOfISODate(d.date).valueOf() })),
-          },
-          key: 'date',
-          fields: ['value', data.hasStdErr ? ['stderr'] : []].flat(),
-        },
-      },
       {
         calculate: 'datum.value == null ? null : datum.value - datum.stderr',
         as: 'stderr_min',
@@ -101,13 +86,15 @@ function createLineChartSpec(
           tickMinStep: 0.1,
         },
       },
+      color: {
+        value: DEFAULT_CHART_COLOR,
+      },
     },
     layer: [
       {
         mark: {
           type: 'area',
           interpolate: 'linear',
-          color: DEFAULT_CHART_COLOR,
           opacity: DEFAULT_CHART_AREA_OPACITY,
         },
         encoding: {
@@ -125,7 +112,6 @@ function createLineChartSpec(
           interpolate: 'linear',
           point: 'transparent',
           strokeCap: 'square',
-          color: DEFAULT_CHART_COLOR,
         },
       },
       {
@@ -151,12 +137,12 @@ function createLineChartSpec(
           },
         },
         mark: {
-          type: 'point',
+          type: 'circle',
           stroke: null,
           tooltip: { content: 'data' },
         },
         encoding: {
-          fill: {
+          color: {
             condition: {
               selection: 'hover',
               value: HIGHLIGHT_COLOR,
@@ -194,7 +180,7 @@ export async function createSignalLineChart(
     {
       title: `${region.name} - ${signal.name}`,
       description: signal.description(),
-      values: values ?? [],
+      values: imputeMissing(values ?? [], {}),
       minDate,
       maxValue: getValueDomain(signal, meta)[1],
       valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
@@ -213,19 +199,47 @@ export async function createSignalMultiLineChart(
   const metas = await fetchMeta(options.ctx);
   const meta = metas.find((d) => d.signal === signal.id)!;
   const minDate = selectEarliestDate(metas);
-  // TODO
-  return createLineChartSpec(
+
+  const spec = createLineChartSpec(
     {
       title: `${regions.map((r) => r.name).join(',')} - ${signal.name}`,
       description: signal.description(),
-      values: values ?? [],
+      values: imputeMissing(values ?? [], { region: 'T' }, 'region'),
       minDate,
       maxValue: getValueDomain(signal, meta)[1],
       valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
       hasStdErr: signal.data.hasStdErr,
+      hasRegion: true,
     },
     options
   );
+
+  const regionLookup: Record<string, string> = {};
+  regions.forEach((region) => (regionLookup[region.id] = region.name));
+
+  spec.encoding!.color = {
+    field: 'region',
+    type: 'ordinal',
+    scale: {
+      domain: regions.map((d) => d.id),
+      range: COMPARE_COLORS,
+    },
+    legend: {
+      title: 'Region',
+      symbolOpacity: 1,
+      labelExpr: `${JSON.stringify(regionLookup)}[datum.value]`,
+    },
+  };
+  spec.layer[spec.layer.length - 1].encoding!.color = {
+    condition: {
+      selection: 'hover',
+      value: HIGHLIGHT_COLOR,
+    },
+    field: 'region',
+    type: 'ordinal',
+  };
+
+  return spec;
 }
 
 export async function createSkeletonLineChart(options: IVegaOptions): Promise<TopLevelSpec> {
