@@ -30,13 +30,33 @@ export interface IRegionSignalHistoryFavorite {
   region: IRegion;
 }
 
+export interface IRegionsSignalFavorite {
+  id: string;
+  type: 'regions+signal';
+  signal: ISignal;
+  regions: IRegion[];
+}
+
+export interface IRegionsSignalHistoryFavorite {
+  id: string;
+  type: 'regions+signal+h';
+  signal: ISignal;
+  regions: IRegion[];
+}
+
 interface ISerializedFavorite {
-  r?: string;
+  r?: string | string[];
   s?: string;
   h?: boolean;
 }
 
-export type IFavorite = ISignalFavorite | IRegionFavorite | IRegionSignalFavorite | IRegionSignalHistoryFavorite;
+export type IFavorite =
+  | ISignalFavorite
+  | IRegionFavorite
+  | IRegionSignalFavorite
+  | IRegionSignalHistoryFavorite
+  | IRegionsSignalFavorite
+  | IRegionsSignalHistoryFavorite;
 
 const DEFAULT_FAVORITES = [
   ...signals.slice(0, 3).map((s) => asFavorite(s)!),
@@ -49,8 +69,11 @@ function parseFavorite(favorite: ISerializedFavorite): IFavorite | null {
   if (!favorite.r && !favorite.s) {
     return null;
   }
-  const region = favorite.r ? regionByID(favorite.r) : undefined;
   const signal = favorite.s ? signalByID(favorite.s) : undefined;
+  if (Array.isArray(favorite.r)) {
+    return asFavorite(signal, favorite.r.map(regionByID), favorite.h);
+  }
+  const region = favorite.r ? regionByID(favorite.r) : undefined;
   return asFavorite(signal, region, favorite.h);
 }
 
@@ -66,6 +89,17 @@ function formatFavorite(favorite: IFavorite): ISerializedFavorite {
         r: favorite.region.id,
         h: true,
       };
+    case 'regions+signal':
+      return {
+        s: favorite.signal.id,
+        r: favorite.regions.map((d) => d.id),
+      };
+    case 'regions+signal+h':
+      return {
+        s: favorite.signal.id,
+        r: favorite.regions.map((d) => d.id),
+        h: true,
+      };
     default:
       return {
         s: favorite.signal.id,
@@ -74,8 +108,25 @@ function formatFavorite(favorite: IFavorite): ISerializedFavorite {
   }
 }
 
-function asFavorite(signal?: ISignal, region?: IRegion, history = false): IFavorite | null {
-  if (signal && region && history) {
+function asFavorite(signal?: ISignal, region?: IRegion | IRegion[], history = false): IFavorite | null {
+  if (signal && Array.isArray(region) && history) {
+    return {
+      id: `${region.map((d) => d.id).join(',')}+${signal.id}+h`,
+      type: 'regions+signal+h',
+      signal,
+      regions: region,
+    };
+  }
+  if (signal && Array.isArray(region)) {
+    return {
+      id: `${region.map((d) => d.id).join(',')}+${signal.id}`,
+      type: 'regions+signal',
+      signal,
+      regions: region,
+    };
+  }
+
+  if (signal && region && !Array.isArray(region) && history) {
     return {
       id: `${region.id}+${signal.id}+h`,
       type: 'region+signal+h',
@@ -83,7 +134,7 @@ function asFavorite(signal?: ISignal, region?: IRegion, history = false): IFavor
       region,
     };
   }
-  if (signal && region) {
+  if (signal && region && !Array.isArray(region)) {
     return {
       id: `${region.id}+${signal.id}`,
       type: 'region+signal',
@@ -98,7 +149,7 @@ function asFavorite(signal?: ISignal, region?: IRegion, history = false): IFavor
       signal,
     };
   }
-  if (region) {
+  if (region && !Array.isArray(region)) {
     return {
       id: region!.id!,
       type: 'region',
@@ -189,13 +240,19 @@ function FavoriteUndo({
 export function useFavorite(warning: boolean, signal: ISignal): [boolean, () => void];
 export function useFavorite(warning: boolean, region: IRegion): [boolean, () => void];
 export function useFavorite(warning: boolean, signal: ISignal, region: IRegion): [boolean, () => void];
+export function useFavorite(warning: boolean, signal: ISignal, region: IRegion[]): [boolean, () => void];
 export function useFavorite(
   warning: boolean,
   signal: ISignal,
   region: IRegion,
   history?: boolean
 ): [boolean, () => void];
-export function useFavorite(warning: boolean, signalOrRegion: ISignal | IRegion, region?: IRegion, history = false) {
+export function useFavorite(
+  warning: boolean,
+  signalOrRegion: ISignal | IRegion,
+  region?: IRegion | IRegion[],
+  history = false
+) {
   const [favorites, setFavorites] = useFavorites();
 
   const favorite = asFavorite(
