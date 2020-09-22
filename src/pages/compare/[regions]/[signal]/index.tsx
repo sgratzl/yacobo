@@ -1,10 +1,24 @@
-import { useQueryParam } from '@/client/hooks';
+import { useFallback } from '@/client/hooks';
 import { extractRegions, extractSignal } from '@/common/validator';
 import { RegionsSignalCompare } from '@/components/pages/RegionsSignalCompare';
+import type { NextPage } from 'next';
 
-export default function RegionSignalWrapper() {
-  const regions = useQueryParam(extractRegions, []);
-  const signal = useQueryParam(extractSignal);
-
-  return <RegionsSignalCompare regions={regions} signal={signal} />;
+interface IProps {
+  regions: string;
+  signal: string;
 }
+
+const Page: NextPage<IProps> = (props) => {
+  const regions = useFallback(props.regions, extractRegions, []);
+  const signal = useFallback(props.signal, extractSignal, undefined);
+  return <RegionsSignalCompare regions={regions} signal={signal} />;
+};
+
+Page.getInitialProps = async (ctx) => {
+  return {
+    regions: ctx.query.regions as string,
+    signal: ctx.query.signal as string,
+  };
+};
+
+export default Page;
