@@ -54,7 +54,7 @@ export default function BaseLayout({
             </>
           )}
           {/* <meta name="twitter:site" content="@caleydo_org"/> */}
-          <meta name="twitter:title" content={pageTitle} />
+          <meta name="twitter:title" content={`YaCoBo - Yet another COVID-19 board - ${pageTitle}`} />
           <meta name="twitter:description" content={description} />
           {/* <meta name="twitter:creator" content="@caleydo_org"/> */}
           {previewImage && <meta name="twitter:image:src" content={`${BASE_URL}${previewImage.url}`} />}
