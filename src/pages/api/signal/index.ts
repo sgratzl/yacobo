@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { fetchMeta } from '@/api/data';
 import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { Formats, sendFormat } from '@/api/format';

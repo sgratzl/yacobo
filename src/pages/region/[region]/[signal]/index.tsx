@@ -1,10 +1,10 @@
 import { fetchMinMaxDate } from '@/api/data';
 import { CacheDuration } from '@/api/model';
 import { useFallback } from '@/client/hooks';
-import { ISerializedMinMax } from '@/client/utils';
+import type { ISerializedMinMax } from '@/client/utils';
 import { extractRegion, extractSignal } from '@/common/validator';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { ParsedUrlQuery } from 'querystring';
+import type { GetStaticPaths, GetStaticProps } from 'next';
+import type { ParsedUrlQuery } from 'querystring';
 import { withContext } from '@/api/middleware';
 import { RegionSignal } from '@/components/pages/RegionSignal';
 

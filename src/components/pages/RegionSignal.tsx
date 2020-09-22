@@ -1,9 +1,9 @@
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { RegionSelect } from '@/components/blocks/RegionSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
-import { ISignal } from '@/model/signals';
+import type { ISignal } from '@/model/signals';
 import { Divider, Typography } from 'antd';
-import { IRegion } from '../../model';
+import type { IRegion } from '../../model';
 import ContentLayout from '../blocks/ContentLayout';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';

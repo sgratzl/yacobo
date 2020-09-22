@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { isCountyRegion } from '../../model/regions';
-import { ICommonOptions } from '../format';
+import type { ICommonOptions } from '../format';
 import { setCommonHeaders } from './setCommonHeaders';
 
 export default function sendJSON<T>(req: NextApiRequest, res: NextApiResponse, data: T[], options: ICommonOptions) {

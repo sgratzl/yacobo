@@ -1,10 +1,10 @@
 import { formatAPIDate } from '@/common';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import { fetchMinMaxDate } from '@/api/data';
 import { estimateDateToPreRender } from '@/api/model';
 import { useFallback } from '@/client/hooks';
 import { extractDate } from '@/common/validator';
-import { ParsedUrlQuery } from 'querystring';
+import type { ParsedUrlQuery } from 'querystring';
 import { DateOverview } from '@/components/pages/DateOverview';
 import { withContext } from '@/api/middleware';
 

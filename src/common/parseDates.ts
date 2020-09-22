@@ -1,4 +1,4 @@
-import { IDateValue } from '@/model';
+import type { IDateValue } from '@/model';
 import { addDays, compareAsc, differenceInDays, parseJSON } from 'date-fns';
 
 function identity(v: any) {

@@ -3,7 +3,7 @@ import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { RegionsSelect } from '@/components/blocks/RegionSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
-import { IRegion, ISignal } from '@/model';
+import type { IRegion, ISignal } from '@/model';
 import { Divider, Row, Typography } from 'antd';
 import { Comparing } from '../blocks/Comparing';
 import ContentLayout from '../blocks/ContentLayout';

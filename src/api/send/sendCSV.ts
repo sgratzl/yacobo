@@ -1,7 +1,7 @@
 import { csvFormat } from 'd3-dsv';
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { IRegion, isCountyRegion, ISignal } from '../../model';
-import { ICommonOptions } from '../format';
+import type { ICommonOptions } from '../format';
 import { setCommonHeaders } from './setCommonHeaders';
 
 // eslint-disable-next-line @typescript-eslint/ban-types

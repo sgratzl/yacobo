@@ -1,4 +1,4 @@
-import { IFavorite } from '../blocks/useFavorites';
+import type { IFavorite } from '../blocks/useFavorites';
 import RegionSection from './RegionSection';
 import RegionSignalHistorySection from './RegionSignalHistory';
 import RegionSignalSection from './RegionSignalSection';

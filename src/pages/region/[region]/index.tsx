@@ -2,8 +2,8 @@ import { fetchMinMaxDate } from '@/api/data';
 import { useFallback } from '@/client/hooks';
 import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
 import { extractRegion } from '@/common/validator';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { ParsedUrlQuery } from 'querystring';
+import type { GetStaticPaths, GetStaticProps } from 'next';
+import type { ParsedUrlQuery } from 'querystring';
 import { RegionDate } from '@/components/pages/RegionDate';
 import { withContext } from '@/api/middleware';
 

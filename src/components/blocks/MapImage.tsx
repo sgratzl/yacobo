@@ -6,7 +6,7 @@ import { isValid } from 'date-fns';
 import { useRegionValue } from '@/client/data';
 import useSWR from 'swr';
 import { addParam, fetcher } from '@/client/utils';
-import { TopLevelSpec } from 'vega-lite';
+import type { TopLevelSpec } from 'vega-lite';
 import { valueTooltipContent } from './VegaTooltip';
 import { useRouter } from 'next/router';
 import { useImageLoading, Image } from './Image';

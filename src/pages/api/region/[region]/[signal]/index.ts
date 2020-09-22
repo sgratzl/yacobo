@@ -3,7 +3,7 @@ import { sendFormat, extractFormat } from '@/api/format';
 import { extractRegion, extractSignal } from '@/common/validator';
 import { createSignalLineChart } from '@/charts/line';
 import { fetchSignalRegion } from '@/api/data';
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { CacheDuration } from '@/api/model';
 import { historyRange } from '@/model';
 

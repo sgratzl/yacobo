@@ -11,7 +11,7 @@
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "importsNotUsedAsValues": "remove",
+    "importsNotUsedAsValues": "error",
     "esModuleInterop": true,
     "module": "esnext",
     "noImplicitAny": true,

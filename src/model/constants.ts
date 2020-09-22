@@ -1,6 +1,6 @@
 import { startOfISODate } from '@/common/parseDates';
 import { min, startOfTomorrow } from 'date-fns';
-import { ISignalMeta } from './signals';
+import type { ISignalMeta } from './signals';
 
 export function selectLatestDate(meta: ISignalMeta[]) {
   const dates = meta.slice().sort((a, b) => a.maxTime.valueOf() - b.maxTime.valueOf());

@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { ICommonOptions } from '../format';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type { ICommonOptions } from '../format';
 import { CacheDuration } from '../model';
 
 export function setCommonHeaders(

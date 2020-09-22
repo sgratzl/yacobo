@@ -1,7 +1,7 @@
 import { fetchMinMaxDate } from '@/api/data';
 import { CacheDuration } from '@/api/model';
 import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import { CompareOverview } from '@/components/pages/CompareOverview';
 import { withContext } from '@/api/middleware';
 

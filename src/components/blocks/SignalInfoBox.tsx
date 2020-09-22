@@ -1,4 +1,4 @@
-import { ISignal } from '@/model';
+import type { ISignal } from '@/model';
 import { Typography, Modal, List } from 'antd';
 
 function renderLink(item: { alt: string; href: string }) {

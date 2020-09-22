@@ -1,7 +1,7 @@
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
-import { ITriple } from '@/model';
+import type { ITriple } from '@/model';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import styles from './Section.module.css';

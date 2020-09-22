@@ -3,7 +3,7 @@ import styles from './VegaImage.module.css';
 import { classNames } from '../utils';
 import InteractionOutlined from '@ant-design/icons/InteractionOutlined';
 import dynamic from 'next/dynamic';
-import { VegaWrapperProps } from './VegaWrapper';
+import type { VegaWrapperProps } from './VegaWrapper';
 
 export function InteractiveWrapper({ children }: { children?: ReactNode }) {
   const [interactive, setInteractive] = useState(false);

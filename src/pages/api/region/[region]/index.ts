@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { formatAPIDate } from '@/common';
 import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { redirectWithFormat } from '@/api/redirect';

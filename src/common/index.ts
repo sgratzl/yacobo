@@ -1,4 +1,4 @@
-import { IRegion } from '@/model';
+import type { IRegion } from '@/model';
 import { format, formatISO, isValid } from 'date-fns';
 
 export function formatAPIDate(date?: Date | number) {

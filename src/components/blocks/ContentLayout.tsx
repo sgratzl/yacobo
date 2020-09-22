@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import styles from './BaseLayout.module.css';
 
 export default function ContentLayout(props: { children?: ReactNode }) {

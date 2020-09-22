@@ -1,4 +1,4 @@
-import { IRegion } from '@/model';
+import type { IRegion } from '@/model';
 import { classNames } from '../utils';
 import styles from './CompareIcon.module.css';
 

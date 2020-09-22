@@ -1,7 +1,7 @@
 import { useFallback } from '@/client/hooks';
 import { extractDate, extractRegions } from '@/common/validator';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { ParsedUrlQuery } from 'querystring';
+import type { GetStaticPaths, GetStaticProps } from 'next';
+import type { ParsedUrlQuery } from 'querystring';
 import { RegionsCompareOverview } from '@/components/pages/RegionsCompareOverview';
 
 interface IRegionsDateProps {

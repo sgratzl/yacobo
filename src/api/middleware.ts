@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { CustomHTTPError } from '../common/error';
 import Cors from 'cors';
 import { Redis } from './redis';

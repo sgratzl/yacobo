@@ -1,4 +1,4 @@
-import { IRequestContext } from '@/api/middleware';
+import type { IRequestContext } from '@/api/middleware';
 
 export const font = `Roboto, Arial, sans-serif`;
 

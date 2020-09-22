@@ -3,7 +3,7 @@ import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import { Button, Card, Tooltip } from 'antd';
 import Link from 'next/link';
 import { useCallback } from 'react';
-import { ITriple } from '@/model';
+import type { ITriple } from '@/model';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { showInfoBox } from '../blocks/SignalInfoBox';

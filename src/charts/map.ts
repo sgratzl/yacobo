@@ -1,8 +1,8 @@
 import { formatLocal } from '@/common';
-import { LinearGradient, UrlData } from 'vega';
-import { InlineData, NamedData } from 'vega-lite/build/src/data';
-import { SchemeParams } from 'vega-lite/build/src/scale';
-import { LayerSpec, TopLevel, UnitSpec } from 'vega-lite/build/src/spec';
+import type { LinearGradient, UrlData } from 'vega';
+import type { InlineData, NamedData } from 'vega-lite/build/src/data';
+import type { SchemeParams } from 'vega-lite/build/src/scale';
+import type { LayerSpec, TopLevel, UnitSpec } from 'vega-lite/build/src/spec';
 import { font, IVegaOptions } from '.';
 import { fetchSignalMeta } from '../api/data';
 import { getValueDomain, HIGHLIGHT_COLOR, IRegionValue, ISignal, ZERO_COLOR, MAP_STROKE } from '../model';

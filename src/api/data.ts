@@ -19,7 +19,7 @@ import {
   signals,
 } from '../model';
 import fetchCached, { fetchJSON } from './fetchCached';
-import { IRequestContext } from './middleware';
+import type { IRequestContext } from './middleware';
 import { CacheDuration, estimateCacheDuration } from './model';
 
 const ENDPOINT = 'https://api.covidcast.cmu.edu/epidata/api.php';

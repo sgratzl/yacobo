@@ -2,7 +2,7 @@ import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { extractFormat, sendFormat } from '@/api/format';
 import { extractDate, extractRegion, extractSignal } from '@/common/validator';
 import { fetchSignalRegionDate } from '@/api/data';
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { formatAPIDate } from '@/common';
 import { estimateCacheDuration } from '@/api/model';
 import { regionByID } from '@/model';

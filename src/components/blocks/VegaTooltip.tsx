@@ -1,5 +1,5 @@
 import { formatValue } from '@/common';
-import { ISignal } from '@/model';
+import type { ISignal } from '@/model';
 import { Statistic } from 'antd';
 
 export function valueTooltipContent(

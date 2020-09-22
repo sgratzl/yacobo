@@ -5,7 +5,7 @@ import { estimateCacheDuration } from '@/api/model';
 import { regionDateSummaryDates } from '@/common/helpers';
 import { extractDate, extractRegions, extractSignal } from '@/common/validator';
 import { regionByID } from '@/model/regions';
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default withMiddleware((req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
   const { param: date, format } = extractFormat(req, 'date', extractDate);

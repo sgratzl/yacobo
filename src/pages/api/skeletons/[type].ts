@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { createSkeletonLineChart } from '@/charts/line';
 import { CacheDuration } from '@/api/model';

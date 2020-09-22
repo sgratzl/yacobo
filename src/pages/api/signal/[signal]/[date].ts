@@ -3,7 +3,7 @@ import { sendFormat, extractFormat } from '@/api/format';
 import { extractDate, extractSignal } from '@/common/validator';
 import { createMap } from '@/charts/map';
 import { fetchAllRegions } from '@/api/data';
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { regionByID } from '@/model/regions';
 import { formatAPIDate } from '@/common';
 import { estimateCacheDuration } from '@/api/model';

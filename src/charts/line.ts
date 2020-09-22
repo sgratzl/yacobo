@@ -1,5 +1,5 @@
 import { fetchMeta } from '../api/data';
-import { TopLevelSpec } from 'vega-lite';
+import type { TopLevelSpec } from 'vega-lite';
 import {
   COMPARE_COLORS,
   DEFAULT_CHART_AREA_OPACITY,
@@ -9,7 +9,7 @@ import {
 } from '../model/constants';
 import { getValueDomain, ISignal } from '../model/signals';
 import { IVegaOptions, font } from '.';
-import { IDateValue, IRegion, IRegionDateValue } from '@/model';
+import type { IDateValue, IRegion, IRegionDateValue } from '@/model';
 import { imputeMissing, startOfISODate, startOfISOToday } from '@/common/parseDates';
 import { parseISO } from 'date-fns';
 import type { LayerSpec, TopLevel } from 'vega-lite/build/src/spec';

@@ -3,8 +3,8 @@ import { CacheDuration } from '@/api/model';
 import { useFallback } from '@/client/hooks';
 import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
 import { extractRegions } from '@/common/validator';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { ParsedUrlQuery } from 'querystring';
+import type { GetStaticPaths, GetStaticProps } from 'next';
+import type { ParsedUrlQuery } from 'querystring';
 import { withContext } from '@/api/middleware';
 import { RegionsCompareOverview } from '@/components/pages/RegionsCompareOverview';
 

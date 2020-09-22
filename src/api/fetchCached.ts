@@ -1,5 +1,5 @@
 import fetchImpl from 'cross-fetch';
-import { IRequestContext } from './middleware';
+import type { IRequestContext } from './middleware';
 import { CacheDuration } from './model';
 
 function identity(v: any) {

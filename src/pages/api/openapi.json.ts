@@ -1,7 +1,7 @@
 import { withMiddleware } from '@/api/middleware';
 import { CacheDuration } from '@/api/model';
 import api from '@/api/openapi.json';
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { setCommonHeaders } from '@/api/send/setCommonHeaders';
 import { signals } from '@/model';
 

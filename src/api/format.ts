@@ -1,11 +1,11 @@
-import { IVegaOptions } from '@/charts';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { TopLevelSpec } from 'vega-lite';
+import type { IVegaOptions } from '@/charts';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type { TopLevelSpec } from 'vega-lite';
 import { CustomHTTPError } from '../common/error';
-import { IRouterLike } from '../common/validator';
-import { IRegion, ISignal } from '../model';
-import { IRequestContext } from './middleware';
-import { CacheDuration } from './model';
+import type { IRouterLike } from '../common/validator';
+import type { IRegion, ISignal } from '../model';
+import type { IRequestContext } from './middleware';
+import type { CacheDuration } from './model';
 import sendCSV from './send/sendCSV';
 import sendJSON from './send/sendJSON';
 import sendVega from './send/sendVega';

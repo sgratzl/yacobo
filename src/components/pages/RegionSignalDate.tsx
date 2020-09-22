@@ -3,7 +3,7 @@ import { DateSelect } from '@/components/blocks/DateSelect';
 import { RegionSelect } from '@/components/blocks/RegionSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { formatAPIDate, formatLocal } from '@/common';
-import { ITriple } from '@/model';
+import type { ITriple } from '@/model';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';

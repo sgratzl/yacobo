@@ -1,4 +1,4 @@
-import { ITriple, ISignal } from '@/model';
+import type { ITriple, ISignal } from '@/model';
 import { Button, Card, Tooltip } from 'antd';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';

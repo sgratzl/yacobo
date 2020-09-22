@@ -1,6 +1,6 @@
 import { Col } from 'antd';
 import type { ColProps } from 'antd/lib/col';
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import styles from './GridColumn.module.css';
 
 export default function GridColumn(props: PropsWithChildren<ColProps>) {

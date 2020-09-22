@@ -11,7 +11,7 @@ import { imputeMissing } from '@/common/parseDates';
 import { useRouter } from 'next/router';
 import React, { useMemo, useState, useCallback } from 'react';
 import useSWR from 'swr';
-import { TopLevelSpec } from 'vega-lite';
+import type { TopLevelSpec } from 'vega-lite';
 import { valueTooltipContent } from './VegaTooltip';
 
 interface IParams {

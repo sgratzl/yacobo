@@ -1,12 +1,12 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { TopLevelSpec } from 'vega-lite';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type { TopLevelSpec } from 'vega-lite';
 import { CustomHTTPError } from '../../common/error';
-import { IVegaOptions } from '@/charts';
+import type { IVegaOptions } from '@/charts';
 import { setCommonHeaders } from './setCommonHeaders';
 import { ICommonOptions, Formats } from '../format';
 import type { View } from 'vega';
-import { Canvas } from 'canvas';
-import { IRequestContext } from '../middleware';
+import type { Canvas } from 'canvas';
+import type { IRequestContext } from '../middleware';
 import { initCanvas } from 'yacobo-font-canvas-helper';
 
 export default async function sendVega<T>(

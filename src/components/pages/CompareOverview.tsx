@@ -1,7 +1,7 @@
 import { formatAPIDate, formatLocal } from '@/common';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
-import { IRegion } from '@/model';
+import type { IRegion } from '@/model';
 import { Typography } from 'antd';
 import { Comparing } from '../blocks/Comparing';
 import { RegionsSelect } from '../blocks/RegionSelect';
