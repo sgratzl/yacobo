@@ -1,32 +1,9 @@
-import { useFallback } from '@/client/hooks';
+import { useQueryParam } from '@/client/hooks';
 import { extractDate, extractRegion } from '@/common/validator';
-import { GetStaticProps, GetStaticPaths } from 'next';
-import { ParsedUrlQuery } from 'querystring';
 import { RegionDate } from '@/components/pages/RegionDate';
 
-interface IRegionDateProps {
-  region: string;
-  date: string;
-}
-
-export const getStaticProps: GetStaticProps<IRegionDateProps> = async (context) => {
-  return {
-    props: {
-      region: context.params!.region as string,
-      date: context.params!.date as string,
-    },
-  };
-};
-
-export const getStaticPaths: GetStaticPaths<IRegionDateProps & ParsedUrlQuery> = async () => {
-  return {
-    paths: [], // no favorite regions yet
-    fallback: true,
-  };
-};
-
-export default function RegionDateWrapper(props: IRegionDateProps) {
-  const region = useFallback(props.region, extractRegion, undefined);
-  const date = useFallback(props.date, extractDate, undefined);
+export default function RegionDateWrapper() {
+  const region = useQueryParam(extractRegion);
+  const date = useQueryParam(extractDate);
   return <RegionDate date={date} region={region} />;
 }
