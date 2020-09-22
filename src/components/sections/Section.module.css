@@ -15,6 +15,10 @@
   margin-bottom: 1em;
 }
 
+.meta :global(.ant-card-meta-title) {
+  white-space: initial;
+}
+
 .coverIcon {
   padding-top: 60%;
   position: relative;
