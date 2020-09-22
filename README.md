@@ -1,32 +1,55 @@
 # YaCoBo - Yet another COVID-19 Board
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+[![License: MIT][mit-image]][mit-url] [![Github Actions][github-actions-image]][github-actions-url]
 
-## Getting Started
+YaCoBo (Yet another COVID-19 Board) is a dashboard application visualizing the data from the [Delphi Group at Carnegie Mellon University](https://delphi.cmu.edu/) as part of the [COVIDCast](https://covidcast.cmu.edu) project.
 
-First, run the development server:
+![Overview](https://user-images.githubusercontent.com/4129778/93870730-efce6e80-fccd-11ea-9854-0b5d627ef5ef.png)
 
-```bash
-npm run dev
-# or
+![Compare Regions](https://user-images.githubusercontent.com/4129778/93870932-31f7b000-fcce-11ea-8b0b-134f6928384a.png)
+
+## Features
+
+- overview of several signal collected by COVIDCast
+- drill down to individual signals, regions, dates, and their combinations
+- compare regions across multiple signals
+- bookmark your favorite sections for a personalized summary (local store only)
+- sharable URLs with social media preview images
+- download the shown data in CSV or JSON format
+- download the shown images in PNG, JPEG, or PDF format
+- download the shown images as [Vega Lite Specification](https://vega.github.io/vega-lite/)
+- use the provided [OpenAPI/Swagger](https://swagger.io/specification/) description to access the API
+
+## Development Environment
+
+YaCoBo is implemented using [Next.js](https://nextjs.org), hosted on [Vercel](https://vercel.com/), and uses [Lambda Store](https://lambda.store/) for caching.
+
+```sh
+npm i -g yarn
+yarn install
+docker-compose up -d
 yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### Common commands
 
-## Learn More
+```sh
+yarn dev
+yarn compile
+yarn test
+yarn lint
+yarn fix
+yarn build
+yarn release
+```
 
-To learn more about Next.js, take a look at the following resources:
+### License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+YaCoBo is released under the **MIT License**. Copyright of the website belongs to Samuel Gratzl. The [Terms of Use](https://covidcast.cmu.edu/terms-of-use.html) of the COVIDCast project apply.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
+[mit-url]: https://opensource.org/licenses/MIT
+[github-actions-image]: https://github.com/sgratzl/yacobo/workflows/ci/badge.svg
+[github-actions-url]: https://github.com/sgratzl/yacobo/actions
