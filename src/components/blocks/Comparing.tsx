@@ -32,14 +32,14 @@ export function Comparing({
         if (s && s !== 'US') {
           // replace
           const newRegions = [...ids.slice(0, i), s, ...ids.slice(i + 1)];
-          router(path, { ...query, regions: newRegions });
+          router.push(path, { ...query, regions: newRegions });
         } else if (ids.length === 1) {
           // last one
-          router(clearPath, query);
+          router.push(clearPath, query);
         } else {
           const newRegions = ids.slice();
           newRegions.splice(i, 1);
-          router(path, { ...query, regions: newRegions });
+          router.push(path, { ...query, regions: newRegions });
         }
       };
       return {
@@ -65,7 +65,7 @@ export function Comparing({
             // compare with state automatically
             newRegions.push(region.state.id);
           }
-          router(path, { ...query, regions: newRegions });
+          router.push(path, { ...query, regions: newRegions });
         },
       });
     }

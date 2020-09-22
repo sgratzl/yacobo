@@ -54,7 +54,7 @@ function injectQuery(path: string, query: IRouterQuery) {
   return path.replace(/\[(\w+)\]/gm, (_, key) => {
     if (!keys.has(key)) {
       if (process.env.NODE_ENV === 'development') {
-        console.warn('generate url for key not found', path, key, query);
+        console.error('generate url for key not found', path, key, query);
       }
       return key;
     }
