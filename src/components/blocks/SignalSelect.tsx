@@ -1,21 +1,30 @@
 import { Select } from 'antd';
-import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { ISignal, signals } from '../../model';
 import styles from './Select.module.css';
-import { injectQuery } from './BaseLayout';
+import { IRouterQuery, useRouterWrapper } from '@/client/hooks';
 
-export function SignalSelect({ signal, path, clearPath }: { signal?: ISignal; path: string; clearPath?: string }) {
-  const router = useRouter();
+export function SignalSelect({
+  signal,
+  path,
+  clearPath,
+  query,
+}: {
+  signal?: ISignal;
+  path: string;
+  clearPath: string;
+  query: IRouterQuery;
+}) {
+  const router = useRouterWrapper();
   const onSelect = useCallback(
     (s: string | null) => {
       if (s) {
-        router.push(path, injectQuery(router, path, { signal: s }));
+        router.push(path, { ...query, signal: s });
       } else if (clearPath) {
-        router.push(clearPath, injectQuery(router, clearPath));
+        router.push(clearPath, query);
       }
     },
-    [router, path, clearPath]
+    [router, path, clearPath, query]
   );
 
   return (

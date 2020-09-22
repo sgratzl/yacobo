@@ -9,15 +9,19 @@ import { RegionsSelect } from '../blocks/RegionSelect';
 const EMPTY: IRegion[] = [];
 
 export function CompareOverview({ date, dynamic }: { date?: Date; dynamic?: boolean }) {
-  const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
       pageTitle={`${formatLocal(date)}`}
       mainActive="compare"
       title={
-        <RegionsSelect regions={EMPTY} path={`/compare/[regions]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />
+        <RegionsSelect
+          regions={EMPTY}
+          path="/compare/[regions]/date/[date]"
+          clearPath="/date/[date]"
+          query={{ date }}
+        />
       }
-      subTitle={<DateSelect date={date} path={`/compare/date/[date]`} clearPath="/compare" />}
+      subTitle={<DateSelect date={date} path="/compare/date/[date]" clearPath="/compare" query={{}} />}
       breadcrumb={[
         {
           breadcrumbName: 'Compare',
@@ -35,7 +39,7 @@ export function CompareOverview({ date, dynamic }: { date?: Date; dynamic?: bool
     >
       <Typography.Title>Compare Regions</Typography.Title>
       <Typography.Paragraph>select one or more regions to start</Typography.Paragraph>
-      <Comparing regions={EMPTY} path={`/compare/[regions]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />
+      <Comparing regions={EMPTY} path="/compare/[regions]/date/[date]" clearPath="/date/[date]" query={{ date }} />
     </BaseLayout>
   );
 }

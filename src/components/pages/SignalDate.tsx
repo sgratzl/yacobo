@@ -11,6 +11,7 @@ import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { RegionSelect } from '../blocks/RegionSelect';
 import ContentLayout from '../blocks/ContentLayout';
 import { MapImage } from '../blocks/MapImage';
+import { fullUrl } from '@/client/hooks';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -19,17 +20,13 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
     <BaseLayout
       pageTitle={`${signal.name} as of ${formatLocal(date)}`}
       mainActive="overview"
-      title={<RegionSelect path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
+      title={<RegionSelect path="/region/[region]/date/[date]" clearPath="/date/[date]" query={{ date }} />}
       description={signal.description(date)}
-      previewImage={{
-        url: `/api/signal/${signal.id}/${apiDate}.jpg`,
-        width: 570,
-        height: 310,
-      }}
+      previewImage={fullUrl('/api/signal/[signal]/[date].jpg', { signal, date })}
       subTitle={
         <>
-          <SignalSelect signal={signal} path={`/signal/[signal]/${apiDate}`} clearPath={`/date/${apiDate}`} />
-          <DateSelect date={date} path={`/signal/${signal.id}/[date]`} clearPath={`/signal/${signal.id}`} />
+          <SignalSelect signal={signal} path="/signal/[signal]/[date]" clearPath="/date/[date]" query={{ date }} />
+          <DateSelect date={date} path="/signal/[signal]/[date]" clearPath="/signal/[signal]" query={{ signal }} />
         </>
       }
       breadcrumb={[
@@ -44,7 +41,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
       ]}
       extra={[
         <FavoriteToggle signal={signal} key="bookmark" warning={false} />,
-        <DownloadMenu key="download" path={`/signal/${signal.id}/${apiDate}`} />,
+        <DownloadMenu key="download" path={fullUrl('/signal/[signal]/[date]', { signal, date })} />,
       ]}
     >
       <ContentLayout>

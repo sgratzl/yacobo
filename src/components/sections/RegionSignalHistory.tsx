@@ -1,7 +1,6 @@
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import { Button, Card, Tooltip } from 'antd';
-import Link from 'next/link';
 import { useCallback } from 'react';
 import type { ITriple } from '@/model';
 import { DownloadMenu } from '../blocks/DownloadMenu';
@@ -10,6 +9,8 @@ import { showInfoBox } from '../blocks/SignalInfoBox';
 import { LineImage } from '../blocks/LineImage';
 import styles from './Section.module.css';
 import { RegionSignalKeyFacts } from '../blocks/RegionSignalKeyFacts';
+import { fullUrl } from '@/client/hooks';
+import LinkWrapper from '../blocks/LinkWrapper';
 
 export default function RegionSignalHistorySection({
   region,
@@ -38,13 +39,13 @@ export default function RegionSignalHistorySection({
         </>
       }
       actions={[
-        <Link key="d" href="/region/[region]/[signal]/" as={`/region/${region?.id}/${signal?.id}`}>
+        <LinkWrapper key="d" path="/region/[region]/[signal]/" query={{ region, signal }}>
           <Tooltip title="show details">
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
-        </Link>,
+        </LinkWrapper>,
         <FavoriteToggle key="b" signal={signal} region={region} history />,
-        <DownloadMenu key="d" path={`/region/${region?.id}/${signal?.id}`} />,
+        <DownloadMenu key="d" path={fullUrl('/region/[region]/[signal]', { region, signal })} />,
         <Tooltip key="i" title="show signal information">
           <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />
         </Tooltip>,

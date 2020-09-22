@@ -12,6 +12,7 @@ import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { MapImage } from '../blocks/MapImage';
 import { LineImage } from '../blocks/LineImage';
 import ContentLayout from '../blocks/ContentLayout';
+import { fullUrl } from '@/client/hooks';
 
 export function RegionSignalDate({ region, signal, date }: ITriple) {
   const apiDate = formatAPIDate(date);
@@ -19,30 +20,29 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
     <BaseLayout
       pageTitle={`${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}
       description={signal?.description(date)}
-      previewImage={{
-        url: `/api/region/${region?.id}/${signal?.id}.jpg`,
-        width: 450,
-        height: 247,
-      }}
+      previewImage={fullUrl('/api/region/[region]/[signal].jpg', { region, signal })}
       mainActive="overview"
       title={
         <RegionSelect
           region={region}
-          path={`/region/[region]/${signal?.id}/${apiDate}`}
-          clearPath={`/signal/${signal?.id}/${apiDate}`}
+          path="/region/[region]/[signal]/[date]"
+          clearPath="/signal/[signal]/[date]"
+          query={{ signal, date }}
         />
       }
       subTitle={
         <>
           <SignalSelect
             signal={signal}
-            path={`/region/${region?.id}/[signal]/${apiDate}`}
-            clearPath={`/region/${region?.id}/date/${apiDate}`}
+            path="/region/[region]/[signal]/[date]"
+            clearPath="/region/[region]/date/[date]"
+            query={{ region, date }}
           />
           <DateSelect
             date={date}
-            path={`/region/${region?.id}/${signal?.id}/[date]`}
-            clearPath={`/region/${region?.id}/${signal?.id}`}
+            path="/region/[region]/[signal]/[date]"
+            clearPath="/region/[region]/[signal]"
+            query={{ region, signal }}
           />
         </>
       }
@@ -62,7 +62,11 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
       ]}
       extra={[
         <FavoriteToggle signal={signal} region={region} key="bookmark" warning={false} />,
-        <DownloadMenu key="download" img={false} path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
+        <DownloadMenu
+          key="download"
+          img={false}
+          path={fullUrl('/region/[region]/[signal]/[date]', { region, signal, date })}
+        />,
       ]}
     >
       <ContentLayout>

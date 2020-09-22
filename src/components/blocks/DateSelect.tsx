@@ -1,25 +1,34 @@
 import { formatAPIDate } from '@/common';
 import { isValid, subDays, addDays } from 'date-fns';
-import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import styles from './Select.module.css';
 import DatePicker from './DatePicker';
-import { injectQuery } from './BaseLayout';
 import { Button, Tooltip } from 'antd';
 import LeftOutlined from '@ant-design/icons/LeftOutlined';
 import RightOutlined from '@ant-design/icons/RightOutlined';
+import { IRouterQuery, useRouterWrapper } from '@/client/hooks';
 
-export function DateSelect({ date, path, clearPath }: { date?: Date; path: string; clearPath?: string }) {
-  const router = useRouter();
+export function DateSelect({
+  date,
+  path,
+  query,
+  clearPath,
+}: {
+  date?: Date;
+  path: string;
+  clearPath: string;
+  query: IRouterQuery;
+}) {
+  const router = useRouterWrapper();
   const onSelect = useCallback(
     (s: Date | null) => {
       if (s) {
-        router.push(path, injectQuery(router, path, { date: formatAPIDate(s) }));
+        router.push(path, { ...query, date: formatAPIDate(s) });
       } else if (clearPath) {
-        router.push(clearPath, injectQuery(router, clearPath));
+        router.push(clearPath, query);
       }
     },
-    [router, path, clearPath]
+    [router, path, clearPath, query]
   );
   const previous = useCallback(() => {
     if (date) {

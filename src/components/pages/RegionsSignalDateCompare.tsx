@@ -1,4 +1,5 @@
-import { formatAPIDate, formatAPIRegions, formatLocal } from '@/common';
+import { fullUrl } from '@/client/hooks';
+import { formatAPIDate, formatLocal } from '@/common';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { RegionsSelect } from '@/components/blocks/RegionSelect';
@@ -23,36 +24,33 @@ export function RegionsSignalDateCompare({
   signal?: ISignal;
   date?: Date;
 }) {
-  const apiRegions = formatAPIRegions(regions);
-  const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
       pageTitle={`${regions.map((d) => d.name).join(' vs. ')} - ${signal?.name} as of ${formatLocal(date)}`}
       description={signal?.description(date)}
-      previewImage={{
-        url: `/api/compare/${apiRegions}/${signal?.id}.jpg`,
-        width: 450,
-        height: 247,
-      }}
+      previewImage={fullUrl('/api/compare/[regions]/[signal].jpg', { regions, signal })}
       mainActive="compare"
       title={
         <RegionsSelect
           regions={regions}
-          path={`/compare/[region]/${signal?.id}/${apiDate}`}
-          clearPath={`/signal/${signal?.id}/${apiDate}`}
+          path="/compare/[region]/[signal]/[date]"
+          clearPath="/signal/[signal]/[date]"
+          query={{ signal }}
         />
       }
       subTitle={
         <>
           <SignalSelect
             signal={signal}
-            path={`/compare/${apiRegions}/[signal]/${apiDate}`}
-            clearPath={`/compare/${apiRegions}/date/${apiDate}`}
+            path="/compare/[regions]/[signal]/[date]"
+            clearPath="/compare/[regions]/date/[date]"
+            query={{ regions, date }}
           />
           <DateSelect
             date={date}
-            path={`/compare/${apiRegions}/${signal?.id}/[date]`}
-            clearPath={`/compare/${apiRegions}/${signal?.id}`}
+            path="/compare/[regions]/[signal]/[date]"
+            clearPath="/compare/[regions]/[signal]"
+            query={{ regions, signal }}
           />
         </>
       }
@@ -70,13 +68,17 @@ export function RegionsSignalDateCompare({
           path: '/compare/[regions]/[signal]',
         },
         {
-          breadcrumbName: apiDate,
+          breadcrumbName: formatAPIDate(date),
           path: '/compare/[regions]/[signal]/[date]',
         },
       ]}
       extra={[
         <FavoriteToggle signal={signal} region={regions} key="bookmark" warning={false} />,
-        <DownloadMenu key="download" img={false} path={`/compare/${apiRegions}/${signal?.id}/${apiDate}`} />,
+        <DownloadMenu
+          key="download"
+          img={false}
+          path={fullUrl('/compare/[regions]/[signal]/[date]', { regions, signal, date })}
+        />,
       ]}
     >
       <ContentLayout>
@@ -85,8 +87,9 @@ export function RegionsSignalDateCompare({
         <Divider />
         <Comparing
           regions={regions}
-          path={`/compare/[regions]/${signal?.id}/${apiDate}`}
-          clearPath={`/signal/${signal?.id}/${apiDate}`}
+          path="/compare/[regions]/[signal]/[date]"
+          clearPath="/signal/[signal]/[date]"
+          query={{ date, signal }}
         />
         <Row>
           {regions.map((region) => (

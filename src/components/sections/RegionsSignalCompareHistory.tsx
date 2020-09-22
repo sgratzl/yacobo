@@ -1,7 +1,6 @@
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import { Button, Card, Tooltip } from 'antd';
-import Link from 'next/link';
 import { useCallback } from 'react';
 import type { IRegion, ISignal } from '@/model';
 import { DownloadMenu } from '../blocks/DownloadMenu';
@@ -10,6 +9,8 @@ import { showInfoBox } from '../blocks/SignalInfoBox';
 import styles from './Section.module.css';
 import { LineMultiImage } from '../blocks/LineMultiImage';
 import { CompareLegend } from '../blocks/CompareIcon';
+import { fullUrl } from '@/client/hooks';
+import LinkWrapper from '../blocks/LinkWrapper';
 
 export default function RegionsSignalCompareHistorySection({
   regions,
@@ -47,17 +48,13 @@ export default function RegionsSignalCompareHistorySection({
         </>
       }
       actions={[
-        <Link
-          key="d"
-          href="/compare/[regions]/[signal]"
-          as={`/compare/${regions.map((d) => d.id).join(',')}/${signal?.id}`}
-        >
+        <LinkWrapper key="d" path="/compare/[regions]/[signal]" query={{ regions, signal }}>
           <Tooltip title="show details">
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
-        </Link>,
+        </LinkWrapper>,
         <FavoriteToggle key="b" signal={signal} region={regions} history />,
-        <DownloadMenu key="d" path={`/compare/${regions.map((d) => d.id).join(',')}/${signal?.id}`} />,
+        <DownloadMenu key="d" path={fullUrl('/compare/[regions]/[signal]', { regions, signal })} />,
         <Tooltip key="i" title="show signal information">
           <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />
         </Tooltip>,

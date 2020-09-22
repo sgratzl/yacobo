@@ -8,11 +8,11 @@ import useSWR from 'swr';
 import { addParam, fetcher } from '@/client/utils';
 import type { TopLevelSpec } from 'vega-lite';
 import { valueTooltipContent } from './VegaTooltip';
-import { useRouter } from 'next/router';
 import { imputeMissing } from '@/common/parseDates';
 import { useImageLoading, Image } from './Image';
 import { LoadingImage } from './LoadingImage';
 import { InteractiveWrapper, VegaLoader } from './MakeInteractive';
+import { useRouterWrapper } from '@/client/hooks';
 
 interface IParams extends ITriple {
   scale?: number;
@@ -79,11 +79,11 @@ function InteractiveLineVega({ signal, region, scale, date }: IParams) {
   const [ready, setReady] = useState(false);
 
   const content = useMemo(() => valueTooltipContent.bind(null, signal), [signal]);
-  const router = useRouter();
+  const router = useRouterWrapper();
   const onClick = useCallback(
     (d: { date: number }) => {
       if (signal && d.date && region && !isFakeRegion(region)) {
-        router.push('/region/[region]/[signal]/[date]', `/region/${region.id}/${signal.id}/${formatAPIDate(d.date)}`);
+        router.push('/region/[region]/[signal]/[date]', { region, signal, date: new Date(d.date) });
       }
     },
     [signal, region, router]

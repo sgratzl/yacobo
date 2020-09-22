@@ -8,7 +8,6 @@ import {
 } from '@/client/compare';
 import { useFetchSignalMeta } from '@/client/utils';
 import { Table } from 'antd';
-import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
 import type { SortOrder } from 'antd/lib/table/interface';
 import {
@@ -23,6 +22,7 @@ import { getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ISignalWith
 import { classNames } from '../utils';
 import styles from './DataTables.module.css';
 import { CompareIcon } from './CompareIcon';
+import LinkWrapper from './LinkWrapper';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
 
@@ -71,35 +71,34 @@ function useRenderBarValue(signal?: ISignal) {
 // ];
 
 export default function SignalTable({ signal, date, region }: ITriple) {
-  const apiDate = formatAPIDate(date);
   const { data } = useRegionValue(signal, date);
   const filtered = useMemo(() => data?.filter((d) => !d.region.endsWith('000')), [data]);
 
   const renderRegion = useCallback(
     (value: string, row: IRegionObjectValue) => {
       return (
-        <Link href="/region/[region]/[signal]/[date]" as={`/region/${row.region}/${signal?.id}/${apiDate}`} passHref>
+        <LinkWrapper path="/region/[region]/[signal]/[date]" query={{ region: row.region, signal, date }} passHref>
           <a href="a" className={classNames(region?.id === row.region && styles.highlight)}>
             {value}
           </a>
-        </Link>
+        </LinkWrapper>
       );
     },
-    [signal, apiDate, region]
+    [signal, date, region]
   );
   const renderState = useCallback(
     (value: string, row: IRegionObjectValue) => {
       return (
-        <Link
-          href="/region/[region]/[signal]/[date]"
-          as={`/region/${(row.regionObj as ICountyRegion).state.id}/${signal?.id}/${apiDate}`}
+        <LinkWrapper
+          path="/region/[region]/[signal]/[date]"
+          query={{ region: (row.regionObj as ICountyRegion).state, signal, date }}
           passHref
         >
           <a href="a">{value}</a>
-        </Link>
+        </LinkWrapper>
       );
     },
-    [signal, apiDate]
+    [signal, date]
   );
   const renderBarValue = useRenderBarValue(signal);
 
@@ -148,15 +147,11 @@ export function DateTable({ signal, region, date }: ITriple) {
   const renderDate = useCallback(
     (value: Date) => {
       return (
-        <Link
-          href="/region/[region]/[signal]/[date]"
-          as={`/region/${region!.id}/${signal!.id}/${formatAPIDate(value)}`}
-          passHref
-        >
+        <LinkWrapper path="/region/[region]/[signal]/[date]" query={{ region, signal, date: value }} passHref>
           <a href="a" className={classNames(formatAPIDate(value) === formatAPIDate(date) && styles.highlight)}>
             {formatAPIDate(value)}
           </a>
-        </Link>
+        </LinkWrapper>
       );
     },
     [signal, region, date]
@@ -229,23 +224,18 @@ function compareRegionValue(region: IRegion) {
 
 export function DateMultiTable({ signal, regions, date }: { signal?: ISignal; regions: IRegion[]; date?: Date }) {
   const { data } = useDateMultiRegionValue(regions, signal);
-  const apiRegions = regions.map((d) => d.id).join(',');
 
   const renderDate = useCallback(
     (value: Date) => {
       return (
-        <Link
-          href="/compare/[regions]/[signal]/[date]"
-          as={`/compare/${apiRegions}/${signal!.id}/${formatAPIDate(value)}`}
-          passHref
-        >
+        <LinkWrapper path="/compare/[regions]/[signal]/[date]" query={{ regions, signal, date: value }} passHref>
           <a href="a" className={classNames(formatAPIDate(value) === formatAPIDate(date) && styles.highlight)}>
             {formatAPIDate(value)}
           </a>
-        </Link>
+        </LinkWrapper>
       );
     },
-    [signal, apiRegions, date]
+    [signal, regions, date]
   );
   const renderBarValue = useRenderBarValue(signal);
 

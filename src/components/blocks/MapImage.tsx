@@ -8,11 +8,11 @@ import useSWR from 'swr';
 import { addParam, fetcher } from '@/client/utils';
 import type { TopLevelSpec } from 'vega-lite';
 import { valueTooltipContent } from './VegaTooltip';
-import { useRouter } from 'next/router';
 import { useImageLoading, Image } from './Image';
 import { LoadingImage } from './LoadingImage';
 import { InteractiveWrapper, VegaLoader } from './MakeInteractive';
 import { isFakeRegion, ITriple, regionByID } from '@/model';
+import { useRouterWrapper } from '@/client/hooks';
 
 interface IParams extends ITriple {
   scale?: number;
@@ -86,11 +86,11 @@ function InteractiveMapVega({ signal, date, region, scale }: IParams) {
   const content = useMemo(() => valueTooltipContent.bind(null, signal), [signal]);
 
   const onReady = useCallback(() => setReady(true), [setReady]);
-  const router = useRouter();
+  const router = useRouterWrapper();
   const onClick = useCallback(
     (d: { region: string }) => {
       if (signal && date && d.region) {
-        router.push('/region/[region]/[signal]/[date]', `/region/${d.region}/${signal.id}/${formatAPIDate(date)}`);
+        router.push('/region/[region]/[signal]/[date]', { region: d.region, signal, date });
       }
     },
     [signal, date, router]

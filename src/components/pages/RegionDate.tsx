@@ -10,6 +10,7 @@ import { LineImage } from '../blocks/LineImage';
 import ContentLayout from '../blocks/ContentLayout';
 import { Fragment } from 'react';
 import RegionSignalHistorySection from '../sections/RegionSignalHistory';
+import { fullUrl } from '@/client/hooks';
 
 export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: boolean }) {
   const apiDate = formatAPIDate(date);
@@ -18,14 +19,12 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
       pageTitle={`${region?.name} as of ${formatLocal(date)}`}
       mainActive="overview"
       description={`${region?.name} as of ${formatLocal(date)}`}
-      previewImage={{
-        url: `/api/region/${region?.id}/${refSignal.id}.jpg?highlight=${formatAPIDate(date)}`,
-        width: 450,
-        height: 247,
-      }}
-      title={<RegionSelect region={region} path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
+      previewImage={fullUrl('/api/region/[region]/[signal].jpg?highlight=[date]', { date, signal: refSignal, region })}
+      title={
+        <RegionSelect region={region} path="/region/[region]/date/[date]" clearPath="/date/[date]" query={{ date }} />
+      }
       subTitle={
-        <DateSelect date={date} path={`/region/${region?.id}/date/[date]`} clearPath={`/region/${region?.id}`} />
+        <DateSelect date={date} path="/region/[region]/date/[date]" clearPath="/region/[region]" query={{ region }} />
       }
       breadcrumb={[
         {

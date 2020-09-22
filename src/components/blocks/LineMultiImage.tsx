@@ -8,11 +8,11 @@ import { LoadingImage } from './LoadingImage';
 import { InteractiveWrapper, VegaLoader } from './MakeInteractive';
 import { useDateMultiRegionValue } from '@/client/data';
 import { imputeMissing } from '@/common/parseDates';
-import { useRouter } from 'next/router';
 import React, { useMemo, useState, useCallback } from 'react';
 import useSWR from 'swr';
 import type { TopLevelSpec } from 'vega-lite';
 import { valueTooltipContent } from './VegaTooltip';
+import { useRouterWrapper } from '@/client/hooks';
 
 interface IParams {
   signal?: ISignal;
@@ -94,11 +94,11 @@ function InteractiveMultiLineVega({ signal, regions, scale, date }: IParams) {
   const [ready, setReady] = useState(false);
 
   const content = useMemo(() => valueTooltipContent.bind(null, signal), [signal]);
-  const router = useRouter();
+  const router = useRouterWrapper();
   const onClick = useCallback(
     (d: { region: string; date: number }) => {
       if (signal && d.date && d.region) {
-        router.push('/region/[region]/[signal]/[date]', `/region/${d.region}/${signal.id}/${formatAPIDate(d.date)}`);
+        router.push('/region/[region]/[signal]/[date]', { region: d.region, signal, date: new Date(d.date) });
       }
     },
     [signal, router]

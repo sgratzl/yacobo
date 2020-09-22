@@ -10,6 +10,7 @@ import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { DateTable } from '../blocks/DataTables';
 import { LineImage } from '../blocks/LineImage';
+import { fullUrl } from '@/client/hooks';
 
 export function RegionSignal({ region, signal }: { region?: IRegion; signal?: ISignal }) {
   return (
@@ -17,16 +18,22 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
       pageTitle={`${region?.name} - ${signal?.name}`}
       mainActive="overview"
       description={`${region?.name}: ${signal?.description()}`}
-      previewImage={{
-        url: `/api/region/${region?.id}/${signal?.id}.jpg`,
-        width: 450,
-        height: 247,
-      }}
+      previewImage={fullUrl('/api/region/[region]/[signal].jpg', { region, signal })}
       title={
-        <RegionSelect region={region} path={`/region/[region]/${signal?.id}`} clearPath={`/signal/${signal?.id}`} />
+        <RegionSelect
+          region={region}
+          path="/region/[region]/[signal]"
+          clearPath="/signal/[signal]"
+          query={{ signal }}
+        />
       }
       subTitle={
-        <SignalSelect signal={signal} path={`/region/${region?.id}/[signal]`} clearPath={`/region/${region?.id}`} />
+        <SignalSelect
+          signal={signal}
+          path="/region/[region]/[signal]"
+          clearPath="/region/[region]"
+          query={{ region }}
+        />
       }
       breadcrumb={[
         {
@@ -40,7 +47,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
       ]}
       extra={[
         <FavoriteToggle region={region} signal={signal} key="bookmark" warning={false} history />,
-        <DownloadMenu key="download" path={`/region/${region?.id}/${signal?.id}`} />,
+        <DownloadMenu key="download" path={fullUrl('/region/[region]/[signal]', { region, signal })} />,
       ]}
     >
       <ContentLayout>

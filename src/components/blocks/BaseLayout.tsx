@@ -3,24 +3,17 @@ import { BackTop, Layout, PageHeader } from 'antd';
 import type { BreadcrumbProps } from 'antd/lib/breadcrumb';
 import type { PageHeaderProps } from 'antd/lib/page-header';
 import Head from 'next/head';
-import Link from 'next/link';
-import { NextRouter, useRouter } from 'next/router';
 import styles from './BaseLayout.module.css';
 import FooterLayout from './LayoutFooter';
-import { LayoutHeader } from './LayoutHeader';
+import { LayoutHeader, MainEntries } from './LayoutHeader';
+import LinkWrapper from './LinkWrapper';
 
 export interface BaseLayoutProps {
   pageTitle: string;
   description?: string;
-  previewImage?: { url: string; width: number; height: number };
-  mainActive: 'overview' | 'compare' | 'favorites' | 'api' | 'about';
+  previewImage?: string;
+  mainActive: MainEntries;
   breadcrumb: { breadcrumbName: string; path: string }[];
-}
-
-export function injectQuery(router: NextRouter, path: string, extras: Record<string, string> = {}) {
-  return path.replace(/\[(\w+)\]/gm, (_, key) => {
-    return extras[key] ?? router.query[key] ?? key;
-  });
 }
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? '';
@@ -34,7 +27,6 @@ export default function BaseLayout({
   breadcrumb,
   ...pageHeader
 }: React.PropsWithChildren<BaseLayoutProps & Omit<PageHeaderProps, 'breadcrumb'>>) {
-  const router = useRouter();
   return (
     <Layout className={styles.layout}>
       <LayoutHeader mainActive={mainActive} />
@@ -45,21 +37,15 @@ export default function BaseLayout({
           {/** generate social media tags */}
           <meta key="og:site_name" property="og:title" content={pageTitle} />
           <meta key="og:description" property="og:description" content={description} />
-          {previewImage && (
-            <>
-              <meta key="og:image:width" property="og:image:width" content={previewImage.width.toString()} />
-              <meta key="og:image:height" property="og:image:height" content={previewImage.height.toString()} />
-              <meta key="og:url" property="og:url" content={BASE_URL} />
-              <meta key="og:image" property="og:image" content={`${BASE_URL}${previewImage.url}`} />
-            </>
-          )}
+          <meta key="og:url" property="og:url" content={BASE_URL} />
+          {previewImage && <meta key="og:image" property="og:image" content={`${BASE_URL}${previewImage}`} />}
           {/* <meta name="twitter:site" content="@caleydo_org"/> */}
           <meta name="twitter:title" content={`YaCoBo - Yet another COVID-19 board - ${pageTitle}`} />
           <meta name="twitter:description" content={description} />
           {/* <meta name="twitter:creator" content="@caleydo_org"/> */}
-          {previewImage && <meta name="twitter:image:src" content={`${BASE_URL}${previewImage.url}`} />}
+          {previewImage && <meta name="twitter:image:src" content={`${BASE_URL}${previewImage}`} />}
         </Head>
-        <PageHeader className={styles.header} breadcrumb={createBreadcrumbProps(router, breadcrumb)} {...pageHeader}>
+        <PageHeader className={styles.header} breadcrumb={createBreadcrumbProps(breadcrumb)} {...pageHeader}>
           {children}
           <BackTop className={styles.backTop}>
             <UpCircleOutlined />
@@ -76,21 +62,14 @@ const breadcrumbRender: BreadcrumbProps['itemRender'] = (route, _params, routes)
   if (isLastItem) {
     return <span>{route.breadcrumbName}</span>;
   }
-  if (route.path.includes(':')) {
-    const [href, as] = route.path.split(':');
-    return (
-      <Link href={href} as={as}>
-        {route.breadcrumbName}
-      </Link>
-    );
-  }
-  return <Link href={route.path}>{route.breadcrumbName}</Link>;
+  return (
+    <LinkWrapper path={route.path} query={{}}>
+      {route.breadcrumbName}
+    </LinkWrapper>
+  );
 };
 
-function createBreadcrumbProps(
-  router: NextRouter,
-  routes: { breadcrumbName: string; path: string }[]
-): BreadcrumbProps {
+function createBreadcrumbProps(routes: { breadcrumbName: string; path: string }[]): BreadcrumbProps {
   return {
     itemRender: breadcrumbRender,
     routes: [
@@ -98,7 +77,7 @@ function createBreadcrumbProps(
         breadcrumbName: 'Home',
         path: '/',
       },
-      ...routes.map((r) => ({ ...r, path: `${r.path}:${injectQuery(router, r.path)}` })),
+      ...routes,
     ],
   };
 }

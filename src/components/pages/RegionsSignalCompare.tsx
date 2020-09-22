@@ -11,30 +11,31 @@ import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { DateMultiTable } from '../blocks/DataTables';
 import { LineMultiImage } from '../blocks/LineMultiImage';
 import { Comparing } from '../blocks/Comparing';
-import { formatAPIRegions } from '@/common';
+import { fullUrl } from '@/client/hooks';
 
 export function RegionsSignalCompare({ regions, signal }: { regions: IRegion[]; signal?: ISignal }) {
-  const apiRegions = formatAPIRegions(regions);
   const regionNames = regions.map((d) => d.name).join(' vs. ');
   return (
     <BaseLayout
       pageTitle={`${regionNames} - ${signal?.name}`}
       mainActive="compare"
       description={`${regionNames}: ${signal?.description()}`}
-      previewImage={{
-        url: `/api/compare/${apiRegions}/${signal?.id}.jpg`,
-        width: 450,
-        height: 247,
-      }}
+      previewImage={fullUrl('/api/compare/[regions]/[signal].jpg', { regions, signal })}
       title={
         <RegionsSelect
           regions={regions}
-          path={`/compare/[regions]/${signal?.id}`}
-          clearPath={`/signal/${signal?.id}`}
+          path="/compare/[regions]/[signal]"
+          clearPath="/signal/[signal]"
+          query={{ signal }}
         />
       }
       subTitle={
-        <SignalSelect signal={signal} path={`/compare/${apiRegions}/[signal]`} clearPath={`/compare/${apiRegions}`} />
+        <SignalSelect
+          signal={signal}
+          path="compare/[regions]/[signal]"
+          clearPath="/compare/[regions]"
+          query={{ regions }}
+        />
       }
       breadcrumb={[
         {
@@ -52,14 +53,19 @@ export function RegionsSignalCompare({ regions, signal }: { regions: IRegion[]; 
       ]}
       extra={[
         <FavoriteToggle region={regions} signal={signal} key="bookmark" warning={false} history />,
-        <DownloadMenu key="download" path={`/compare/${apiRegions}/${signal?.id}`} />,
+        <DownloadMenu key="download" path={fullUrl('/compare/[regions]/[signal]', { signal, regions })} />,
       ]}
     >
       <ContentLayout>
         <Typography.Title>{signal?.name}</Typography.Title>
         <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
         <Divider />
-        <Comparing regions={regions} path={`/compare/[regions]/${signal?.id}`} clearPath={`/signal/${signal?.id}`} />
+        <Comparing
+          regions={regions}
+          path="/compare/[regions]/[signal]"
+          clearPath="/signal/[signal]"
+          query={{ signal }}
+        />
         <LineMultiImage scale={2} interactive regions={regions} signal={signal} />
         <Divider />
         <SignalInfoBlock signal={signal} />

@@ -6,21 +6,17 @@ import { refSignal, signals } from '@/model/signals';
 import { formatAPIDate, formatLocal } from '@/common';
 import { Row } from 'antd';
 import GridColumn from '@/components/blocks/GridColumn';
+import { fullUrl } from '@/client/hooks';
 
 export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean }) {
-  const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
       pageTitle={`${formatLocal(date)}`}
       mainActive="overview"
-      title={<RegionSelect path={`/region/[region]/date/${apiDate}`} clearPath={`/date/${apiDate}`} />}
-      subTitle={<DateSelect date={date} path="/date/[date]" clearPath="/" />}
+      title={<RegionSelect path="/region/[region]/date/[date]" clearPath="/date/[date]" query={{ date }} />}
+      subTitle={<DateSelect date={date} path="/date/[date]" clearPath="/" query={{}} />}
       description={`Overview of the United States as of ${formatLocal(date)} showing multiple signals`}
-      previewImage={{
-        url: `/api/signal/${refSignal.id}/${apiDate}.jpg`,
-        width: 570,
-        height: 310,
-      }}
+      previewImage={fullUrl('/api/signal/[signal]/[date].jpg', { signal: refSignal.id, date })}
       breadcrumb={
         dynamic
           ? []

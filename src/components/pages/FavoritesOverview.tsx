@@ -1,3 +1,4 @@
+import { fullUrl } from '@/client/hooks';
 import { formatAPIDate, formatLocal } from '@/common';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
@@ -34,12 +35,8 @@ export default function FavoritesOverview({ date, dynamic }: { date?: Date; dyna
       mainActive="favorites"
       title="My Favorites"
       description={`Overview of the United States as of ${formatAPIDate(date)} showing the personal favorites`}
-      previewImage={{
-        url: `/api/signal/${refSignal.id}/${formatAPIDate(date)}.jpg`,
-        width: 570,
-        height: 310,
-      }}
-      subTitle={<DateSelect date={date} path={`/favorites/[date]`} clearPath="/" />}
+      previewImage={fullUrl('/api/signal/[signal]/[date]', { signal: refSignal, date })}
+      subTitle={<DateSelect date={date} path="/favorites/[date]" clearPath="/" query={{}} />}
       breadcrumb={[
         {
           breadcrumbName: 'Favorites',

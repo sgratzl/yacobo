@@ -1,9 +1,7 @@
-import { formatAPIRegions } from '@/common';
+import { IRouterQuery, useRouterWrapper } from '@/client/hooks';
 import { COMPARE_COLORS, IRegion, isCountyRegion, regionByID } from '@/model';
 import { Typography, List } from 'antd';
-import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
-import { injectQuery } from './BaseLayout';
 import { CompareCircleFilled } from './CompareIcon';
 import { RegionCustomSelect } from './RegionSelect';
 
@@ -14,8 +12,18 @@ interface IRegionItem {
   i: number;
 }
 
-export function Comparing({ regions, path, clearPath }: { regions: IRegion[]; path: string; clearPath: string }) {
-  const router = useRouter();
+export function Comparing({
+  regions,
+  path,
+  clearPath,
+  query,
+}: {
+  regions: IRegion[];
+  path: string;
+  clearPath: string;
+  query: IRouterQuery;
+}) {
+  const router = useRouterWrapper();
 
   const dataSource = useMemo(() => {
     const ids = regions.map((d) => d.id);
@@ -24,14 +32,14 @@ export function Comparing({ regions, path, clearPath }: { regions: IRegion[]; pa
         if (s && s !== 'US') {
           // replace
           const newRegions = [...ids.slice(0, i), s, ...ids.slice(i + 1)];
-          router.push(path, injectQuery(router, path, { regions: formatAPIRegions(newRegions) }));
+          router(path, { ...query, regions: newRegions });
         } else if (ids.length === 1) {
           // last one
-          router.push(clearPath, injectQuery(router, clearPath));
+          router(clearPath, query);
         } else {
           const newRegions = ids.slice();
           newRegions.splice(i, 1);
-          router.push(path, injectQuery(router, path, { regions: formatAPIRegions(newRegions) }));
+          router(path, { ...query, regions: newRegions });
         }
       };
       return {
@@ -57,12 +65,12 @@ export function Comparing({ regions, path, clearPath }: { regions: IRegion[]; pa
             // compare with state automatically
             newRegions.push(region.state.id);
           }
-          router.push(path, injectQuery(router, path, { regions: formatAPIRegions(newRegions) }));
+          router(path, { ...query, regions: newRegions });
         },
       });
     }
     return ds;
-  }, [router, path, clearPath, regions]);
+  }, [router, path, clearPath, regions, query]);
 
   const renderItem = useCallback(
     (item: IRegionItem) => {

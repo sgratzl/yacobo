@@ -1,4 +1,5 @@
-import { formatAPIDate, formatAPIRegions, formatLocal } from '@/common';
+import { fullUrl } from '@/client/hooks';
+import { formatAPIDate, formatLocal } from '@/common';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { IRegion, refSignal, signals } from '@/model';
@@ -18,27 +19,31 @@ export function RegionsCompareOverview({
   date?: Date;
   dynamic?: boolean;
 }) {
-  const apiRegions = formatAPIRegions(regions);
-  const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
       pageTitle={`${formatLocal(date)}`}
       description={refSignal.description(date)}
-      previewImage={{
-        url: `/api/compare/${apiRegions}/${refSignal?.id}.jpg?highlight=${apiDate}`,
-        width: 450,
-        height: 247,
-      }}
+      previewImage={fullUrl('/api/compare/[regions]/[signal].jpg?highlight=[date]', {
+        regions,
+        signal: refSignal,
+        date,
+      })}
       mainActive="compare"
       title={
         <RegionsSelect
           regions={regions}
-          path={`/compare/[regions]/date/${apiDate}`}
-          clearPath={`/compare/date/${apiDate}`}
+          path="/compare/[regions]/date/[date]"
+          clearPath="/compare/date/[date]"
+          query={{ date }}
         />
       }
       subTitle={
-        <DateSelect date={date} path={`/compare/${apiRegions}/date/[date]`} clearPath={`/compare/${apiRegions}`} />
+        <DateSelect
+          date={date}
+          path="/compare/[regions]/date/[date]"
+          clearPath="/compare/[regions]"
+          query={{ regions }}
+        />
       }
       breadcrumb={[
         {
@@ -60,7 +65,12 @@ export function RegionsCompareOverview({
       ]}
     >
       <Typography.Title>{regions.map((r) => r.name).join(' vs. ')}</Typography.Title>
-      <Comparing regions={regions} path={`/compare/[regions]/date/${apiDate}`} clearPath={`/compare/date/${apiDate}`} />
+      <Comparing
+        regions={regions}
+        path="/compare/[regions]/date/[date]"
+        clearPath="/compare/date/[date]"
+        query={{ date }}
+      />
       <Row>
         {regions.map((r, i) => (
           <GridColumn key={r.id}>
