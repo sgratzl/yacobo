@@ -41,9 +41,9 @@ export default function LayoutFooter() {
         >
           MIT License
         </Typography.Link>
-        {'; '}
+        {`; v${process.env.NEXT_PUBLIC_VERSION} `}
         <Typography.Link href="https://github.com/sgratzl/yacobo" target="_blank" rel="noopener noreferrer">
-          <GithubOutlined /> GitHub
+          <GithubOutlined />
         </Typography.Link>
       </div>
     </Layout.Footer>

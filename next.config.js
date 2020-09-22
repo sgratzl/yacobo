@@ -1,11 +1,22 @@
 /* eslint-env node */
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pkg = require('./package.json');
+
 module.exports = {
+  env: {
+    NEXT_PUBLIC_VERSION: pkg.version,
+  },
   async redirects() {
     return [
       {
         source: '/signal/all',
         destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/compare/date',
+        destination: '/compare',
         permanent: true,
       },
       {
@@ -26,6 +37,11 @@ module.exports = {
       {
         source: '/region/:region/all',
         destination: '/region/:region',
+        permanent: true,
+      },
+      {
+        source: '/compare/:regions/date',
+        destination: '/compare/:regions',
         permanent: true,
       },
     ];
