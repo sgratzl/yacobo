@@ -229,6 +229,8 @@ export async function createSignalMultiLineChart(
           title: 'Region',
           symbolOpacity: 1,
           labelExpr: `${JSON.stringify(regionLookup)}[datum.value]`,
+          orient: 'bottom',
+          titleOrient: 'left',
         }
       : null,
   };

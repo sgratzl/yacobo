@@ -315,6 +315,104 @@
           }
         }
       }
+    },
+    "/compare/{regions}/{signal}": {
+      "get": {
+        "summary": "returns history of the signal for the given regions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/regions"
+          },
+          {
+            "$ref": "#/components/parameters/signal"
+          },
+          {
+            "$ref": "#/components/parameters/details"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "region date info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Value"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Region"
+                      },
+                      {
+                        "$ref": "#/components/schemas/RegionDetails"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Date"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
+          }
+        }
+      }
+    },
+
+    "/compare/{regions}/{signal}/{date}": {
+      "get": {
+        "summary": "returns history of the signal for the given regions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/regions"
+          },
+          {
+            "$ref": "#/components/parameters/signal"
+          },
+          {
+            "$ref": "#/components/parameters/date"
+          },
+          {
+            "$ref": "#/components/parameters/details"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "region date info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Value"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Region"
+                      },
+                      {
+                        "$ref": "#/components/schemas/RegionDetails"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Date"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "5XX": {
+            "$ref": "#/components/responses/GeneralError"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -439,6 +537,29 @@
         },
         "schema": {
           "type": "string"
+        }
+      },
+      "regions": {
+        "name": "regions",
+        "in": "path",
+        "description": "The regions to compare",
+        "required": true,
+        "examples": {
+          "42,42003": {
+            "description": "Pennsylvania vs. Allegheny County",
+            "value": "42,42003"
+          },
+          "06,36": {
+            "description": "California vs. New York",
+            "value": "06,36"
+          }
+        },
+        "style": "simple",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "signal": {

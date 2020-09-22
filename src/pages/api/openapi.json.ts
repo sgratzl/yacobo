@@ -83,7 +83,7 @@ function generateFormatPath(
   };
 }
 
-const noImages = ['/signal/date/{date}', '/signal'];
+const noImages = ['/signal/date/{date}', '/signal', 'compare/{regions}/{signal}/{date}'];
 
 const imageParams = [
   {
