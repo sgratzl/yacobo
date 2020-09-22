@@ -105,7 +105,7 @@ export function RegionsSelect({ regions, path, clearPath }: { regions: IRegion[]
       treeCheckable
       maxTagCount={COMPARE_COLORS.length}
       className={`${styles.select} ${styles.selectTreeMultiple}`}
-      value={regions.length === 0 ? undefined : (regions.map((r) => r.id) as any)}
+      value={regions.length === 0 ? undefined : regions.map((r) => ({ value: r.id, label: r.name }))}
       onChange={onSelect}
       allowClear={clearPath != null}
       showSearch
