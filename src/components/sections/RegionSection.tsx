@@ -13,7 +13,7 @@ export default function RegionSection({
   region,
   date,
   signal,
-  focus = 'region',
+  focus = 'both',
   compare,
 }: ITriple & { focus?: 'region' | 'both'; compare?: number }) {
   const apiDate = formatAPIDate(date);
