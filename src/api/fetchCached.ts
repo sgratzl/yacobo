@@ -16,7 +16,15 @@ export default async function fetchCached<T, R = T>(
     parse = identity,
   }: { cache?: CacheDuration; process?: (r: T) => R; parse?: (r: R) => R }
 ): Promise<R> {
-  const r = await ctx.redis.getAsync(key);
+  let r: string | null = null;
+  try {
+    r = await ctx.redis.getAsync(key);
+  } catch (error) {
+    console.warn(error);
+    // in case of an redis error load it
+    const loaded = await loader(key);
+    return process(loaded);
+  }
 
   if (r != null) {
     return parse(JSON.parse(r));
