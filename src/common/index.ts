@@ -1,3 +1,4 @@
+import { IRegion } from '@/model';
 import { format, formatISO, isValid } from 'date-fns';
 
 export function formatAPIDate(date?: Date | number) {
@@ -28,4 +29,10 @@ export function formatFixedValue(value?: number | null) {
     return '?';
   }
   return value.toFixed(1);
+}
+
+export function formatAPIRegions(regions: string[]): string;
+export function formatAPIRegions(regions: IRegion[]): string;
+export function formatAPIRegions(regions: (IRegion | string)[]): string {
+  return regions.map((r) => (typeof r === 'string' ? r : r.id)).join(',');
 }

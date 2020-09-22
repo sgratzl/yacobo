@@ -11,9 +11,10 @@ import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { DateMultiTable } from '../blocks/DataTables';
 import { LineMultiImage } from '../blocks/LineMultiImage';
 import { Comparing } from '../blocks/Comparing';
+import { formatAPIRegions } from '@/common';
 
 export function RegionsSignalCompare({ regions, signal }: { regions: IRegion[]; signal?: ISignal }) {
-  const apiRegions = regions.map((d) => d.id).join(',');
+  const apiRegions = formatAPIRegions(regions);
   const regionNames = regions.map((d) => d.name).join(' vs. ');
   return (
     <BaseLayout

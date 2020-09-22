@@ -1,7 +1,7 @@
 import styles from './VegaImage.module.css';
 import { classNames } from '../utils';
 import { ISignal, IRegion, isFakeRegion, regionByID } from '@/model';
-import { formatAPIDate, formatLocal } from '@/common';
+import { formatAPIDate, formatAPIRegions, formatLocal } from '@/common';
 import { addParam, fetcher } from '@/client/utils';
 import { useImageLoading, Image } from './Image';
 import { LoadingImage } from './LoadingImage';
@@ -33,7 +33,7 @@ export function LineMultiImage({
   const valid = signal != null && regions.length > 0;
   const src = valid
     ? addParam(
-        `/api/compare/${regions.map((r) => r.id).join(',')}/${signal?.id}.jpg`,
+        `/api/compare/${formatAPIRegions(regions)}/${signal?.id}.jpg`,
         'highlight',
         date ? formatAPIDate(date) : undefined
       )
@@ -75,7 +75,7 @@ function regionDateValueTooltip(datum: { region: string; date: number }) {
 function InteractiveMultiLineVega({ signal, regions, scale, date }: IParams) {
   const { data, error } = useDateMultiRegionValue(regions, signal);
   const specUrl = addParam(
-    addParam(`/api/compare/${regions.map((d) => d.id).join(',')}/${signal?.id}.vg`, 'scale', scale),
+    addParam(`/api/compare/${formatAPIRegions(regions)}/${signal?.id}.vg`, 'scale', scale),
     'highlight',
     date ? formatAPIDate(date) : undefined
   )!;

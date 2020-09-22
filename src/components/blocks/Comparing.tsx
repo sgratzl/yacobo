@@ -1,27 +1,11 @@
-import { COMPARE_COLORS, IRegion } from '@/model';
+import { formatAPIRegions } from '@/common';
+import { COMPARE_COLORS, IRegion, isCountyRegion, regionByID } from '@/model';
 import { Typography, List } from 'antd';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
 import { injectQuery } from './BaseLayout';
+import { CompareCircleFilled } from './CompareCircleFilled';
 import { RegionCustomSelect } from './RegionSelect';
-
-function CircleIcon({ i }: { i: number }) {
-  return (
-    <span role="img" aria-label="plus-circle" className="anticon">
-      <svg
-        viewBox="64 64 896 896"
-        focusable="false"
-        data-icon="plus-circle"
-        width="1em"
-        height="1em"
-        style={{ fill: `var(--compare-color${i + 1})` }}
-        aria-hidden="true"
-      >
-        <path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64z"></path>
-      </svg>
-    </span>
-  );
-}
 
 interface IRegionItem {
   id: string;
@@ -40,14 +24,14 @@ export function Comparing({ regions, path, clearPath }: { regions: IRegion[]; pa
         if (s && s !== 'US') {
           // replace
           const newRegions = [...ids.slice(0, i), s, ...ids.slice(i + 1)];
-          router.push(path, injectQuery(router, path, { regions: newRegions.join(',') }));
+          router.push(path, injectQuery(router, path, { regions: formatAPIRegions(newRegions) }));
         } else if (ids.length === 1) {
           // last one
           router.push(clearPath, injectQuery(router, clearPath));
         } else {
           const newRegions = ids.slice();
           newRegions.splice(i, 1);
-          router.push(path, injectQuery(router, path, { regions: newRegions.join(',') }));
+          router.push(path, injectQuery(router, path, { regions: formatAPIRegions(newRegions) }));
         }
       };
       return {
@@ -66,7 +50,14 @@ export function Comparing({ regions, path, clearPath }: { regions: IRegion[]; pa
           if (!s || s === 'US') {
             return;
           }
-          router.push(path, injectQuery(router, path, { regions: [...regions.map((d) => d.id), s].join(',') }));
+          const newRegions = ids.slice();
+          newRegions.push(s);
+          const region = regionByID(s);
+          if (regions.length === 0 && isCountyRegion(region)) {
+            // compare with state automatically
+            newRegions.push(region.state.id);
+          }
+          router.push(path, injectQuery(router, path, { regions: formatAPIRegions(newRegions) }));
         },
       });
     }
@@ -78,7 +69,7 @@ export function Comparing({ regions, path, clearPath }: { regions: IRegion[]; pa
       <List.Item>
         <List.Item.Meta
           style={{ alignItems: 'center' }}
-          avatar={<CircleIcon i={item.i} />}
+          avatar={<CompareCircleFilled i={item.i} />}
           title={
             <RegionCustomSelect
               region={item.region}

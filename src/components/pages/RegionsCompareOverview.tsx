@@ -1,4 +1,4 @@
-import { formatAPIDate, formatLocal } from '@/common';
+import { formatAPIDate, formatAPIRegions, formatLocal } from '@/common';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { IRegion, refSignal, signals } from '@/model';
@@ -17,7 +17,7 @@ export function RegionsCompareOverview({
   date?: Date;
   dynamic?: boolean;
 }) {
-  const apiRegions = regions.map((d) => d.id).join(',');
+  const apiRegions = formatAPIRegions(regions);
   const apiDate = formatAPIDate(date);
   return (
     <BaseLayout

@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { COMPARE_COLORS, IRegion, states } from '../../model';
 import styles from './Select.module.css';
 import { injectQuery } from './BaseLayout';
+import { formatAPIRegions } from '@/common';
 
 export const treeData = [
   {
@@ -70,11 +71,11 @@ export function RegionsSelect({ regions, path, clearPath }: { regions: IRegion[]
   const onSelect = useCallback(
     (s: string | null | string[]) => {
       const validRegions = Array.isArray(s) ? s.filter((d) => d !== 'US') : [];
-      if (validRegions.length > 4) {
-        validRegions.splice(3, validRegions.length - 3 - 1);
+      if (validRegions.length > COMPARE_COLORS.length) {
+        validRegions.splice(COMPARE_COLORS.length - 1, validRegions.length - COMPARE_COLORS.length - 1 - 1);
       }
       if (validRegions.length > 0) {
-        router.push(path, injectQuery(router, path, { regions: validRegions.join(',') }));
+        router.push(path, injectQuery(router, path, { regions: formatAPIRegions(validRegions) }));
       } else if (clearPath) {
         router.push(clearPath, injectQuery(router, clearPath));
       }
