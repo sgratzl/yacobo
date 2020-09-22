@@ -8,7 +8,9 @@ export class Redis {
     if (this.client) {
       return this.client;
     }
-    this.client = createClient(process.env.REDIS_URL!);
+    this.client = createClient(process.env.REDIS_URL!, {
+      no_ready_check: true, // to save some command
+    });
     return this.client;
   }
 
