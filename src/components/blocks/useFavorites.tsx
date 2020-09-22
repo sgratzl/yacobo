@@ -63,6 +63,7 @@ const DEFAULT_FAVORITES = [
   asFavorite(undefined, regionByID('42003')!)!, // Allegheny County
   asFavorite(signalByID('cases')!, regionByID('42003')!)!, // Allegheny County
   asFavorite(signalByID('cases')!, regionByID('42003')!, true)!, // Allegheny County History
+  asFavorite(signalByID('cases')!, [regionByID('42003'), regionByID('42')!], true)!, // Allegheny County vs Pennsylvania
 ].map(formatFavorite);
 
 function parseFavorite(favorite: ISerializedFavorite): IFavorite | null {
