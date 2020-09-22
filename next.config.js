@@ -6,6 +6,7 @@ const pkg = require('./package.json');
 module.exports = {
   env: {
     NEXT_PUBLIC_VERSION: pkg.version,
+    NEXT_PUBLIC_BASE_URL: process.env.VERCEL_URL || '',
   },
   async redirects() {
     return [

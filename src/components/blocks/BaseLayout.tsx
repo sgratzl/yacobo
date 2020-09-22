@@ -23,7 +23,7 @@ export function injectQuery(router: NextRouter, path: string, extras: Record<str
   });
 }
 
-const BASE_URL = process.env.VERCEL_URL ?? '';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? '';
 
 export default function BaseLayout({
   children,
