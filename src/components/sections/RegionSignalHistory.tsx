@@ -31,7 +31,12 @@ export default function RegionSignalHistorySection({
   return (
     <Card
       className={styles.card}
-      cover={<RegionSignalKeyFacts date={date} region={region} signal={signal} />}
+      cover={
+        <>
+          <RegionSignalKeyFacts date={date} region={region} signal={signal} />
+          <LineImage signal={signal} date={date} region={region} />
+        </>
+      }
       actions={[
         <Link key="d" href="/region/[region]/[signal]/" as={`/region/${region?.id}/${signal?.id}`}>
           <Tooltip title="show details">
@@ -45,12 +50,7 @@ export default function RegionSignalHistorySection({
         </Tooltip>,
       ]}
     >
-      <Card.Meta
-        title={title}
-        className={styles.meta}
-        description={<>{focus !== 'region' && signal?.description(date)}</>}
-      />
-      <LineImage signal={signal} date={date} region={region} />
+      <Card.Meta title={title} description={<>{focus !== 'region' && signal?.description(date)}</>} />
     </Card>
   );
 }

@@ -25,7 +25,14 @@ export default function RegionSignalSection({
   return (
     <Card
       className={styles.card}
-      cover={<RegionSignalKeyFacts date={date} region={region} signal={signal} />}
+      cover={
+        <>
+          <RegionSignalKeyFacts date={date} region={region} signal={signal} />
+          <div className={styles.tableCover}>
+            <RegionSignalKeyFactsTable date={date} region={region} signal={signal} />
+          </div>
+        </>
+      }
       actions={[
         <Link key="d" href="/region/[region]/[signal]/[date]" as={`/region/${region?.id}/${signal?.id}/${apiDate}`}>
           <Tooltip title="show region details">
@@ -36,10 +43,7 @@ export default function RegionSignalSection({
         <DownloadMenu key="d" img={false} path={`/region/${region?.id}/${signal?.id}/${apiDate}`} />,
       ]}
     >
-      <Card.Meta
-        title={title}
-        description={<RegionSignalKeyFactsTable date={date} region={region} signal={signal} />}
-      />
+      <Card.Meta title={title} description={signal?.description(date)} />
     </Card>
   );
 }

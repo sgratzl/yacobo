@@ -39,7 +39,9 @@ export default function RegionSection({
         }
         className={styles.meta}
       />
-      <KeySignalMultiFacts region={region} date={date} signal={signal} />
+      <div className={styles.tableCover}>
+        <KeySignalMultiFacts region={region} date={date} signal={signal} />
+      </div>
     </Card>
   );
 }
