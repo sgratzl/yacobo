@@ -37,6 +37,7 @@ export default function RegionsSignalCompareHistorySection({
   return (
     <Card
       className={styles.card}
+      cover={<LineMultiImage signal={signal} date={date} regions={regions} />}
       actions={[
         <Link
           key="d"
@@ -59,7 +60,6 @@ export default function RegionsSignalCompareHistorySection({
         className={styles.meta}
         description={<>{focus !== 'region' && signal?.description(date)}</>}
       />
-      <LineMultiImage signal={signal} date={date} regions={regions} />
     </Card>
   );
 }

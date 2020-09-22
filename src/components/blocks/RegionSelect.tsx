@@ -84,6 +84,7 @@ export function RegionsSelect({ regions, path, clearPath }: { regions: IRegion[]
 
   return (
     <TreeSelect
+      treeCheckStrictly
       treeCheckable
       maxTagCount={COMPARE_COLORS.length}
       className={`${styles.select} ${styles.selectTreeMultiple}`}
