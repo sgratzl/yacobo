@@ -13,7 +13,7 @@ export interface BaseLayoutProps {
   pageTitle: string;
   description?: string;
   previewImage?: { url: string; width: number; height: number };
-  mainActive: 'overview' | 'compare' | 'favorites' | 'api';
+  mainActive: 'overview' | 'compare' | 'favorites' | 'api' | 'about';
   breadcrumb: { breadcrumbName: string; path: string }[];
 }
 
