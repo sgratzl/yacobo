@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { PropsWithChildren } from 'react';
-import type { IRouterQuery } from '../../client/hooks';
+import { IRouterQuery, useRouterWrapper } from '../../client/hooks';
 
 export default function LinkWrapper({
   path,
@@ -8,8 +8,9 @@ export default function LinkWrapper({
   passHref,
   children,
 }: PropsWithChildren<{ path: string; query: IRouterQuery; passHref?: boolean }>) {
+  const { href, as } = useRouterWrapper().generate(path, query);
   return (
-    <Link href={path} passHref={passHref}>
+    <Link href={href} as={as} passHref={passHref}>
       {children}
     </Link>
   );

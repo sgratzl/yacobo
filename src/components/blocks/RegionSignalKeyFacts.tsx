@@ -17,10 +17,10 @@ import FallOutlined from '@ant-design/icons/FallOutlined';
 import RiseOutlined from '@ant-design/icons/RiseOutlined';
 import { Spin, Statistic, Table, Tooltip } from 'antd';
 import { formatDistance, isValid, subDays } from 'date-fns';
-import Link from 'next/link';
 import { useCallback } from 'react';
 import useSWR from 'swr';
 import { classNames } from '../utils';
+import LinkWrapper from './LinkWrapper';
 import styles from './RegionSignalKeyFacts.module.css';
 
 interface IDateTableRow {
@@ -47,13 +47,9 @@ export function RegionSignalKeyFactsTable({ region, signal, date }: ITriple) {
     (value: string, row: IDateTableRow) => {
       if (row.date) {
         return (
-          <Link
-            passHref
-            href="/region/[region]/[signal]/[date]"
-            as={`/region/${region?.id}/${signal?.id}/${formatAPIDate(row.date)}`}
-          >
+          <LinkWrapper passHref path="/region/[region]/[signal]/[date]" query={{ region, signal, date: row.date }}>
             <a href="a">{value}</a>
-          </Link>
+          </LinkWrapper>
         );
       }
       return value;
@@ -202,15 +198,11 @@ export function KeySignalMultiFacts({ region, date, signal }: ITriple) {
   const renderSignalLink = useCallback(
     (value: string, row: ISignalTableRow) => {
       return (
-        <Link
-          passHref
-          href="/region/[region]/[signal]/[date]"
-          as={`/region/${region?.id}/${row.signal.id}/${formatAPIDate(date)}`}
-        >
+        <LinkWrapper passHref path="/region/[region]/[signal]/[date]" query={{ region, signal: row.signal, date }}>
           <a href="a" className={classNames(signal?.id === row.signal.id && styles.highlight)}>
             {value}
           </a>
-        </Link>
+        </LinkWrapper>
       );
     },
     [region, date, signal]

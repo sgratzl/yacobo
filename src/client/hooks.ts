@@ -1,3 +1,4 @@
+import { formatAPIDate } from '@/common';
 import { NextRouter, useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -32,14 +33,38 @@ export function useFallback<T>(value: string | undefined, resolver: (value: stri
   return resolver(value!);
 }
 
-function injectQuery(router: NextRouter, path: string, extras: Record<string, string> = {}) {
+function formatValue(value: undefined | null | string | string[] | Date | { id: string } | { id: string }[]): string {
+  if (value == null) {
+    return '?'; // dummy value for to be loaded once
+  }
+  if (value instanceof Date) {
+    return formatAPIDate(value);
+  }
+  if (typeof value === 'string') {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return (value as any[]).map((d) => formatValue(d)).join(',');
+  }
+  return value.id;
+}
+
+function injectQuery(path: string, query: IRouterQuery) {
+  const keys = new Set(Object.keys(query));
   return path.replace(/\[(\w+)\]/gm, (_, key) => {
-    return extras[key] ?? router.query[key] ?? key;
+    if (!keys.has(key)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('generate url for key not found', path, key, query);
+      }
+      return key;
+    }
+    const r = query[key];
+    return formatValue(r);
   });
 }
 
 export function fullUrl(path: string, query: IRouterQuery) {
-  return path; // TODO
+  return injectQuery(path, query);
 }
 
 export type IRouterQuery = Record<
@@ -50,11 +75,20 @@ export type IRouterQuery = Record<
 export function useRouterWrapper() {
   const router = useRouter();
 
+  const generate = useCallback(
+    (path: string, query: IRouterQuery) => {
+      const fullQuery = { ...router.query, ...query };
+      const href = injectQuery(path, fullQuery);
+      return { href, as: undefined };
+    },
+    [router.query]
+  );
   const push = useCallback(
     (path: string, query: IRouterQuery) => {
-      router.push(path);
+      const { href, as } = generate(path, query);
+      router.push(href, as);
     },
-    [router]
+    [router, generate]
   );
-  return { push };
+  return { push, generate };
 }
