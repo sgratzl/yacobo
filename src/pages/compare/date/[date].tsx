@@ -1,40 +1,21 @@
-import { formatAPIDate } from '@/common';
-import type { GetStaticPaths, GetStaticProps } from 'next';
-import { fetchMinMaxDate } from '@/api/data';
-import { estimateDateToPreRender } from '@/api/model';
 import { useFallback } from '@/client/hooks';
 import { extractDate } from '@/common/validator';
-import type { ParsedUrlQuery } from 'querystring';
 import { CompareOverview } from '@/components/pages/CompareOverview';
-import { withContext } from '@/api/middleware';
+import type { NextPage } from 'next';
 
-interface IDateOverviewProps {
+interface IProps {
   date: string;
 }
 
-export const getStaticProps: GetStaticProps<IDateOverviewProps> = async (context) => {
-  return {
-    props: {
-      date: context.params!.date as string,
-    },
-  };
-};
-
-export const getStaticPaths: GetStaticPaths<IDateOverviewProps & ParsedUrlQuery> = async () => {
-  const { max } = await withContext(fetchMinMaxDate);
-  const datesToRender = estimateDateToPreRender(max);
-  return {
-    paths: datesToRender.map((date) => ({
-      params: {
-        date: formatAPIDate(date),
-      },
-    })),
-    fallback: true,
-  };
-};
-
-export default function DateOverviewWrapper(props: IDateOverviewProps) {
+const Page: NextPage<IProps> = (props) => {
   const date = useFallback(props.date, extractDate, undefined);
-
   return <CompareOverview date={date} />;
-}
+};
+
+Page.getInitialProps = async (ctx) => {
+  return {
+    date: ctx.query.date as string,
+  };
+};
+
+export default Page;
