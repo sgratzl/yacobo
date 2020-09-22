@@ -1,0 +1,9 @@
+.compareIcon {
+  padding-right: 0.5em;
+}
+
+.legend {
+  font-size: 10px;
+  display: flex;
+  justify-content: space-evenly;
+}

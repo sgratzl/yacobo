@@ -5,10 +5,17 @@ import { ITriple } from '@/model';
 import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { DownloadMenu } from '../blocks/DownloadMenu';
 import styles from './Section.module.css';
-import { formatAPIDate } from '@/common';
+import { formatAPIDate, formatLocal } from '@/common';
 import { KeySignalMultiFacts } from '../blocks/RegionSignalKeyFacts';
+import { CompareIcon } from '../blocks/CompareIcon';
 
-export default function RegionSection({ region, date, signal }: ITriple) {
+export default function RegionSection({
+  region,
+  date,
+  signal,
+  focus = 'region',
+  compare,
+}: ITriple & { focus?: 'region' | 'both'; compare?: number }) {
   const apiDate = formatAPIDate(date);
   return (
     <Card
@@ -23,7 +30,15 @@ export default function RegionSection({ region, date, signal }: ITriple) {
         <DownloadMenu img={false} key="d" path={`/region/${region?.id}/date/${apiDate}`} />,
       ]}
     >
-      <Card.Meta title={region?.name} className={styles.meta} />
+      <Card.Meta
+        title={
+          <CompareIcon
+            title={`${region?.name}${focus === 'both' ? ` as of ${formatLocal(date)}` : ''}`}
+            compare={compare}
+          />
+        }
+        className={styles.meta}
+      />
       <KeySignalMultiFacts region={region} date={date} signal={signal} />
     </Card>
   );

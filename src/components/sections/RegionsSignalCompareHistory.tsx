@@ -9,17 +9,20 @@ import { FavoriteToggle } from '../blocks/FavoriteToggle';
 import { showInfoBox } from '../blocks/SignalInfoBox';
 import styles from './Section.module.css';
 import { LineMultiImage } from '../blocks/LineMultiImage';
+import { CompareLegend } from '../blocks/CompareIcon';
 
 export default function RegionsSignalCompareHistorySection({
   regions,
   signal,
   date,
   focus = 'both',
+  legend = true,
 }: {
   regions: IRegion[];
   signal?: ISignal;
   date?: Date;
   focus: 'region' | 'signal' | 'both';
+  legend?: boolean;
 }) {
   const showInfo = useCallback(() => {
     if (signal) {
@@ -37,7 +40,12 @@ export default function RegionsSignalCompareHistorySection({
   return (
     <Card
       className={styles.card}
-      cover={<LineMultiImage signal={signal} date={date} regions={regions} />}
+      cover={
+        <>
+          <LineMultiImage signal={signal} date={date} regions={regions} />
+          {legend && <CompareLegend regions={regions} />}
+        </>
+      }
       actions={[
         <Link
           key="d"

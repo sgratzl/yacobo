@@ -4,7 +4,7 @@ import { Typography, List } from 'antd';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
 import { injectQuery } from './BaseLayout';
-import { CompareCircleFilled } from './CompareCircleFilled';
+import { CompareCircleFilled } from './CompareIcon';
 import { RegionCustomSelect } from './RegionSelect';
 
 interface IRegionItem {

@@ -22,6 +22,7 @@ import { formatAPIDate, formatFixedValue } from '../../common';
 import { getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ISignalWithMeta, ITriple } from '../../model';
 import { classNames } from '../utils';
 import styles from './DataTables.module.css';
+import { CompareIcon } from './CompareIcon';
 
 // export type ISignalMultiRow = { region: string } & Record<string, string | number | undefined | null>;
 
@@ -267,11 +268,7 @@ export function DateMultiTable({ signal, regions, date }: { signal?: ISignal; re
         <Table.Column<IMultiDateValue>
           key={region.id}
           align="center"
-          title={
-            <span className={styles.compareHint} data-i={i}>
-              {region.name}
-            </span>
-          }
+          title={<CompareIcon title={region.name} compare={i} />}
           dataIndex={['values', region.id]}
           render={renderBarValue}
           sorter={comparators[i]}

@@ -6,6 +6,7 @@ import { Row, Typography } from 'antd';
 import { Comparing } from '../blocks/Comparing';
 import GridColumn from '../blocks/GridColumn';
 import { RegionsSelect } from '../blocks/RegionSelect';
+import RegionSection from '../sections/RegionSection';
 import RegionsSignalCompareHistorySection from '../sections/RegionsSignalCompareHistory';
 
 export function RegionsCompareOverview({
@@ -61,9 +62,22 @@ export function RegionsCompareOverview({
       <Typography.Title>{regions.map((r) => r.name).join(' vs. ')}</Typography.Title>
       <Comparing regions={regions} path={`/compare/[regions]/date/${apiDate}`} clearPath={`/compare/date/${apiDate}`} />
       <Row>
+        {regions.map((r, i) => (
+          <GridColumn key={r.id}>
+            <RegionSection region={r} date={date} focus="both" compare={i} />
+          </GridColumn>
+        ))}
+      </Row>
+      <Row>
         {signals.map((s) => (
           <GridColumn key={s.id}>
-            <RegionsSignalCompareHistorySection regions={regions} signal={s} date={date} focus="signal" />
+            <RegionsSignalCompareHistorySection
+              regions={regions}
+              signal={s}
+              date={date}
+              focus="signal"
+              legend={false}
+            />
           </GridColumn>
         ))}
       </Row>
