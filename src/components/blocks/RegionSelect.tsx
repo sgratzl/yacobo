@@ -6,31 +6,47 @@ import styles from './Select.module.css';
 import { injectQuery } from './BaseLayout';
 import { formatAPIRegions } from '@/common';
 
-export const treeData = [
-  {
-    key: 'US',
-    label: 'US - whole country',
-    value: 'US',
-    children: states.map((state) => ({
-      key: state.id,
-      label: state.name,
-      value: state.id,
-      children: state.counties.map((county) => ({ key: county.id, label: county.name, value: county.id })),
-    })),
-  },
-];
+function generateTree(selected: IRegion[]) {
+  const lookup = new Set(selected.map((d) => d.id));
+  return [
+    {
+      key: 'US',
+      label: 'US - whole country',
+      value: 'US',
+      disabled: lookup.has('US'),
+      children: states.map((state) => ({
+        key: state.id,
+        label: state.name,
+        value: state.id,
+        disabled: lookup.has(state.id),
+        filter: `${state.id} ${state.short} ${state.name}`,
+        children: state.counties.map((county) => ({
+          key: county.id,
+          label: county.name,
+          value: county.id,
+          disabled: lookup.has(county.id),
+          filter: `${county.id} ${county.name}`,
+        })),
+      })),
+    },
+  ];
+}
+
+export const treeData = generateTree([]);
 
 export function RegionCustomSelect({
   region,
   onSelect,
   allowClear,
   defaultValue = true,
+  selected,
   open,
 }: {
   region?: IRegion;
   defaultValue?: boolean;
   onSelect: (v: string | null) => void;
   allowClear?: boolean;
+  selected?: IRegion[];
   open?: boolean;
 }) {
   return (
@@ -40,10 +56,10 @@ export function RegionCustomSelect({
       onChange={onSelect}
       allowClear={allowClear}
       showSearch
-      treeData={treeData}
+      treeData={selected ? generateTree(selected) : treeData}
       placeholder="Select Region"
       treeDefaultExpandedKeys={['US']}
-      treeNodeFilterProp="label"
+      treeNodeFilterProp="filter"
       open={open}
       dropdownMatchSelectWidth={300}
     ></TreeSelect>
@@ -69,8 +85,8 @@ export function RegionSelect({ region, path, clearPath }: { region?: IRegion; pa
 export function RegionsSelect({ regions, path, clearPath }: { regions: IRegion[]; path: string; clearPath?: string }) {
   const router = useRouter();
   const onSelect = useCallback(
-    (s: string | null | string[]) => {
-      const validRegions = Array.isArray(s) ? s.filter((d) => d !== 'US') : [];
+    (s: { value: string; label: string }[]) => {
+      const validRegions = Array.isArray(s) ? s.map((d) => d.value).filter((d) => d !== 'US') : [];
       if (validRegions.length > COMPARE_COLORS.length) {
         validRegions.splice(COMPARE_COLORS.length - 1, validRegions.length - COMPARE_COLORS.length - 1 - 1);
       }
@@ -96,7 +112,7 @@ export function RegionsSelect({ regions, path, clearPath }: { regions: IRegion[]
       treeData={treeData}
       placeholder="Select Region"
       treeDefaultExpandedKeys={['US']}
-      treeNodeFilterProp="label"
+      treeNodeFilterProp="filter"
       dropdownMatchSelectWidth={300}
     ></TreeSelect>
   );

@@ -64,25 +64,29 @@ export function Comparing({ regions, path, clearPath }: { regions: IRegion[]; pa
     return ds;
   }, [router, path, clearPath, regions]);
 
-  const renderItem = useCallback((item: IRegionItem) => {
-    return (
-      <List.Item>
-        <List.Item.Meta
-          style={{ alignItems: 'center' }}
-          avatar={<CompareCircleFilled i={item.i} />}
-          title={
-            <RegionCustomSelect
-              region={item.region}
-              onSelect={item.select}
-              allowClear
-              defaultValue={false}
-              open={item.i === 0 && !item.region ? true : undefined}
-            />
-          }
-        />
-      </List.Item>
-    );
-  }, []);
+  const renderItem = useCallback(
+    (item: IRegionItem) => {
+      return (
+        <List.Item>
+          <List.Item.Meta
+            style={{ alignItems: 'center' }}
+            avatar={<CompareCircleFilled i={item.i} />}
+            title={
+              <RegionCustomSelect
+                region={item.region}
+                onSelect={item.select}
+                allowClear
+                selected={regions}
+                defaultValue={false}
+                open={item.i === 0 && !item.region ? true : undefined}
+              />
+            }
+          />
+        </List.Item>
+      );
+    },
+    [regions]
+  );
 
   return (
     <>
