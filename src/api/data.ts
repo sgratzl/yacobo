@@ -17,7 +17,7 @@ import {
   regionByID,
   signals,
 } from '../model';
-import fetchCached, { fetchJSON } from './fetchCached';
+import fetchCached, { fetchJSON, fetchMemoryJSON } from './fetchCached';
 import type { IRequestContext } from './middleware';
 import { CacheDuration, estimateCacheDuration } from './model';
 
@@ -230,7 +230,7 @@ export function fetchMeta(ctx: IRequestContext): Promise<({ signal: string } & I
   url.searchParams.set('geo_types', 'county');
   url.searchParams.set('time_types', 'day');
   url.searchParams.set('format', 'json');
-  return fetchJSON(ctx, url, {
+  return fetchMemoryJSON(ctx, url, {
     cache: CacheDuration.short,
     process: injectMeta,
     parse: parseDates(['maxTime', 'minTime']),

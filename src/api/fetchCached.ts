@@ -43,9 +43,45 @@ function fetcher(url: string) {
 
 export async function fetchJSON<T, R = T>(
   ctx: IRequestContext,
-  key: string | URL,
+  url: string | URL,
   options: { cache?: CacheDuration; process?: (r: T) => R; parse?: (r: R) => R }
 ): Promise<R> {
-  const u = key.toString();
-  return fetchCached(ctx, u, fetcher, options);
+  const key = url.toString();
+  return fetchCached(ctx, key, fetcher, options);
+}
+
+const memoryCache = new Map<
+  string,
+  {
+    maxAge: number;
+    data: string;
+  }
+>();
+
+/**
+ * fetch and also store in memory for small packages
+ */
+export async function fetchMemoryJSON<T, R = T>(
+  ctx: IRequestContext,
+  url: string | URL,
+  options: { cache?: CacheDuration; process?: (r: T) => R; parse?: (r: R) => R }
+): Promise<R> {
+  const key = url.toString();
+  if (memoryCache.has(key)) {
+    const entry = memoryCache.get(key)!;
+    if (entry.maxAge > Date.now()) {
+      // valid
+      const value = JSON.parse(entry.data);
+      if (options.parse) {
+        return options.parse(value);
+      }
+      return value;
+    }
+  }
+  const r = await fetchJSON(ctx, url, options);
+  memoryCache.set(key, {
+    data: JSON.stringify(r),
+    maxAge: Date.now() + (options.cache ?? CacheDuration.short),
+  });
+  return r;
 }
