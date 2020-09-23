@@ -95,6 +95,7 @@ const imageParams = [
   // parameters
   // highlightRegion
   // highlightDate
+  // chart
 ];
 
 function generateFormatPaths(paths: Record<string, any>) {
@@ -104,12 +105,20 @@ function generateFormatPaths(paths: Record<string, any>) {
     if (noImages.includes(key)) {
       return;
     }
+
     const params = [
       ...imageParams,
       {
         $ref: `#/components/parameters/highlight${key.includes('{date}') ? 'Region' : 'Date'}`,
       },
     ];
+
+    if (key === '/signal/{signal}/{date}') {
+      params.push({
+        $ref: '#/components/parameters/chart',
+      });
+    }
+
     generateFormatPath(paths, 'png', key, value, params);
     generateFormatPath(paths, 'jpg', key, value, params);
     generateFormatPath(paths, 'pdf', key, value, params);

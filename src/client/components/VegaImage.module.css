@@ -72,6 +72,13 @@
   background-image: url(./skeletons/line2.png);
 }
 
+.histogramOverlay {
+  background-image: url(./skeletons/histogram.png);
+}
+.histogramOverlay2 {
+  background-image: url(./skeletons/histogram2.png);
+}
+
 .tooltip {
   user-select: none;
 }

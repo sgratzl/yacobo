@@ -657,6 +657,16 @@
         "schema": {
           "type": "boolean"
         }
+      },
+      "chart": {
+        "name": "chart",
+        "in": "query",
+        "description": "specify the chart type: map or histogram",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["histogram", "map"]
+        }
       }
     },
     "responses": {
