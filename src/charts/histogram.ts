@@ -4,7 +4,7 @@ import type { TopLevelSpec } from 'vega-lite';
 import type { SchemeParams } from 'vega-lite/build/src/scale';
 import { font, IVegaOptions } from '.';
 import { fetchMeta } from '../api/data';
-import { ZERO_COLOR } from '../model/constants';
+import { HIGHLIGHT_COLOR, ZERO_COLOR } from '../model/constants';
 import { getValueDomain, ISignal } from '../model/signals';
 
 const HISTOGRAM_WIDTH = 400;
@@ -36,6 +36,9 @@ function createHistogramSpec(
     },
     transform: [
       {
+        filter: "substring(datum.region, 0, -3) !== '000'",
+      },
+      {
         bin: {
           extent: [0, data.maxValue],
         },
@@ -64,14 +67,29 @@ function createHistogramSpec(
         as: 'bin_value_mid',
       },
     ],
+    selection: {
+      hover: {
+        type: 'single',
+        on: 'mouseover',
+        empty: 'none',
+        nearest: true,
+        fields: ['bin_value', 'bin_value_end'],
+      },
+    },
     encoding: {
+      stroke: {
+        value: HIGHLIGHT_COLOR,
+      },
+      strokeOpacity: {
+        condition: { selection: 'hover', value: 1 },
+        value: 0,
+      },
       x: {
         field: 'bin_value',
         type: 'quantitative',
         bin: { binned: true },
         scale: {
           domainMin: 0,
-          domainMax: data.maxValue,
           clamp: true,
         },
         axis: {
