@@ -47,7 +47,12 @@ export function RegionSignalKeyFactsTable({ region, signal, date }: ITriple) {
     (value: string, row: IDateTableRow) => {
       if (row.date) {
         return (
-          <LinkWrapper passHref path="/region/[region]/[signal]/[date]" query={{ region, signal, date: row.date }}>
+          <LinkWrapper
+            passHref
+            path="/region/[region]/[signal]/[date]"
+            query={{ region, signal, date: row.date }}
+            prefetch={false}
+          >
             <a href="a">{value}</a>
           </LinkWrapper>
         );
@@ -198,7 +203,12 @@ export function KeySignalMultiFacts({ region, date, signal }: ITriple) {
   const renderSignalLink = useCallback(
     (value: string, row: ISignalTableRow) => {
       return (
-        <LinkWrapper passHref path="/region/[region]/[signal]/[date]" query={{ region, signal: row.signal, date }}>
+        <LinkWrapper
+          passHref
+          path="/region/[region]/[signal]/[date]"
+          query={{ region, signal: row.signal, date }}
+          prefetch={false}
+        >
           <a href="a" className={classNames(signal?.id === row.signal.id && styles.highlight)}>
             {value}
           </a>

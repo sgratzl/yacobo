@@ -90,5 +90,12 @@ export function useRouterWrapper() {
     },
     [router, generate]
   );
-  return { push, generate };
+  const prefetch = useCallback(
+    (path: string, query: IRouterQuery) => {
+      const { href, as } = generate(path, query);
+      router.prefetch(href, as);
+    },
+    [router, generate]
+  );
+  return { push, generate, prefetch };
 }

@@ -77,7 +77,12 @@ export default function SignalTable({ signal, date, region }: ITriple) {
   const renderRegion = useCallback(
     (value: string, row: IRegionObjectValue) => {
       return (
-        <LinkWrapper path="/region/[region]/[signal]/[date]" query={{ region: row.region, signal, date }} passHref>
+        <LinkWrapper
+          path="/region/[region]/[signal]/[date]"
+          query={{ region: row.region, signal, date }}
+          passHref
+          prefetch={false}
+        >
           <a href="a" className={classNames(region?.id === row.region && styles.highlight)}>
             {value}
           </a>
@@ -93,6 +98,7 @@ export default function SignalTable({ signal, date, region }: ITriple) {
           path="/region/[region]/[signal]/[date]"
           query={{ region: (row.regionObj as ICountyRegion).state, signal, date }}
           passHref
+          prefetch={false}
         >
           <a href="a">{value}</a>
         </LinkWrapper>
@@ -147,7 +153,12 @@ export function DateTable({ signal, region, date }: ITriple) {
   const renderDate = useCallback(
     (value: Date) => {
       return (
-        <LinkWrapper path="/region/[region]/[signal]/[date]" query={{ region, signal, date: value }} passHref>
+        <LinkWrapper
+          path="/region/[region]/[signal]/[date]"
+          query={{ region, signal, date: value }}
+          passHref
+          prefetch={false}
+        >
           <a href="a" className={classNames(formatAPIDate(value) === formatAPIDate(date) && styles.highlight)}>
             {formatAPIDate(value)}
           </a>
@@ -228,7 +239,12 @@ export function DateMultiTable({ signal, regions, date }: { signal?: ISignal; re
   const renderDate = useCallback(
     (value: Date) => {
       return (
-        <LinkWrapper path="/compare/[regions]/[signal]/[date]" query={{ regions, signal, date: value }} passHref>
+        <LinkWrapper
+          path="/compare/[regions]/[signal]/[date]"
+          query={{ regions, signal, date: value }}
+          passHref
+          prefetch={false}
+        >
           <a href="a" className={classNames(formatAPIDate(value) === formatAPIDate(date) && styles.highlight)}>
             {formatAPIDate(value)}
           </a>
