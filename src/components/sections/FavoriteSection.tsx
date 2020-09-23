@@ -10,7 +10,7 @@ export default function FavoriteSection({ favorite, date }: { favorite: IFavorit
     case 'signal':
       return <SignalSection signal={favorite.signal} date={date} />;
     case 'region':
-      return <RegionSection region={favorite.region} date={date} />;
+      return <RegionSection region={favorite.region} date={date} focus="both" />;
     case 'region+signal+h':
       return <RegionSignalHistorySection signal={favorite.signal} region={favorite.region} date={date} focus="both" />;
     case 'regions+signal':

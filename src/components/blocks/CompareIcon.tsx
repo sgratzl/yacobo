@@ -24,7 +24,7 @@ export function CompareCircleFilled({ i, className }: { i?: number; className?: 
   );
 }
 
-export function CompareIcon({ title, compare }: { title: string; compare?: number }) {
+export function CompareIcon({ title, compare }: { title?: string; compare?: number }) {
   if (compare == null) {
     return <>{title}</>;
   }

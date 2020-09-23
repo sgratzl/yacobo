@@ -93,9 +93,9 @@ export function RegionsSignalDateCompare({
           query={{ date, signal }}
         />
         <Row>
-          {regions.map((region) => (
+          {regions.map((region, i) => (
             <GridColumn key={region.id}>
-              <RegionSignalSection region={region} signal={signal} date={date} focus="region" />
+              <RegionSignalSection region={region} signal={signal} date={date} focus="region" compare={i} />
             </GridColumn>
           ))}
         </Row>
