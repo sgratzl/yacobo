@@ -2,7 +2,7 @@
 
 [![License: MIT][mit-image]][mit-url] [![Github Actions][github-actions-image]][github-actions-url]
 
-YaCoBo (Yet another COVID-19 Board) is a dashboard application visualizing the data from the [Delphi Group at Carnegie Mellon University](https://delphi.cmu.edu/) as part of the [COVIDCast](https://covidcast.cmu.edu) project. It is hosted at https://yacobo.vercel.app/.
+YaCoBo (Yet another COVID-19 Board) is a dashboard application visualizing hosted at https://yacobo.vercel.app/. It shows data from the [Delphi Group at Carnegie Mellon University](https://delphi.cmu.edu/) which they collect as part of the [COVIDCast](https://covidcast.cmu.edu) project.
 
 ![Overview](https://user-images.githubusercontent.com/4129778/93870730-efce6e80-fccd-11ea-9854-0b5d627ef5ef.png)
 
@@ -10,11 +10,11 @@ YaCoBo (Yet another COVID-19 Board) is a dashboard application visualizing the d
 
 ## Features
 
-- overview of several signal collected by COVIDCast
+- explore the overview of several signal collected by COVIDCast
 - drill down to individual signals, regions, dates, and their combinations
 - compare regions across multiple signals
-- bookmark your favorite sections for a personalized summary (local store only)
-- sharable URLs with social media preview images
+- bookmark your favorite sections for a personalized summary (localStorage only)
+- share URLs with social media preview images
 - download the shown data in CSV or JSON format
 - download the shown images in PNG, JPEG, or PDF format
 - download the shown images as [Vega Lite Specification](https://vega.github.io/vega-lite/)
@@ -45,7 +45,7 @@ yarn build
 yarn release
 ```
 
-### License
+## License
 
 YaCoBo is released under the **MIT License**. Copyright of the website belongs to Samuel Gratzl. The [Terms of Use](https://covidcast.cmu.edu/terms-of-use.html) of the COVIDCast project apply.
 
