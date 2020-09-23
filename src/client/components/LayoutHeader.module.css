@@ -17,8 +17,13 @@
   flex: 1 1 0;
 }
 
-@media (max-width: 768px) {
-  .search {
+@media (max-width: 900px) {
+  .topHeader {
+    display: initial;
+    align-items: center;
+  }
+  .search,
+  .span {
     display: none;
   }
 }

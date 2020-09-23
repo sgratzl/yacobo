@@ -65,3 +65,9 @@
 .selectTreeMultiple :global(.ant-select-selection-item):nth-child(4)::before {
   background: var(--compare-color4);
 }
+
+@media (max-width: 380px) {
+  .hideMobile {
+    display: none !important;
+  }
+}

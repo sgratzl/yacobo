@@ -1,8 +1,8 @@
 import { IRouterQuery, useRouterWrapper } from '@/client/hooks';
 import { COMPARE_COLORS, IRegion, isCountyRegion, regionByID } from '@/model';
-import { Typography, List } from 'antd';
+import { Typography, List, Row, Col } from 'antd';
 import { useCallback, useMemo } from 'react';
-import { CompareCircleFilled } from './CompareIcon';
+import { CompareCircleFilled, CompareIcon } from './CompareIcon';
 import { RegionCustomSelect } from './RegionSelect';
 
 interface IRegionItem {
@@ -72,14 +72,13 @@ export function Comparing({
     return ds;
   }, [router, path, clearPath, regions, query]);
 
-  const renderItem = useCallback(
-    (item: IRegionItem) => {
-      return (
-        <List.Item>
-          <List.Item.Meta
-            style={{ alignItems: 'center' }}
-            avatar={<CompareCircleFilled i={item.i} />}
-            title={
+  return (
+    <>
+      <Typography.Title level={2}>{regions.length === 0 ? 'Select' : 'Selected'} Regions</Typography.Title>
+      <Row>
+        {dataSource.map((item) => (
+          <Col key={item.id} sm={12} md={8} lg={6}>
+            <CompareIcon compare={item.i}>
               <RegionCustomSelect
                 region={item.region}
                 onSelect={item.select}
@@ -88,29 +87,10 @@ export function Comparing({
                 defaultValue={false}
                 open={item.i === 0 && !item.region ? true : undefined}
               />
-            }
-          />
-        </List.Item>
-      );
-    },
-    [regions]
-  );
-
-  return (
-    <>
-      <Typography.Title level={2}>{regions.length === 0 ? 'Select' : 'Selected'} Regions</Typography.Title>
-      <List
-        grid={{
-          gutter: 16,
-          column: COMPARE_COLORS.length,
-          lg: COMPARE_COLORS.length,
-          md: Math.floor(COMPARE_COLORS.length / 2),
-          sm: 1,
-        }}
-        rowKey="id"
-        dataSource={dataSource}
-        renderItem={renderItem}
-      />
+            </CompareIcon>
+          </Col>
+        ))}
+      </Row>
     </>
   );
 }

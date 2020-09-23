@@ -3,7 +3,7 @@ import { Button, Tooltip } from 'antd';
 import { classNames } from '../utils';
 import styles from './CompareIcon.module.css';
 import BlockOutlined from '@ant-design/icons/BlockOutlined';
-import { useCallback } from 'react';
+import { PropsWithChildren, ReactNode, useCallback } from 'react';
 import { useRouterWrapper } from '@/client/hooks';
 
 export function CompareCircleFilled({ i, className }: { i?: number; className?: string }) {
@@ -24,14 +24,26 @@ export function CompareCircleFilled({ i, className }: { i?: number; className?: 
   );
 }
 
-export function CompareIcon({ title, compare }: { title?: string; compare?: number }) {
+export function CompareIcon({
+  title,
+  compare,
+  children,
+}: PropsWithChildren<{ title?: ReactNode | JSX.Element; compare?: number }>) {
   if (compare == null) {
-    return <>{title}</>;
+    return (
+      <>
+        {title}
+        {children}
+      </>
+    );
   }
   return (
     <span>
       <CompareCircleFilled i={compare} className={styles.compareIcon} />
-      <span>{title}</span>
+      <span>
+        {title}
+        {children}
+      </span>
     </span>
   );
 }
