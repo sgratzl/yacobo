@@ -9,7 +9,7 @@ import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
 import { DateMultiTable } from '../components/DataTables';
-import { LineMultiImage } from '../components/LineMultiImage';
+import { LineMultiImage } from '../vega/LineMultiImage';
 import { Comparing } from '../components/Comparing';
 import { fullUrl } from '@/client/hooks';
 

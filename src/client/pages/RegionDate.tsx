@@ -6,7 +6,7 @@ import { IRegion, refSignal, signals } from '@/model';
 import GridColumn from '../components/GridColumn';
 import { Row, Typography } from 'antd';
 import RegionSignalWidget from '../widgets/RegionSignalWidget';
-import { LineImage } from '../components/LineImage';
+import { LineImage } from '../vega/LineImage';
 import ContentLayout from '../components/ContentLayout';
 import { Fragment } from 'react';
 import RegionSignalHistoryWidget from '../widgets/RegionSignalHistoryWidget';

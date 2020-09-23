@@ -1,8 +1,8 @@
 import { IRouterQuery, useRouterWrapper } from '@/client/hooks';
-import { COMPARE_COLORS, IRegion, isCountyRegion, regionByID } from '@/model';
-import { Typography, List, Row, Col } from 'antd';
-import { useCallback, useMemo } from 'react';
-import { CompareCircleFilled, CompareIcon } from './CompareIcon';
+import { IRegion, isCountyRegion, regionByID } from '@/model';
+import { Col, Row, Typography } from 'antd';
+import { useMemo } from 'react';
+import { CompareIcon } from './CompareIcon';
 import { RegionCustomSelect } from './RegionSelect';
 
 interface IRegionItem {

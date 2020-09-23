@@ -7,7 +7,7 @@ import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
 import { showInfoBox } from '../components/SignalInfoBox';
 import styles from './Section.module.css';
-import { LineMultiImage } from '../components/LineMultiImage';
+import { LineMultiImage } from '../vega/LineMultiImage';
 import { CompareLegend } from '../components/CompareIcon';
 import { fullUrl } from '@/client/hooks';
 import LinkWrapper from '../components/LinkWrapper';

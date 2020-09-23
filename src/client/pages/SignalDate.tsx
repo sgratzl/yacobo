@@ -10,7 +10,7 @@ import { formatLocal, formatAPIDate } from '@/common';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
 import { RegionSelect } from '../components/RegionSelect';
 import ContentLayout from '../components/ContentLayout';
-import { MapImage } from '../components/MapImage';
+import { MapImage } from '../vega/MapImage';
 import { fullUrl } from '@/client/hooks';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {

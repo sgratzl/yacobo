@@ -11,7 +11,7 @@ import ContentLayout from '../components/ContentLayout';
 import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
 import GridColumn from '../components/GridColumn';
-import { LineMultiImage } from '../components/LineMultiImage';
+import { LineMultiImage } from '../vega/LineMultiImage';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
 import RegionSignalWidget from '../widgets/RegionSignalWidget';
 

@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
 import { showInfoBox } from '../components/SignalInfoBox';
-import { LineImage } from '../components/LineImage';
+import { LineImage } from '../vega/LineImage';
 import styles from './Section.module.css';
 import { RegionSignalKeyFacts } from '../components/RegionSignalKeyFacts';
 import { fullUrl } from '@/client/hooks';
