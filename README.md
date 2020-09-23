@@ -2,7 +2,7 @@
 
 [![License: MIT][mit-image]][mit-url] [![Github Actions][github-actions-image]][github-actions-url]
 
-YaCoBo (Yet another COVID-19 Board) is a dashboard application visualizing the data from the [Delphi Group at Carnegie Mellon University](https://delphi.cmu.edu/) as part of the [COVIDCast](https://covidcast.cmu.edu) project.
+YaCoBo (Yet another COVID-19 Board) is a dashboard application visualizing the data from the [Delphi Group at Carnegie Mellon University](https://delphi.cmu.edu/) as part of the [COVIDCast](https://covidcast.cmu.edu) project. It is hosted at https://yacobo.vercel.app/.
 
 ![Overview](https://user-images.githubusercontent.com/4129778/93870730-efce6e80-fccd-11ea-9854-0b5d627ef5ef.png)
 
