@@ -61,7 +61,7 @@ function DateSelectImpl({
         allowClear={clearPath != null}
         format="MMM, d"
       />
-      <Tooltip title={`Go to the earliest date in which any signals are available\n${formatLocal(dateRange?.min)}`}>
+      <Tooltip title={`Go to the earliest date at which any signals are available\n${formatLocal(dateRange?.min)}`}>
         <Button
           onClick={jumpDateRange.min}
           icon={<VerticalRightOutlined />}
@@ -71,7 +71,7 @@ function DateSelectImpl({
       <Tooltip title={`Go to the previous day: ${formatLocal(date ? subDays(date, 1) : undefined)}`}>
         <Button onClick={previous} icon={<LeftOutlined />} disabled={isEqualDate(dateRange?.min, date)} />
       </Tooltip>
-      <Tooltip title={`Go to the latest date in which all signals are available: ${formatLocal(dateRange?.maxAll)}`}>
+      <Tooltip title={`Go to the latest date at which all signals are available: ${formatLocal(dateRange?.maxAll)}`}>
         <Button
           onClick={jumpDateRange.maxAll}
           icon={<CalendarOutlined />}
@@ -81,7 +81,7 @@ function DateSelectImpl({
       <Tooltip title={`Go to the next day: ${formatLocal(date ? addDays(date, 1) : undefined)}`}>
         <Button onClick={next} icon={<RightOutlined />} disabled={isEqualDate(dateRange?.max, date)} />
       </Tooltip>
-      <Tooltip title={`Go to the latest date in which any signal is available: ${formatLocal(dateRange?.max)}`}>
+      <Tooltip title={`Go to the latest date at which any signal is available: ${formatLocal(dateRange?.max)}`}>
         <Button
           onClick={jumpDateRange.max}
           icon={<VerticalLeftOutlined />}
@@ -152,7 +152,7 @@ export function DateSignalSelect({
         allowClear={clearPath != null}
         format="MMM, d"
       />
-      <Tooltip title={`Go to the earliest date in which data is available: ${formatLocal(meta?.meta.minTime)}`}>
+      <Tooltip title={`Go to the earliest date at which data is available: ${formatLocal(meta?.meta.minTime)}`}>
         <Button
           onClick={jumpSignalMeta.min}
           icon={<VerticalRightOutlined />}
@@ -165,7 +165,7 @@ export function DateSignalSelect({
       <Tooltip title={`Go to the next day: ${formatLocal(date ? addDays(date, 1) : undefined)}`}>
         <Button onClick={next} icon={<RightOutlined />} disabled={isEqualDate(meta?.meta.maxTime, date)} />
       </Tooltip>
-      <Tooltip title={`Go to the latest date in which data is available: ${formatLocal(meta?.meta.maxTime)}`}>
+      <Tooltip title={`Go to the latest date at which data is available: ${formatLocal(meta?.meta.maxTime)}`}>
         <Button
           onClick={jumpSignalMeta.max}
           icon={<VerticalLeftOutlined />}
