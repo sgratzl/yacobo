@@ -4,7 +4,7 @@ import { useFetchMinMaxDate } from '@/client/utils';
 import type { GetStaticProps } from 'next';
 import { CompareOverview } from '@/components/pages/CompareOverview';
 import { withContext } from '@/api/middleware';
-import { ISerializedDateRange, serializeDateRange } from '@/common/range';
+import { ISerializedDateRange, serializeDateRange } from '@/model';
 
 export const getStaticProps: GetStaticProps<ISerializedDateRange> = async () => {
   const data = await withContext(fetchMinMaxDate).then(serializeDateRange);

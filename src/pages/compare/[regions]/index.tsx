@@ -7,7 +7,7 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import { withContext } from '@/api/middleware';
 import { RegionsCompareOverview } from '@/components/pages/RegionsCompareOverview';
-import { ISerializedDateRange, serializeDateRange } from '@/common/range';
+import { ISerializedDateRange, serializeDateRange } from '@/model';
 
 interface IRegionsProps extends ISerializedDateRange {
   regions: string;

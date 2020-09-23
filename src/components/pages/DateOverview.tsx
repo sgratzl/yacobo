@@ -7,7 +7,7 @@ import { formatAPIDate, formatLocal } from '@/common';
 import { Row, Typography } from 'antd';
 import GridColumn from '@/components/blocks/GridColumn';
 import { fullUrl } from '@/client/hooks';
-import type { IDateRange } from '@/common/range';
+import type { IDateRange } from '@/model';
 
 export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: IDateRange }) {
   return (

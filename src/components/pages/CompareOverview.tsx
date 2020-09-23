@@ -1,5 +1,5 @@
 import { formatAPIDate, formatLocal } from '@/common';
-import type { IDateRange } from '@/common/range';
+import type { IDateRange } from '@/model';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { IRegion, regionByID } from '@/model';

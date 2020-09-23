@@ -7,7 +7,7 @@ import { Button, Tooltip } from 'antd';
 import LeftOutlined from '@ant-design/icons/LeftOutlined';
 import RightOutlined from '@ant-design/icons/RightOutlined';
 import { IRouterQuery, useRouterWrapper } from '@/client/hooks';
-import type { IDateRange } from '@/common/range';
+import type { IDateRange } from '@/model';
 
 export function DateSelect({
   date,

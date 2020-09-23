@@ -18,6 +18,19 @@ export function historyRange() {
     to: startOfISODate(startOfTomorrow()),
   };
 }
+export interface IDateRange {
+  min: Date;
+  latest: Date;
+}
+
+export type ISerializedDateRange = Record<keyof IDateRange, Date | number>;
+
+export function serializeDateRange(data: IDateRange): ISerializedDateRange {
+  return {
+    min: data.min.valueOf(),
+    latest: data.latest.valueOf(),
+  };
+}
 
 export const ZERO_COLOR = 'rgb(242,242,242)';
 export const MAP_STROKE = '#eaeaea';

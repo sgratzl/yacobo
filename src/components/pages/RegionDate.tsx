@@ -11,7 +11,7 @@ import ContentLayout from '../blocks/ContentLayout';
 import { Fragment } from 'react';
 import RegionSignalHistorySection from '../sections/RegionSignalHistory';
 import { fullUrl } from '@/client/hooks';
-import type { IDateRange } from '@/common/range';
+import type { IDateRange } from '@/model';
 
 export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: IDateRange }) {
   const apiDate = formatAPIDate(date);

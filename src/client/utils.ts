@@ -1,5 +1,5 @@
 import { parseDate } from '@/common/parseDates';
-import type { IDateRange, ISerializedDateRange } from '@/common/range';
+import type { IDateRange, ISerializedDateRange } from '@/model';
 import useSWR from 'swr';
 import { ISignal, ISignalMeta, ISignalWithMeta, selectMinDate, selectLatestDate, signalByID } from '../model';
 
@@ -45,13 +45,13 @@ export function useFetchMinMaxDate(initialData?: ISerializedDateRange) {
 
   if (!data) {
     if (initialData) {
-      return { earliest: parseDate(initialData.earliest), latest: parseDate(initialData.latest) };
+      return { min: parseDate(initialData.min), latest: parseDate(initialData.latest) };
     }
-    return { earliest: undefined, latest: undefined };
+    return { min: undefined, latest: undefined };
   }
   const meta = data.map((d) => d.meta);
   return {
-    earliest: selectMinDate(meta),
+    min: selectMinDate(meta),
     latest: selectLatestDate(meta),
   };
 }
