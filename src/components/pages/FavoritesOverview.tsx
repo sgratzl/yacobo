@@ -4,7 +4,7 @@ import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import GridColumn from '@/components/blocks/GridColumn';
 import { refSignal } from '@/model';
-import { Row } from 'antd';
+import { Row, Typography } from 'antd';
 import dynamic from 'next/dynamic';
 import { useFavorites } from '../blocks/useFavorites';
 // import AddFavorite from '../sections/AddFavorite';
@@ -54,6 +54,7 @@ export default function FavoritesOverview({ date, dynamic }: { date?: Date; dyna
             ],
       ].flat()}
     >
+      <Typography.Title>My Favorites</Typography.Title>
       <FavoritesGridNoSSR date={date} />
     </BaseLayout>
   );

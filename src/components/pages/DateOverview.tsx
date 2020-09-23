@@ -4,7 +4,7 @@ import { RegionSelect } from '@/components/blocks/RegionSelect';
 import SignalSection from '@/components/sections/SignalSection';
 import { refSignal, signals } from '@/model/signals';
 import { formatAPIDate, formatLocal } from '@/common';
-import { Row } from 'antd';
+import { Row, Typography } from 'antd';
 import GridColumn from '@/components/blocks/GridColumn';
 import { fullUrl } from '@/client/hooks';
 
@@ -30,6 +30,7 @@ export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean
             ]
       }
     >
+      <Typography.Title>COVID-19 Overview as of {formatLocal(date)}</Typography.Title>
       <Row>
         {signals.map((s) => (
           <GridColumn key={s.id}>
