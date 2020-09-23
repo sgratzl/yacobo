@@ -27,7 +27,7 @@ export function CompareOverview({ date, dynamic }: { date?: Date; dynamic?: IDat
         />
       }
       subTitle={
-        <DateSelect date={date} path="/compare/date/[date]" clearPath="/compare" query={{}} dynamic={dynamic} />
+        <DateSelect date={date} path="/compare/date/[date]" clearPath="/compare" query={{}} dateRange={dynamic} />
       }
       breadcrumb={[
         {

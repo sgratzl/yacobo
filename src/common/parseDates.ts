@@ -1,5 +1,6 @@
 import type { IDateValue } from '@/model';
 import { addDays, compareAsc, differenceInDays, parseJSON } from 'date-fns';
+import { formatAPIDate } from '.';
 
 function identity(v: any) {
   return v;
@@ -22,6 +23,12 @@ export function startOfISODate(date: Date) {
 
 export function parseDate(date: number | string | Date) {
   return startOfISODate(parseJSON(date));
+}
+
+export function isEqualDate(a?: Date, b?: Date) {
+  const sA = formatAPIDate(a);
+  const sB = formatAPIDate(b);
+  return sA === sB;
 }
 /**
  * helper method for parsing serialized dates

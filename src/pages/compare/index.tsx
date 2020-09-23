@@ -1,6 +1,6 @@
 import { fetchMinMaxDate } from '@/api/data';
 import { CacheDuration } from '@/api/model';
-import { useFetchMinMaxDate } from '@/client/utils';
+import { useFetchDateRange } from '@/client/utils';
 import type { GetStaticProps } from 'next';
 import { CompareOverview } from '@/components/pages/CompareOverview';
 import { withContext } from '@/api/middleware';
@@ -16,6 +16,6 @@ export const getStaticProps: GetStaticProps<ISerializedDateRange> = async () => 
 };
 
 export default function Home(props: ISerializedDateRange) {
-  const data = useFetchMinMaxDate(props);
+  const data = useFetchDateRange(props);
   return <CompareOverview date={data.default} dynamic={data} />;
 }

@@ -1,7 +1,7 @@
 import { fetchMinMaxDate } from '@/api/data';
 import { CacheDuration } from '@/api/model';
 import { useFallback } from '@/client/hooks';
-import { useFetchMinMaxDate } from '@/client/utils';
+import { useFetchDateRange } from '@/client/utils';
 import { extractSignal } from '@/common/validator';
 import { signals } from '@/model/signals';
 import type { GetStaticPaths, GetStaticProps } from 'next';
@@ -40,7 +40,7 @@ export const getStaticPaths: GetStaticPaths<{ signal: string } & ParsedUrlQuery>
 };
 
 export default function Signal(props: ISignalProps) {
-  const { default: date } = useFetchMinMaxDate(props);
+  const { default: date } = useFetchDateRange(props);
   const signal = useFallback(props.signal, extractSignal, signals[0]);
   return <SignalDate signal={signal} date={date} />;
 }

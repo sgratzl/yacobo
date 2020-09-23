@@ -1,7 +1,7 @@
 import { fullUrl } from '@/client/hooks';
 import { formatAPIDate, formatLocal } from '@/common';
 import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSelect } from '@/components/blocks/DateSelect';
+import { DateSignalSelect } from '@/components/blocks/DateSelect';
 import { RegionsSelect } from '@/components/blocks/RegionSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
 import type { IRegion, ISignal } from '@/model';
@@ -46,8 +46,9 @@ export function RegionsSignalDateCompare({
             clearPath="/compare/[regions]/date/[date]"
             query={{ regions, date }}
           />
-          <DateSelect
+          <DateSignalSelect
             date={date}
+            signal={signal}
             path="/compare/[regions]/[signal]/[date]"
             clearPath="/compare/[regions]/[signal]"
             query={{ regions, signal }}

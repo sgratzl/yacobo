@@ -39,7 +39,7 @@ export default function FavoritesOverview({ date, dynamic }: { date?: Date; dyna
         date
       )} showing the personal favorites. ${refSignal.description()}`}
       previewImage={fullUrl('/api/signal/[signal]/[date]', { signal: refSignal, date })}
-      subTitle={<DateSelect date={date} path="/favorites/[date]" clearPath="/" query={{}} dynamic={dynamic} />}
+      subTitle={<DateSelect date={date} path="/favorites/[date]" clearPath="/" query={{}} dateRange={dynamic} />}
       breadcrumb={[
         {
           breadcrumbName: 'Favorites',

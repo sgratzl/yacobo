@@ -1,6 +1,6 @@
 import { fetchMinMaxDate } from '@/api/data';
 import { CacheDuration } from '@/api/model';
-import { useFetchMinMaxDate } from '@/client/utils';
+import { useFetchDateRange } from '@/client/utils';
 import type { GetStaticProps } from 'next';
 import { withContext } from '@/api/middleware';
 import FavoritesOverview from '@/components/pages/FavoritesOverview';
@@ -16,6 +16,6 @@ export const getStaticProps: GetStaticProps<ISerializedDateRange> = async () => 
 };
 
 export default function Home(props: ISerializedDateRange) {
-  const data = useFetchMinMaxDate(props);
+  const data = useFetchDateRange(props);
   return <FavoritesOverview date={data.default} dynamic={data} />;
 }

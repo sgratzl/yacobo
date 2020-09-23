@@ -1,5 +1,5 @@
 import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSelect } from '@/components/blocks/DateSelect';
+import { DateSignalSelect } from '@/components/blocks/DateSelect';
 import { RegionSelect } from '@/components/blocks/RegionSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { formatAPIDate, formatLocal } from '@/common';
@@ -38,8 +38,9 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
             clearPath="/region/[region]/date/[date]"
             query={{ region, date }}
           />
-          <DateSelect
+          <DateSignalSelect
             date={date}
+            signal={signal}
             path="/region/[region]/[signal]/[date]"
             clearPath="/region/[region]/[signal]"
             query={{ region, signal }}

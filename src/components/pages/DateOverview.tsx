@@ -15,7 +15,7 @@ export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: IDateRa
       pageTitle={`${formatLocal(date)}`}
       mainActive="overview"
       title={<RegionSelect path="/region/[region]/date/[date]" clearPath="/date/[date]" query={{ date }} />}
-      subTitle={<DateSelect date={date} path="/date/[date]" clearPath="/" query={{}} dynamic={dynamic} />}
+      subTitle={<DateSelect date={date} path="/date/[date]" clearPath="/" query={{}} dateRange={dynamic} />}
       description={`Overview of the United States as of ${formatLocal(
         date
       )} showing multiple signals. ${refSignal.description(date)}`}

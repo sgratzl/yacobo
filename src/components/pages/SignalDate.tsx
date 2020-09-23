@@ -1,5 +1,5 @@
 import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSelect } from '@/components/blocks/DateSelect';
+import { DateSignalSelect } from '@/components/blocks/DateSelect';
 import { SignalSelect } from '@/components/blocks/SignalSelect';
 import { FavoriteToggle } from '@/components/blocks/FavoriteToggle';
 import SignalTable from '@/components/blocks/DataTables';
@@ -26,7 +26,13 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
       subTitle={
         <>
           <SignalSelect signal={signal} path="/signal/[signal]/[date]" clearPath="/date/[date]" query={{ date }} />
-          <DateSelect date={date} path="/signal/[signal]/[date]" clearPath="/signal/[signal]" query={{ signal }} />
+          <DateSignalSelect
+            date={date}
+            signal={signal}
+            path="/signal/[signal]/[date]"
+            clearPath="/signal/[signal]"
+            query={{ signal }}
+          />
         </>
       }
       breadcrumb={[

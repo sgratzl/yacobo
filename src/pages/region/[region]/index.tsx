@@ -1,6 +1,6 @@
 import { fetchMinMaxDate } from '@/api/data';
 import { useFallback } from '@/client/hooks';
-import { useFetchMinMaxDate } from '@/client/utils';
+import { useFetchDateRange } from '@/client/utils';
 import { extractRegion } from '@/common/validator';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
@@ -30,7 +30,7 @@ export const getStaticPaths: GetStaticPaths<IRegionProps & ParsedUrlQuery> = asy
 };
 
 export default function Region(props: IRegionProps) {
-  const data = useFetchMinMaxDate(props);
+  const data = useFetchDateRange(props);
   const region = useFallback(props.region, extractRegion, undefined);
   return <RegionDate region={region} date={data.default} dynamic={data} />;
 }

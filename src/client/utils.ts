@@ -44,9 +44,9 @@ export function useFetchMeta() {
   });
 }
 
-export function useFetchMinMaxDate(): Partial<IDateRange>;
-export function useFetchMinMaxDate(initialData: ISerializedDateRange): IDateRange;
-export function useFetchMinMaxDate(initialData?: ISerializedDateRange) {
+export function useFetchDateRange(): Partial<IDateRange>;
+export function useFetchDateRange(initialData: ISerializedDateRange): IDateRange;
+export function useFetchDateRange(initialData?: ISerializedDateRange) {
   const { data } = useFetchMeta();
 
   if (!data) {

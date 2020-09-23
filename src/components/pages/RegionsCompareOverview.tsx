@@ -47,7 +47,7 @@ export function RegionsCompareOverview({
           path="/compare/[regions]/date/[date]"
           clearPath="/compare/[regions]"
           query={{ regions }}
-          dynamic={dynamic}
+          dateRange={dynamic}
         />
       }
       breadcrumb={[

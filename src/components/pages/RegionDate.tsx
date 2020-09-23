@@ -30,7 +30,7 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
           path="/region/[region]/date/[date]"
           clearPath="/region/[region]"
           query={{ region }}
-          dynamic={dynamic}
+          dateRange={dynamic}
         />
       }
       breadcrumb={[

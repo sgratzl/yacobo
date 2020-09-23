@@ -1,7 +1,7 @@
 import { fetchMinMaxDate } from '@/api/data';
 import { CacheDuration } from '@/api/model';
 import { useFallback } from '@/client/hooks';
-import { useFetchMinMaxDate } from '@/client/utils';
+import { useFetchDateRange } from '@/client/utils';
 import { extractRegions } from '@/common/validator';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
@@ -33,6 +33,6 @@ export const getStaticPaths: GetStaticPaths<IRegionsProps & ParsedUrlQuery> = as
 
 export default function RegionSignalWrapper(props: IRegionsProps) {
   const regions = useFallback(props.regions, extractRegions, []);
-  const data = useFetchMinMaxDate(props);
+  const data = useFetchDateRange(props);
   return <RegionsCompareOverview regions={regions} date={data.default} dynamic={data} />;
 }
