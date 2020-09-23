@@ -1,6 +1,7 @@
 import { parseDate } from '@/common/parseDates';
+import type { IDateRange, ISerializedDateRange } from '@/common/range';
 import useSWR from 'swr';
-import { ISignal, ISignalMeta, ISignalWithMeta, selectEarliestDate, selectLatestDate, signalByID } from '../model';
+import { ISignal, ISignalMeta, ISignalWithMeta, selectMinDate, selectLatestDate, signalByID } from '../model';
 
 export function addParam(url: string | undefined, key: string, value?: string | number) {
   if (!url || value == null) {
@@ -37,25 +38,21 @@ export function useFetchMeta() {
   });
 }
 
-export interface ISerializedMinMax {
-  min: number | Date;
-  max: number | Date;
-}
-
-export function useFetchMinMaxDate(): { min?: Date; max?: Date };
-export function useFetchMinMaxDate(initialData: { min: number | Date; max: number | Date }): { min: Date; max: Date };
-export function useFetchMinMaxDate(initialData?: { min: number | Date; max: number | Date }) {
+export function useFetchMinMaxDate(): Partial<IDateRange>;
+export function useFetchMinMaxDate(initialData: ISerializedDateRange): IDateRange;
+export function useFetchMinMaxDate(initialData?: ISerializedDateRange) {
   const { data } = useFetchMeta();
 
   if (!data) {
     if (initialData) {
-      return { min: parseDate(initialData.min), max: parseDate(initialData.max) };
+      return { earliest: parseDate(initialData.earliest), latest: parseDate(initialData.latest) };
     }
-    return { min: undefined, max: undefined };
+    return { earliest: undefined, latest: undefined };
   }
+  const meta = data.map((d) => d.meta);
   return {
-    min: selectEarliestDate(data.map((d) => d.meta)),
-    max: selectLatestDate(data.map((d) => d.meta)),
+    earliest: selectMinDate(meta),
+    latest: selectLatestDate(meta),
   };
 }
 

@@ -8,7 +8,7 @@ export function selectLatestDate(meta: ISignalMeta[]) {
   return dates[Math.ceil(dates.length / 2)].maxTime;
 }
 
-export function selectEarliestDate(meta: ISignalMeta[]) {
+export function selectMinDate(meta: ISignalMeta[]) {
   return min(meta.map((d) => d.minTime));
 }
 

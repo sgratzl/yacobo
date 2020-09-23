@@ -1,5 +1,6 @@
 import { fullUrl } from '@/client/hooks';
 import { formatAPIDate, formatLocal } from '@/common';
+import type { IDateRange } from '@/common/range';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { IRegion, refSignal, signals } from '@/model';
@@ -17,7 +18,7 @@ export function RegionsCompareOverview({
 }: {
   regions: IRegion[];
   date?: Date;
-  dynamic?: boolean;
+  dynamic?: IDateRange;
 }) {
   const title = regions.map((r) => r.name).join(' vs. ');
   return (
@@ -46,6 +47,7 @@ export function RegionsCompareOverview({
           path="/compare/[regions]/date/[date]"
           clearPath="/compare/[regions]"
           query={{ regions }}
+          dynamic={dynamic}
         />
       }
       breadcrumb={[

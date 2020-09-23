@@ -23,7 +23,7 @@ export const getStaticProps: GetStaticProps<ISignalDateProps> = async (context) 
 };
 
 export const getStaticPaths: GetStaticPaths<ISignalDateProps & ParsedUrlQuery> = async () => {
-  const { max } = await withContext(fetchMinMaxDate);
+  const { latest } = await withContext(fetchMinMaxDate);
   return {
     paths:
       process.env.NODE_ENV === 'development'
@@ -31,7 +31,7 @@ export const getStaticPaths: GetStaticPaths<ISignalDateProps & ParsedUrlQuery> =
         : signals.map((signal) => ({
             params: {
               signal: signal.id,
-              date: formatAPIDate(max),
+              date: formatAPIDate(latest),
             },
           })),
     fallback: true,

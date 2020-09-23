@@ -5,7 +5,7 @@ import {
   DEFAULT_CHART_AREA_OPACITY,
   DEFAULT_CHART_COLOR,
   HIGHLIGHT_COLOR,
-  selectEarliestDate,
+  selectMinDate,
 } from '../model/constants';
 import { getValueDomain, ISignal } from '../model/signals';
 import { IVegaOptions, font } from '.';
@@ -175,7 +175,7 @@ export async function createSignalLineChart(
 ): Promise<TopLevelSpec> {
   const metas = await fetchMeta(options.ctx);
   const meta = metas.find((d) => d.signal === signal.id)!;
-  const minDate = selectEarliestDate(metas);
+  const minDate = selectMinDate(metas);
   return createLineChartSpec(
     {
       title: `${region.name} - ${signal.name}`,
@@ -198,7 +198,7 @@ export async function createSignalMultiLineChart(
 ): Promise<TopLevelSpec> {
   const metas = await fetchMeta(options.ctx);
   const meta = metas.find((d) => d.signal === signal.id)!;
-  const minDate = selectEarliestDate(metas);
+  const minDate = selectMinDate(metas);
 
   const spec = createLineChartSpec(
     {
@@ -248,7 +248,7 @@ export async function createSignalMultiLineChart(
 
 export async function createSkeletonLineChart(options: IVegaOptions): Promise<TopLevelSpec> {
   const metas = await fetchMeta(options.ctx);
-  const minDate = selectEarliestDate(metas);
+  const minDate = selectMinDate(metas);
   return createLineChartSpec(
     {
       title: 'Line Chart',

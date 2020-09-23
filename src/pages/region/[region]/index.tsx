@@ -1,22 +1,22 @@
 import { fetchMinMaxDate } from '@/api/data';
 import { useFallback } from '@/client/hooks';
-import { ISerializedMinMax, useFetchMinMaxDate } from '@/client/utils';
+import { useFetchMinMaxDate } from '@/client/utils';
 import { extractRegion } from '@/common/validator';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import { RegionDate } from '@/components/pages/RegionDate';
 import { withContext } from '@/api/middleware';
+import { ISerializedDateRange, serializeDateRange } from '@/common/range';
 
-interface IRegionProps extends ISerializedMinMax {
+interface IRegionProps extends ISerializedDateRange {
   region: string;
 }
 
 export const getStaticProps: GetStaticProps<IRegionProps> = async (context) => {
-  const data = await withContext(fetchMinMaxDate);
+  const data = await withContext(fetchMinMaxDate).then(serializeDateRange);
   return {
     props: {
-      min: data.min.valueOf(),
-      max: data.max.valueOf(),
+      ...data,
       region: context.params!.region as string,
     },
   };
@@ -30,7 +30,7 @@ export const getStaticPaths: GetStaticPaths<IRegionProps & ParsedUrlQuery> = asy
 };
 
 export default function Region(props: IRegionProps) {
-  const { max: date } = useFetchMinMaxDate(props);
+  const data = useFetchMinMaxDate(props);
   const region = useFallback(props.region, extractRegion, undefined);
-  return <RegionDate region={region} date={date} dynamic />;
+  return <RegionDate region={region} date={data.latest} dynamic={data} />;
 }

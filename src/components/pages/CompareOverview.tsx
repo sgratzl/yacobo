@@ -1,4 +1,5 @@
 import { formatAPIDate, formatLocal } from '@/common';
+import type { IDateRange } from '@/common/range';
 import BaseLayout from '@/components/blocks/BaseLayout';
 import { DateSelect } from '@/components/blocks/DateSelect';
 import { IRegion, regionByID } from '@/model';
@@ -12,7 +13,7 @@ const EMPTY: IRegion[] = [];
 const California_NewYork_Florida = [regionByID('06'), regionByID('36'), regionByID('12')];
 const AlleghenyCounty_Pennsylvania = [regionByID('42003'), regionByID('42')];
 
-export function CompareOverview({ date, dynamic }: { date?: Date; dynamic?: boolean }) {
+export function CompareOverview({ date, dynamic }: { date?: Date; dynamic?: IDateRange }) {
   return (
     <BaseLayout
       pageTitle={`Compare multiple regions as of ${formatLocal(date)}`}
@@ -25,7 +26,9 @@ export function CompareOverview({ date, dynamic }: { date?: Date; dynamic?: bool
           query={{ date }}
         />
       }
-      subTitle={<DateSelect date={date} path="/compare/date/[date]" clearPath="/compare" query={{}} />}
+      subTitle={
+        <DateSelect date={date} path="/compare/date/[date]" clearPath="/compare" query={{}} dynamic={dynamic} />
+      }
       breadcrumb={[
         {
           breadcrumbName: 'Compare',

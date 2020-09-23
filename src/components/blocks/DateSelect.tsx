@@ -7,17 +7,20 @@ import { Button, Tooltip } from 'antd';
 import LeftOutlined from '@ant-design/icons/LeftOutlined';
 import RightOutlined from '@ant-design/icons/RightOutlined';
 import { IRouterQuery, useRouterWrapper } from '@/client/hooks';
+import type { IDateRange } from '@/common/range';
 
 export function DateSelect({
   date,
   path,
   query,
   clearPath,
+  dynamic,
 }: {
   date?: Date;
   path: string;
   clearPath: string;
   query: IRouterQuery;
+  dynamic?: IDateRange;
 }) {
   const router = useRouterWrapper();
   const onSelect = useCallback(

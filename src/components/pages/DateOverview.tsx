@@ -7,14 +7,15 @@ import { formatAPIDate, formatLocal } from '@/common';
 import { Row, Typography } from 'antd';
 import GridColumn from '@/components/blocks/GridColumn';
 import { fullUrl } from '@/client/hooks';
+import type { IDateRange } from '@/common/range';
 
-export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean }) {
+export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: IDateRange }) {
   return (
     <BaseLayout
       pageTitle={`${formatLocal(date)}`}
       mainActive="overview"
       title={<RegionSelect path="/region/[region]/date/[date]" clearPath="/date/[date]" query={{ date }} />}
-      subTitle={<DateSelect date={date} path="/date/[date]" clearPath="/" query={{}} />}
+      subTitle={<DateSelect date={date} path="/date/[date]" clearPath="/" query={{}} dynamic={dynamic} />}
       description={`Overview of the United States as of ${formatLocal(
         date
       )} showing multiple signals. ${refSignal.description(date)}`}

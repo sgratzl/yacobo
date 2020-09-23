@@ -11,8 +11,9 @@ import ContentLayout from '../blocks/ContentLayout';
 import { Fragment } from 'react';
 import RegionSignalHistorySection from '../sections/RegionSignalHistory';
 import { fullUrl } from '@/client/hooks';
+import type { IDateRange } from '@/common/range';
 
-export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: boolean }) {
+export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: IDateRange }) {
   const apiDate = formatAPIDate(date);
   return (
     <BaseLayout
@@ -24,7 +25,13 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
         <RegionSelect region={region} path="/region/[region]/date/[date]" clearPath="/date/[date]" query={{ date }} />
       }
       subTitle={
-        <DateSelect date={date} path="/region/[region]/date/[date]" clearPath="/region/[region]" query={{ region }} />
+        <DateSelect
+          date={date}
+          path="/region/[region]/date/[date]"
+          clearPath="/region/[region]"
+          query={{ region }}
+          dynamic={dynamic}
+        />
       }
       breadcrumb={[
         {
