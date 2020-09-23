@@ -1,10 +1,11 @@
 import { addDays, differenceInDays, endOfTomorrow, startOfToday, subDays } from 'date-fns';
 
 // in seconds
+const HOURS = 60 * 60;
 export enum CacheDuration {
-  short = 12 * 60 * 60,
-  medium = 48 * 60 * 60, // default
-  long = 96 * 60 * 60,
+  short = 12 * HOURS,
+  medium = 48 * HOURS, // default
+  long = 96 * HOURS,
 }
 
 export function estimateCacheDuration(date: Date) {
