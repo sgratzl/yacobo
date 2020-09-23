@@ -41,7 +41,7 @@ export function CompareOverview({ date, dynamic }: { date?: Date; dynamic?: bool
             ]),
       ]}
     >
-      <Typography.Title>Compare Regions</Typography.Title>
+      <Typography.Title>Compare Regions as of {formatLocal(date)}</Typography.Title>
       <Typography.Paragraph>select one or more regions to start</Typography.Paragraph>
       <Typography.Title level={2}>Examples</Typography.Title>
       <List size="small">

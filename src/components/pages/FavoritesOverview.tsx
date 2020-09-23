@@ -54,7 +54,7 @@ export default function FavoritesOverview({ date, dynamic }: { date?: Date; dyna
             ],
       ].flat()}
     >
-      <Typography.Title>My Favorites</Typography.Title>
+      <Typography.Title>My Favorites as of {formatLocal(date)}</Typography.Title>
       <FavoritesGridNoSSR date={date} />
     </BaseLayout>
   );
