@@ -198,4 +198,4 @@ function VegaWrapper<T>({ spec, data, onReady, tooltipTitle, tooltipContent, onC
   );
 }
 
-export default memo(VegaWrapper) as <T>(props: VegaWrapperProps<T>) => ReactNode;
+export default memo(VegaWrapper) as <T>(props: VegaWrapperProps<T>) => JSX.Element;
