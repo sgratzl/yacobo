@@ -19,10 +19,13 @@ export function RegionsCompareOverview({
   date?: Date;
   dynamic?: boolean;
 }) {
+  const title = regions.map((r) => r.name).join(' vs. ');
   return (
     <BaseLayout
-      pageTitle={`${formatLocal(date)}`}
-      description={refSignal.description(date)}
+      pageTitle={`${title} as of ${formatLocal(date)}`}
+      description={`Comparing ${title} as of ${formatLocal(date)} over multiple signals. ${refSignal.description(
+        date
+      )}`}
       previewImage={fullUrl('/api/compare/[regions]/[signal].jpg?highlight=[date]', {
         regions,
         signal: refSignal,
@@ -64,7 +67,7 @@ export function RegionsCompareOverview({
             ]),
       ]}
     >
-      <Typography.Title>{regions.map((r) => r.name).join(' vs. ')}</Typography.Title>
+      <Typography.Title>{title}</Typography.Title>
       <Comparing
         regions={regions}
         path="/compare/[regions]/date/[date]"

@@ -18,7 +18,7 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
     <BaseLayout
       pageTitle={`${region?.name} as of ${formatLocal(date)}`}
       mainActive="overview"
-      description={`${region?.name} as of ${formatLocal(date)}`}
+      description={`${region?.name} as of ${formatLocal(date)}. ${refSignal.description(date)}`}
       previewImage={fullUrl('/api/region/[region]/[signal].jpg?highlight=[date]', { date, signal: refSignal, region })}
       title={
         <RegionSelect region={region} path="/region/[region]/date/[date]" clearPath="/date/[date]" query={{ date }} />

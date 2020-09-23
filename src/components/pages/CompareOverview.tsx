@@ -15,7 +15,7 @@ const AlleghenyCounty_Pennsylvania = [regionByID('42003'), regionByID('42')];
 export function CompareOverview({ date, dynamic }: { date?: Date; dynamic?: boolean }) {
   return (
     <BaseLayout
-      pageTitle={`${formatLocal(date)}`}
+      pageTitle={`Compare multiple regions as of ${formatLocal(date)}`}
       mainActive="compare"
       title={
         <RegionsSelect

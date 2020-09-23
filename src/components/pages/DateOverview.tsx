@@ -15,7 +15,9 @@ export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: boolean
       mainActive="overview"
       title={<RegionSelect path="/region/[region]/date/[date]" clearPath="/date/[date]" query={{ date }} />}
       subTitle={<DateSelect date={date} path="/date/[date]" clearPath="/" query={{}} />}
-      description={`Overview of the United States as of ${formatLocal(date)} showing multiple signals`}
+      description={`Overview of the United States as of ${formatLocal(
+        date
+      )} showing multiple signals. ${refSignal.description(date)}`}
       previewImage={fullUrl('/api/signal/[signal]/[date].jpg', { signal: refSignal.id, date })}
       breadcrumb={
         dynamic

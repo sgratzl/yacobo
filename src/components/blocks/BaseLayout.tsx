@@ -32,10 +32,10 @@ export default function BaseLayout({
       <LayoutHeader mainActive={mainActive} />
       <Layout.Content className={styles.content}>
         <Head>
-          <title>YaCoBo - Yet another COVID-19 board - {pageTitle}</title>
+          <title>YaCoBo - {pageTitle}</title>
           <meta name="description" content={description} />
           {/** generate social media tags */}
-          <meta key="og:site_name" property="og:title" content={pageTitle} />
+          <meta key="og:site_name" property="og:title" content={`YaCoBo - Yet another COVID-19 board - ${pageTitle}`} />
           <meta key="og:description" property="og:description" content={description} />
           <meta key="og:url" property="og:url" content={BASE_URL} />
           {previewImage && <meta key="og:image" property="og:image" content={`${BASE_URL}${previewImage}`} />}

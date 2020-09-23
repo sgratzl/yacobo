@@ -34,7 +34,9 @@ export default function FavoritesOverview({ date, dynamic }: { date?: Date; dyna
       pageTitle={`My Favorites as of ${formatLocal(date)}`}
       mainActive="favorites"
       title="My Favorites"
-      description={`Overview of the United States as of ${formatAPIDate(date)} showing the personal favorites`}
+      description={`Overview of the United States as of ${formatAPIDate(
+        date
+      )} showing the personal favorites. ${refSignal.description()}`}
       previewImage={fullUrl('/api/signal/[signal]/[date]', { signal: refSignal, date })}
       subTitle={<DateSelect date={date} path="/favorites/[date]" clearPath="/" query={{}} />}
       breadcrumb={[
