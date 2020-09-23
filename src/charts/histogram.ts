@@ -43,7 +43,13 @@ function createHistogramSpec(
         as: 'bin_value',
       },
       {
-        aggregate: [{ op: 'count', as: '_count' }],
+        aggregate: [
+          { op: 'count', as: '_count' },
+          {
+            op: 'values',
+            as: 'values',
+          },
+        ],
         groupby: ['bin_value', 'bin_value_end'],
       },
       {
@@ -67,7 +73,6 @@ function createHistogramSpec(
           domainMin: 0,
           domainMax: data.maxValue,
           clamp: true,
-          scheme: data.colorScheme,
         },
         axis: {
           titleFontWeight: 'normal',
@@ -83,7 +88,8 @@ function createHistogramSpec(
         field: '_percent',
         type: 'quantitative',
         scale: {
-          domain: [0, 1],
+          domain: [0, 0.5], // 10 bins on average 0.1 max distribution 0.5 should be safe
+          clamp: true,
         },
         axis: {
           titleFontWeight: 'normal',

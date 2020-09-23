@@ -12,6 +12,7 @@ import { RegionSelect } from '../components/RegionSelect';
 import ContentLayout from '../components/ContentLayout';
 import { MapImage } from '../vega/MapImage';
 import { fullUrl } from '@/client/hooks';
+import { HistogramImage } from '../vega/HistogramImage';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -56,6 +57,9 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
         <MapImage scale={2} interactive signal={signal} date={date} />
         <Divider />
         <SignalInfoBlock signal={signal} />
+        <Divider />
+        <Typography.Title level={2}>Relative Frequency Distribution</Typography.Title>
+        <HistogramImage scale={2} interactive signal={signal} date={date} />
         <Divider />
         <Typography.Title level={2}>Data Table</Typography.Title>
         <SignalTable signal={signal} date={date} />
