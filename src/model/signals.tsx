@@ -36,19 +36,36 @@ function dated(prefix: string, date?: Date) {
   return date ? ` ${prefix} ${formatLocal(date)}` : '';
 }
 
+function JohnHopkins() {
+  return (
+    <a href="https://systems.jhu.edu/research/public-health/ncov/" target="_blank" rel="noopener noreferrer">
+      a team at Johns Hopkins University
+    </a>
+  );
+}
+
+function USAFacts() {
+  return (
+    <a
+      href="https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      USAFacts
+    </a>
+  );
+}
+
 const base: (ISignal | false)[] = [
   {
     id: 'fb_survey',
-    name: 'Showing Symptoms',
+    name: 'COVID-Like Symptoms',
     description: (date?: Date) =>
+      // prettier-ignore
       `How many out of 100 participants of the daily Facebook survey${dated('from', date)} show COVID-like symptoms`,
-    longDescription: () => `Every day, Delphi surveys tens of thousands of Facebook users,
-    asking a broad set of COVID-related questions, including whether they, or anyone in their household,
-    are currently experiencing symptoms. We also ask questions about well-being and various lockdown measures,
-    including mask wearing. For this signal, we estimate the percentage of people self-reporting COVID-like symptoms.
-    COVID-like symptoms are defined as having fever, along with either cough, shortness of breath, or difficulty breathing.
-    While many other conditions can cause these symptoms, comparing the rates of COVID-like symptoms across the country
-    can suggest where COVID is most active.`,
+    longDescription: () =>
+      // prettier-ignore
+      `Every day, Delphi surveys tens of thousands of Facebook users, asking a broad set of COVID-related questions, including whether they, or anyone in their household, are currently experiencing COVID-related symptoms. We also ask questions about well-being and various mitigation measures, including mask wearing. For this signal, we estimate the percentage of people self-reporting COVID-like symptoms, defined here as fever along with either cough, shortness of breath, or difficulty breathing. While many other conditions can cause these symptoms, comparing the rates of COVID-like symptoms across the country can suggest where COVID is most active.`,
     seeAlso: [
       {
         href: 'https://covidcast.cmu.edu/surveys.html',
@@ -70,19 +87,13 @@ const base: (ISignal | false)[] = [
   },
   false && {
     id: 'fb-survey-community',
-    name: 'Knowing Someone in Community with Symptoms',
+    name: 'COVID-Like Symptoms in Community',
     description: (date?: Date) =>
-      `How many out of 100 participants of the daily Facebook survey${dated(
-        'from',
-        date
-      )} survey know someone in their local community with COVID-like symptoms`,
-    longDescription: () => `Every day, Delphi surveys tens of thousands of Facebook users, asking them a broad set of COVID-related questions,
-    including whether they, or anyone in their household, are currently experiencing symptoms.
-    We also ask them if they know anyone in their local community who is sick with fever and either sore throat,
-    cough, shortness of breath, or difficulty breathing.
-    For this indicator, we calculate the percentage of people who know someone, in their household or outside it, who is sick.
-    While many conditions can cause these symptoms, not just COVID, comparing the rates across the country
-    can suggest where COVID is most active.`,
+      // prettier-ignore
+      `How many out of 100 participants of the daily Facebook survey${dated('from', date)} survey know someone in their local community with COVID-like symptoms`,
+    longDescription: () =>
+      // prettier-ignore
+      `Every day, Delphi surveys tens of thousands of Facebook users, asking them a broad set of COVID-related questions, including whether they, or anyone in their household, are currently experiencing COVID-relarted symptoms. We also ask them if they know anyone in their local community who has COVID-like or flu-like symptoms, defined here as fever along with either sore throat, cough, shortness of breath, or difficulty breathing.  For this indicator, we estimate the percentage of people who know someone, in their household or outside it, who has these symptoms. While many conditions can cause these symptoms, not just COVID, comparing the rates across the country can suggest where COVID is most active.`,
     seeAlso: [
       {
         alt: 'More information',
@@ -104,12 +115,13 @@ const base: (ISignal | false)[] = [
   },
   {
     id: 'doctor_visits',
-    name: 'Doctor Visits',
+    name: 'COVID-Related Doctor Visits',
     description: (date?: Date) =>
+      // prettier-ignore
       `How many out of 100 doctor visits${dated('on', date)} were due to COVID-like symptoms`,
-    longDescription: () => `Delphi receives from our health system partners aggregated statistics on COVID-related outpatient doctor visits,
-    derived from ICD codes found in insurance claims. Using this data, Delphi estimates the percentage of daily doctor’s visits in each area that are due to COVID-like illnesses.
-    Note that these estimates are based only on visits by patients whose data is accessible by our partners.`,
+    longDescription: () =>
+      // prettier-ignore
+      `Delphi receives from our health system partners aggregated statistics on COVID-related outpatient doctor visits, derived from ICD codes found in insurance claims. Using this data, Delphi estimates the percentage of daily doctor’s visits in each area that are due to COVID-like illness. Note that these estimates are based only on visits by patients whose data is accessible by our partners.`,
     seeAlso: [
       {
         alt: 'Technical description',
@@ -127,30 +139,15 @@ const base: (ISignal | false)[] = [
   },
   {
     id: 'cases',
-    name: 'Cases',
+    name: 'COVID Cases',
     description: (date?: Date) =>
+      // prettier-ignore
       `How many out of 100,000 people are newly reported COVID cases${dated('on', date)} (7-day average)`,
-    longDescription: () => (
+    longDescription: () =>
+      // prettier-ignore
       <>
-        {`The maps reflect only cases reported by state and local health authorities.
-    They are based on case counts compiled and made public by
-    `}
-        <a href="https://systems.jhu.edu/research/public-health/ncov/" target="_blank" rel="noopener noreferrer">
-          a team at Johns Hopkins University
-        </a>
-        {` and by `}
-        <a
-          href="https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          USAFacts
-        </a>
-        {`. We use Johns Hopkins data for Puerto Rico and report USAFacts data in all other locations.
-    Note that “confirmed cases” covers only those infections that were detected via testing, not all infections.
-    The signal may not be directly comparable across regions with vastly different testing capacity.`}
-      </>
-    ),
+        {`This data shows the number of COVID-19 confirmed cases newly reported each day. It reflects only cases reported by state and local health authorities. It is based on case counts compiled and made public by `}<USAFacts />{` and by `}<JohnHopkins/>{`. We use Johns Hopkins data for Puerto Rico and report USAFacts data in all other locations. Note that “confirmed cases” covers only those infections that were confirmed via testing, not all infections. The signal may not be directly comparable across regions with vastly different testing capacity.`}
+      </>,
     seeAlso: [
       {
         alt: 'Technical description',
@@ -169,14 +166,14 @@ const base: (ISignal | false)[] = [
   },
   {
     id: 'antigen_tests',
-    name: 'COVID-19 Antigen Tests',
+    name: 'COVID Antigen Test Positivity (Quidel)',
     description: (date?: Date) =>
-      `How many out of 100 people tested by Quidel, Inc.${dated('on', date)} show for COVID-19 antigens`,
-    longDescription: () => `Quidel, a national provider of networked lab testing devices, provides us with data from every COVID antigen test
-    that they conduct. When a patient (whether at a doctor’s office, clinic, or hospital) has COVID-like symptoms,
-    doctors may order an antigen test, which can detect parts of the virus that are present during an active infection.
-    We report the percentage of COVID antigen tests that are positive. Note that this signal only includes
-    Quidel’s antigen tests, not those run by competitors.`,
+      `How many out of 100 people tested by Quidel, Inc.${dated(
+        'on',
+        date
+      )} have been tested positively for COVID-19 antigens`,
+    longDescription: () =>
+      `When a patient (whether at a doctor’s office, clinic, or hospital) has COVID-like symptoms, doctors may order an antigen test, which can detect parts of the virus that are present during an active infection. Quidel, a national provider of networked lab testing devices, provides us with data from every COVID antigen test that they conduct.  We report the percentage of COVID antigen tests that are positive. Note that this signal only includes Quidel’s antigen tests, not those run by other test providers`,
     seeAlso: [
       {
         alt: 'Technical description',
@@ -194,13 +191,11 @@ const base: (ISignal | false)[] = [
   },
   {
     id: 'hospital_admissions',
-    name: 'Hospital Admissions',
+    name: 'COVID Hospital Admissions',
     description: (date?: Date) =>
       `How many out of 100 hospital admission${dated('on', date)} had a COVID-19 associated diagnoses`,
-    longDescription: () => `Delphi receives de-identified electronic medical records and claims data from our health systems partners.
-    Based on diagnostic codes, we calculate the percentage of new hospital admissions each day that are related to COVID-19.
-    Note that this  signal only covers those regions and patients whose data is observed by our partners,
-    and addresses new hospital admissions each day, not all currently hospitalized patients who have COVID-related diagnoses.`,
+    longDescription: () =>
+      `Delphi receives from our health system partners aggregated statistics on COVID-related hospital admissions, derived from ICD codes found in insurance claims and other medical records. Using this data, we estimate the percentage of new hospital admissions each day that are related to COVID-19. Note that these estimates are based only on admissions by patients whose data is accessible to our partners and addresses new hospital admissions each day, not all currently hospitalized patients who have COVID-related diagnoses.`,
     seeAlso: [
       {
         alt: 'Technical description',
@@ -218,29 +213,15 @@ const base: (ISignal | false)[] = [
   },
   {
     id: 'deaths',
-    name: 'Deaths',
+    name: 'COVID Deaths',
     description: (date?: Date) =>
+      // prettier-ignore
       `How many out of 100,000 people are newly reported COVID deaths${dated('on', date)} (7-day average)`,
-    longDescription: () => (
+    longDescription: () =>
+      // prettier-ignore
       <>
-        {`This data shows the number of COVID-19 related deaths reported each day.
-    The maps reflect official figures by state and local health authorities,
-    and may not include excess deaths not confirmed as due to COVID-19 by health authorities.
-    They are based on death counts compiled and made public by `}
-        <a href="https://systems.jhu.edu/research/public-health/ncov/" target="_blank" rel="noopener noreferrer">
-          a team at Johns Hopkins University
-        </a>
-        {` and by `}
-        <a
-          href="https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          USAFacts
-        </a>
-        {`. We use Johns Hopkins data for Puerto Rico and report USAFacts data in all other locations.`}
-      </>
-    ),
+        {`This data shows the number of COVID-19 related deaths newly reported each day. It reflects official figures reported by state and local health authorities, and may not include excess deaths not confirmed by health authorities to be due to COVID-19. They signal is based on death counts compiled and made public by `}<USAFacts />{` and by `}<JohnHopkins/>{`. We use Johns Hopkins data for Puerto Rico and report USAFacts data in all other locations.`}
+      </>,
     seeAlso: [
       {
         alt: 'Technical description',
