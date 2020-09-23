@@ -11,6 +11,7 @@ import { SignalInfoBlock } from '../blocks/SignalInfoBox';
 import { DateTable } from '../blocks/DataTables';
 import { LineImage } from '../blocks/LineImage';
 import { fullUrl } from '@/client/hooks';
+import { CompareWithButton } from '../blocks/CompareIcon';
 
 export function RegionSignal({ region, signal }: { region?: IRegion; signal?: ISignal }) {
   return (
@@ -46,6 +47,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
         },
       ]}
       extra={[
+        <CompareWithButton key="c" region={region} signal={signal} />,
         <FavoriteToggle region={region} signal={signal} key="bookmark" warning={false} history />,
         <DownloadMenu key="download" path={fullUrl('/region/[region]/[signal]', { region, signal })} />,
       ]}

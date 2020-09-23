@@ -12,6 +12,7 @@ import { Fragment } from 'react';
 import RegionSignalHistorySection from '../sections/RegionSignalHistory';
 import { fullUrl } from '@/client/hooks';
 import type { IDateRange } from '@/model';
+import { CompareWithButton } from '../blocks/CompareIcon';
 
 export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: IDateRange }) {
   const apiDate = formatAPIDate(date);
@@ -47,6 +48,7 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
             ]
           : [],
       ].flat()}
+      extra={[<CompareWithButton region={region} date={date} />]}
     >
       <ContentLayout>
         <Typography.Title>{region?.name}</Typography.Title>

@@ -1,6 +1,10 @@
-import type { IRegion } from '@/model';
+import type { IRegion, ITriple } from '@/model';
+import { Button, Tooltip } from 'antd';
 import { classNames } from '../utils';
 import styles from './CompareIcon.module.css';
+import BlockOutlined from '@ant-design/icons/BlockOutlined';
+import { useCallback } from 'react';
+import { useRouterWrapper } from '@/client/hooks';
 
 export function CompareCircleFilled({ i, className }: { i?: number; className?: string }) {
   return (
@@ -39,5 +43,28 @@ export function CompareLegend({ regions }: { regions: IRegion[] }) {
         <CompareIcon key={region.id} title={region.name} compare={i} />
       ))}
     </div>
+  );
+}
+
+export function CompareWithButton({ region, signal, date }: ITriple) {
+  const router = useRouterWrapper();
+  const compare = useCallback(() => {
+    if (!region) {
+      return;
+    }
+    if (signal && date) {
+      router.push('/compare/[regions]/[signal]/[date]', { regions: region, signal, date });
+    } else if (signal) {
+      router.push('/compare/[regions]/[signal]', { regions: region, signal });
+    } else if (signal) {
+      router.push('/compare/[regions]/date/[date]', { regions: region, date });
+    } else {
+      router.push('/compare/[regions]', { regions: region });
+    }
+  }, [region, signal, date, router]);
+  return (
+    <Tooltip title="Compare with another region">
+      <Button type="default" shape="circle" onClick={compare} icon={<BlockOutlined />} />
+    </Tooltip>
   );
 }

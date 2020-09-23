@@ -12,7 +12,7 @@ interface IProps {
 const Page: NextPage<IProps> = (props) => {
   const regions = useFallback(props.regions, extractRegions, []);
   const signal = useFallback(props.signal, extractSignal, undefined);
-  const date = useFallback(props.signal, extractDate, undefined);
+  const date = useFallback(props.date, extractDate, undefined);
   return <RegionsSignalDateCompare regions={regions} signal={signal} date={date} />;
 };
 

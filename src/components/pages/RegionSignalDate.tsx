@@ -13,6 +13,7 @@ import { MapImage } from '../blocks/MapImage';
 import { LineImage } from '../blocks/LineImage';
 import ContentLayout from '../blocks/ContentLayout';
 import { fullUrl } from '@/client/hooks';
+import { CompareWithButton } from '../blocks/CompareIcon';
 
 export function RegionSignalDate({ region, signal, date }: ITriple) {
   const apiDate = formatAPIDate(date);
@@ -62,6 +63,7 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
         },
       ]}
       extra={[
+        <CompareWithButton key="c" region={region} signal={signal} date={date} />,
         <FavoriteToggle signal={signal} region={region} key="bookmark" warning={false} />,
         <DownloadMenu
           key="download"
