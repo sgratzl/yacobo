@@ -1,41 +1,24 @@
-import { fetchMinMaxDate } from '@/api/data';
-import { CacheDuration } from '@/api/model';
 import { useFallback } from '@/client/hooks';
-import type { ISerializedMinMax } from '@/client/utils';
 import { extractRegion, extractSignal } from '@/common/validator';
-import type { GetStaticPaths, GetStaticProps } from 'next';
-import type { ParsedUrlQuery } from 'querystring';
-import { withContext } from '@/api/middleware';
 import { RegionSignal } from '@/components/pages/RegionSignal';
+import type { NextPage } from 'next';
 
-interface IRegionSignalProps extends ISerializedMinMax {
+interface IProps {
   region: string;
   signal: string;
 }
 
-export const getStaticProps: GetStaticProps<IRegionSignalProps> = async (context) => {
-  const data = await withContext(fetchMinMaxDate);
-  return {
-    props: {
-      min: data.min.valueOf(),
-      max: data.max.valueOf(),
-      region: context.params!.region as string,
-      signal: context.params!.signal as string,
-    },
-    revalidate: CacheDuration.short,
-  };
-};
-
-export const getStaticPaths: GetStaticPaths<IRegionSignalProps & ParsedUrlQuery> = async () => {
-  return {
-    paths: [], // no favorite regions yet
-    fallback: true,
-  };
-};
-
-export default function RegionSignalWrapper(props: IRegionSignalProps) {
+const Page: NextPage<IProps> = (props) => {
   const region = useFallback(props.region, extractRegion, undefined);
   const signal = useFallback(props.signal, extractSignal, undefined);
-
   return <RegionSignal region={region} signal={signal} />;
-}
+};
+
+Page.getInitialProps = async (ctx) => {
+  return {
+    region: ctx.query.region as string,
+    signal: ctx.query.signal as string,
+  };
+};
+
+export default Page;

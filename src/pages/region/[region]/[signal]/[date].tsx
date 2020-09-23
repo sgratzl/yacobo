@@ -6,11 +6,12 @@ import type { NextPage } from 'next';
 interface IProps {
   region: string;
   date: string;
+  signal: string;
 }
 
 const Page: NextPage<IProps> = (props) => {
   const region = useFallback(props.region, extractRegion, undefined);
-  const signal = useFallback(props.date, extractSignal, undefined);
+  const signal = useFallback(props.signal, extractSignal, undefined);
   const date = useFallback(props.date, extractDate, undefined);
   return <RegionSignalDate region={region} signal={signal} date={date} />;
 };
