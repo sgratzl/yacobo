@@ -1,5 +1,5 @@
-import { ReactNode, useEffect, useRef, useState, MutableRefObject } from 'react';
-import { parse, TooltipHandler, View } from 'vega';
+import { ReactNode, useEffect, useRef, useState, MutableRefObject, memo } from 'react';
+import { Item, parse, TooltipHandler, View } from 'vega';
 import { Error as ErrorLevel } from 'vega';
 import { compile, TopLevelSpec } from 'vega-lite';
 import { classNames } from '../utils';
@@ -13,7 +13,7 @@ function resolveDatum(item: any): any {
   return item;
 }
 
-const popperToAntdPlacments = {
+const popperToAntdPlacements = {
   top: 'top',
   bottom: 'bottom',
   right: 'right',
@@ -43,7 +43,7 @@ function TooltipAdapter<T>({
 }) {
   const [visible, setVisible] = useState(false);
   const [datum, setDatum] = useState(null as T | null);
-  const [placement, setPlacement] = useState('top' as keyof typeof popperToAntdPlacments);
+  const [placement, setPlacement] = useState('top' as keyof typeof popperToAntdPlacements);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -100,7 +100,7 @@ function TooltipAdapter<T>({
     };
   }, [setDatum, tooltipRef, handler, setVisible, setPlacement]);
 
-  const placementClass = `ant-popover-placement-${popperToAntdPlacments[placement]}`;
+  const placementClass = `ant-popover-placement-${popperToAntdPlacements[placement]}`;
   // fake a antd popover
   return (
     <div ref={tooltipRef} className={classNames('ant-popover', placementClass, !visible && 'ant-popover-hidden')}>
@@ -124,14 +124,7 @@ export interface VegaWrapperProps<T> extends ITooltipProps<T> {
   onClick?: (data: T) => void;
 }
 
-export default function VegaWrapper<T>({
-  spec,
-  data,
-  onReady,
-  tooltipTitle,
-  tooltipContent,
-  onClick,
-}: VegaWrapperProps<T>) {
+function VegaWrapper<T>({ spec, data, onReady, tooltipTitle, tooltipContent, onClick }: VegaWrapperProps<T>) {
   const vegaInstance = useRef<View | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<TooltipHandler>(null);
@@ -154,14 +147,6 @@ export default function VegaWrapper<T>({
       hover: true,
       tooltip: tooltipRef.current ?? undefined,
     });
-    if (onClick) {
-      view.addEventListener('click', (_, item) => {
-        if (!item) {
-          return;
-        }
-        onClick(resolveDatum(item));
-      });
-    }
     vegaInstance.current = view;
     view.runAsync().then(() => {
       if (onReady) {
@@ -171,7 +156,24 @@ export default function VegaWrapper<T>({
     return () => {
       view.finalize();
     };
-  }, [vegaInstance, spec, onReady, tooltipRef, onClick]);
+  }, [vegaInstance, spec, onReady, tooltipRef]);
+
+  useEffect(() => {
+    if (!vegaInstance.current || !onClick) {
+      return;
+    }
+    const view = vegaInstance.current;
+    const listener = (_: any, item?: Item) => {
+      if (!item) {
+        return;
+      }
+      onClick(resolveDatum(item));
+    };
+    view.addEventListener('click', listener);
+    return () => {
+      view.removeEventListener('click', listener);
+    };
+  }, [vegaInstance, onClick]);
 
   useEffect(() => {
     if (!vegaInstance.current) {
@@ -195,3 +197,5 @@ export default function VegaWrapper<T>({
     </div>
   );
 }
+
+export default memo(VegaWrapper) as <T>(props: VegaWrapperProps<T>) => ReactNode;
