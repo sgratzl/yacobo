@@ -40,14 +40,14 @@ export default function OpenAPI() {
       ]}
     >
       <ContentLayout>
-        <Typography.Title>About</Typography.Title>
+        <Typography.Title>YaCoBo (Yet Another COVID-19 Board)</Typography.Title>
         <Typography.Paragraph>
           <Typography.Text strong>YaCoBo</Typography.Text>
           {' is a hobby project by '}
           <Typography.Link href="https://www.sgratzl.com" target="_blank" rel="noopener noreferrer">
             Samuel Gratzl
           </Typography.Link>
-          {'.'}
+          {'. If you like it, consider adding a star at the GitHub project, since there is no tracking in place.'}
         </Typography.Paragraph>
 
         <Typography.Title level={2}>Bugs, Feature Requests, Feedback</Typography.Title>
@@ -65,6 +65,28 @@ export default function OpenAPI() {
           {'.'}
         </Typography.Paragraph>
 
+        <Typography.Title level={2}>Data</Typography.Title>
+        <Typography.Paragraph>
+          {'The data is fetched and cached from the public '}
+          <Typography.Link
+            href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            COVIDCast API
+          </Typography.Link>
+          {'. Their '}
+          <Typography.Link href="https://covidcast.cmu.edu/terms-of-use.html" target="_blank" rel="noopener noreferrer">
+            Terms of Use
+          </Typography.Link>
+          {' apply. The scales for line charts and maps are using the same logic as the original '}
+          <Typography.Link href="https://covidcast.cmu.edu" target="_blank" rel="noopener noreferrer">
+            COVIDCast Map
+          </Typography.Link>
+          {': '}
+          <code>[0, mean + 3 * stdev]</code>
+        </Typography.Paragraph>
+
         <Typography.Title level={2}>License</Typography.Title>
         <Typography.Paragraph>
           <Typography.Text strong>YaCoBo</Typography.Text>
@@ -76,30 +98,21 @@ export default function OpenAPI() {
           >
             MIT License
           </Typography.Link>
-          {'. The data is fetched and cached from the public '}
-          <Typography.Link
-            href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            COVIDCast API
-          </Typography.Link>
-          {'. Their '}
-          <Typography.Link
-            href="there https://covidcast.cmu.edu/terms-of-use.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Terms of Use
-          </Typography.Link>
-          {' apply.'}
+          {'.'}
         </Typography.Paragraph>
 
         <Typography.Title level={2}>Privacy Notice</Typography.Title>
         <Typography.Paragraph>
           <Typography.Text strong>YaCoBo</Typography.Text>
-          {' is not storing any user data on a server.'}
-          {' The localstorage API of the web browser is used to store the personalized favorite list. '}
+          {' is not storing any user data on a server. The '}
+          <Typography.Link
+            href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Local Storage API
+          </Typography.Link>
+          {' of the web browser is used to store the personalized favorite list.'}
         </Typography.Paragraph>
       </ContentLayout>
     </BaseLayout>
