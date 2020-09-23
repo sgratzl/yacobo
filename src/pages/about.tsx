@@ -1,8 +1,8 @@
-import BaseLayout from '@/components/blocks/BaseLayout';
+import BaseLayout from '@/client/components/BaseLayout';
 import GithubOutlined from '@ant-design/icons/GithubOutlined';
 import BugOutlined from '@ant-design/icons/BugOutlined';
 import { Button, Tooltip, Typography } from 'antd';
-import ContentLayout from '@/components/blocks/ContentLayout';
+import ContentLayout from '@/client/components/ContentLayout';
 
 export default function OpenAPI() {
   return (

@@ -1,11 +1,11 @@
-import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSelect } from '@/components/blocks/DateSelect';
-import { RegionSelect } from '@/components/blocks/RegionSelect';
-import SignalSection from '@/components/sections/SignalSection';
+import BaseLayout from '../components/BaseLayout';
+import { DateSelect } from '../components/DateSelect';
+import { RegionSelect } from '../components/RegionSelect';
+import SignalWidget from '@/client/widgets/SignalWidget';
 import { refSignal, signals } from '@/model/signals';
 import { formatAPIDate, formatLocal } from '@/common';
 import { Row, Typography } from 'antd';
-import GridColumn from '@/components/blocks/GridColumn';
+import GridColumn from '../components/GridColumn';
 import { fullUrl } from '@/client/hooks';
 import type { IDateRange } from '@/model';
 
@@ -35,7 +35,7 @@ export function DateOverview({ date, dynamic }: { date?: Date; dynamic?: IDateRa
       <Row>
         {signals.map((s) => (
           <GridColumn key={s.id}>
-            <SignalSection signal={s} date={date} />
+            <SignalWidget signal={s} date={date} />
           </GridColumn>
         ))}
       </Row>

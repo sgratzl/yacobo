@@ -2,18 +2,18 @@ import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import { Button, Card, Tooltip } from 'antd';
 import { useCallback } from 'react';
-import { DownloadMenu } from '../blocks/DownloadMenu';
-import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import { showInfoBox } from '../blocks/SignalInfoBox';
-import { LineImage } from '../blocks/LineImage';
+import { DownloadMenu } from '../components/DownloadMenu';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import { showInfoBox } from '../components/SignalInfoBox';
+import { LineImage } from '../components/LineImage';
 import styles from './Section.module.css';
-import { RegionSignalKeyFacts } from '../blocks/RegionSignalKeyFacts';
+import { RegionSignalKeyFacts } from '../components/RegionSignalKeyFacts';
 import { fullUrl } from '@/client/hooks';
-import LinkWrapper from '../blocks/LinkWrapper';
-import { CompareIcon, CompareWithButton } from '../blocks/CompareIcon';
+import LinkWrapper from '../components/LinkWrapper';
+import { CompareIcon, CompareWithButton } from '../components/CompareIcon';
 import type { IWidgetProps } from './interfaces';
 
-export default function RegionSignalHistorySection({ region, signal, date, focus = 'both', compare }: IWidgetProps) {
+export default function RegionSignalHistoryWidget({ region, signal, date, focus = 'both', compare }: IWidgetProps) {
   const showInfo = useCallback(() => {
     if (signal) {
       showInfoBox(signal, date);

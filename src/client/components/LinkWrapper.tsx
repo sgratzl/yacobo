@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { PropsWithChildren } from 'react';
-import { IRouterQuery, useRouterWrapper } from '../../client/hooks';
+import { IRouterQuery, useRouterWrapper } from '../hooks';
 
 export default function LinkWrapper({
   path,

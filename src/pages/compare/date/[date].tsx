@@ -1,6 +1,6 @@
 import { useFallback } from '@/client/hooks';
 import { extractDate } from '@/common/validator';
-import { CompareOverview } from '@/components/pages/CompareOverview';
+import { CompareOverview } from '@/client/pages/CompareOverview';
 import type { NextPage } from 'next';
 
 interface IProps {

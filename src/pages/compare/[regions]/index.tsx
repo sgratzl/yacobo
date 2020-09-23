@@ -6,7 +6,7 @@ import { extractRegions } from '@/common/validator';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import { withContext } from '@/api/middleware';
-import { RegionsCompareOverview } from '@/components/pages/RegionsCompareOverview';
+import { RegionsCompareOverview } from '@/client/pages/RegionsCompareOverview';
 import { ISerializedDateRange, serializeDateRange } from '@/model';
 
 interface IRegionsProps extends ISerializedDateRange {

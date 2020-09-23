@@ -1,12 +1,12 @@
 import { formatAPIDate, formatLocal } from '@/common';
 import type { IDateRange } from '@/model';
-import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSelect } from '@/components/blocks/DateSelect';
+import BaseLayout from '../components/BaseLayout';
+import { DateSelect } from '../components/DateSelect';
 import { IRegion, regionByID } from '@/model';
 import { Typography, List } from 'antd';
-import { Comparing } from '../blocks/Comparing';
-import LinkWrapper from '../blocks/LinkWrapper';
-import { RegionsSelect } from '../blocks/RegionSelect';
+import { Comparing } from '../components/Comparing';
+import LinkWrapper from '../components/LinkWrapper';
+import { RegionsSelect } from '../components/RegionSelect';
 
 const EMPTY: IRegion[] = [];
 

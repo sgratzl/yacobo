@@ -1,16 +1,16 @@
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import { Button, Card, Tooltip } from 'antd';
-import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import { DownloadMenu } from '../blocks/DownloadMenu';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import { DownloadMenu } from '../components/DownloadMenu';
 import styles from './Section.module.css';
 import { formatLocal } from '@/common';
-import { KeySignalMultiFacts } from '../blocks/RegionSignalKeyFacts';
-import { CompareIcon, CompareWithButton } from '../blocks/CompareIcon';
+import { KeySignalMultiFacts } from '../components/RegionSignalKeyFacts';
+import { CompareIcon, CompareWithButton } from '../components/CompareIcon';
 import { fullUrl } from '@/client/hooks';
-import LinkWrapper from '../blocks/LinkWrapper';
+import LinkWrapper from '../components/LinkWrapper';
 import type { IWidgetProps } from './interfaces';
 
-export default function RegionSection({ region, date, signal, focus = 'both', compare }: IWidgetProps) {
+export default function RegionWidget({ region, date, signal, focus = 'both', compare }: IWidgetProps) {
   return (
     <Card
       className={styles.card}

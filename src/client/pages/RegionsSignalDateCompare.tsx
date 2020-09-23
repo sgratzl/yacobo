@@ -1,19 +1,19 @@
 import { fullUrl } from '@/client/hooks';
 import { formatAPIDate, formatLocal } from '@/common';
-import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSignalSelect } from '@/components/blocks/DateSelect';
-import { RegionsSelect } from '@/components/blocks/RegionSelect';
-import { SignalSelect } from '@/components/blocks/SignalSelect';
+import BaseLayout from '../components/BaseLayout';
+import { DateSignalSelect } from '../components/DateSelect';
+import { RegionsSelect } from '../components/RegionSelect';
+import { SignalSelect } from '../components/SignalSelect';
 import type { IRegion, ISignal } from '@/model';
 import { Divider, Row, Typography } from 'antd';
-import { Comparing } from '../blocks/Comparing';
-import ContentLayout from '../blocks/ContentLayout';
-import { DownloadMenu } from '../blocks/DownloadMenu';
-import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import GridColumn from '../blocks/GridColumn';
-import { LineMultiImage } from '../blocks/LineMultiImage';
-import { SignalInfoBlock } from '../blocks/SignalInfoBox';
-import RegionSignalSection from '../sections/RegionSignalSection';
+import { Comparing } from '../components/Comparing';
+import ContentLayout from '../components/ContentLayout';
+import { DownloadMenu } from '../components/DownloadMenu';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import GridColumn from '../components/GridColumn';
+import { LineMultiImage } from '../components/LineMultiImage';
+import { SignalInfoBlock } from '../components/SignalInfoBox';
+import RegionSignalWidget from '../widgets/RegionSignalWidget';
 
 export function RegionsSignalDateCompare({
   regions,
@@ -95,7 +95,7 @@ export function RegionsSignalDateCompare({
         <Row>
           {regions.map((region, i) => (
             <GridColumn key={region.id}>
-              <RegionSignalSection region={region} signal={signal} date={date} focus="region" compare={i} />
+              <RegionSignalWidget region={region} signal={signal} date={date} focus="region" compare={i} />
             </GridColumn>
           ))}
         </Row>

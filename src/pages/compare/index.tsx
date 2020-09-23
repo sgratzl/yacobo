@@ -2,7 +2,7 @@ import { fetchMinMaxDate } from '@/api/data';
 import { CacheDuration } from '@/api/model';
 import { useFetchDateRange } from '@/client/utils';
 import type { GetStaticProps } from 'next';
-import { CompareOverview } from '@/components/pages/CompareOverview';
+import { CompareOverview } from '@/client/pages/CompareOverview';
 import { withContext } from '@/api/middleware';
 import { ISerializedDateRange, serializeDateRange } from '@/model';
 

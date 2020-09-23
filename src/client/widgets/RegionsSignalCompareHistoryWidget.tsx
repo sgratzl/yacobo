@@ -3,16 +3,16 @@ import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import { Button, Card, Tooltip } from 'antd';
 import { useCallback } from 'react';
 import type { IRegion, ISignal } from '@/model';
-import { DownloadMenu } from '../blocks/DownloadMenu';
-import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import { showInfoBox } from '../blocks/SignalInfoBox';
+import { DownloadMenu } from '../components/DownloadMenu';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import { showInfoBox } from '../components/SignalInfoBox';
 import styles from './Section.module.css';
-import { LineMultiImage } from '../blocks/LineMultiImage';
-import { CompareLegend } from '../blocks/CompareIcon';
+import { LineMultiImage } from '../components/LineMultiImage';
+import { CompareLegend } from '../components/CompareIcon';
 import { fullUrl } from '@/client/hooks';
-import LinkWrapper from '../blocks/LinkWrapper';
+import LinkWrapper from '../components/LinkWrapper';
 
-export default function RegionsSignalCompareHistorySection({
+export default function RegionsSignalCompareHistoryWidget({
   regions,
   signal,
   date,

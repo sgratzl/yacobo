@@ -6,7 +6,7 @@ import { useFallback } from '@/client/hooks';
 import { extractDate } from '@/common/validator';
 import type { ParsedUrlQuery } from 'querystring';
 import { withContext } from '@/api/middleware';
-import FavoritesOverview from '@/components/pages/FavoritesOverview';
+import FavoritesOverview from '@/client/pages/FavoritesOverview';
 
 interface IDateOverviewProps {
   date: string;

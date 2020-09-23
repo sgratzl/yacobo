@@ -1,19 +1,19 @@
-import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSignalSelect } from '@/components/blocks/DateSelect';
-import { RegionSelect } from '@/components/blocks/RegionSelect';
-import { SignalSelect } from '@/components/blocks/SignalSelect';
+import BaseLayout from '../components/BaseLayout';
+import { DateSignalSelect } from '../components/DateSelect';
+import { RegionSelect } from '../components/RegionSelect';
+import { SignalSelect } from '../components/SignalSelect';
 import { formatAPIDate, formatLocal } from '@/common';
 import type { ITriple } from '@/model';
-import { DownloadMenu } from '../blocks/DownloadMenu';
-import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
+import { DownloadMenu } from '../components/DownloadMenu';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../components/RegionSignalKeyFacts';
 import { Divider, Typography } from 'antd';
-import { SignalInfoBlock } from '../blocks/SignalInfoBox';
-import { MapImage } from '../blocks/MapImage';
-import { LineImage } from '../blocks/LineImage';
-import ContentLayout from '../blocks/ContentLayout';
+import { SignalInfoBlock } from '../components/SignalInfoBox';
+import { MapImage } from '../components/MapImage';
+import { LineImage } from '../components/LineImage';
+import ContentLayout from '../components/ContentLayout';
 import { fullUrl } from '@/client/hooks';
-import { CompareWithButton } from '../blocks/CompareIcon';
+import { CompareWithButton } from '../components/CompareIcon';
 
 export function RegionSignalDate({ region, signal, date }: ITriple) {
   const apiDate = formatAPIDate(date);

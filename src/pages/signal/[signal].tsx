@@ -6,7 +6,7 @@ import { extractSignal } from '@/common/validator';
 import { signals } from '@/model/signals';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import { SignalDate } from '@/components/pages/SignalDate';
+import { SignalDate } from '@/client/pages/SignalDate';
 import { withContext } from '@/api/middleware';
 import { ISerializedDateRange, serializeDateRange } from '@/model';
 

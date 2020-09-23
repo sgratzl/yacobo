@@ -1,18 +1,18 @@
-import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSelect } from '@/components/blocks/DateSelect';
-import { RegionSelect } from '@/components/blocks/RegionSelect';
+import BaseLayout from '../components/BaseLayout';
+import { DateSelect } from '../components/DateSelect';
+import { RegionSelect } from '../components/RegionSelect';
 import { formatAPIDate, formatLocal } from '@/common';
 import { IRegion, refSignal, signals } from '@/model';
-import GridColumn from '../blocks/GridColumn';
+import GridColumn from '../components/GridColumn';
 import { Row, Typography } from 'antd';
-import RegionSignalSection from '../sections/RegionSignalSection';
-import { LineImage } from '../blocks/LineImage';
-import ContentLayout from '../blocks/ContentLayout';
+import RegionSignalWidget from '../widgets/RegionSignalWidget';
+import { LineImage } from '../components/LineImage';
+import ContentLayout from '../components/ContentLayout';
 import { Fragment } from 'react';
-import RegionSignalHistorySection from '../sections/RegionSignalHistory';
+import RegionSignalHistoryWidget from '../widgets/RegionSignalHistoryWidget';
 import { fullUrl } from '@/client/hooks';
 import type { IDateRange } from '@/model';
-import { CompareWithButton } from '../blocks/CompareIcon';
+import { CompareWithButton } from '../components/CompareIcon';
 
 export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: IDateRange }) {
   const apiDate = formatAPIDate(date);
@@ -63,10 +63,10 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
           {signals.map((s) => (
             <Fragment key={s.id}>
               <GridColumn>
-                <RegionSignalSection region={region} signal={s} date={date} focus="signal" />
+                <RegionSignalWidget region={region} signal={s} date={date} focus="signal" />
               </GridColumn>
               <GridColumn>
-                <RegionSignalHistorySection region={region} signal={s} date={date} focus="signal" />
+                <RegionSignalHistoryWidget region={region} signal={s} date={date} focus="signal" />
               </GridColumn>
             </Fragment>
           ))}

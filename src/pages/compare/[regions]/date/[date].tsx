@@ -1,6 +1,6 @@
 import { useFallback } from '@/client/hooks';
 import { extractDate, extractRegions } from '@/common/validator';
-import { RegionsCompareOverview } from '@/components/pages/RegionsCompareOverview';
+import { RegionsCompareOverview } from '@/client/pages/RegionsCompareOverview';
 import type { NextPage } from 'next';
 
 interface IProps {

@@ -4,7 +4,7 @@ import { useFetchDateRange } from '@/client/utils';
 import { extractRegion } from '@/common/validator';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import { RegionDate } from '@/components/pages/RegionDate';
+import { RegionDate } from '@/client/pages/RegionDate';
 import { withContext } from '@/api/middleware';
 import { ISerializedDateRange, serializeDateRange } from '@/model';
 

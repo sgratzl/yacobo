@@ -4,14 +4,14 @@ import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import { useCallback } from 'react';
 import styles from './Section.module.css';
-import { MapImage } from '../blocks/MapImage';
-import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import { DownloadMenu } from '../blocks/DownloadMenu';
-import { showInfoBox } from '../blocks/SignalInfoBox';
+import { MapImage } from '../components/MapImage';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import { DownloadMenu } from '../components/DownloadMenu';
+import { showInfoBox } from '../components/SignalInfoBox';
 import { fullUrl } from '@/client/hooks';
-import LinkWrapper from '../blocks/LinkWrapper';
+import LinkWrapper from '../components/LinkWrapper';
 
-export default function SignalSection({ signal, date, region }: ITriple & { signal: ISignal }) {
+export default function SignalWidget({ signal, date, region }: ITriple & { signal: ISignal }) {
   const showInfo = useCallback(() => {
     showInfoBox(signal, date);
   }, [signal, date]);

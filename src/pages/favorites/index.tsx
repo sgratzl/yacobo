@@ -3,7 +3,7 @@ import { CacheDuration } from '@/api/model';
 import { useFetchDateRange } from '@/client/utils';
 import type { GetStaticProps } from 'next';
 import { withContext } from '@/api/middleware';
-import FavoritesOverview from '@/components/pages/FavoritesOverview';
+import FavoritesOverview from '@/client/pages/FavoritesOverview';
 import { ISerializedDateRange, serializeDateRange } from '@/model';
 
 export const getStaticProps: GetStaticProps<ISerializedDateRange> = async () => {

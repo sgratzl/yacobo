@@ -1,17 +1,17 @@
-import BaseLayout from '@/components/blocks/BaseLayout';
-import { RegionSelect } from '@/components/blocks/RegionSelect';
-import { SignalSelect } from '@/components/blocks/SignalSelect';
+import BaseLayout from '../components/BaseLayout';
+import { RegionSelect } from '../components/RegionSelect';
+import { SignalSelect } from '../components/SignalSelect';
 import type { ISignal } from '@/model/signals';
 import { Divider, Typography } from 'antd';
 import type { IRegion } from '../../model';
-import ContentLayout from '../blocks/ContentLayout';
-import { DownloadMenu } from '../blocks/DownloadMenu';
-import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import { SignalInfoBlock } from '../blocks/SignalInfoBox';
-import { DateTable } from '../blocks/DataTables';
-import { LineImage } from '../blocks/LineImage';
+import ContentLayout from '../components/ContentLayout';
+import { DownloadMenu } from '../components/DownloadMenu';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import { SignalInfoBlock } from '../components/SignalInfoBox';
+import { DateTable } from '../components/DataTables';
+import { LineImage } from '../components/LineImage';
 import { fullUrl } from '@/client/hooks';
-import { CompareWithButton } from '../blocks/CompareIcon';
+import { CompareWithButton } from '../components/CompareIcon';
 
 export function RegionSignal({ region, signal }: { region?: IRegion; signal?: ISignal }) {
   return (

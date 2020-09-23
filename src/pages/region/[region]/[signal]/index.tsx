@@ -1,6 +1,6 @@
 import { useFallback } from '@/client/hooks';
 import { extractRegion, extractSignal } from '@/common/validator';
-import { RegionSignal } from '@/components/pages/RegionSignal';
+import { RegionSignal } from '@/client/pages/RegionSignal';
 import type { NextPage } from 'next';
 
 interface IProps {

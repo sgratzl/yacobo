@@ -9,6 +9,10 @@ import {
 import useSWR from 'swr';
 import { ISignal, ISignalMeta, ISignalWithMeta, signalByID } from '../model';
 
+export function classNames(...classes: (boolean | null | undefined | string)[]) {
+  return classes.filter(Boolean).join(' ');
+}
+
 export function addParam(url: string | undefined, key: string, value?: string | number) {
   if (!url || value == null) {
     return url;

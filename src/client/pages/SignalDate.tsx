@@ -1,16 +1,16 @@
-import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSignalSelect } from '@/components/blocks/DateSelect';
-import { SignalSelect } from '@/components/blocks/SignalSelect';
-import { FavoriteToggle } from '@/components/blocks/FavoriteToggle';
-import SignalTable from '@/components/blocks/DataTables';
+import BaseLayout from '../components/BaseLayout';
+import { DateSignalSelect } from '../components/DateSelect';
+import { SignalSelect } from '../components/SignalSelect';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import SignalTable from '../components/DataTables';
 import type { ISignal } from '@/model/signals';
 import { Divider, Typography } from 'antd';
-import { DownloadMenu } from '@/components/blocks/DownloadMenu';
+import { DownloadMenu } from '../components/DownloadMenu';
 import { formatLocal, formatAPIDate } from '@/common';
-import { SignalInfoBlock } from '../blocks/SignalInfoBox';
-import { RegionSelect } from '../blocks/RegionSelect';
-import ContentLayout from '../blocks/ContentLayout';
-import { MapImage } from '../blocks/MapImage';
+import { SignalInfoBlock } from '../components/SignalInfoBox';
+import { RegionSelect } from '../components/RegionSelect';
+import ContentLayout from '../components/ContentLayout';
+import { MapImage } from '../components/MapImage';
 import { fullUrl } from '@/client/hooks';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {

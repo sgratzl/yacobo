@@ -1,15 +1,15 @@
 import { fullUrl } from '@/client/hooks';
 import { formatAPIDate, formatLocal } from '@/common';
 import type { IDateRange } from '@/model';
-import BaseLayout from '@/components/blocks/BaseLayout';
-import { DateSelect } from '@/components/blocks/DateSelect';
-import GridColumn from '@/components/blocks/GridColumn';
+import BaseLayout from '../components/BaseLayout';
+import { DateSelect } from '../components/DateSelect';
+import GridColumn from '../components/GridColumn';
 import { refSignal } from '@/model';
 import { Row, Typography } from 'antd';
 import dynamic from 'next/dynamic';
-import { useFavorites } from '../blocks/useFavorites';
+import { useFavorites } from '../components/useFavorites';
 // import AddFavorite from '../sections/AddFavorite';
-import FavoriteSection from '../sections/FavoriteSection';
+import FavoriteWidget from '../widgets/FavoriteWidget';
 
 function FavoritesGrid({ date }: { date?: Date }) {
   const [favorites] = useFavorites();
@@ -17,7 +17,7 @@ function FavoritesGrid({ date }: { date?: Date }) {
     <Row>
       {favorites.map((favorite) => (
         <GridColumn key={favorite.id}>
-          <FavoriteSection favorite={favorite} date={date} />
+          <FavoriteWidget favorite={favorite} date={date} />
         </GridColumn>
       ))}
       {/* <GridColumn>

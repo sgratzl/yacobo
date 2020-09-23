@@ -1,6 +1,6 @@
 import { useFallback } from '@/client/hooks';
 import { extractRegions, extractSignal } from '@/common/validator';
-import { RegionsSignalCompare } from '@/components/pages/RegionsSignalCompare';
+import { RegionsSignalCompare } from '@/client/pages/RegionsSignalCompare';
 import type { NextPage } from 'next';
 
 interface IProps {

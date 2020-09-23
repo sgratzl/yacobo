@@ -1,6 +1,6 @@
 import { useFallback } from '@/client/hooks';
 import { extractDate, extractRegion, extractSignal } from '@/common/validator';
-import { RegionSignalDate } from '@/components/pages/RegionSignalDate';
+import { RegionSignalDate } from '@/client/pages/RegionSignalDate';
 import type { NextPage } from 'next';
 
 interface IProps {

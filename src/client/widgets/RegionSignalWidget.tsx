@@ -1,15 +1,15 @@
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import { Button, Card, Tooltip } from 'antd';
-import { FavoriteToggle } from '../blocks/FavoriteToggle';
-import { DownloadMenu } from '../blocks/DownloadMenu';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import { DownloadMenu } from '../components/DownloadMenu';
 import styles from './Section.module.css';
-import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../blocks/RegionSignalKeyFacts';
+import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../components/RegionSignalKeyFacts';
 import { fullUrl } from '@/client/hooks';
-import LinkWrapper from '../blocks/LinkWrapper';
+import LinkWrapper from '../components/LinkWrapper';
 import type { IWidgetProps } from './interfaces';
-import { CompareIcon, CompareWithButton } from '../blocks/CompareIcon';
+import { CompareIcon, CompareWithButton } from '../components/CompareIcon';
 
-export default function RegionSignalSection({ region, signal, date, focus = 'both', compare }: IWidgetProps) {
+export default function RegionSignalWidget({ region, signal, date, focus = 'both', compare }: IWidgetProps) {
   // const valid = isValid(date) && region != null && signal != null;
 
   const title =

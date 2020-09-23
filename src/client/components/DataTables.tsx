@@ -16,7 +16,7 @@ import {
   useDateMultiRegionValue,
   useDateValue,
   useRegionValue,
-} from '../../client/data';
+} from '../data';
 import { formatAPIDate, formatFixedValue } from '../../common';
 import { getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ISignalWithMeta, ITriple } from '../../model';
 import { classNames } from '../utils';
