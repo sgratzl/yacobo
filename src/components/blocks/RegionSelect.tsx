@@ -129,7 +129,7 @@ export function RegionsSelect({
       allowClear
       showSearch
       treeData={treeData}
-      placeholder="Select Region"
+      placeholder="Select Regions"
       treeDefaultExpandedKeys={['US']}
       treeNodeFilterProp="filter"
       dropdownMatchSelectWidth={300}
