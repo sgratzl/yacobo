@@ -1,8 +1,7 @@
 import { useRegionValue } from '@/client/data';
-import { useRouterWrapper } from '@/client/hooks';
 import { addParam, fetcher } from '@/client/utils';
 import { formatAPIDate, formatFixedValue, formatLocal, formatValue } from '@/common';
-import type { IRegionValue, ISignal, ITriple } from '@/model';
+import type { IRegionValue, ITriple } from '@/model';
 import { Statistic } from 'antd';
 import { isValid } from 'date-fns';
 import { useCallback, useState } from 'react';
