@@ -2,6 +2,7 @@ import type { IRegion } from './regions';
 import type { ISignal } from './signals';
 
 export * from './constants';
+export * from './dateRange';
 export * from './signals';
 export * from './regions';
 

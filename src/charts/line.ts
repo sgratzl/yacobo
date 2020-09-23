@@ -1,15 +1,9 @@
 import { fetchMeta } from '../api/data';
 import type { TopLevelSpec } from 'vega-lite';
-import {
-  COMPARE_COLORS,
-  DEFAULT_CHART_AREA_OPACITY,
-  DEFAULT_CHART_COLOR,
-  HIGHLIGHT_COLOR,
-  selectMinDate,
-} from '../model/constants';
+import { COMPARE_COLORS, DEFAULT_CHART_AREA_OPACITY, DEFAULT_CHART_COLOR, HIGHLIGHT_COLOR } from '../model/constants';
 import { getValueDomain, ISignal } from '../model/signals';
 import { IVegaOptions, font } from '.';
-import type { IDateValue, IRegion, IRegionDateValue } from '@/model';
+import { extractDateRange, IDateValue, IRegion, IRegionDateValue } from '@/model';
 import { imputeMissing, startOfISODate, startOfISOToday } from '@/common/parseDates';
 import { parseISO } from 'date-fns';
 import type { LayerSpec, TopLevel } from 'vega-lite/build/src/spec';
@@ -175,7 +169,7 @@ export async function createSignalLineChart(
 ): Promise<TopLevelSpec> {
   const metas = await fetchMeta(options.ctx);
   const meta = metas.find((d) => d.signal === signal.id)!;
-  const minDate = selectMinDate(metas);
+  const minDate = extractDateRange(metas).min;
   return createLineChartSpec(
     {
       title: `${region.name} - ${signal.name}`,
@@ -198,7 +192,7 @@ export async function createSignalMultiLineChart(
 ): Promise<TopLevelSpec> {
   const metas = await fetchMeta(options.ctx);
   const meta = metas.find((d) => d.signal === signal.id)!;
-  const minDate = selectMinDate(metas);
+  const minDate = extractDateRange(metas).min;
 
   const spec = createLineChartSpec(
     {
@@ -248,7 +242,7 @@ export async function createSignalMultiLineChart(
 
 export async function createSkeletonLineChart(options: IVegaOptions): Promise<TopLevelSpec> {
   const metas = await fetchMeta(options.ctx);
-  const minDate = selectMinDate(metas);
+  const minDate = extractDateRange(metas).min;
   return createLineChartSpec(
     {
       title: 'Line Chart',

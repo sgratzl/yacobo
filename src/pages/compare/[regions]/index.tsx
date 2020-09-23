@@ -34,5 +34,5 @@ export const getStaticPaths: GetStaticPaths<IRegionsProps & ParsedUrlQuery> = as
 export default function RegionSignalWrapper(props: IRegionsProps) {
   const regions = useFallback(props.regions, extractRegions, []);
   const data = useFetchMinMaxDate(props);
-  return <RegionsCompareOverview regions={regions} date={data.latest} dynamic={data} />;
+  return <RegionsCompareOverview regions={regions} date={data.default} dynamic={data} />;
 }

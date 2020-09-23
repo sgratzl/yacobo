@@ -1,37 +1,3 @@
-import { startOfISODate } from '@/common/parseDates';
-import { min, startOfTomorrow } from 'date-fns';
-import type { ISignalMeta } from './signals';
-
-export function selectLatestDate(meta: ISignalMeta[]) {
-  const dates = meta.slice().sort((a, b) => a.maxTime.valueOf() - b.maxTime.valueOf());
-  // use the median date
-  return dates[Math.ceil(dates.length / 2)].maxTime;
-}
-
-export function selectMinDate(meta: ISignalMeta[]) {
-  return min(meta.map((d) => d.minTime));
-}
-
-export function historyRange() {
-  return {
-    from: startOfISODate(new Date(2020, 1, 1)),
-    to: startOfISODate(startOfTomorrow()),
-  };
-}
-export interface IDateRange {
-  min: Date;
-  latest: Date;
-}
-
-export type ISerializedDateRange = Record<keyof IDateRange, Date | number>;
-
-export function serializeDateRange(data: IDateRange): ISerializedDateRange {
-  return {
-    min: data.min.valueOf(),
-    latest: data.latest.valueOf(),
-  };
-}
-
 export const ZERO_COLOR = 'rgb(242,242,242)';
 export const MAP_STROKE = '#eaeaea';
 

@@ -1,6 +1,6 @@
 import { regionDateSummaryDates } from '@/common/helpers';
 import { parseDates } from '@/common/parseDates';
-import type { IDateRange } from '@/model';
+import { extractDateRange, IDateRange } from '@/model';
 import { compareAsc, compareDesc, formatISO, parseISO } from 'date-fns';
 import {
   hasMeta,
@@ -15,8 +15,6 @@ import {
   ISignalValue,
   isStateRegion,
   regionByID,
-  selectMinDate,
-  selectLatestDate,
   signals,
 } from '../model';
 import fetchCached, { fetchJSON } from './fetchCached';
@@ -247,8 +245,5 @@ export function fetchSignalMeta(ctx: IRequestContext, signal: ISignal) {
 }
 
 export function fetchMinMaxDate(ctx: IRequestContext): Promise<IDateRange> {
-  return fetchMeta(ctx).then((meta) => ({
-    min: selectMinDate(meta),
-    latest: selectLatestDate(meta),
-  }));
+  return fetchMeta(ctx).then(extractDateRange);
 }

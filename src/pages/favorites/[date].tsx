@@ -21,7 +21,7 @@ export const getStaticProps: GetStaticProps<IDateOverviewProps> = async (context
 };
 
 export const getStaticPaths: GetStaticPaths<IDateOverviewProps & ParsedUrlQuery> = async () => {
-  const { latest } = await withContext(fetchMinMaxDate);
+  const { default: latest } = await withContext(fetchMinMaxDate);
   const datesToRender = estimateDateToPreRender(latest);
   return {
     paths: datesToRender.map((date) => ({

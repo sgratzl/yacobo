@@ -40,7 +40,7 @@ export const getStaticPaths: GetStaticPaths<{ signal: string } & ParsedUrlQuery>
 };
 
 export default function Signal(props: ISignalProps) {
-  const { latest: date } = useFetchMinMaxDate(props);
+  const { default: date } = useFetchMinMaxDate(props);
   const signal = useFallback(props.signal, extractSignal, signals[0]);
   return <SignalDate signal={signal} date={date} />;
 }

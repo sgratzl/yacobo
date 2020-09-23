@@ -23,7 +23,7 @@ export const getStaticProps: GetStaticProps<ISignalDateProps> = async (context) 
 };
 
 export const getStaticPaths: GetStaticPaths<ISignalDateProps & ParsedUrlQuery> = async () => {
-  const { latest } = await withContext(fetchMinMaxDate);
+  const { default: latest } = await withContext(fetchMinMaxDate);
   return {
     paths:
       process.env.NODE_ENV === 'development'

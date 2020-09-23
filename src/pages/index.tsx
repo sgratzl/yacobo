@@ -17,5 +17,5 @@ export const getStaticProps: GetStaticProps<ISerializedDateRange> = async () => 
 
 export default function Home(props: ISerializedDateRange) {
   const data = useFetchMinMaxDate(props);
-  return <DateOverview date={data.latest} dynamic={data} />;
+  return <DateOverview date={data.default} dynamic={data} />;
 }
