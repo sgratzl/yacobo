@@ -8,9 +8,6 @@ import { fetchMeta } from '../api/data';
 import { HIGHLIGHT_COLOR, ZERO_COLOR } from '../model/constants';
 import { getValueDomain, ISignal } from '../model/signals';
 
-const HEAT_MAP_CHART_WIDTH = 600;
-const HEAT_MAP_CHART_HEIGHT = 400;
-
 const stateLookUp: Record<string, string> = {};
 for (const state of states) {
   stateLookUp[state.id] = state.short;
@@ -35,6 +32,7 @@ function createHeatMapChartSpec(
   const max = startOfISOToday();
 
   const aspectRatio = 0.3;
+  // TODO uses the county meta data
 
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
@@ -76,6 +74,10 @@ function createHeatMapChartSpec(
         },
       },
       fill: {
+        condition: {
+          test: 'datum.value === 0',
+          value: ZERO_COLOR,
+        },
         field: 'value',
         type: 'quantitative',
         scale: {
