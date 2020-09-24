@@ -1,7 +1,7 @@
 import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { sendFormat, extractFormat } from '@/api/format';
-import { extractDate } from '@/common/validator';
-import { fetchAllRegions } from '@/api/data';
+import { extractDate, extractDateOrMagic } from '@/common/validator';
+import { fetchAllRegions, resolveMetaDate } from '@/api/data';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { signals } from '@/model/signals';
 import { regionByID } from '@/model/regions';
@@ -29,7 +29,8 @@ function merge(all: IRegionValue[][]) {
 }
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
-  const { param: date, format } = extractFormat(req, 'date', extractDate);
+  const { param: dateOrMagic, format } = extractFormat(req, 'date', extractDateOrMagic);
+  const date = dateOrMagic instanceof Date ? dateOrMagic : await resolveMetaDate(dateOrMagic, ctx);
 
   const data = () => Promise.all(signals.map((signal) => fetchAllRegions(ctx, signal.data, date))).then(merge);
 

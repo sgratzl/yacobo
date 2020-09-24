@@ -583,10 +583,27 @@
         "in": "path",
         "description": "The date to query",
         "required": true,
-        "example": "2020-07-02",
+        "examples": {
+          "2020-07-02": {
+            "description": "specific date",
+            "value": "2020-07-02"
+          },
+          "latest": {
+            "description": "latest date",
+            "value": "latest"
+          }
+        },
         "schema": {
-          "type": "string",
-          "format": "date"
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "string",
+              "enum": ["latest", "earliest"]
+            }
+          ]
         }
       },
       "scale": {

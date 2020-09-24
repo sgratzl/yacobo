@@ -1,15 +1,16 @@
-import { fetchSignalRegions } from '@/api/data';
+import { fetchSignalRegions, resolveMetaSignalDate } from '@/api/data';
 import { extractFormat, sendFormat } from '@/api/format';
 import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { estimateCacheDuration } from '@/api/model';
 import { regionDateSummaryDates } from '@/common/helpers';
-import { extractDate, extractRegions, extractSignal } from '@/common/validator';
+import { extractDateOrMagic, extractRegions, extractSignal } from '@/common/validator';
 import { regionByID } from '@/model/regions';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default withMiddleware((req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
-  const { param: date, format } = extractFormat(req, 'date', extractDate);
+export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
+  const { param: dateOrMagic, format } = extractFormat(req, 'date', extractDateOrMagic);
   const signal = extractSignal(req);
+  const date = dateOrMagic instanceof Date ? dateOrMagic : await resolveMetaSignalDate(dateOrMagic, ctx, signal);
   const regions = extractRegions(req);
   const data = () => fetchSignalRegions(ctx, signal, regions, regionDateSummaryDates(date));
 

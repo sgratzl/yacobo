@@ -247,3 +247,21 @@ export function fetchSignalMeta(ctx: IRequestContext, signal: ISignal) {
 export function fetchMinMaxDate(ctx: IRequestContext): Promise<IDateRange> {
   return fetchMeta(ctx).then(extractDateRange);
 }
+
+export function resolveMetaSignalDate(key: 'latest' | 'earliest', ctx: IRequestContext, signal: ISignal) {
+  return fetchSignalMeta(ctx, signal).then((r) => {
+    if (key === 'latest') {
+      return r.maxTime;
+    }
+    return r.minTime;
+  });
+}
+
+export function resolveMetaDate(key: 'latest' | 'earliest', ctx: IRequestContext) {
+  return fetchMinMaxDate(ctx).then((r) => {
+    if (key === 'latest') {
+      return r.max;
+    }
+    return r.min;
+  });
+}

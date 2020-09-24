@@ -46,3 +46,14 @@ export function extractDate(res: string | IRouterLike) {
   }
   return date;
 }
+
+export function extractDateOrMagic(res: string | IRouterLike) {
+  const queryDate = typeof res === 'string' ? res : (res.query.date as string);
+  if (queryDate === 'latest') {
+    return 'latest';
+  }
+  if (queryDate === 'earliest') {
+    return 'earliest';
+  }
+  return extractDate(res);
+}
