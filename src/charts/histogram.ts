@@ -36,13 +36,17 @@ function createHistogramSpec(
     },
     transform: [
       {
-        filter: "substring(datum.region, 0, -3) !== '000'",
+        filter: "substring(datum.region, 0, -3) !== '000' && datum.value != null",
+      },
+      {
+        calculate: `min(${data.maxValue}, max(0, datum.value))`,
+        as: 'c_value',
       },
       {
         bin: {
           extent: [0, data.maxValue],
         },
-        field: 'value',
+        field: 'c_value',
         as: 'bin_value',
       },
       {
