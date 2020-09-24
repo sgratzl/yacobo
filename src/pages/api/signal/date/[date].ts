@@ -1,6 +1,6 @@
 import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { sendFormat, extractFormat } from '@/api/format';
-import { extractDate, extractDateOrMagic } from '@/common/validator';
+import { extractDateOrMagic } from '@/common/validator';
 import { fetchAllRegions, resolveMetaDate } from '@/api/data';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { signals } from '@/model/signals';
