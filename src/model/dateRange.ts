@@ -4,8 +4,8 @@ import type { ISignalMeta } from './signals';
 
 export function historyRange() {
   return {
-    from: startOfISODate(new Date(2020, 1, 1)),
-    to: startOfISODate(startOfTomorrow()),
+    start: startOfISODate(new Date(2020, 1, 1)),
+    end: startOfISODate(startOfTomorrow()),
   };
 }
 export interface IDateRange {
