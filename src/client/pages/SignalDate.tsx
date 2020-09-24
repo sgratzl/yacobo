@@ -13,6 +13,7 @@ import ContentLayout from '../components/ContentLayout';
 import { MapImage } from '../vega/MapImage';
 import { fullUrl } from '@/client/hooks';
 import { HistogramImage } from '../vega/HistogramImage';
+import { HeatMapImage } from '../vega/HeatmapImage';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -60,6 +61,9 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
         <Divider />
         <Typography.Title level={2}>Relative Frequency Distribution</Typography.Title>
         <HistogramImage scale={2} interactive signal={signal} date={date} />
+        <Divider />
+        <Typography.Title level={2}>States over Time</Typography.Title>
+        <HeatMapImage scale={2} interactive signal={signal} date={date} />
         <Divider />
         <Typography.Title level={2}>Data Table</Typography.Title>
         <SignalTable signal={signal} date={date} />

@@ -57,3 +57,11 @@ export function useRegionValue(signal?: ISignal, date?: Date) {
     {}
   );
 }
+
+export function useSignalHistory(signal?: ISignal) {
+  return useSWR<IRegionObjectDateValue[]>(
+    signal != null ? `/api/signal/${signal.id}.json` : null,
+    fetchRegionDates,
+    {}
+  );
+}

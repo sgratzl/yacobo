@@ -7,11 +7,13 @@ import { CustomHTTPError } from '@/common/error';
 import { createSkeletonMap } from '@/charts/map';
 import { Formats, extractFormat } from '@/api/format';
 import { createSkeletonHistogramChart } from '@/charts/histogram';
+import { createSkeletonHeatMapChart } from '@/charts/heatmap';
 
 const factories = {
   map: createSkeletonMap,
   line: createSkeletonLineChart,
   histogram: createSkeletonHistogramChart,
+  heatmap: createSkeletonHeatMapChart,
 };
 
 function extractType(type: string): keyof typeof factories {

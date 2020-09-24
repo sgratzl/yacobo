@@ -15,6 +15,7 @@ import {
   ISignalValue,
   isStateRegion,
   regionByID,
+  isValidRegionID,
   signals,
 } from '../model';
 import {
@@ -79,6 +80,7 @@ export function fetchAllRegionsHistory(
             cache: estimateCacheDuration(batch instanceof Date ? batch : batch.end),
             process: (r: IEpiDataRow[]) =>
               r
+                .filter((d) => isValidRegionID(d.geo_value))
                 .map(
                   (d) =>
                     ({

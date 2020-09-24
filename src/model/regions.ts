@@ -55,6 +55,12 @@ const { counties, states, byId } = (() => {
 
 export { counties, states };
 
+export function isValidRegionID(region: string): boolean {
+  const search = region ? region.toLowerCase() : '';
+  const r = byId.get(search);
+  return r != null && !r.fake;
+}
+
 export function regionByID(region: string) {
   const search = region ? region.toLowerCase() : '';
   if (byId.has(search)) {
