@@ -80,7 +80,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
         >
           States over Time
         </ParagraphTitle>
-        <HeatMapImage scale={2} interactive signal={signal} date={date} />
+        <HeatMapImage scale={2} signal={signal} date={date} />
         <Divider />
         <Typography.Title level={2}>Data Table</Typography.Title>
         <SignalTable signal={signal} date={date} />
