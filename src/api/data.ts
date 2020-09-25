@@ -46,31 +46,18 @@ export function fetchAllRegionsHistory(
   signal: ISignal,
   range: Interval
 ): Promise<IRegionDateValue[]> {
-  // just state level for now since we can pack it then
-  const key = `${signal.id}-history-state-${formatAPIDate(range.start)}:${formatAPIDate(range.end)}`;
-
-  return fetchCached(
-    ctx,
-    key,
-    () => {
-      // fetch in batches
-      const batches = determineBatches(range, 'state');
-      return Promise.all(
-        batches.map((batch) => {
-          const b = buildCovidCastURL(signal, 'state', batch, ['geo_value', 'time_value']);
-          return fetchJSON(ctx, b, {
-            cache: estimateCacheDuration(batch instanceof Date ? batch : batch.end),
-            process: asRegionDateValue,
-            parse: parseDates(['date']),
-          });
-        })
-      ).then((r) => r.flat());
-    },
-    {
-      cache: CacheDuration.short,
-      parse: parseDates(['date']),
-    }
-  );
+  // fetch in batches
+  const batches = determineBatches(range, 'state');
+  return Promise.all(
+    batches.map((batch) => {
+      const b = buildCovidCastURL(signal, 'state', batch, ['geo_value', 'time_value']);
+      return fetchJSON(ctx, b, {
+        cache: estimateCacheDuration(batch instanceof Date ? batch : batch.end),
+        process: asRegionDateValue,
+        parse: parseDates(['date']),
+      });
+    })
+  ).then((r) => r.flat());
 }
 
 export function fetchSignalRegion(
