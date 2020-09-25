@@ -7,7 +7,7 @@ import GridColumn from '../components/GridColumn';
 import { refSignal } from '@/model';
 import { Row, Typography } from 'antd';
 import dynamic from 'next/dynamic';
-import { useFavorites } from '../components/useFavorites';
+import { toFavoriteKey, useFavorites } from '../components/useFavorites';
 // import AddFavorite from '../sections/AddFavorite';
 import FavoriteWidget from '../widgets/FavoriteWidget';
 
@@ -16,7 +16,7 @@ function FavoritesGrid({ date }: { date?: Date }) {
   return (
     <Row>
       {favorites.map((favorite) => (
-        <GridColumn key={favorite.id}>
+        <GridColumn key={toFavoriteKey(favorite)}>
           <FavoriteWidget favorite={favorite} date={date} />
         </GridColumn>
       ))}

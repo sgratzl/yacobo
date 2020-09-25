@@ -20,7 +20,7 @@ export default function RegionsSignalCompareHistoryWidget({
   legend = true,
 }: {
   regions: IRegion[];
-  signal?: ISignal;
+  signal: ISignal;
   date?: Date;
   focus: 'region' | 'signal' | 'both';
   legend?: boolean;
@@ -53,7 +53,7 @@ export default function RegionsSignalCompareHistoryWidget({
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </LinkWrapper>,
-        <FavoriteToggle key="b" signal={signal} region={regions} history />,
+        <FavoriteToggle key="b" favorite={{ type: 'rs+s+h', signal, regions }} />,
         <DownloadMenu key="d" path={fullUrl('/compare/[regions]/[signal]', { regions, signal })} />,
         <Tooltip key="i" title="show signal information">
           <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />

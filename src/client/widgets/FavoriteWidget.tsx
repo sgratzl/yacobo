@@ -7,14 +7,23 @@ import SignalWidget from './SignalWidget';
 
 export default function FavoriteWidget({ favorite, date }: { favorite: IFavorite; date?: Date }) {
   switch (favorite.type) {
-    case 'signal':
+    case 's':
       return <SignalWidget signal={favorite.signal} date={date} />;
-    case 'region':
+    case 's+d':
+      return null;
+    case 's+h':
+      return null;
+    case 'r':
       return <RegionWidget region={favorite.region} date={date} focus="both" />;
-    case 'region+signal+h':
+    case 'r+s':
+      return <RegionSignalWidget signal={favorite.signal} region={favorite.region} date={date} focus="both" />;
+    case 'r+s+h':
       return <RegionSignalHistoryWidget signal={favorite.signal} region={favorite.region} date={date} focus="both" />;
-    case 'regions+signal':
-    case 'regions+signal+h':
+    case 'r+s+sh':
+      return null;
+    case 'rs+s':
+      return null;
+    case 'rs+s+h':
       return (
         <RegionsSignalCompareHistoryWidget
           signal={favorite.signal}
@@ -23,7 +32,6 @@ export default function FavoriteWidget({ favorite, date }: { favorite: IFavorite
           focus="both"
         />
       );
-    default:
-      return <RegionSignalWidget signal={favorite.signal} region={favorite.region} date={date} focus="both" />;
   }
+  return null;
 }

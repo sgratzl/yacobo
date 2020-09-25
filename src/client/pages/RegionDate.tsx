@@ -63,10 +63,10 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
           {signals.map((s) => (
             <Fragment key={s.id}>
               <GridColumn>
-                <RegionSignalWidget region={region} signal={s} date={date} focus="signal" />
+                {region && <RegionSignalWidget region={region} signal={s} date={date} focus="signal" />}
               </GridColumn>
               <GridColumn>
-                <RegionSignalHistoryWidget region={region} signal={s} date={date} focus="signal" />
+                {region && <RegionSignalHistoryWidget region={region} signal={s} date={date} focus="signal" />}
               </GridColumn>
             </Fragment>
           ))}

@@ -12,8 +12,15 @@ import { fullUrl } from '@/client/hooks';
 import LinkWrapper from '../components/LinkWrapper';
 import { CompareIcon, CompareWithButton } from '../components/CompareIcon';
 import type { IWidgetProps } from './interfaces';
+import type { ISignal, IRegion } from '@/model';
 
-export default function RegionSignalHistoryWidget({ region, signal, date, focus = 'both', compare }: IWidgetProps) {
+export default function RegionSignalHistoryWidget({
+  region,
+  signal,
+  date,
+  focus = 'both',
+  compare,
+}: IWidgetProps & { signal: ISignal; region: IRegion }) {
   const showInfo = useCallback(() => {
     if (signal) {
       showInfoBox(signal, date);
@@ -39,7 +46,7 @@ export default function RegionSignalHistoryWidget({ region, signal, date, focus 
           </Tooltip>
         </LinkWrapper>,
         compare == null && <CompareWithButton region={region} date={date} signal={signal} />,
-        <FavoriteToggle key="b" signal={signal} region={region} history />,
+        <FavoriteToggle key="b" favorite={{ type: 'r+s+h', signal, region }} />,
         <DownloadMenu key="d" path={fullUrl('/region/[region]/[signal]', { region, signal })} />,
         <Tooltip key="i" title="show signal information">
           <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />

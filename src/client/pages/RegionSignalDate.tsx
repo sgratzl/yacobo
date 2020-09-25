@@ -64,7 +64,9 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
       ]}
       extra={[
         <CompareWithButton key="c" region={region} signal={signal} date={date} />,
-        <FavoriteToggle signal={signal} region={region} key="bookmark" warning={false} />,
+        region && signal && (
+          <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 'r+s', region, signal }} />
+        ),
         <DownloadMenu
           key="download"
           img={false}

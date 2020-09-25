@@ -48,7 +48,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
         },
       ]}
       extra={[
-        <FavoriteToggle signal={signal} key="bookmark" warning={false} />,
+        <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 's', signal }} />,
         <DownloadMenu key="download" path={fullUrl('/signal/[signal]/[date]', { signal, date })} />,
       ]}
     >

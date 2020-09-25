@@ -1,169 +1,113 @@
 import { ISignal, signalByID, signals } from '../../model/signals';
 import { useCallback } from 'react';
-import { IRegion, regionByID } from '../../model/regions';
+import { IRegion, IStateRegion, regionByID } from '../../model/regions';
 import createPersistedState from 'use-persisted-state';
 import { Button, notification } from 'antd';
 
 export interface ISignalFavorite {
-  id: string;
-  type: 'signal';
+  type: 's';
+  signal: ISignal;
+}
+export interface ISignalDistributionFavorite {
+  type: 's+d';
+  signal: ISignal;
+}
+
+export interface ISignalHistoryFavorite {
+  type: 's+h';
   signal: ISignal;
 }
 
 export interface IRegionFavorite {
-  id: string;
-  type: 'region';
+  type: 'r';
   region: IRegion;
 }
 
 export interface IRegionSignalFavorite {
-  id: string;
-  type: 'region+signal';
+  type: 'r+s';
   signal: ISignal;
   region: IRegion;
 }
 
 export interface IRegionSignalHistoryFavorite {
-  id: string;
-  type: 'region+signal+h';
+  type: 'r+s+h';
   signal: ISignal;
   region: IRegion;
 }
 
 export interface IRegionsSignalFavorite {
-  id: string;
-  type: 'regions+signal';
+  type: 'rs+s';
   signal: ISignal;
   regions: IRegion[];
+}
+
+export interface IRegionSignalStateHistoryFavorite {
+  type: 'r+s+sh';
+  signal: ISignal;
+  region: IStateRegion;
 }
 
 export interface IRegionsSignalHistoryFavorite {
-  id: string;
-  type: 'regions+signal+h';
+  type: 'rs+s+h';
   signal: ISignal;
   regions: IRegion[];
-}
-
-interface ISerializedFavorite {
-  r?: string | string[];
-  s?: string;
-  h?: boolean;
 }
 
 export type IFavorite =
   | ISignalFavorite
+  | ISignalDistributionFavorite
+  | ISignalHistoryFavorite
   | IRegionFavorite
   | IRegionSignalFavorite
   | IRegionSignalHistoryFavorite
   | IRegionsSignalFavorite
-  | IRegionsSignalHistoryFavorite;
+  | IRegionsSignalHistoryFavorite
+  | IRegionSignalStateHistoryFavorite;
 
-const DEFAULT_FAVORITES = [
-  ...signals.slice(0, 3).map((s) => asFavorite(s)!),
-  asFavorite(undefined, regionByID('42003')!)!, // Allegheny County
-  asFavorite(signalByID('cases')!, regionByID('42003')!)!, // Allegheny County
-  asFavorite(signalByID('cases')!, regionByID('42003')!, true)!, // Allegheny County History
-  asFavorite(signalByID('cases')!, [regionByID('42003'), regionByID('42')!], true)!, // Allegheny County vs Pennsylvania
-].map(formatFavorite);
-
-function parseFavorite(favorite: ISerializedFavorite): IFavorite | null {
-  if (!favorite.r && !favorite.s) {
-    return null;
-  }
-  const signal = favorite.s ? signalByID(favorite.s) : undefined;
-  if (Array.isArray(favorite.r)) {
-    return asFavorite(signal, favorite.r.map(regionByID), favorite.h);
-  }
-  const region = favorite.r ? regionByID(favorite.r) : undefined;
-  return asFavorite(signal, region, favorite.h);
+interface ISerializedFavorite {
+  t: IFavorite['type'];
+  s?: string;
+  r?: string;
+  rs?: string[];
 }
 
 function formatFavorite(favorite: IFavorite): ISerializedFavorite {
-  switch (favorite.type) {
-    case 'region':
-      return { r: favorite.region.id };
-    case 'signal':
-      return { s: favorite.signal.id };
-    case 'region+signal+h':
-      return {
-        s: favorite.signal.id,
-        r: favorite.region.id,
-        h: true,
-      };
-    case 'regions+signal':
-      return {
-        s: favorite.signal.id,
-        r: favorite.regions.map((d) => d.id),
-      };
-    case 'regions+signal+h':
-      return {
-        s: favorite.signal.id,
-        r: favorite.regions.map((d) => d.id),
-        h: true,
-      };
-    default:
-      return {
-        s: favorite.signal.id,
-        r: favorite.region.id,
-      };
-  }
+  return {
+    t: favorite.type,
+    s: (favorite as IRegionSignalFavorite).signal ? (favorite as IRegionSignalFavorite).signal.id : undefined,
+    r: (favorite as IRegionSignalFavorite).region ? (favorite as IRegionSignalFavorite).region.id : undefined,
+    rs: (favorite as IRegionsSignalHistoryFavorite).regions
+      ? (favorite as IRegionsSignalHistoryFavorite).regions.map((d) => d.id)
+      : undefined,
+  };
 }
 
-function asFavorite(signal?: ISignal, region?: IRegion | IRegion[], history = false): IFavorite | null {
-  if (signal && Array.isArray(region) && history) {
-    return {
-      id: `${region.map((d) => d.id).join(',')}+${signal.id}+h`,
-      type: 'regions+signal+h',
-      signal,
-      regions: region,
-    };
-  }
-  if (signal && Array.isArray(region)) {
-    return {
-      id: `${region.map((d) => d.id).join(',')}+${signal.id}`,
-      type: 'regions+signal',
-      signal,
-      regions: region,
-    };
-  }
-
-  if (signal && region && !Array.isArray(region) && history) {
-    return {
-      id: `${region.id}+${signal.id}+h`,
-      type: 'region+signal+h',
-      signal,
-      region,
-    };
-  }
-  if (signal && region && !Array.isArray(region)) {
-    return {
-      id: `${region.id}+${signal.id}`,
-      type: 'region+signal',
-      signal,
-      region,
-    };
-  }
-  if (signal) {
-    return {
-      id: signal.id,
-      type: 'signal',
-      signal,
-    };
-  }
-  if (region && !Array.isArray(region)) {
-    return {
-      id: region!.id!,
-      type: 'region',
-      region: region!,
-    };
-  }
-  return null;
+export function toFavoriteKey(favorite: IFavorite) {
+  return JSON.stringify(formatFavorite(favorite));
 }
 
-const usePersistentFavorites = createPersistedState('favorites');
+function parseFavorite(favorite: ISerializedFavorite) {
+  return ({
+    type: favorite.t,
+    signal: favorite.s ? signalByID(favorite.s) : undefined,
+    region: favorite.r ? regionByID(favorite.r) : undefined,
+    regions: favorite.rs ? favorite.rs.map(regionByID) : undefined,
+  } as unknown) as IFavorite;
+}
+
+const defaultFavorites = [
+  ...signals.slice(0, 3).map((s) => ({ type: 's', signal: s } as IFavorite)),
+  { type: 'r', region: regionByID('42003') } as IFavorite, // Allegheny County
+  { type: 'r+s', signal: signalByID('cases'), region: regionByID('42003') } as IFavorite, // Allegheny County
+  { type: 'r+s+h', signal: signalByID('cases')!, region: regionByID('42003') } as IFavorite, // Allegheny County History
+  { type: 'rs+s+h', signal: signalByID('cases')!, regions: [regionByID('42003'), regionByID('42')] } as IFavorite, // Allegheny County vs Pennsylvania
+];
+const defaultSerializedFavorites = defaultFavorites.map(formatFavorite);
+
+const usePersistentFavorites = createPersistedState('favoritesV2');
 
 export function useFavorites() {
-  const [favorites, setFavorites] = usePersistentFavorites(DEFAULT_FAVORITES);
+  const [favorites, setFavorites] = usePersistentFavorites(defaultSerializedFavorites);
 
   // useEffect(() => {
   //   if (favorites.length === 0) {
@@ -181,10 +125,6 @@ export function useFavorites() {
   const parsedFavorites = favorites.map(parseFavorite).filter((d): d is IFavorite => d != null);
 
   return [parsedFavorites, setParsedFavorites] as const;
-}
-
-function isSignal(signalOrRegion?: ISignal | IRegion): signalOrRegion is ISignal {
-  return signalOrRegion != null && (signalOrRegion as ISignal).colorScheme != null;
 }
 
 function findFavorite(favorites: IFavorite[], favorite?: IFavorite) {
@@ -221,7 +161,7 @@ function FavoriteUndo({
     notification.close(notificationKey);
   }, [favorite, favorites, index, notificationKey, setFavorites]);
   const restoreAll = useCallback(() => {
-    setFavorites(DEFAULT_FAVORITES.map(parseFavorite).filter((d): d is IFavorite => d != null));
+    setFavorites(defaultFavorites.filter((d): d is IFavorite => d != null));
     notification.close(notificationKey);
   }, [notificationKey, setFavorites]);
   return (
@@ -238,29 +178,8 @@ function FavoriteUndo({
   );
 }
 
-export function useFavorite(warning: boolean, signal: ISignal): [boolean, () => void];
-export function useFavorite(warning: boolean, region: IRegion): [boolean, () => void];
-export function useFavorite(warning: boolean, signal: ISignal, region: IRegion): [boolean, () => void];
-export function useFavorite(warning: boolean, signal: ISignal, region: IRegion[]): [boolean, () => void];
-export function useFavorite(
-  warning: boolean,
-  signal: ISignal,
-  region: IRegion,
-  history?: boolean
-): [boolean, () => void];
-export function useFavorite(
-  warning: boolean,
-  signalOrRegion: ISignal | IRegion,
-  region?: IRegion | IRegion[],
-  history = false
-) {
+export function useFavorite(warning: boolean, favorite: IFavorite): [boolean, () => void] {
   const [favorites, setFavorites] = useFavorites();
-
-  const favorite = asFavorite(
-    isSignal(signalOrRegion) ? signalOrRegion : undefined,
-    isSignal(signalOrRegion) ? region : signalOrRegion,
-    history
-  )!;
 
   const savedFavorite = findFavorite(favorites, favorite);
 
@@ -290,5 +209,5 @@ export function useFavorite(
   if (!favorite) {
     return [false, noop];
   }
-  return [savedFavorite != null, savedFavorite ? removeFavorite : addFavorite] as const;
+  return [savedFavorite != null, savedFavorite ? removeFavorite : addFavorite];
 }

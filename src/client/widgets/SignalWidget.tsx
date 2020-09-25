@@ -26,7 +26,7 @@ export default function SignalWidget({ signal, date, region }: ITriple & { signa
             <Button type="default" shape="circle" icon={<EyeOutlined />} />
           </Tooltip>
         </LinkWrapper>,
-        <FavoriteToggle key="b" signal={signal} />,
+        <FavoriteToggle key="b" favorite={{ type: 's', signal }} />,
         <DownloadMenu key="d" path={fullUrl('/signal/[signal]/[date]', { signal, date })} />,
         <Tooltip key="i" title="show signal information">
           <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />

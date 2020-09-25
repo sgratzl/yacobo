@@ -1,6 +1,5 @@
-import type { ITriple } from '@/model';
-
-export interface IWidgetProps extends ITriple {
+export interface IWidgetProps {
   focus: 'region' | 'signal' | 'both';
+  date?: Date;
   compare?: number;
 }

@@ -9,8 +9,15 @@ import { CompareIcon, CompareWithButton } from '../components/CompareIcon';
 import { fullUrl } from '@/client/hooks';
 import LinkWrapper from '../components/LinkWrapper';
 import type { IWidgetProps } from './interfaces';
+import type { IRegion, ISignal } from '@/model';
 
-export default function RegionWidget({ region, date, signal, focus = 'both', compare }: IWidgetProps) {
+export default function RegionWidget({
+  region,
+  date,
+  signal,
+  focus = 'both',
+  compare,
+}: IWidgetProps & { region: IRegion; signal?: ISignal }) {
   return (
     <Card
       className={styles.card}
@@ -21,7 +28,7 @@ export default function RegionWidget({ region, date, signal, focus = 'both', com
           </Tooltip>
         </LinkWrapper>,
         compare == null && <CompareWithButton region={region} date={date} signal={signal} />,
-        <FavoriteToggle key="b" region={region} />,
+        <FavoriteToggle key="b" favorite={{ type: 'r', region }} />,
         <DownloadMenu img={false} key="d" path={fullUrl('/region/[region]/date/[date]', { region, date })} />,
       ].filter(Boolean)}
     >

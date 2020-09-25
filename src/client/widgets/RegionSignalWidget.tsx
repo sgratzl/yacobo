@@ -8,8 +8,15 @@ import { fullUrl } from '@/client/hooks';
 import LinkWrapper from '../components/LinkWrapper';
 import type { IWidgetProps } from './interfaces';
 import { CompareIcon, CompareWithButton } from '../components/CompareIcon';
+import type { IRegion, ISignal } from '@/model';
 
-export default function RegionSignalWidget({ region, signal, date, focus = 'both', compare }: IWidgetProps) {
+export default function RegionSignalWidget({
+  region,
+  signal,
+  date,
+  focus = 'both',
+  compare,
+}: IWidgetProps & { region: IRegion; signal: ISignal }) {
   // const valid = isValid(date) && region != null && signal != null;
 
   const title =
@@ -33,7 +40,7 @@ export default function RegionSignalWidget({ region, signal, date, focus = 'both
           </Tooltip>
         </LinkWrapper>,
         compare == null && <CompareWithButton region={region} date={date} signal={signal} />,
-        <FavoriteToggle key="b" region={region} signal={signal} />,
+        <FavoriteToggle key="b" favorite={{ type: 'r+s', region, signal }} />,
         <DownloadMenu
           key="d"
           img={false}

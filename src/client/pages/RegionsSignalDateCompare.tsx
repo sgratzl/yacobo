@@ -74,7 +74,7 @@ export function RegionsSignalDateCompare({
         },
       ]}
       extra={[
-        <FavoriteToggle signal={signal} region={regions} key="bookmark" warning={false} />,
+        signal && <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 'rs+s', regions, signal }} />,
         <DownloadMenu
           key="download"
           img={false}
@@ -95,7 +95,7 @@ export function RegionsSignalDateCompare({
         <Row>
           {regions.map((region, i) => (
             <GridColumn key={region.id}>
-              <RegionSignalWidget region={region} signal={signal} date={date} focus="region" compare={i} />
+              {signal && <RegionSignalWidget region={region} signal={signal} date={date} focus="region" compare={i} />}
             </GridColumn>
           ))}
         </Row>

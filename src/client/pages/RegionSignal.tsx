@@ -48,7 +48,9 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
       ]}
       extra={[
         <CompareWithButton key="c" region={region} signal={signal} />,
-        <FavoriteToggle region={region} signal={signal} key="bookmark" warning={false} history />,
+        region && signal && (
+          <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 'r+s+h', region, signal }} />
+        ),
         <DownloadMenu key="download" path={fullUrl('/region/[region]/[signal]', { region, signal })} />,
       ]}
     >

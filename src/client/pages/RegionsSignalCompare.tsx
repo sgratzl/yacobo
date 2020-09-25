@@ -52,7 +52,7 @@ export function RegionsSignalCompare({ regions, signal }: { regions: IRegion[]; 
         },
       ]}
       extra={[
-        <FavoriteToggle region={regions} signal={signal} key="bookmark" warning={false} history />,
+        signal && <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 'rs+s+h', signal, regions }} />,
         <DownloadMenu key="download" path={fullUrl('/compare/[regions]/[signal]', { signal, regions })} />,
       ]}
     >
