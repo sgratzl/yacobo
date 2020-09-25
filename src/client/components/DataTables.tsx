@@ -18,7 +18,7 @@ import {
   useRegionValue,
 } from '../data';
 import { formatAPIDate, formatFixedValue } from '../../common';
-import { getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ISignalWithMeta, ITriple } from '../../model';
+import { getColorScale, getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ITriple } from '../../model';
 import { classNames } from '../utils';
 import styles from './DataTables.module.css';
 import { CompareIcon } from './CompareIcon';
@@ -30,29 +30,33 @@ const renderStdErr = (value: number | null) => {
   return <span>{value == null ? '?' : value.toFixed(2)}</span>;
 };
 
-function generateGradient(meta?: ISignalWithMeta, value?: number | null) {
-  if (!meta || value == null) {
-    return undefined;
-  }
-  const scale = getValueScale(meta, meta.meta);
-  const p = Math.round(1000 * scale(value)) / 10;
-  return `linear-gradient(to right, var(--color) ${p}%, transparent ${p}%)`;
-}
-
 function useRenderBarValue(signal?: ISignal) {
   const meta = useFetchSignalMeta(signal);
+  const scale = useMemo(
+    () =>
+      meta
+        ? {
+            value: getValueScale(meta, meta.meta),
+            color: getColorScale(meta, meta.meta),
+          }
+        : undefined,
+    [meta]
+  );
   return useCallback(
     (value?: number | null) => {
-      if (value == null) {
-        return <div className={styles.gradientMissing}>?</div>;
+      if (value == null || !scale) {
+        return <div className={classNames(styles.gradient, styles.missing)}>?</div>;
       }
+      const p = Math.round(1000 * scale.value(value)) / 10;
+      const gradient = `linear-gradient(to right, var(--color) ${p}%, transparent ${p}%)`;
+      const color = scale.color(value);
       return (
-        <div className={styles.gradient} style={{ background: generateGradient(meta, value) }}>
+        <div className={styles.gradient} style={{ background: gradient, '--vcolor': color } as any}>
           {formatFixedValue(value)}
         </div>
       );
     },
-    [meta]
+    [scale]
   );
 }
 // export const columns: ColumnsType<ISignalMultiRow> = [

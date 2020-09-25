@@ -1,10 +1,24 @@
 .gradient {
   --color: #ececec;
   text-align: right;
+  position: relative;
+  margin-right: 1.4em;
 }
 
-.gradientMissing {
-  text-align: right;
+.gradient::before {
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  right: -1.3em;
+  top: 50%;
+  transform: translate(0, -50%);
+  content: '';
+  background: var(--vcolor);
+}
+
+.missing::before {
+  background: repeating-linear-gradient(-45deg, #c4c4c4 0, white 10%);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -47,6 +47,7 @@
     "use-ssr": "^1.0.23",
     "vega": "^5.16.1",
     "vega-lite": "^4.16.2",
+    "vega-scale": "^7.1.1",
     "yacobo-font-canvas-helper": "file:./yacobo-font-canvas-helper"
   },
   "devDependencies": {
