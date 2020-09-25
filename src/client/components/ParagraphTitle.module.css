@@ -1,0 +1,8 @@
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex > :first-child {
+  flex-grow: 1;
+}

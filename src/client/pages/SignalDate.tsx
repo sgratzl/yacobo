@@ -14,6 +14,7 @@ import { MapImage } from '../vega/MapImage';
 import { fullUrl } from '@/client/hooks';
 import { HistogramImage } from '../vega/HistogramImage';
 import { HeatMapImage } from '../vega/HeatmapImage';
+import ParagraphTitle from '../components/ParagraphTitle';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
   const apiDate = formatAPIDate(date);
@@ -59,10 +60,26 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />
-        <Typography.Title level={2}>Relative Frequency Distribution</Typography.Title>
+        <ParagraphTitle
+          level={2}
+          extra={[
+            <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 's+d', signal }} />,
+            <DownloadMenu key="download" path={fullUrl('/signal/[signal]/[date]', { signal, date })} />,
+          ]}
+        >
+          Relative Frequency Distribution
+        </ParagraphTitle>
         <HistogramImage scale={2} interactive signal={signal} date={date} />
         <Divider />
-        <Typography.Title level={2}>States over Time</Typography.Title>
+        <ParagraphTitle
+          level={2}
+          extra={[
+            <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 's+h', signal }} />,
+            <DownloadMenu key="download" path={fullUrl('/signal/[signal]', { signal })} />,
+          ]}
+        >
+          States over Time
+        </ParagraphTitle>
         <HeatMapImage scale={2} interactive signal={signal} date={date} />
         <Divider />
         <Typography.Title level={2}>Data Table</Typography.Title>

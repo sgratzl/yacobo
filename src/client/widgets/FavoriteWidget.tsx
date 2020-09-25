@@ -4,15 +4,17 @@ import RegionSignalHistoryWidget from './RegionSignalHistoryWidget';
 import RegionSignalWidget from './RegionSignalWidget';
 import RegionsSignalCompareHistoryWidget from './RegionsSignalCompareHistoryWidget';
 import SignalWidget from './SignalWidget';
+import SignalDistributionWidget from './SignalDistributionWidget';
+import SignalStateHistoryWidget from './SignalStateHistoryWidget';
 
 export default function FavoriteWidget({ favorite, date }: { favorite: IFavorite; date?: Date }) {
   switch (favorite.type) {
     case 's':
       return <SignalWidget signal={favorite.signal} date={date} />;
     case 's+d':
-      return null;
+      return <SignalDistributionWidget signal={favorite.signal} date={date} />;
     case 's+h':
-      return null;
+      return <SignalStateHistoryWidget signal={favorite.signal} date={date} />;
     case 'r':
       return <RegionWidget region={favorite.region} date={date} focus="both" />;
     case 'r+s':
