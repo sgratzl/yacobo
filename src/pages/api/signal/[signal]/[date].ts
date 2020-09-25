@@ -16,15 +16,14 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
   const data = () => fetchAllRegions(ctx, signal.data, date);
 
-  const vegaFactory =
-    req.query.chart === 'histogram'
-      ? createHistogramChart.bind(null, signal, date)
-      : createMap.bind(null, signal, date);
-
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${formatAPIDate(date)}`,
     headers: ['region', 'value', 'stderr'],
-    vega: vegaFactory,
+    vega: {
+      default: createMap.bind(null, signal, date),
+      map: createMap.bind(null, signal, date),
+      histogram: createHistogramChart.bind(null, signal, date),
+    },
     cache: estimateCacheDuration(date),
     regions: regionByID,
   });

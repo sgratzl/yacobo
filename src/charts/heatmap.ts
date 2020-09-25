@@ -1,12 +1,12 @@
 import { startOfISODate, startOfISOToday } from '@/common/parseDates';
-import { extractDateRange, IRegionDateValue, states } from '@/model';
+import { extractDateRange, IRegion, IRegionDateValue, IStateRegion, states } from '@/model';
 import { differenceInDays } from 'date-fns';
 import type { TopLevelSpec } from 'vega-lite';
 import type { SchemeParams } from 'vega-lite/build/src/scale';
 import { font, IVegaOptions } from '.';
 import { fetchMeta } from '../api/data';
 import { HIGHLIGHT_COLOR, ZERO_COLOR } from '../model/constants';
-import { getValueDomain, ISignal } from '../model/signals';
+import { axisTitle, getValueDomain, ISignal } from '../model/signals';
 
 const stateLookUp: Record<string, string> = {};
 for (const state of states) {
@@ -22,6 +22,8 @@ function createHeatMapChartSpec(
     maxValue: number;
     valueTitle: string;
     colorScheme: string | SchemeParams;
+    regions: IRegion[];
+    regionTitle: string;
   },
   options: IVegaOptions
 ) {
@@ -65,11 +67,11 @@ function createHeatMapChartSpec(
         field: 'region',
         type: 'nominal',
         scale: {
-          domain: states.map((d) => d.id),
+          domain: data.regions.map((d) => d.id),
         },
         axis: {
           titleFontWeight: 'normal',
-          title: 'State',
+          title: data.regionTitle,
           labelExpr: `${JSON.stringify(stateLookUp)}[datum.value]`,
         },
       },
@@ -141,8 +143,37 @@ export async function createHeatMap(
       values: values ?? [],
       minDate,
       maxValue: getValueDomain(signal, meta)[1],
-      valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
+      valueTitle: axisTitle(signal),
       colorScheme: signal.colorScheme,
+      regionTitle: 'State',
+      regions: states, // support
+    },
+    options
+  );
+  return spec;
+}
+
+export async function createCountyHeatMap(
+  signal: ISignal,
+  state: IStateRegion,
+  values: IRegionDateValue[] | undefined,
+  options: IVegaOptions
+): Promise<TopLevelSpec> {
+  const metas = await fetchMeta(options.ctx);
+  const meta = metas.find((d) => d.signal === signal.id)!;
+  const minDate = extractDateRange(metas).min;
+
+  const spec = createHeatMapChartSpec(
+    {
+      title: `${signal.name} - ${state.name}`,
+      description: signal.description(),
+      values: values ?? [],
+      minDate,
+      maxValue: getValueDomain(signal, meta)[1],
+      valueTitle: axisTitle(signal),
+      colorScheme: signal.colorScheme,
+      regionTitle: 'Counties',
+      regions: state.counties,
     },
     options
   );
@@ -161,6 +192,8 @@ export async function createSkeletonHeatMapChart(options: IVegaOptions): Promise
       maxValue: 10,
       valueTitle: `of 100 people`,
       colorScheme: [ZERO_COLOR, ZERO_COLOR] as any,
+      regionTitle: 'State',
+      regions: states,
     },
     options
   );

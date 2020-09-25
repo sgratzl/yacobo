@@ -1,6 +1,4 @@
-import type { IVegaOptions } from '@/charts';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { TopLevelSpec } from 'vega-lite';
 import { CustomHTTPError } from '../common/error';
 import type { IRouterLike } from '../common/validator';
 import type { IRegion, ISignal } from '../model';
@@ -8,7 +6,7 @@ import type { IRequestContext } from './middleware';
 import type { CacheDuration } from './model';
 import sendCSV from './send/sendCSV';
 import sendJSON from './send/sendJSON';
-import sendVega from './send/sendVega';
+import sendVega, { IMultiVegaFactory, IVegaFactory } from './send/sendVega';
 
 export enum Formats {
   png = 'png',
@@ -66,7 +64,7 @@ export async function sendFormat<T extends object>(
   data: () => Promise<T[]>,
   options: ICommonOptions & {
     headers: (keyof T)[];
-    vega?: (data: T[] | undefined, options: IVegaOptions) => TopLevelSpec | Promise<TopLevelSpec>;
+    vega?: IVegaFactory<T> | IMultiVegaFactory<T>;
   }
 ) {
   if (format === Formats.csv) {

@@ -1,7 +1,7 @@
 import { fetchMeta } from '../api/data';
 import type { TopLevelSpec } from 'vega-lite';
 import { COMPARE_COLORS, DEFAULT_CHART_AREA_OPACITY, DEFAULT_CHART_COLOR, HIGHLIGHT_COLOR } from '../model/constants';
-import { getValueDomain, ISignal } from '../model/signals';
+import { axisTitle, getValueDomain, ISignal } from '../model/signals';
 import { IVegaOptions, font } from '.';
 import { extractDateRange, IDateValue, IRegion, IRegionDateValue } from '@/model';
 import { imputeMissing, startOfISODate, startOfISOToday } from '@/common/parseDates';
@@ -177,7 +177,7 @@ export async function createSignalLineChart(
       values: imputeMissing(values ?? [], {}),
       minDate,
       maxValue: getValueDomain(signal, meta)[1],
-      valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
+      valueTitle: axisTitle(signal),
       hasStdErr: signal.data.hasStdErr,
     },
     options
@@ -201,7 +201,7 @@ export async function createSignalMultiLineChart(
       values: imputeMissing(values ?? [], { region: 'T' }, 'region'),
       minDate,
       maxValue: getValueDomain(signal, meta)[1],
-      valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
+      valueTitle: axisTitle(signal),
       hasStdErr: signal.data.hasStdErr,
       hasRegion: true,
     },

@@ -9,22 +9,40 @@ import type { Canvas } from 'canvas';
 import type { IRequestContext } from '../middleware';
 import { initCanvas } from 'yacobo-font-canvas-helper';
 
+export interface IVegaFactory<T> {
+  (data: T[] | undefined, options: IVegaOptions): TopLevelSpec | Promise<TopLevelSpec>;
+}
+
+export interface IMultiVegaFactory<T> {
+  default: IVegaFactory<T>;
+  [chartType: string]: IVegaFactory<T>;
+}
+
+function pickFactory<T>(req: NextApiRequest, vega: IVegaFactory<T> | IMultiVegaFactory<T>) {
+  if (typeof vega === 'function') {
+    return vega;
+  }
+  const chart = (req.query.chart as string) ?? 'default';
+  return vega[chart] ?? vega.default;
+}
+
 export default async function sendVega<T>(
   req: NextApiRequest,
   res: NextApiResponse,
   ctx: IRequestContext,
   format: Formats,
   data: () => Promise<T[]>,
-  vega: (data: T[] | undefined, options: IVegaOptions) => TopLevelSpec | Promise<TopLevelSpec>,
+  vega: IVegaFactory<T> | IMultiVegaFactory<T>,
   options: ICommonOptions & { skeleton?: boolean }
 ) {
   const vegaOptions = extractVegaOptions(req, ctx, format);
+  const vegaFactory = pickFactory(req, vega);
   if (format === Formats.vg && !vegaOptions.details) {
     // pure vega without data
-    return sendVegaSpec(req, res, vega(undefined, vegaOptions), options);
+    return sendVegaSpec(req, res, vegaFactory(undefined, vegaOptions), options);
   }
 
-  const spec: TopLevelSpec = await vega(await data(), vegaOptions);
+  const spec: TopLevelSpec = await vegaFactory(await data(), vegaOptions);
 
   if (format === Formats.vg) {
     return sendVegaSpec(req, res, spec, options);

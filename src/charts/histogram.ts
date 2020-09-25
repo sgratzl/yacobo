@@ -5,7 +5,7 @@ import type { SchemeParams } from 'vega-lite/build/src/scale';
 import { font, IVegaOptions } from '.';
 import { fetchMeta } from '../api/data';
 import { HIGHLIGHT_COLOR, ZERO_COLOR } from '../model/constants';
-import { getValueDomain, ISignal } from '../model/signals';
+import { axisTitle, getValueDomain, ISignal } from '../model/signals';
 
 const HISTOGRAM_WIDTH = 400;
 const HISTOGRAM_HEIGHT = 200;
@@ -161,7 +161,7 @@ export async function createHistogramChart(
       values: values ?? [],
       maxValue: getValueDomain(signal, meta)[1],
       colorScheme: signal.colorScheme,
-      valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
+      valueTitle: axisTitle(signal),
     },
     options
   );

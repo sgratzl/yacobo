@@ -36,6 +36,10 @@ function dated(prefix: string, date?: Date) {
   return date ? ` ${prefix} ${formatLocal(date)}` : '';
 }
 
+export function axisTitle(signal: ISignal) {
+  return `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`;
+}
+
 function JohnHopkins() {
   return (
     <a href="https://systems.jhu.edu/research/public-health/ncov/" target="_blank" rel="noopener noreferrer">
