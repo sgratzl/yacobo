@@ -27,7 +27,7 @@ function createHistogramSpec(
   };
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-    ...(options.details ? meta : {}),
+    ...(!options.plain ? meta : {}),
     width: HISTOGRAM_WIDTH * options.scaleFactor,
     height: HISTOGRAM_HEIGHT * options.scaleFactor,
     data: {

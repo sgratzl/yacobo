@@ -1,6 +1,6 @@
 import { csvFormat } from 'd3-dsv';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { IRegion, isCountyRegion, ISignal } from '../../model';
+import { isCountyRegion } from '../../model';
 import type { ICommonOptions } from '../format';
 import { setCommonHeaders } from './setCommonHeaders';
 
@@ -10,13 +10,11 @@ export default function sendCSV<T extends object>(
   res: NextApiResponse,
   data: T[],
   headers: (keyof T)[],
-  options: ICommonOptions & {
-    details?: Map<string, IRegion | ISignal>;
-  }
+  options: ICommonOptions
 ) {
   setCommonHeaders(req, res, options, 'csv');
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-  if (req.query.details == null || (!options.signals && !options.regions)) {
+  if (req.query.plain != null || (!options.signals && !options.regions)) {
     res.send(csvFormat(data, headers));
     res.end();
     return;

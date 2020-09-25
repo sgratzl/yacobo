@@ -34,7 +34,7 @@ interface IDateTableRow {
 function useKeyFacts({ region, signal, date }: ITriple = {}) {
   const valid = region != null && signal != null && isValid(date);
   return useSWR(
-    valid ? `/api/region/${region?.id}/${signal?.id}/${formatAPIDate(date)}.json` : null,
+    valid ? `/api/region/${region?.id}/${signal?.id}/${formatAPIDate(date)}.json?plain` : null,
     fetchRegionSignalDate
   );
 }
@@ -174,7 +174,10 @@ function fetchRegionMultiDate(key: string): Promise<RequiredValue<ISignalDateVal
 
 function useKeyMultiFacts({ region, date }: { region?: IRegion; date?: Date } = {}) {
   const valid = region != null && isValid(date);
-  return useSWR(valid ? `/api/region/${region?.id}/date/${formatAPIDate(date)}.json` : null, fetchRegionMultiDate);
+  return useSWR(
+    valid ? `/api/region/${region?.id}/date/${formatAPIDate(date)}.json?plain` : null,
+    fetchRegionMultiDate
+  );
 }
 
 interface ISignalTableRow {

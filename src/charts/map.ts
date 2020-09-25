@@ -19,7 +19,7 @@ function createBaseMap(data: { title: string; description: string }, options: IV
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     width: MAP_CHART_WIDTH * options.scaleFactor,
     height: MAP_CHART_HEIGHT * options.scaleFactor,
-    ...(options.details ? meta : {}),
+    ...(!options.plain ? meta : {}),
     projection: {
       type: 'albersUsa',
     },
@@ -39,7 +39,7 @@ export const COUNTIES_URL: UrlData = {
 };
 
 async function chooseDataSource(options: IVegaOptions) {
-  if (options.details || !options.forImage) {
+  if (!options.plain || !options.forImage) {
     return COUNTIES_URL;
   }
   const values = (await import('us-atlas/counties-10m.json')).default;

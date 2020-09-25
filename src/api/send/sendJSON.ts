@@ -5,7 +5,7 @@ import { setCommonHeaders } from './setCommonHeaders';
 
 export default function sendJSON<T>(req: NextApiRequest, res: NextApiResponse, data: T[], options: ICommonOptions) {
   setCommonHeaders(req, res, options, 'json');
-  if (req.query.details == null || (!options.signals && !options.regions)) {
+  if (req.query.plain != null || (!options.signals && !options.regions)) {
     res.json(data);
     return;
   }

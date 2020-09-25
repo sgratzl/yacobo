@@ -26,7 +26,7 @@ export function HeatMapImage({
 }) {
   const valid = signal != null;
   // TODO support highlight
-  const src = valid ? addParam(`/api/signal/${signal?.id}.jpg`, 'highlight', undefined) : undefined;
+  const src = valid ? addParam(`/api/signal/${signal?.id}.jpg?plain`, 'highlight', undefined) : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
   return (
@@ -64,7 +64,7 @@ function regionTitleTooltip(datum: { region: string; date: number }) {
 function InteractiveHeatMapVega({ signal, scale }: IParams) {
   const { data, error } = useSignalHistory(signal);
   // TODO highlight
-  const specUrl = addParam(addParam(`/api/signal/${signal?.id}.vg`, 'scale', scale), 'highlight', undefined)!;
+  const specUrl = addParam(addParam(`/api/signal/${signal?.id}.vg?plain`, 'scale', scale), 'highlight', undefined)!;
   const { data: spec, error: specError } = useSWR<TopLevelSpec>(signal != null ? specUrl : null, fetcher);
   const [ready, setReady] = useState(false);
 

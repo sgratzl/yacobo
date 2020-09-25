@@ -32,7 +32,7 @@ function createLineChartSpec(
 
   const spec: TopLevel<LayerSpec> = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-    ...(options.details ? meta : {}),
+    ...(!options.plain ? meta : {}),
     width: LINE_CHART_WIDTH * options.scaleFactor,
     height: LINE_CHART_HEIGHT * options.scaleFactor,
     data: {
@@ -218,7 +218,7 @@ export async function createSignalMultiLineChart(
       domain: regions.map((d) => d.id),
       range: COMPARE_COLORS,
     },
-    legend: options.details
+    legend: !options.plain
       ? {
           title: 'Region',
           symbolOpacity: 1,

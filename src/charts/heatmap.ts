@@ -38,7 +38,7 @@ function createHeatMapChartSpec(
 
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-    ...(options.details ? meta : {}),
+    ...(!options.plain ? meta : {}),
     width: Math.abs(differenceInDays(data.minDate, max)) * aspectRatio * 8 * options.scaleFactor,
     height: {
       step: 8 * options.scaleFactor,

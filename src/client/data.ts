@@ -30,7 +30,7 @@ function fetchRegionDates(key: string): Promise<(IRegionDateValue & { regionObj:
 }
 
 export function useDateValue(region?: IRegion, signal?: ISignal) {
-  return useSWR<IDateValue[]>(signal && region ? `/api/region/${region.id}/${signal.id}.json` : null, fetchDated);
+  return useSWR<IDateValue[]>(signal && region ? `/api/region/${region.id}/${signal.id}.json?plain` : null, fetchDated);
 }
 
 export interface IRegionObjectDateValue extends IRegionDateValue {
@@ -39,7 +39,7 @@ export interface IRegionObjectDateValue extends IRegionDateValue {
 
 export function useDateMultiRegionValue(regions: IRegion[], signal?: ISignal) {
   return useSWR<IRegionObjectDateValue[]>(
-    signal && regions.length > 0 ? `/api/compare/${regions.map((d) => d.id).join(',')}/${signal.id}.json` : null,
+    signal && regions.length > 0 ? `/api/compare/${regions.map((d) => d.id).join(',')}/${signal.id}.json?plain` : null,
     fetchRegionDates
   );
 }
@@ -52,7 +52,7 @@ export function useRegionValue(signal?: ISignal, date?: Date) {
   const validDate = isValid(date);
 
   return useSWR<IRegionObjectValue[]>(
-    validDate && signal != null ? `/api/signal/${signal.id}/${apiDate}.json` : null,
+    validDate && signal != null ? `/api/signal/${signal.id}/${apiDate}.json?plain` : null,
     fetchInjectRegion,
     {}
   );
@@ -60,7 +60,7 @@ export function useRegionValue(signal?: ISignal, date?: Date) {
 
 export function useSignalHistory(signal?: ISignal) {
   return useSWR<IRegionObjectDateValue[]>(
-    signal != null ? `/api/signal/${signal.id}.json` : null,
+    signal != null ? `/api/signal/${signal.id}.json?plain` : null,
     fetchRegionDates,
     {}
   );

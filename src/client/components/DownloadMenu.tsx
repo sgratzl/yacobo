@@ -17,22 +17,22 @@ export function DownloadMenu({ path, img = true }: { path: string; img?: boolean
       {img && (
         <Menu.ItemGroup title="Image">
           <Menu.Item icon={<FileImageOutlined />}>
-            <Typography.Link href={`/api${path}.svg?download&details`} data-format="SVG" onClick={hintDownload}>
+            <Typography.Link href={`/api${path}.svg?download`} data-format="SVG" onClick={hintDownload}>
               Download SVG
             </Typography.Link>
           </Menu.Item>
           <Menu.Item icon={<FileImageOutlined />}>
-            <Typography.Link href={`/api${path}.png?download&details`} data-format="PNG" onClick={hintDownload}>
+            <Typography.Link href={`/api${path}.png?download`} data-format="PNG" onClick={hintDownload}>
               Download PNG
             </Typography.Link>
           </Menu.Item>
           <Menu.Item icon={<FilePdfOutlined />}>
-            <Typography.Link href={`/api${path}.pdf?download&details`} data-format="PDF" onClick={hintDownload}>
+            <Typography.Link href={`/api${path}.pdf?download`} data-format="PDF" onClick={hintDownload}>
               Download PDF
             </Typography.Link>
           </Menu.Item>
           <Menu.Item icon={<FileOutlined />}>
-            <Typography.Link href={`/api${path}.vg?download&details`} data-format="Vega Spec" onClick={hintDownload}>
+            <Typography.Link href={`/api${path}.vg?download`} data-format="Vega Spec" onClick={hintDownload}>
               Download Vega Spec
             </Typography.Link>
           </Menu.Item>
@@ -40,12 +40,12 @@ export function DownloadMenu({ path, img = true }: { path: string; img?: boolean
       )}
       <Menu.ItemGroup title="Data">
         <Menu.Item icon={<FileOutlined />}>
-          <Typography.Link href={`/api${path}.json?download&details`} data-format="JSON" onClick={hintDownload}>
+          <Typography.Link href={`/api${path}.json?download`} data-format="JSON" onClick={hintDownload}>
             Download JSON
           </Typography.Link>
         </Menu.Item>
         <Menu.Item icon={<FileExcelOutlined />}>
-          <Typography.Link href={`/api${path}.csv?download&details`} data-format="CSV" onClick={hintDownload}>
+          <Typography.Link href={`/api${path}.csv?download`} data-format="CSV" onClick={hintDownload}>
             Download CSV
           </Typography.Link>
         </Menu.Item>

@@ -33,7 +33,7 @@ export function LineMultiImage({
   const valid = signal != null && regions.length > 0;
   const src = valid
     ? addParam(
-        `/api/compare/${formatAPIRegions(regions)}/${signal?.id}.jpg`,
+        `/api/compare/${formatAPIRegions(regions)}/${signal?.id}.jpg?plain`,
         'highlight',
         date ? formatAPIDate(date) : undefined
       )
@@ -75,7 +75,7 @@ function regionDateValueTooltip(datum: { region: string; date: number }) {
 function InteractiveMultiLineVega({ signal, regions, scale, date }: IParams) {
   const { data, error } = useDateMultiRegionValue(regions, signal);
   const specUrl = addParam(
-    addParam(`/api/compare/${formatAPIRegions(regions)}/${signal?.id}.vg`, 'scale', scale),
+    addParam(`/api/compare/${formatAPIRegions(regions)}/${signal?.id}.vg?plain`, 'scale', scale),
     'highlight',
     date ? formatAPIDate(date) : undefined
   )!;

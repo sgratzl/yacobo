@@ -29,7 +29,7 @@ export function LineImage({
 }) {
   const valid = signal != null && region != null;
   const src = valid
-    ? addParam(`/api/region/${region?.id}/${signal?.id}.jpg`, 'highlight', date ? formatAPIDate(date) : undefined)
+    ? addParam(`/api/region/${region?.id}/${signal?.id}.jpg?plain`, 'highlight', date ? formatAPIDate(date) : undefined)
     : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
@@ -65,7 +65,7 @@ function dateValueTooltip(datum: { date: number }) {
 function InteractiveLineVega({ signal, region, scale, date }: IParams) {
   const { data, error } = useDateValue(region, signal);
   const specUrl = addParam(
-    addParam(`/api/region/${region?.id}/${signal?.id}.vg`, 'scale', scale),
+    addParam(`/api/region/${region?.id}/${signal?.id}.vg?plain`, 'scale', scale),
     'highlight',
     date ? formatAPIDate(date) : undefined
   )!;

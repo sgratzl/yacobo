@@ -24,8 +24,8 @@ export function fetcher<T = any>(path: string): Promise<T> {
   return fetch(path).then((r) => r.json());
 }
 
-function fetchMeta() {
-  return fetch('/api/signal')
+function fetchMeta(key: string) {
+  return fetch(key)
     .then((r) => r.json())
     .then((rows: (ISignalMeta & { signal: string })[]) =>
       rows.map((row) => {
@@ -43,7 +43,7 @@ function fetchMeta() {
     );
 }
 export function useFetchMeta() {
-  return useSWR('/api/signal', fetchMeta, {
+  return useSWR('/api/signal?plain', fetchMeta, {
     refreshInterval: 6 * 60 * 60 * 1000, // 6h
   });
 }

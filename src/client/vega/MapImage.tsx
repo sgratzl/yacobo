@@ -29,7 +29,7 @@ export function MapImage({
 }) {
   const valid = signal != null && isValid(date);
   const src = valid
-    ? addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.jpg`, 'highlight', region?.id)
+    ? addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.jpg?plain`, 'highlight', region?.id)
     : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
@@ -74,7 +74,7 @@ function regionValueTooltip(datum: { region: string }) {
 function InteractiveMapVega({ signal, date, region, scale }: IParams) {
   const { data, error } = useRegionValue(signal, date);
   const specUrl = addParam(
-    addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.vg`, 'scale', scale),
+    addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.vg?plain`, 'scale', scale),
     'highlight',
     region?.id
   )!;

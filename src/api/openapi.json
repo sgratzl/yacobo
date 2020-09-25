@@ -56,7 +56,7 @@
             "$ref": "#/components/parameters/region"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -80,7 +80,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -99,7 +99,7 @@
                         "$ref": "#/components/schemas/Signal"
                       },
                       {
-                        "$ref": "#/components/schemas/SignalDetails"
+                        "$ref": "#/components/schemas/Signalplain"
                       },
                       {
                         "$ref": "#/components/schemas/Date"
@@ -168,7 +168,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -187,7 +187,7 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/RegionDetails"
+                        "$ref": "#/components/schemas/Regionplain"
                       },
                       {
                         "$ref": "#/components/schemas/Date"
@@ -212,7 +212,7 @@
             "$ref": "#/components/parameters/signal"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -236,7 +236,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -255,7 +255,7 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/RegionDetails"
+                        "$ref": "#/components/schemas/Regionplain"
                       },
                       {
                         "$ref": "#/components/schemas/MultiSignal"
@@ -283,7 +283,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -302,7 +302,7 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/RegionDetails"
+                        "$ref": "#/components/schemas/Regionplain"
                       }
                     ]
                   }
@@ -327,7 +327,7 @@
             "$ref": "#/components/parameters/signal"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -346,7 +346,7 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/RegionDetails"
+                        "$ref": "#/components/schemas/Regionplain"
                       },
                       {
                         "$ref": "#/components/schemas/Date"
@@ -378,7 +378,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -397,7 +397,7 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/RegionDetails"
+                        "$ref": "#/components/schemas/Regionplain"
                       },
                       {
                         "$ref": "#/components/schemas/Date"
@@ -626,20 +626,20 @@
           "minimum": 1
         }
       },
-      "details": {
-        "name": "details",
+      "plain": {
+        "name": "plain",
         "in": "query",
-        "description": "Return more details in the JSON/CSV file",
+        "description": "Return only plain in the JSON/CSV file",
         "required": false,
         "allowEmptyValue": true,
         "schema": {
           "type": "boolean"
         }
       },
-      "detailsVG": {
-        "name": "details",
+      "plainVG": {
+        "name": "plain",
         "in": "query",
-        "description": "Includes data in the VEGA spec file",
+        "description": "No data in the VEGA spec file",
         "required": false,
         "allowEmptyValue": true,
         "schema": {

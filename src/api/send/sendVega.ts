@@ -37,7 +37,7 @@ export default async function sendVega<T>(
 ) {
   const vegaOptions = extractVegaOptions(req, ctx, format);
   const vegaFactory = pickFactory(req, vega);
-  if (format === Formats.vg && !vegaOptions.details) {
+  if (format === Formats.vg && vegaOptions.plain) {
     // pure vega without data
     return sendVegaSpec(req, res, vegaFactory(undefined, vegaOptions), options);
   }
@@ -138,7 +138,7 @@ async function sendVegaSVG(
 export function extractVegaOptions(req: NextApiRequest, ctx: IRequestContext, format: Formats): IVegaOptions {
   return {
     scaleFactor: Number.parseInt((req.query.scale as string) ?? '1', 10),
-    details: req.query.details != null,
+    plain: req.query.plain != null,
     devicePixelRatio: Number.parseInt((req.query.dpr as string) ?? '1', 10),
     forImage: format !== Formats.vg,
     highlight: req.query.highlight as string,

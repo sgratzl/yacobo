@@ -28,7 +28,7 @@ export function HistogramImage({
 }) {
   const valid = signal != null && isValid(date);
   const src = valid
-    ? addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.jpg?chart=histogram`, 'highlight', region?.id)
+    ? addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.jpg?plain&chart=histogram`, 'highlight', region?.id)
     : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
@@ -76,7 +76,7 @@ function regionValueTooltip(datum: IBinnedValues) {
 function InteractiveHistogramVega({ signal, date, region, scale }: IParams) {
   const { data, error } = useRegionValue(signal, date);
   const specUrl = addParam(
-    addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.vg?chart=histogram`, 'scale', scale),
+    addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.vg?plain&chart=histogram`, 'scale', scale),
     'highlight',
     region?.id
   )!;
