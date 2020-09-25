@@ -10,7 +10,7 @@ import { historyRange } from '@/model';
 export default withMiddleware((req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
   const { param: signal, format } = extractFormat(req, 'signal', extractSignal);
   const region = extractRegion(req);
-  const data = () => fetchSignalRegion(ctx, signal.data, region, historyRange());
+  const data = () => fetchSignalRegion(ctx, signal, region, historyRange());
 
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${region.name}`,

@@ -14,7 +14,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
   const signal = extractSignal(req);
   const date = dateOrMagic instanceof Date ? dateOrMagic : await resolveMetaSignalDate(dateOrMagic, ctx, signal);
 
-  const data = () => fetchAllRegions(ctx, signal.data, date);
+  const data = () => fetchAllRegions(ctx, signal, date);
 
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${formatAPIDate(date)}`,

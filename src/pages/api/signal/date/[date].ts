@@ -32,7 +32,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
   const { param: dateOrMagic, format } = extractFormat(req, 'date', extractDateOrMagic);
   const date = dateOrMagic instanceof Date ? dateOrMagic : await resolveMetaDate(dateOrMagic, ctx);
 
-  const data = () => Promise.all(signals.map((signal) => fetchAllRegions(ctx, signal.data, date))).then(merge);
+  const data = () => Promise.all(signals.map((signal) => fetchAllRegions(ctx, signal, date))).then(merge);
 
   return sendFormat(req, res, ctx, format, data, {
     title: `all-${formatAPIDate(date)}`,

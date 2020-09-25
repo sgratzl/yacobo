@@ -13,7 +13,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
   const date = dateOrMagic instanceof Date ? dateOrMagic : await resolveMetaSignalDate(dateOrMagic, ctx, signal);
 
   const region = extractRegion(req);
-  const data = () => fetchSignalRegionDate(ctx, signal.data, region, date);
+  const data = () => fetchSignalRegionDate(ctx, signal, region, date);
   return sendFormat(req, res, ctx, format, data, {
     title: `${region.name}-${signal.id}-${formatAPIDate(date)}`,
     headers: ['region', 'date', 'value', 'stderr'],
