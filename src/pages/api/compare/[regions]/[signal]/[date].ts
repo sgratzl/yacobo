@@ -4,7 +4,6 @@ import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { estimateCacheDuration } from '@/api/model';
 import { regionDateSummaryDates } from '@/common/helpers';
 import { extractDateOrMagic, extractRegions, extractSignal } from '@/common/validator';
-import { regionByID } from '@/model/regions';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
@@ -16,9 +15,10 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${regions.map((d) => d.name).join(',')}`,
-    headers: ['region', 'date', 'value', 'stderr'],
     // vega: createSignalMultiLineChart.bind(null, signal, regions),
     cache: estimateCacheDuration(date),
-    regions: regionByID,
+    constantFields: {
+      signal: signal.id,
+    },
   });
 });

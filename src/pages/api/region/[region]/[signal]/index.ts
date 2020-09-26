@@ -14,8 +14,11 @@ export default withMiddleware((req: NextApiRequest, res: NextApiResponse, ctx: I
 
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${region.name}`,
-    headers: ['date', 'value', 'stderr'],
     vega: createSignalLineChart.bind(null, region, signal),
     cache: CacheDuration.short,
+    constantFields: {
+      signal: signal.id,
+      region: region.id,
+    },
   });
 });

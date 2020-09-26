@@ -4,7 +4,6 @@ import { extractDateOrMagic, extractRegion } from '@/common/validator';
 import { fetchRegion, resolveMetaDate } from '@/api/data';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { formatAPIDate } from '@/common';
-import { signalByID } from '@/model/signals';
 import { estimateCacheDuration } from '@/api/model';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
@@ -14,8 +13,10 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
   const data = () => fetchRegion(ctx, region, date);
   return sendFormat(req, res, ctx, format, data, {
     title: `${region.name}-${formatAPIDate(date)}`,
-    headers: ['signal', 'value', 'stderr'],
     cache: estimateCacheDuration(date),
-    signals: signalByID,
+    constantFields: {
+      date,
+      region: region.id,
+    },
   });
 });

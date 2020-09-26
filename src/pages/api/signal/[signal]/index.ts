@@ -3,7 +3,7 @@ import { IRequestContext, withMiddleware } from '@/api/middleware';
 import { fetchAllRegionsHistory } from '@/api/data';
 import { extractSignal } from '@/common/validator';
 import { extractFormat, sendFormat } from '@/api/format';
-import { historyRange, regionByID } from '@/model';
+import { historyRange } from '@/model';
 import { createHeatMap } from '@/charts/heatmap';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
@@ -14,8 +14,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
   const vegaFactory = createHeatMap.bind(null, signal);
   return sendFormat(req, res, ctx, format, data, {
     title: signal.id,
-    headers: ['region', 'date', 'value', 'stderr'],
     vega: vegaFactory,
-    regions: regionByID,
+    constantFields: { signal: signal.id },
   });
 });

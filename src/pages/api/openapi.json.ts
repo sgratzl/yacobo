@@ -12,6 +12,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
     {
       title: 'openapi',
       cache: CacheDuration.long,
+      constantFields: {},
     },
     'json'
   );

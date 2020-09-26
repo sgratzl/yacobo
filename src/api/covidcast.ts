@@ -1,7 +1,6 @@
 import { parseDates } from '@/common/parseDates';
 import {
   IDateValue,
-  IEpiDataRow,
   IRegion,
   IRegionDateValue,
   IRegionValue,
@@ -18,6 +17,14 @@ import type { IRequestContext } from './middleware';
 import { CacheDuration } from './model';
 
 const ENDPOINT = process.env.COVIDCAST_ENDPOINT!;
+
+interface IEpiDataRow {
+  signal: string;
+  geo_value: string;
+  time_value: number;
+  value: number;
+  stderr: number;
+}
 
 function formatCCastAPIDate(date: number | Date) {
   return formatISO(date, { representation: 'date' });

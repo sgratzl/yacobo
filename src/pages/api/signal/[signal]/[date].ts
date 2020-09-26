@@ -4,7 +4,6 @@ import { extractDateOrMagic, extractSignal } from '@/common/validator';
 import { createMap } from '@/charts/map';
 import { fetchAllRegions, resolveMetaSignalDate } from '@/api/data';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { regionByID } from '@/model/regions';
 import { formatAPIDate } from '@/common';
 import { estimateCacheDuration } from '@/api/model';
 import { createHistogramChart } from '@/charts/histogram';
@@ -18,13 +17,15 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
   return sendFormat(req, res, ctx, format, data, {
     title: `${signal.id}-${formatAPIDate(date)}`,
-    headers: ['region', 'value', 'stderr'],
     vega: {
       default: createMap.bind(null, signal, date),
       map: createMap.bind(null, signal, date),
       histogram: createHistogramChart.bind(null, signal, date),
     },
     cache: estimateCacheDuration(date),
-    regions: regionByID,
+    constantFields: {
+      date,
+      signal: signal.id,
+    },
   });
 });

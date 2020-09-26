@@ -99,10 +99,10 @@
                         "$ref": "#/components/schemas/Signal"
                       },
                       {
-                        "$ref": "#/components/schemas/Signalplain"
+                        "$ref": "#/components/schemas/Date"
                       },
                       {
-                        "$ref": "#/components/schemas/Date"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -141,6 +141,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/Date"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -187,10 +190,10 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/Regionplain"
+                        "$ref": "#/components/schemas/Date"
                       },
                       {
-                        "$ref": "#/components/schemas/Date"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -255,9 +258,6 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/Regionplain"
-                      },
-                      {
                         "$ref": "#/components/schemas/MultiSignal"
                       }
                     ]
@@ -302,7 +302,7 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/Regionplain"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -346,10 +346,10 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/Regionplain"
+                        "$ref": "#/components/schemas/Date"
                       },
                       {
-                        "$ref": "#/components/schemas/Date"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -363,7 +363,6 @@
         }
       }
     },
-
     "/compare/{regions}/{signal}/{date}": {
       "get": {
         "summary": "returns history of the signal for the given regions",
@@ -397,10 +396,10 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/Regionplain"
+                        "$ref": "#/components/schemas/Date"
                       },
                       {
-                        "$ref": "#/components/schemas/Date"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -462,22 +461,6 @@
         },
         "required": ["region"]
       },
-      "RegionDetails": {
-        "type": "object",
-        "properties": {
-          "regionName": {
-            "type": "string"
-          },
-          "regionPopulation": {
-            "type": "number",
-            "nullable": true
-          },
-          "regionState": {
-            "type": "string"
-          }
-        },
-        "required": ["regionName"]
-      },
       "Signal": {
         "type": "object",
         "properties": {
@@ -486,15 +469,6 @@
           }
         },
         "required": ["signal"]
-      },
-      "SignalDetails": {
-        "type": "object",
-        "properties": {
-          "signalName": {
-            "type": "string"
-          }
-        },
-        "required": ["signalName"]
       },
       "Date": {
         "type": "object",
@@ -505,6 +479,35 @@
           }
         },
         "required": ["date"]
+      },
+      "Details": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "region": {
+            "type": "string"
+          },
+          "regionName": {
+            "type": "string"
+          },
+          "regionPopulation": {
+            "type": "number",
+            "nullable": true
+          },
+          "regionState": {
+            "type": "string"
+          },
+          "signal": {
+            "type": "string"
+          },
+          "signalName": {
+            "type": "string"
+          }
+        },
+        "required": ["date", "region", "regionName", "signal", "signalName"]
       },
       "MultiSignal": {
         "type": "object",

@@ -42,6 +42,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
       title: 'skeleton',
       skeleton: true,
       cache: CacheDuration.long,
+      constantFields: {},
     }
   );
 });
