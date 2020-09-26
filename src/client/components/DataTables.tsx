@@ -21,6 +21,7 @@ import { formatAPIDate, formatFixedValue } from '../../common';
 import { getColorScale, getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ITriple } from '../../model';
 import { classNames } from '../utils';
 import styles from './DataTables.module.css';
+import colors from './ColorBox.module.css';
 import { CompareIcon } from './CompareIcon';
 import LinkWrapper from './LinkWrapper';
 
@@ -45,13 +46,16 @@ function useRenderBarValue(signal?: ISignal) {
   return useCallback(
     (value?: number | null) => {
       if (value == null || !scale) {
-        return <div className={classNames(styles.gradient, styles.missing)}>?</div>;
+        return <div className={classNames(styles.gradient, colors.color, colors.missing)}>?</div>;
       }
       const p = Math.round(1000 * scale.value(value)) / 10;
-      const gradient = `linear-gradient(to right, var(--color) ${p}%, transparent ${p}%)`;
+      const gradient = `linear-gradient(to right, var(--g-color) ${p}%, transparent ${p}%)`;
       const color = scale.color(value);
       return (
-        <div className={styles.gradient} style={{ background: gradient, '--vcolor': color } as any}>
+        <div
+          className={classNames(colors.color, styles.gradient)}
+          style={{ background: gradient, '--color': color } as any}
+        >
           {formatFixedValue(value)}
         </div>
       );

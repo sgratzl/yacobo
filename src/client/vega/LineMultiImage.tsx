@@ -13,12 +13,28 @@ import useSWR from 'swr';
 import type { TopLevelSpec } from 'vega-lite';
 import { valueTooltipContent } from './VegaTooltip';
 import { useRouterWrapper } from '@/client/hooks';
+import { Typography } from 'antd';
+import { CompareDescription, ValueLegend } from './descriptions';
 
 interface IParams {
   signal?: ISignal;
   date?: Date;
   regions: IRegion[];
   scale?: number;
+}
+
+export function LineMultiDescription({ signal, regions }: { signal?: ISignal; regions: IRegion[] }) {
+  return (
+    <>
+      <Typography.Paragraph>
+        {`The chart shows the history of ${signal?.name} of multiple locations in form of a line chart.
+        The horizontal x axis shows the date while the vertical y axis shows the value of the signal at this specific point in time.
+        `}
+      </Typography.Paragraph>
+      <CompareDescription regions={regions} />
+      <ValueLegend signal={signal} vertical />
+    </>
+  );
 }
 
 export function LineMultiImage({

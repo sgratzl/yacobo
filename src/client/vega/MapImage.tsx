@@ -11,11 +11,25 @@ import { valueTooltipContent } from './VegaTooltip';
 import { useImageLoading, Image } from './Image';
 import { LoadingImage } from './LoadingImage';
 import { InteractiveWrapper, VegaLoader } from './MakeInteractive';
-import { isFakeRegion, ITriple, regionByID } from '@/model';
+import { isFakeRegion, ISignal, ITriple, regionByID } from '@/model';
 import { useRouterWrapper } from '@/client/hooks';
+import { Typography } from 'antd';
+import { ColorLegend } from './descriptions';
 
 interface IParams extends ITriple {
   scale?: number;
+}
+
+export function MapDescription({ signal, date }: { signal?: ISignal; date?: Date }) {
+  return (
+    <>
+      <Typography.Paragraph>
+        {`The chart shows a choropleth map of US counties for the signal ${signal?.name} as of ${formatLocal(date)}.
+        Each county is colored based on its value of the specific date.`}
+      </Typography.Paragraph>
+      <ColorLegend signal={signal} />
+    </>
+  );
 }
 
 export function MapImage({

@@ -9,8 +9,8 @@ import { FavoriteToggle } from '../components/FavoriteToggle';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../components/RegionSignalKeyFacts';
 import { Divider, Typography } from 'antd';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
-import { MapImage } from '../vega/MapImage';
-import { LineImage } from '../vega/LineImage';
+import { MapDescription, MapImage } from '../vega/MapImage';
+import { LineDescription, LineImage } from '../vega/LineImage';
 import ContentLayout from '../components/ContentLayout';
 import { fullUrl } from '@/client/hooks';
 import { CompareWithButton } from '../components/CompareIcon';
@@ -93,6 +93,7 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
           Overview
         </ParagraphTitle>
         <MapImage scale={2} interactive region={region} signal={signal} date={date} />
+        <MapDescription signal={signal} date={date} />
         <Divider />
         <ParagraphTitle
           level={2}
@@ -106,6 +107,7 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
           History
         </ParagraphTitle>
         <LineImage scale={2} interactive region={region} signal={signal} date={date} />
+        <LineDescription signal={signal} region={region} />
       </ContentLayout>
     </BaseLayout>
   );

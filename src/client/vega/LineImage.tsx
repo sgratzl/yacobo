@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import styles from './VegaImage.module.css';
 import { classNames } from '../utils';
-import { isFakeRegion, ITriple } from '@/model';
+import { IRegion, isFakeRegion, ISignal, ITriple } from '@/model';
 import { formatAPIDate, formatLocal } from '@/common';
 import { useDateValue } from '@/client/data';
 import useSWR from 'swr';
@@ -13,9 +13,23 @@ import { useImageLoading, Image } from './Image';
 import { LoadingImage } from './LoadingImage';
 import { InteractiveWrapper, VegaLoader } from './MakeInteractive';
 import { useRouterWrapper } from '@/client/hooks';
+import { Typography } from 'antd';
+import { ValueLegend } from './descriptions';
 
 interface IParams extends ITriple {
   scale?: number;
+}
+
+export function LineDescription({ signal, region }: { signal?: ISignal; region?: IRegion }) {
+  return (
+    <>
+      <Typography.Paragraph>
+        {`The chart shows the history of ${signal?.name} in ${region?.name} in form of a line chart.
+        The horizontal x axis shows the date while the vertical y axis shows the value of the signal at this specific point in time.`}
+      </Typography.Paragraph>
+      <ValueLegend signal={signal} vertical />
+    </>
+  );
 }
 
 export function LineImage({

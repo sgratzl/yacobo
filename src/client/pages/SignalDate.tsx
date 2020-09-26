@@ -10,10 +10,10 @@ import { formatLocal, formatAPIDate } from '@/common';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
 import { RegionSelect } from '../components/RegionSelect';
 import ContentLayout from '../components/ContentLayout';
-import { MapImage } from '../vega/MapImage';
+import { MapDescription, MapImage } from '../vega/MapImage';
 import { fullUrl } from '@/client/hooks';
-import { HistogramImage } from '../vega/HistogramImage';
-import { HeatMapImage } from '../vega/HeatmapImage';
+import { HistogramDescription, HistogramImage } from '../vega/HistogramImage';
+import { HeatMapDescription, HeatMapImage } from '../vega/HeatmapImage';
 import ParagraphTitle from '../components/ParagraphTitle';
 
 export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
@@ -57,6 +57,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
         <Typography.Title>{signal.name}</Typography.Title>
         <Typography.Paragraph>{signal.description(date)}</Typography.Paragraph>
         <MapImage scale={2} interactive signal={signal} date={date} />
+        <MapDescription signal={signal} date={date} />
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />
@@ -70,6 +71,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
           Relative Frequency Distribution
         </ParagraphTitle>
         <HistogramImage scale={2} interactive signal={signal} date={date} />
+        <HistogramDescription signal={signal} date={date} />
         <Divider />
         <ParagraphTitle
           level={2}
@@ -81,6 +83,7 @@ export function SignalDate({ signal, date }: { signal: ISignal; date?: Date }) {
           States over Time
         </ParagraphTitle>
         <HeatMapImage scale={2} signal={signal} date={date} />
+        <HeatMapDescription signal={signal} />
         <Divider />
         <Typography.Title level={2}>Data Table</Typography.Title>
         <SignalTable signal={signal} date={date} />

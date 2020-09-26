@@ -11,7 +11,7 @@ import ContentLayout from '../components/ContentLayout';
 import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
 import GridColumn from '../components/GridColumn';
-import { LineMultiImage } from '../vega/LineMultiImage';
+import { LineMultiDescription, LineMultiImage } from '../vega/LineMultiImage';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
 import RegionSignalWidget from '../widgets/RegionSignalWidget';
 
@@ -104,6 +104,7 @@ export function RegionsSignalDateCompare({
         <Divider />
         <Typography.Title level={2}>History</Typography.Title>
         <LineMultiImage scale={2} interactive regions={regions} signal={signal} date={date} />
+        <LineMultiDescription signal={signal} regions={regions} />
       </ContentLayout>
     </BaseLayout>
   );

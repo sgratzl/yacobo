@@ -9,7 +9,7 @@ import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
 import { DateMultiTable } from '../components/DataTables';
-import { LineMultiImage } from '../vega/LineMultiImage';
+import { LineMultiDescription, LineMultiImage } from '../vega/LineMultiImage';
 import { Comparing } from '../components/Comparing';
 import { fullUrl } from '@/client/hooks';
 
@@ -67,6 +67,7 @@ export function RegionsSignalCompare({ regions, signal }: { regions: IRegion[]; 
           query={{ signal }}
         />
         <LineMultiImage scale={2} interactive regions={regions} signal={signal} />
+        <LineMultiDescription signal={signal} regions={regions} />
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />

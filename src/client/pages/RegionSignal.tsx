@@ -9,7 +9,7 @@ import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
 import { DateTable } from '../components/DataTables';
-import { LineImage } from '../vega/LineImage';
+import { LineDescription, LineImage } from '../vega/LineImage';
 import { fullUrl } from '@/client/hooks';
 import { CompareWithButton } from '../components/CompareIcon';
 
@@ -58,6 +58,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
         <Typography.Title>{signal?.name}</Typography.Title>
         <Typography.Paragraph>{signal?.description()}</Typography.Paragraph>
         <LineImage scale={2} interactive region={region} signal={signal} />
+        <LineDescription signal={signal} region={region} />
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />

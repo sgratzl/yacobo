@@ -1,12 +1,14 @@
 import { useSignalHistory } from '@/client/data';
 import { addParam, fetcher } from '@/client/utils';
 import { formatLocal } from '@/common';
-import { isFakeRegion, ITriple, regionByID } from '@/model';
+import { isFakeRegion, ISignal, ITriple, regionByID } from '@/model';
+import { Typography } from 'antd';
 import { useCallback, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import type { TopLevelSpec } from 'vega-lite';
 import { useRouterWrapper } from '../hooks';
 import { classNames } from '../utils';
+import { ColorLegend } from './descriptions';
 import { Image, useImageLoading } from './Image';
 import { LoadingImage } from './LoadingImage';
 import { InteractiveWrapper, VegaLoader } from './MakeInteractive';
@@ -15,6 +17,18 @@ import { valueTooltipContent } from './VegaTooltip';
 
 interface IParams extends ITriple {
   scale?: number;
+}
+
+export function HeatMapDescription({ signal }: { signal?: ISignal }) {
+  return (
+    <>
+      <Typography.Paragraph>
+        {`The chart shows a heatmap. Dates are shown horizontally on the x axis. Every state in the US is shown on the y
+      axis ordered alphabetically. A colored cell at the visual cross of state and date shows the value for the signal ${signal?.name} at this specific date and location.`}
+      </Typography.Paragraph>
+      <ColorLegend signal={signal} />
+    </>
+  );
 }
 
 export function HeatMapImage({

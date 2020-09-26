@@ -1,13 +1,14 @@
 import { useRegionValue } from '@/client/data';
 import { addParam, fetcher } from '@/client/utils';
 import { formatAPIDate, formatFixedValue, formatLocal, formatValue } from '@/common';
-import type { IRegionValue, ITriple } from '@/model';
-import { Statistic } from 'antd';
+import { HISTOGRAM_BINS, IRegionValue, ISignal, ITriple, MAX_BIN_FREQUENCY } from '@/model';
+import { Statistic, Typography } from 'antd';
 import { isValid } from 'date-fns';
 import { useCallback, useState } from 'react';
 import useSWR from 'swr';
 import type { TopLevelSpec } from 'vega-lite';
 import { classNames } from '../utils';
+import { ValueLegend } from './descriptions';
 import { Image, useImageLoading } from './Image';
 import { LoadingImage } from './LoadingImage';
 import { InteractiveWrapper, VegaLoader } from './MakeInteractive';
@@ -15,6 +16,21 @@ import styles from './VegaImage.module.css';
 
 interface IParams extends ITriple {
   scale?: number;
+}
+
+export function HistogramDescription({ signal, date }: { signal?: ISignal; date?: Date }) {
+  return (
+    <>
+      <Typography.Paragraph>
+        {`The chart shows the distribution of ${signal?.name} as of ${formatLocal(date)} in form of a histogram.
+        The value for each county are grouped in ${HISTOGRAM_BINS} bins. The horizontal x axis shows the value while the vertical y axis shows the relative frequency of a bin.
+        The maximum relative frequency is theoretically up to 100% but has been reduced to ${
+          MAX_BIN_FREQUENCY * 100
+        }% for illustration purposes. The color of each bin corresponds to bin value and shows no extra information.`}
+      </Typography.Paragraph>
+      <ValueLegend signal={signal} horizontal />
+    </>
+  );
 }
 
 export function HistogramImage({

@@ -38,7 +38,10 @@ function dated(prefix: string, date?: Date) {
   return date ? ` ${prefix} ${formatLocal(date)}` : '';
 }
 
-export function axisTitle(signal: ISignal) {
+export function axisTitle(signal?: ISignal) {
+  if (!signal) {
+    return 'of 100 people';
+  }
   return `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`;
 }
 
