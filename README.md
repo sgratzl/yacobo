@@ -51,5 +51,5 @@ YaCoBo is released under the **MIT License**. Copyright of the website belongs t
 
 [mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
 [mit-url]: https://opensource.org/licenses/MIT
-[github-actions-image]: https://github.com/sgratzl/yacobo/workflows/ci/badge.svg
+[github-actions-image]: https://github.com/sgratzl/yacobo/workflows/Linting/badge.svg
 [github-actions-url]: https://github.com/sgratzl/yacobo/actions
