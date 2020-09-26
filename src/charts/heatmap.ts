@@ -43,7 +43,7 @@ function createHeatMapChartSpec(
   let pixelSize = DEFAULT_PIXEL_SIZE * options.scaleFactor;
   let aspectRatio = 0.3;
 
-  while (yPixels * pixelSize > 500 && pixelSize > 1) {
+  while (yPixels * pixelSize > 500 && pixelSize > 1 && options.plain) {
     // need to rescale
     pixelSize--;
   }
