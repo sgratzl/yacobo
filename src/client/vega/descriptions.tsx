@@ -73,8 +73,8 @@ export function CompareDescription({ regions }: { regions: IRegion[] }) {
       {regions.map((region, i) => (
         <Fragment key={i}>
           <ColorBox color={COMPARE_COLORS[i]}>{region.name}</ColorBox>
-          {i > 0 && i < regions.length - 1 && <>, </>}
-          {i === regions.length - 1 && <>, and </>}
+          {i < regions.length - 2 && <>, </>}
+          {i === regions.length - 2 && <>, and </>}
         </Fragment>
       ))}
     </Typography.Paragraph>
