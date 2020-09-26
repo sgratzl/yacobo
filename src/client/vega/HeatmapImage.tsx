@@ -1,7 +1,7 @@
 import { useSignalHistory } from '@/client/data';
 import { addParam, fetcher } from '@/client/utils';
 import { formatLocal } from '@/common';
-import { isFakeRegion, ISignal, ITriple, regionByID } from '@/model';
+import { isFakeRegion, ISignal, IStateRegion, ITriple, regionByID } from '@/model';
 import { Typography } from 'antd';
 import { useCallback, useMemo, useState } from 'react';
 import useSWR from 'swr';
@@ -19,38 +19,56 @@ interface IParams extends ITriple {
   scale?: number;
 }
 
-export function HeatMapDescription({ signal }: { signal?: ISignal }) {
+export function HeatMapDescription({ signal, focus }: { signal?: ISignal; focus?: IStateRegion }) {
+  const unit = focus ? 'county' : 'state';
   return (
     <>
       <Typography.Paragraph>
-        {`The chart shows a heatmap. Dates are shown horizontally on the x axis. Every state in the US is shown on the y
-      axis ordered alphabetically. A colored cell at the visual cross of state and date shows the value for the signal ${signal?.name} at this specific date and location.`}
+        {`The chart shows a heatmap. Dates are shown horizontally on the x axis. Every ${unit} in ${
+          focus?.name ?? 'the US'
+        } is shown on the y
+      axis ordered alphabetically. A colored cell at the visual cross of ${unit} and date shows the value for the signal ${
+          signal?.name
+        } at this specific date and location.`}
       </Typography.Paragraph>
       <ColorLegend signal={signal} missing={false} />
     </>
   );
 }
 
+function guessAspectRatio(state: IStateRegion) {
+  const counties = state.counties.length;
+  // TODO
+  return '60%';
+}
+
 export function HeatMapImage({
   signal,
   scale,
+  focus,
   interactive,
 }: IParams & {
   interactive?: boolean;
+  focus?: IStateRegion;
 }) {
   const valid = signal != null;
   // TODO support highlight
-  const src = valid ? addParam(`/api/signal/${signal?.id}.jpg?plain`, 'highlight', undefined) : undefined;
+  const src = valid
+    ? addParam(addParam(`/api/signal/${signal?.id}.jpg?plain`, 'highlight', undefined), 'focus', focus?.id)
+    : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
+  // guess the aspect ratio
+  const focusStyle = focus ? { paddingTop: guessAspectRatio(focus) } : undefined;
+
   return (
-    <div className={classNames(styles.img, styles.imgHeatMap)}>
+    <div className={classNames(styles.img, styles.imgHeatMap)} style={focusStyle}>
       {src && (
         <Image
           className={classNames(loading && styles.loadingImage)}
           imgRef={imgRef}
           src={src}
-          alt={`State HeatMap of ${signal?.name}`}
+          alt={`${focus?.name ?? 'State'} HeatMap of ${signal?.name}`}
           scale={scale}
         />
       )}
@@ -62,7 +80,7 @@ export function HeatMapImage({
       <LoadingImage
         loading={loading}
         error={error}
-        className={scale === 2 ? styles.HeatMapOverlay2 : styles.HeatMapOverlay}
+        className={scale === 2 ? styles.heatMapOverlay2 : styles.heatMapOverlay}
       />
     </div>
   );
@@ -75,10 +93,14 @@ function regionTitleTooltip(datum: { region: string; date: number }) {
   }`;
 }
 
-function InteractiveHeatMapVega({ signal, scale }: IParams) {
-  const { data, error } = useSignalHistory(signal);
+function InteractiveHeatMapVega({ signal, scale, focus }: IParams & { focus?: IStateRegion }) {
+  const { data, error } = useSignalHistory(signal, focus);
   // TODO highlight
-  const specUrl = addParam(addParam(`/api/signal/${signal?.id}.vg?plain`, 'scale', scale), 'highlight', undefined)!;
+  const specUrl = addParam(
+    addParam(addParam(`/api/signal/${signal?.id}.vg?plain`, 'scale', scale), 'highlight', undefined),
+    'focus',
+    focus?.id
+  )!;
   const { data: spec, error: specError } = useSWR<TopLevelSpec>(signal != null ? specUrl : null, fetcher);
   const [ready, setReady] = useState(false);
 

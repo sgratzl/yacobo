@@ -1,13 +1,5 @@
 import { startOfISODate, startOfISOToday } from '@/common/parseDates';
-import {
-  extractDateRange,
-  IRegion,
-  IRegionDateValue,
-  isCountyRegion,
-  isStateRegion,
-  regionByID,
-  states,
-} from '@/model';
+import { extractDateRange, IRegion, IRegionDateValue, regionByID, states, toState } from '@/model';
 import { differenceInDays } from 'date-fns';
 import type { TopLevelSpec } from 'vega-lite';
 import type { SchemeParams } from 'vega-lite/build/src/scale';
@@ -159,7 +151,7 @@ export async function createHeatMap(
   const minDate = extractDateRange(metas).min;
 
   const focus = options.focus ? regionByID(options.focus) : undefined;
-  const state = isCountyRegion(focus) ? focus.state : isStateRegion(focus) ? focus : undefined;
+  const state = toState(focus);
 
   const spec = createHeatMapChartSpec(
     {

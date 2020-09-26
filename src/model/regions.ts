@@ -103,6 +103,10 @@ export function isCountyRegion(region?: IRegion): region is ICountyRegion {
   return region != null && (region as ICountyRegion).state != null && !isFakeRegion(region);
 }
 
+export function toState(region?: IRegion) {
+  return isCountyRegion(region) ? region.state : isStateRegion(region) ? region : undefined;
+}
+
 export function plainLabel(region?: IRegion) {
   if (!region || isStateRegion(region)) {
     return region?.name;

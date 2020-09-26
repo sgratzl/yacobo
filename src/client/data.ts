@@ -1,9 +1,10 @@
 import useSWR from 'swr';
-import { IDateValue, IRegion, IRegionDateValue, IRegionValue, ISignal, regionByID } from '../model';
+import { IDateValue, IRegion, IRegionDateValue, IRegionValue, ISignal, IStateRegion, regionByID } from '../model';
 import { parseDates } from '@/common/parseDates';
 import { compareDate, compareValue } from './compare';
 import { formatAPIDate } from '@/common';
 import { isValid } from 'date-fns';
+import { addParam } from './utils';
 
 function fetchDated(key: string) {
   const parse = parseDates<IDateValue>(['date']);
@@ -58,9 +59,9 @@ export function useRegionValue(signal?: ISignal, date?: Date) {
   );
 }
 
-export function useSignalHistory(signal?: ISignal) {
+export function useSignalHistory(signal?: ISignal, focus?: IStateRegion) {
   return useSWR<IRegionObjectDateValue[]>(
-    signal != null ? `/api/signal/${signal.id}.json?plain` : null,
+    signal != null ? addParam(`/api/signal/${signal.id}.json?plain`, 'focus', focus?.id)! : null,
     fetchRegionDates,
     {}
   );

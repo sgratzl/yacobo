@@ -2,7 +2,7 @@ import BaseLayout from '../components/BaseLayout';
 import { DateSelect } from '../components/DateSelect';
 import { RegionSelect } from '../components/RegionSelect';
 import { formatAPIDate, formatLocal } from '@/common';
-import { IRegion, refSignal, signals } from '@/model';
+import { IRegion, isCountyRegion, refSignal, signals } from '@/model';
 import GridColumn from '../components/GridColumn';
 import { Divider, Row, Typography } from 'antd';
 import RegionSignalWidget from '../widgets/RegionSignalWidget';
@@ -35,6 +35,15 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
         />
       }
       breadcrumb={[
+        isCountyRegion(region)
+          ? [
+              {
+                breadcrumbName: region.state.name,
+                path: '/region/[region]',
+                query: { region: region.state },
+              },
+            ]
+          : [],
         {
           breadcrumbName: region?.name ?? '',
           path: '/region/[region]',

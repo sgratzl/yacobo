@@ -3,6 +3,7 @@ import { BackTop, Layout, PageHeader } from 'antd';
 import type { BreadcrumbProps } from 'antd/lib/breadcrumb';
 import type { PageHeaderProps } from 'antd/lib/page-header';
 import Head from 'next/head';
+import type { IRouterQuery } from '../hooks';
 import styles from './BaseLayout.module.css';
 import FooterLayout from './LayoutFooter';
 import { LayoutHeader, MainEntries } from './LayoutHeader';
@@ -13,7 +14,7 @@ export interface BaseLayoutProps {
   description?: string;
   previewImage?: string;
   mainActive: MainEntries;
-  breadcrumb: { breadcrumbName: string; path: string }[];
+  breadcrumb: { breadcrumbName: string; path: string; query?: IRouterQuery }[];
 }
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? '';
@@ -57,19 +58,25 @@ export default function BaseLayout({
   );
 }
 
-const breadcrumbRender: BreadcrumbProps['itemRender'] = (route, _params, routes) => {
+const breadcrumbRender: BreadcrumbProps['itemRender'] = (
+  route: { breadcrumbName: string; path: string; query?: IRouterQuery },
+  _params,
+  routes
+) => {
   const isLastItem = routes.indexOf(route) === routes.length - 1;
   if (isLastItem) {
     return <span>{route.breadcrumbName}</span>;
   }
   return (
-    <LinkWrapper path={route.path} query={{}}>
+    <LinkWrapper path={route.path} query={route.query ?? {}}>
       {route.breadcrumbName}
     </LinkWrapper>
   );
 };
 
-function createBreadcrumbProps(routes: { breadcrumbName: string; path: string }[]): BreadcrumbProps {
+function createBreadcrumbProps(
+  routes: { breadcrumbName: string; path: string; query?: IRouterQuery }[]
+): BreadcrumbProps {
   return {
     itemRender: breadcrumbRender,
     routes: [
