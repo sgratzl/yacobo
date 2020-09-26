@@ -38,11 +38,11 @@ function dated(prefix: string, date?: Date) {
   return date ? ` ${prefix} ${formatLocal(date)}` : '';
 }
 
-export function axisTitle(signal?: ISignal) {
+export function axisTitle(signal?: ISignal, prefix = 'of') {
   if (!signal) {
-    return 'of 100 people';
+    return `${prefix} 100 people`;
   }
-  return `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`;
+  return `${prefix} ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`;
 }
 
 function JohnHopkins() {

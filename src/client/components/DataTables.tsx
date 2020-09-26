@@ -18,7 +18,16 @@ import {
   useRegionValue,
 } from '../data';
 import { formatAPIDate, formatFixedValue } from '../../common';
-import { getColorScale, getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ITriple } from '../../model';
+import {
+  axisTitle,
+  getColorScale,
+  getValueScale,
+  ICountyRegion,
+  IDateValue,
+  IRegion,
+  ISignal,
+  ITriple,
+} from '../../model';
 import { classNames } from '../utils';
 import styles from './DataTables.module.css';
 import colors from './ColorBox.module.css';
@@ -133,7 +142,7 @@ export default function SignalTable({ signal, date, region }: ITriple) {
         sortDirections={['ascend', 'descend']}
       />
       <Table.Column<IRegionObjectValue>
-        title={signal?.name}
+        title={`${signal?.name ?? 'Signal'} ${axisTitle(signal, 'per')}`}
         dataIndex="value"
         render={renderBarValue}
         align="right"
@@ -188,7 +197,7 @@ export function DateTable({ signal, region, date }: ITriple) {
         sortDirections={['ascend', 'descend']}
       />
       <Table.Column<IDateValue>
-        title={signal?.name ?? 'Signal'}
+        title={`${signal?.name ?? 'Signal'} ${axisTitle(signal, 'per')}`}
         dataIndex="value"
         render={renderBarValue}
         align="right"
