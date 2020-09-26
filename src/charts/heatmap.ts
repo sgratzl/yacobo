@@ -1,5 +1,13 @@
 import { startOfISODate, startOfISOToday } from '@/common/parseDates';
-import { extractDateRange, IRegion, IRegionDateValue, IStateRegion, states } from '@/model';
+import {
+  extractDateRange,
+  IRegion,
+  IRegionDateValue,
+  isCountyRegion,
+  isStateRegion,
+  regionByID,
+  states,
+} from '@/model';
 import { differenceInDays } from 'date-fns';
 import type { TopLevelSpec } from 'vega-lite';
 import type { SchemeParams } from 'vega-lite/build/src/scale';
@@ -8,9 +16,11 @@ import { fetchMeta } from '../api/data';
 import { HIGHLIGHT_COLOR, ZERO_COLOR } from '../model/constants';
 import { axisTitle, getValueDomain, ISignal } from '../model/signals';
 
-const stateLookUp: Record<string, string> = {};
-for (const state of states) {
-  stateLookUp[state.id] = state.short;
+const DEFAULT_PIXEL_SIZE = 8;
+
+const stateLookup: Record<string, string> = {};
+for (const region of states) {
+  stateLookup[region.id] = region.short;
 }
 
 function createHeatMapChartSpec(
@@ -24,6 +34,7 @@ function createHeatMapChartSpec(
     colorScheme: string | SchemeParams;
     regions: IRegion[];
     regionTitle: string;
+    regionLookup?: Record<string, string>;
   },
   options: IVegaOptions
 ) {
@@ -33,16 +44,27 @@ function createHeatMapChartSpec(
   };
   const max = startOfISOToday();
 
-  const aspectRatio = 0.3;
   // TODO uses the county meta data
+  const xPixels = Math.abs(differenceInDays(data.minDate, max));
+  const yPixels = data.regions.length;
+
+  let pixelSize = DEFAULT_PIXEL_SIZE * options.scaleFactor;
+  let aspectRatio = 0.3;
+
+  while (yPixels * pixelSize > 500 && pixelSize > 1) {
+    // need to rescale
+    pixelSize--;
+  }
+  if (pixelSize < DEFAULT_PIXEL_SIZE) {
+    // need to adapt aspect ratio
+    aspectRatio *= DEFAULT_PIXEL_SIZE / pixelSize;
+  }
 
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     ...(!options.plain ? meta : {}),
-    width: Math.abs(differenceInDays(data.minDate, max)) * aspectRatio * 8 * options.scaleFactor,
-    height: {
-      step: 8 * options.scaleFactor,
-    },
+    width: xPixels * pixelSize * aspectRatio,
+    height: yPixels * pixelSize,
     data: {
       name: 'data',
       values: data.values.map((d) => ({ ...d, date: startOfISODate(d.date).valueOf() })),
@@ -72,7 +94,7 @@ function createHeatMapChartSpec(
         axis: {
           titleFontWeight: 'normal',
           title: data.regionTitle,
-          labelExpr: `${JSON.stringify(stateLookUp)}[datum.value]`,
+          ...(data.regionLookup ? { labelExpr: `${JSON.stringify(data.regionLookup)}[datum.value]` } : {}),
         },
       },
       fill: {
@@ -118,7 +140,7 @@ function createHeatMapChartSpec(
     mark: {
       type: 'point',
       shape: `M-1,-1l${aspectRatio * 2},0l0,2l${-aspectRatio * 2},0Z`, //create a rect that is aspectRatio x full to avoid overlapping
-      size: Math.pow(8 * options.scaleFactor, 2), // fit vertically
+      size: Math.pow(pixelSize, 2), // fit vertically
     },
     config: {
       font,
@@ -136,44 +158,21 @@ export async function createHeatMap(
   const meta = metas.find((d) => d.signal === signal.id)!;
   const minDate = extractDateRange(metas).min;
 
+  const focus = options.focus ? regionByID(options.focus) : undefined;
+  const state = isCountyRegion(focus) ? focus.state : isStateRegion(focus) ? focus : undefined;
+
   const spec = createHeatMapChartSpec(
     {
-      title: `${signal.name} - Overview`,
+      title: `${signal.name} - ${state?.name ?? 'US States'}`,
       description: signal.description(),
       values: values ?? [],
       minDate,
       maxValue: getValueDomain(signal, meta)[1],
       valueTitle: axisTitle(signal),
       colorScheme: signal.colorScheme,
-      regionTitle: 'State',
-      regions: states, // support
-    },
-    options
-  );
-  return spec;
-}
-
-export async function createCountyHeatMap(
-  signal: ISignal,
-  state: IStateRegion,
-  values: IRegionDateValue[] | undefined,
-  options: IVegaOptions
-): Promise<TopLevelSpec> {
-  const metas = await fetchMeta(options.ctx);
-  const meta = metas.find((d) => d.signal === signal.id)!;
-  const minDate = extractDateRange(metas).min;
-
-  const spec = createHeatMapChartSpec(
-    {
-      title: `${signal.name} - ${state.name}`,
-      description: signal.description(),
-      values: values ?? [],
-      minDate,
-      maxValue: getValueDomain(signal, meta)[1],
-      valueTitle: axisTitle(signal),
-      colorScheme: signal.colorScheme,
-      regionTitle: 'Counties',
-      regions: state.counties,
+      regionTitle: state ? `Counties of ${state.name}` : 'US State',
+      regions: state ? state.counties : states,
+      regionLookup: state ? undefined : stateLookup,
     },
     options
   );

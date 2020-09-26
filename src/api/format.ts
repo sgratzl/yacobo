@@ -57,19 +57,26 @@ export interface ICommonOptions {
   constantFields: { date?: Date; signal?: string; region?: string };
 }
 
+export interface ILoadOptions {
+  focus?: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 export async function sendFormat<T extends ITripleValue>(
   req: NextApiRequest,
   res: NextApiResponse,
   ctx: IRequestContext,
   format: Formats,
-  loadData: () => Promise<T[]>,
+  loadData: (options: ILoadOptions) => Promise<T[]>,
   options: ICommonOptions & {
     vega?: IVegaFactory<T> | IMultiVegaFactory<T>;
   }
 ) {
+  const loadOptions: ILoadOptions = {
+    focus: req.query.focus as string,
+  };
   if (format === Formats.csv || format === Formats.json || format === Formats.sql) {
-    let data = await loadData();
+    let data = await loadData(loadOptions);
     let headers: (keyof T)[] = ['value', 'stderr'];
 
     if (req.query.plain == null && format !== Formats.sql) {
@@ -92,7 +99,10 @@ export async function sendFormat<T extends ITripleValue>(
   if (!options.vega) {
     return res.status(404).json({ message: 'image formats not available' });
   }
-  return sendVega(req, res, ctx, format, loadData, options.vega, options);
+  return sendVega(req, res, ctx, format, () => loadData(loadOptions), options.vega, {
+    ...options,
+    ...loadOptions,
+  });
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types

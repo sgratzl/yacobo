@@ -97,10 +97,10 @@ export function isFakeRegion(region?: IRegion) {
 }
 
 export function isStateRegion(region?: IRegion): region is IStateRegion {
-  return region != null && Array.isArray((region as IStateRegion).counties);
+  return region != null && Array.isArray((region as IStateRegion).counties) && !isFakeRegion(region);
 }
 export function isCountyRegion(region?: IRegion): region is ICountyRegion {
-  return region != null && (region as ICountyRegion).state != null;
+  return region != null && (region as ICountyRegion).state != null && !isFakeRegion(region);
 }
 
 export function plainLabel(region?: IRegion) {

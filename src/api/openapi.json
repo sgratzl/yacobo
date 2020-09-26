@@ -216,6 +216,9 @@
           },
           {
             "$ref": "#/components/parameters/plain"
+          },
+          {
+            "$ref": "#/components/parameters/focus"
           }
         ],
         "responses": {
@@ -647,6 +650,15 @@
         "allowEmptyValue": true,
         "schema": {
           "type": "boolean"
+        }
+      },
+      "focusRegion": {
+        "name": "focus",
+        "in": "query",
+        "description": "Focus the chart on the given region, i.e., filter",
+        "required": false,
+        "schema": {
+          "type": "string"
         }
       },
       "highlightRegion": {

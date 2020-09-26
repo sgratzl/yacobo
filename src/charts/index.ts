@@ -9,4 +9,5 @@ export interface IVegaOptions {
   ctx: IRequestContext;
   forImage: boolean;
   highlight?: string;
+  focus?: string;
 }

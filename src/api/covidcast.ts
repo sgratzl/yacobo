@@ -104,7 +104,7 @@ export function buildCovidCastURL(
   return url;
 }
 
-function timeRange(range: Interval | Date[]) {
+export function timeRange(range: Interval | Date[]) {
   if (Array.isArray(range)) {
     return range;
   }
@@ -113,12 +113,7 @@ function timeRange(range: Interval | Date[]) {
 
 const MAX_RESULTS = 3650;
 
-export function determineBatches(range: Interval, level: 'state' | 'county'): ({ start: Date; end: Date } | Date)[] {
-  // determine which elements can be combined
-  if (level === 'county') {
-    // need each day since we have around 3000 and max results is 3.6k
-    return timeRange(range);
-  }
+export function determineStateBatches(range: Interval): ({ start: Date; end: Date } | Date)[] {
   const pageSize = Math.floor(MAX_RESULTS / 60);
   // can batch multiple dates
   const batches: { start: Date; end: Date }[] = [];

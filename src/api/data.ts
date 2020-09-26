@@ -1,8 +1,8 @@
 import { formatAPIDate } from '@/common';
 import { regionDateSummaryDates } from '@/common/helpers';
 import { parseDates } from '@/common/parseDates';
-import { extractDateRange, IDateRange } from '@/model';
-import { compareDesc } from 'date-fns';
+import { extractDateRange, IDateRange, isStateRegion } from '@/model';
+import { compareDesc, min, max } from 'date-fns';
 import {
   hasMeta,
   IDateValue,
@@ -20,8 +20,9 @@ import {
   asRegionDateValue,
   asRegionValue,
   buildCovidCastURL,
-  determineBatches,
+  determineStateBatches,
   fetchCovidMeta,
+  timeRange,
 } from './covidcast';
 import fetchCached, { fetchJSON } from './fetchCached';
 import type { IRequestContext } from './middleware';
@@ -41,13 +42,8 @@ export function fetchAllRegions(
   });
 }
 
-export function fetchAllRegionsHistory(
-  ctx: IRequestContext,
-  signal: ISignal,
-  range: Interval
-): Promise<IRegionDateValue[]> {
-  // fetch in batches
-  const batches = determineBatches(range, 'state');
+function fetchAllStatesHistory(ctx: IRequestContext, signal: ISignal, range: Interval): Promise<IRegionDateValue[]> {
+  const batches = determineStateBatches(range);
   return Promise.all(
     batches.map((batch) => {
       const b = buildCovidCastURL(signal, 'state', batch, ['geo_value', 'time_value']);
@@ -56,6 +52,40 @@ export function fetchAllRegionsHistory(
         process: asRegionDateValue,
         parse: parseDates(['date']),
       });
+    })
+  ).then((r) => r.flat());
+}
+
+export async function fetchAllRegionsHistory(
+  ctx: IRequestContext,
+  signal: ISignal,
+  range: Interval,
+  focus?: IRegion
+): Promise<IRegionDateValue[]> {
+  const state = isCountyRegion(focus) ? focus.state : isStateRegion(focus) ? focus : undefined;
+  if (!state) {
+    return fetchAllStatesHistory(ctx, signal, range);
+  }
+
+  const counties = new Set(state.counties.map((d) => d.id));
+  const meta = await fetchSignalMeta(ctx, signal);
+  // limit range to the one where we have data
+  const dates = timeRange({
+    start: max([range.start, meta.minTime]),
+    end: min([range.end, meta.maxTime]),
+  });
+  return Promise.all(
+    dates.map(async (date) => {
+      const data = await fetchAllRegions(ctx, signal, date, 'county');
+      return data
+        .filter((d) => counties.has(d.region))
+        .map(
+          (d) =>
+            ({
+              ...d,
+              date,
+            } as IRegionDateValue)
+        );
     })
   ).then((r) => r.flat());
 }

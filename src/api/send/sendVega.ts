@@ -3,7 +3,7 @@ import type { TopLevelSpec } from 'vega-lite';
 import { CustomHTTPError } from '../../common/error';
 import type { IVegaOptions } from '@/charts';
 import { setCommonHeaders } from './setCommonHeaders';
-import { ICommonOptions, Formats } from '../format';
+import { ICommonOptions, Formats, ILoadOptions } from '../format';
 import type { View } from 'vega';
 import type { Canvas } from 'canvas';
 import type { IRequestContext } from '../middleware';
@@ -33,9 +33,9 @@ export default async function sendVega<T>(
   format: Formats,
   data: () => Promise<T[]>,
   vega: IVegaFactory<T> | IMultiVegaFactory<T>,
-  options: ICommonOptions & { skeleton?: boolean }
+  options: ICommonOptions & { skeleton?: boolean } & ILoadOptions
 ) {
-  const vegaOptions = extractVegaOptions(req, ctx, format);
+  const vegaOptions = extractVegaOptions(req, ctx, format, options.focus);
   const vegaFactory = pickFactory(req, vega);
   if (format === Formats.vg && vegaOptions.plain) {
     // pure vega without data
@@ -135,13 +135,19 @@ async function sendVegaSVG(
   }
 }
 
-export function extractVegaOptions(req: NextApiRequest, ctx: IRequestContext, format: Formats): IVegaOptions {
+export function extractVegaOptions(
+  req: NextApiRequest,
+  ctx: IRequestContext,
+  format: Formats,
+  focus?: string
+): IVegaOptions {
   return {
     scaleFactor: Number.parseInt((req.query.scale as string) ?? '1', 10),
     plain: req.query.plain != null,
     devicePixelRatio: Number.parseInt((req.query.dpr as string) ?? '1', 10),
     forImage: format !== Formats.vg,
     highlight: req.query.highlight as string,
+    focus,
     ctx,
   };
 }
