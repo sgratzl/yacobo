@@ -38,8 +38,10 @@ export function HeatMapDescription({ signal, focus }: { signal?: ISignal; focus?
 
 function guessAspectRatio(state: IStateRegion) {
   const counties = state.counties.length;
-  // TODO
-  return '60%';
+  if (counties * 8 > 500) {
+    return '60%';
+  }
+  return `${Math.min(60, Math.round(100 * ((counties * 1.5) / 100)))}%`;
 }
 
 export function HeatMapImage({

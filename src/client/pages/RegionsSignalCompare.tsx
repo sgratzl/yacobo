@@ -3,7 +3,7 @@ import { RegionsSelect } from '../components/RegionSelect';
 import { SignalSelect } from '../components/SignalSelect';
 import type { ISignal } from '@/model/signals';
 import { Divider, Typography } from 'antd';
-import type { IRegion } from '../../model';
+import { IRegion, IStateRegion, toState } from '../../model';
 import ContentLayout from '../components/ContentLayout';
 import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
@@ -12,9 +12,17 @@ import { DateMultiTable } from '../components/DataTables';
 import { LineMultiDescription, LineMultiImage } from '../vega/LineMultiImage';
 import { Comparing } from '../components/Comparing';
 import { fullUrl } from '@/client/hooks';
+import HeatMapSection from '../sections/HeatMapSection';
 
 export function RegionsSignalCompare({ regions, signal }: { regions: IRegion[]; signal?: ISignal }) {
   const regionNames = regions.map((d) => d.name).join(' vs. ');
+  const states: IStateRegion[] = [];
+  for (const region of regions) {
+    const state = toState(region);
+    if (state && !states.includes(state)) {
+      states.push(state);
+    }
+  }
   return (
     <BaseLayout
       pageTitle={`${regionNames} - ${signal?.name}`}
@@ -32,7 +40,7 @@ export function RegionsSignalCompare({ regions, signal }: { regions: IRegion[]; 
       subTitle={
         <SignalSelect
           signal={signal}
-          path="compare/[regions]/[signal]"
+          path="/compare/[regions]/[signal]"
           clearPath="/compare/[regions]"
           query={{ regions }}
         />
@@ -71,6 +79,15 @@ export function RegionsSignalCompare({ regions, signal }: { regions: IRegion[]; 
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />
+        {states.map((region, i) => (
+          <HeatMapSection
+            key={region.id}
+            region={region}
+            signal={signal}
+            showState
+            description={i === states.length - 1}
+          />
+        ))}
         <Typography.Title level={2}>Data Table</Typography.Title>
         <DateMultiTable signal={signal} regions={regions} />
       </ContentLayout>

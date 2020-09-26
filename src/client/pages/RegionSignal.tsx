@@ -2,7 +2,7 @@ import BaseLayout from '../components/BaseLayout';
 import { RegionSelect } from '../components/RegionSelect';
 import { SignalSelect } from '../components/SignalSelect';
 import { Divider, Typography } from 'antd';
-import { ISignal, IRegion, isCountyRegion, toState } from '@/model';
+import { ISignal, IRegion, isCountyRegion } from '@/model';
 import ContentLayout from '../components/ContentLayout';
 import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
@@ -11,11 +11,9 @@ import { DateTable } from '../components/DataTables';
 import { LineDescription, LineImage } from '../vega/LineImage';
 import { fullUrl } from '@/client/hooks';
 import { CompareWithButton } from '../components/CompareIcon';
-import { HeatMapDescription, HeatMapImage } from '../vega/HeatmapImage';
-import ParagraphTitle from '../components/ParagraphTitle';
+import HeatMapSection from '../sections/HeatMapSection';
 
 export function RegionSignal({ region, signal }: { region?: IRegion; signal?: ISignal }) {
-  const focus = toState(region);
   return (
     <BaseLayout
       pageTitle={`${region?.name} - ${signal?.name}`}
@@ -73,28 +71,7 @@ export function RegionSignal({ region, signal }: { region?: IRegion; signal?: IS
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />
-        {focus && (
-          <>
-            <ParagraphTitle
-              level={2}
-              extra={[
-                signal && (
-                  <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 'r+s+sh', region: focus, signal }} />
-                ),
-                <DownloadMenu
-                  key="download"
-                  path={fullUrl('/signal/[signal]', { signal })}
-                  params={`&focus=${focus.id}`}
-                />,
-              ]}
-            >
-              Counties of {focus.name} over Time
-            </ParagraphTitle>
-            <HeatMapImage scale={2} interactive region={region} signal={signal} focus={focus} />
-            <HeatMapDescription signal={signal} focus={focus} />
-            <Divider />
-          </>
-        )}
+        <HeatMapSection signal={signal} region={region} />
         <Typography.Title level={2}>Data Table</Typography.Title>
         <DateTable signal={signal} region={region} />
       </ContentLayout>

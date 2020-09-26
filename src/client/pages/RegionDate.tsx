@@ -2,7 +2,7 @@ import BaseLayout from '../components/BaseLayout';
 import { DateSelect } from '../components/DateSelect';
 import { RegionSelect } from '../components/RegionSelect';
 import { formatAPIDate, formatLocal } from '@/common';
-import { IRegion, isCountyRegion, refSignal, signals } from '@/model';
+import { IRegion, isCountyRegion, refSignal, signals, toState } from '@/model';
 import GridColumn from '../components/GridColumn';
 import { Divider, Row, Typography } from 'antd';
 import RegionSignalWidget from '../widgets/RegionSignalWidget';
@@ -13,9 +13,14 @@ import RegionSignalHistoryWidget from '../widgets/RegionSignalHistoryWidget';
 import { fullUrl } from '@/client/hooks';
 import type { IDateRange } from '@/model';
 import { CompareWithButton } from '../components/CompareIcon';
+import { HeatMapDescription, HeatMapImage } from '../vega/HeatmapImage';
+import ParagraphTitle from '../components/ParagraphTitle';
+import { FavoriteToggle } from '../components/FavoriteToggle';
+import { DownloadMenu } from '../components/DownloadMenu';
 
 export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?: Date; dynamic?: IDateRange }) {
   const apiDate = formatAPIDate(date);
+  const focus = toState(region);
   return (
     <BaseLayout
       pageTitle={`${region?.name} as of ${formatLocal(date)}`}
@@ -63,10 +68,48 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
         <Typography.Title>{region?.name}</Typography.Title>
         {dynamic && (
           <>
-            <Typography.Title level={2}>History of {refSignal.name}</Typography.Title>
+            <ParagraphTitle
+              level={2}
+              extra={[
+                region && (
+                  <FavoriteToggle
+                    key="bookmark"
+                    warning={false}
+                    favorite={{ type: 'r+s+h', region, signal: refSignal }}
+                  />
+                ),
+                <DownloadMenu
+                  key="download"
+                  path={fullUrl('/region/[region]/[signal]', { region, signal: refSignal })}
+                />,
+              ]}
+            >
+              History of {refSignal.name}
+            </ParagraphTitle>
             <LineImage scale={2} interactive region={region} signal={refSignal} date={date} />
-            <Typography.Title level={2}>Chart Description</Typography.Title>
             <LineDescription signal={refSignal} />
+            <Divider />
+            <ParagraphTitle
+              level={2}
+              extra={[
+                focus && (
+                  <FavoriteToggle
+                    key="bookmark"
+                    warning={false}
+                    favorite={{ type: 'r+s+sh', region: focus, signal: refSignal }}
+                  />
+                ),
+                <DownloadMenu
+                  key="download"
+                  path={fullUrl('/signal/[signal]', { signal: refSignal })}
+                  params={`&focus=${focus?.id}`}
+                />,
+              ]}
+            >
+              Counties of {focus?.name} over Time
+            </ParagraphTitle>
+            <HeatMapImage scale={2} interactive region={region} signal={refSignal} focus={focus} />
+            <HeatMapDescription signal={refSignal} focus={focus} />
             <Divider />
             <Typography.Title level={2}>All Signals</Typography.Title>
           </>

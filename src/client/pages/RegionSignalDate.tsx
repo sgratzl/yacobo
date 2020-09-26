@@ -3,23 +3,21 @@ import { DateSignalSelect } from '../components/DateSelect';
 import { RegionSelect } from '../components/RegionSelect';
 import { SignalSelect } from '../components/SignalSelect';
 import { formatAPIDate, formatLocal } from '@/common';
-import { ITriple, toState } from '@/model';
+import type { ITriple } from '@/model';
 import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../components/RegionSignalKeyFacts';
 import { Divider, Typography } from 'antd';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
-import { MapDescription, MapImage } from '../vega/MapImage';
-import { LineDescription, LineImage } from '../vega/LineImage';
 import ContentLayout from '../components/ContentLayout';
 import { fullUrl } from '@/client/hooks';
 import { CompareWithButton } from '../components/CompareIcon';
-import ParagraphTitle from '../components/ParagraphTitle';
-import { HeatMapDescription, HeatMapImage } from '../vega/HeatmapImage';
+import HeatMapSection from '../sections/HeatMapSection';
+import HistorySection from '../sections/HistorySection';
+import MapSection from '../sections/MapSection';
 
 export function RegionSignalDate({ region, signal, date }: ITriple) {
   const apiDate = formatAPIDate(date);
-  const focus = toState(region);
   return (
     <BaseLayout
       pageTitle={`${region?.name} - ${signal?.name} as of ${formatLocal(date)}`}
@@ -85,53 +83,9 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />
-        <ParagraphTitle
-          level={2}
-          extra={[
-            signal && <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 's', signal }} />,
-            <DownloadMenu key="download" path={fullUrl('/signal/[signal]/[date]', { signal, date })} />,
-          ]}
-        >
-          Overview
-        </ParagraphTitle>
-        <MapImage scale={2} interactive region={region} signal={signal} date={date} />
-        <MapDescription signal={signal} date={date} />
-        <Divider />
-        <ParagraphTitle
-          level={2}
-          extra={[
-            region && signal && (
-              <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 'r+s+h', region, signal }} />
-            ),
-            <DownloadMenu key="download" path={fullUrl('/region/[region]/[signal]', { region, signal })} />,
-          ]}
-        >
-          History
-        </ParagraphTitle>
-        <LineImage scale={2} interactive region={region} signal={signal} date={date} />
-        <LineDescription signal={signal} region={region} />
-        {focus && (
-          <>
-            <ParagraphTitle
-              level={2}
-              extra={[
-                signal && (
-                  <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 'r+s+sh', region: focus, signal }} />
-                ),
-                <DownloadMenu
-                  key="download"
-                  path={fullUrl('/signal/[signal]', { signal })}
-                  params={`&focus=${focus.id}`}
-                />,
-              ]}
-            >
-              Counties of {focus.name} over Time
-            </ParagraphTitle>
-            <HeatMapImage scale={2} interactive region={region} signal={signal} focus={focus} />
-            <HeatMapDescription signal={signal} focus={focus} />
-            <Divider />
-          </>
-        )}
+        <MapSection signal={signal} region={region} date={date} />
+        <HistorySection signal={signal} region={region} date={date} />
+        <HeatMapSection signal={signal} region={region} date={date} />
       </ContentLayout>
     </BaseLayout>
   );
