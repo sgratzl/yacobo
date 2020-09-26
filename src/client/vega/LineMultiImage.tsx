@@ -13,12 +13,28 @@ import useSWR from 'swr';
 import type { TopLevelSpec } from 'vega-lite';
 import { valueTooltipContent } from './VegaTooltip';
 import { useRouterWrapper } from '@/client/hooks';
+import { Typography } from 'antd';
+import { CompareDescription, ValueLegend } from './descriptions';
 
 interface IParams {
   signal?: ISignal;
   date?: Date;
   regions: IRegion[];
   scale?: number;
+}
+
+export function LineMultiDescription({ signal, regions }: { signal?: ISignal; regions: IRegion[] }) {
+  return (
+    <>
+      <Typography.Paragraph>
+        {`The chart shows the history of ${signal?.name} of multiple locations in form of a line chart.
+        The horizontal x axis shows the date while the vertical y axis shows the value of the signal at this specific point in time.
+        `}
+      </Typography.Paragraph>
+      <CompareDescription regions={regions} />
+      <ValueLegend signal={signal} vertical />
+    </>
+  );
 }
 
 export function LineMultiImage({
@@ -33,7 +49,7 @@ export function LineMultiImage({
   const valid = signal != null && regions.length > 0;
   const src = valid
     ? addParam(
-        `/api/compare/${formatAPIRegions(regions)}/${signal?.id}.jpg`,
+        `/api/compare/${formatAPIRegions(regions)}/${signal?.id}.jpg?plain`,
         'highlight',
         date ? formatAPIDate(date) : undefined
       )
@@ -75,7 +91,7 @@ function regionDateValueTooltip(datum: { region: string; date: number }) {
 function InteractiveMultiLineVega({ signal, regions, scale, date }: IParams) {
   const { data, error } = useDateMultiRegionValue(regions, signal);
   const specUrl = addParam(
-    addParam(`/api/compare/${formatAPIRegions(regions)}/${signal?.id}.vg`, 'scale', scale),
+    addParam(`/api/compare/${formatAPIRegions(regions)}/${signal?.id}.vg?plain`, 'scale', scale),
     'highlight',
     date ? formatAPIDate(date) : undefined
   )!;

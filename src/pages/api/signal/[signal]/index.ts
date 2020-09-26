@@ -1,13 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { IRequestContext, withMiddleware } from '@/api/middleware';
-import { redirectWithFormat } from '@/api/redirect';
-import { fetchSignalMeta } from '@/api/data';
+import { fetchAllRegionsHistory } from '@/api/data';
 import { extractSignal } from '@/common/validator';
-import { extractFormat } from '@/api/format';
-import { formatAPIDate } from '@/common';
+import { extractFormat, sendFormat } from '@/api/format';
+import { historyRange } from '@/model';
+import { createHeatMap } from '@/charts/heatmap';
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
-  const { param: signal } = extractFormat(req, 'signal', extractSignal);
-  const d = await fetchSignalMeta(ctx, signal);
-  return redirectWithFormat(req, res, formatAPIDate(d.maxTime));
+  const { param: signal, format } = extractFormat(req, 'signal', extractSignal);
+
+  const data = () => fetchAllRegionsHistory(ctx, signal, historyRange());
+
+  const vegaFactory = createHeatMap.bind(null, signal);
+  return sendFormat(req, res, ctx, format, data, {
+    title: signal.id,
+    vega: vegaFactory,
+    constantFields: { signal: signal.id },
+  });
 });

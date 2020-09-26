@@ -1,14 +1,14 @@
-import type { IVegaOptions } from '@/charts';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { TopLevelSpec } from 'vega-lite';
 import { CustomHTTPError } from '../common/error';
 import type { IRouterLike } from '../common/validator';
-import type { IRegion, ISignal } from '../model';
+import type { ITripleValue } from '../model';
 import type { IRequestContext } from './middleware';
 import type { CacheDuration } from './model';
+import { injectCustomDetails, injectDetails } from './send/injectDetails';
 import sendCSV from './send/sendCSV';
 import sendJSON from './send/sendJSON';
-import sendVega from './send/sendVega';
+import sendSQL from './send/sendSQL';
+import sendVega, { IMultiVegaFactory, IVegaFactory } from './send/sendVega';
 
 export enum Formats {
   png = 'png',
@@ -18,6 +18,7 @@ export enum Formats {
   vg = 'vg',
   jpg = 'jpg',
   pdf = 'pdf',
+  sql = 'sql',
 }
 
 export function extractFormat<S extends string, V>(
@@ -53,31 +54,72 @@ export function extractFormat<S extends string, V>(
 export interface ICommonOptions {
   title: string;
   cache?: CacheDuration;
-  signals?: (signal: string) => ISignal | undefined;
-  regions?: (region: string) => IRegion;
+  constantFields: { date?: Date; signal?: string; region?: string };
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export async function sendFormat<T extends object>(
+export async function sendFormat<T extends ITripleValue>(
   req: NextApiRequest,
   res: NextApiResponse,
   ctx: IRequestContext,
   format: Formats,
-  data: () => Promise<T[]>,
+  loadData: () => Promise<T[]>,
   options: ICommonOptions & {
-    headers: (keyof T)[];
-    vega?: (data: T[] | undefined, options: IVegaOptions) => TopLevelSpec | Promise<TopLevelSpec>;
+    vega?: IVegaFactory<T> | IMultiVegaFactory<T>;
   }
 ) {
-  if (format === Formats.csv) {
-    return sendCSV(req, res, await data(), options.headers, options);
-  }
-  if (format === Formats.json) {
-    return sendJSON(req, res, await data(), options);
+  if (format === Formats.csv || format === Formats.json || format === Formats.sql) {
+    let data = await loadData();
+    let headers: (keyof T)[] = ['value', 'stderr'];
+
+    if (req.query.plain == null && format !== Formats.sql) {
+      // details
+      const r = injectDetails(data, options.constantFields);
+      data = r.data;
+      headers = r.headers as (keyof T)[];
+    } else {
+      const dynamicFields = (['region', 'signal', 'date'] as const).filter((d) => options.constantFields[d] != null);
+      headers = [dynamicFields, headers].flat();
+    }
+    if (format === Formats.csv) {
+      return sendCSV(req, res, data, headers as (keyof T)[], options);
+    } else if (format === Formats.sql) {
+      return sendSQL(req, res, data, options);
+    }
+    return sendJSON(req, res, data, options);
   }
   // vega like
   if (!options.vega) {
     return res.status(404).json({ message: 'image formats not available' });
   }
-  return sendVega(req, res, ctx, format, data, options.vega, options);
+  return sendVega(req, res, ctx, format, loadData, options.vega, options);
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export async function sendCustomFormat<T extends object>(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  format: Formats,
+  loadData: () => Promise<T[]>,
+  options: ICommonOptions & {
+    headers: (keyof T)[];
+  }
+) {
+  if (format === Formats.csv || format === Formats.json) {
+    let data = await loadData();
+    let headers = options.headers;
+
+    if (req.query.plain == null) {
+      // details
+      const r = injectCustomDetails(data, options.headers);
+      data = r.data;
+      headers = r.headers as (keyof T)[];
+    }
+    if (format === Formats.csv) {
+      return sendCSV(req, res, data, headers as (keyof T)[], options);
+    }
+    return sendJSON(req, res, data, options);
+  }
+  // vega like
+  return res.status(404).json({ message: 'image formats not available' });
 }

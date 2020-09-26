@@ -12,6 +12,7 @@ export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse) 
     {
       title: 'openapi',
       cache: CacheDuration.long,
+      constantFields: {},
     },
     'json'
   );
@@ -68,7 +69,7 @@ function generateFormatPath(
   details = true
 ) {
   const g = value.get;
-  const cleaned = (g.parameters ?? []).filter((d) => details || !d.$ref.endsWith('details'));
+  const cleaned = (g.parameters ?? []).filter((d) => details || d.$ref.endsWith('plain'));
   paths[`${key}.${format}`] = {
     get: {
       summary: `${g.summary} as ${format.toUpperCase()} file`,
@@ -101,6 +102,7 @@ const imageParams = [
 function generateFormatPaths(paths: Record<string, any>) {
   Object.entries(api.paths).forEach(([key, value]) => {
     generateFormatPath(paths, 'csv', key, value);
+    generateFormatPath(paths, 'sql', key, value);
     // image formats
     if (noImages.includes(key)) {
       return;

@@ -4,9 +4,9 @@ import { RegionSelect } from '../components/RegionSelect';
 import { formatAPIDate, formatLocal } from '@/common';
 import { IRegion, refSignal, signals } from '@/model';
 import GridColumn from '../components/GridColumn';
-import { Row, Typography } from 'antd';
+import { Divider, Row, Typography } from 'antd';
 import RegionSignalWidget from '../widgets/RegionSignalWidget';
-import { LineImage } from '../vega/LineImage';
+import { LineDescription, LineImage } from '../vega/LineImage';
 import ContentLayout from '../components/ContentLayout';
 import { Fragment } from 'react';
 import RegionSignalHistoryWidget from '../widgets/RegionSignalHistoryWidget';
@@ -56,6 +56,9 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
           <>
             <Typography.Title level={2}>History of {refSignal.name}</Typography.Title>
             <LineImage scale={2} interactive region={region} signal={refSignal} date={date} />
+            <Typography.Title level={2}>Chart Description</Typography.Title>
+            <LineDescription signal={refSignal} />
+            <Divider />
             <Typography.Title level={2}>All Signals</Typography.Title>
           </>
         )}
@@ -63,10 +66,10 @@ export function RegionDate({ date, region, dynamic }: { region?: IRegion; date?:
           {signals.map((s) => (
             <Fragment key={s.id}>
               <GridColumn>
-                <RegionSignalWidget region={region} signal={s} date={date} focus="signal" />
+                {region && <RegionSignalWidget region={region} signal={s} date={date} focus="signal" />}
               </GridColumn>
               <GridColumn>
-                <RegionSignalHistoryWidget region={region} signal={s} date={date} focus="signal" />
+                {region && <RegionSignalHistoryWidget region={region} signal={s} date={date} focus="signal" />}
               </GridColumn>
             </Fragment>
           ))}

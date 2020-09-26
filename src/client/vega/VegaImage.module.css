@@ -9,6 +9,10 @@
   padding-top: 50%; /* 1:2 aspect ratio */
 }
 
+.imgHeatMap {
+  padding-top: 70%; /* heatmap aspect ratio */
+}
+
 .abs {
   position: absolute !important;
   left: 0;
@@ -77,6 +81,13 @@
 }
 .histogramOverlay2 {
   background-image: url(./skeletons/histogram2.png);
+}
+
+.heatMapOverlay {
+  background-image: url(./skeletons/heatmap.png);
+}
+.heatMapOverlay2 {
+  background-image: url(./skeletons/heatmap2.png);
 }
 
 .tooltip {

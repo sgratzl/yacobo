@@ -5,7 +5,7 @@ import type { SchemeParams } from 'vega-lite/build/src/scale';
 import type { LayerSpec, TopLevel, UnitSpec } from 'vega-lite/build/src/spec';
 import { font, IVegaOptions } from '.';
 import { fetchSignalMeta } from '../api/data';
-import { getValueDomain, HIGHLIGHT_COLOR, IRegionValue, ISignal, ZERO_COLOR, MAP_STROKE } from '../model';
+import { getValueDomain, HIGHLIGHT_COLOR, IRegionValue, ISignal, ZERO_COLOR, MAP_STROKE, axisTitle } from '../model';
 
 const MAP_CHART_WIDTH = 500;
 const MAP_CHART_HEIGHT = 300;
@@ -19,7 +19,7 @@ function createBaseMap(data: { title: string; description: string }, options: IV
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     width: MAP_CHART_WIDTH * options.scaleFactor,
     height: MAP_CHART_HEIGHT * options.scaleFactor,
-    ...(options.details ? meta : {}),
+    ...(!options.plain ? meta : {}),
     projection: {
       type: 'albersUsa',
     },
@@ -39,7 +39,7 @@ export const COUNTIES_URL: UrlData = {
 };
 
 async function chooseDataSource(options: IVegaOptions) {
-  if (options.details || !options.forImage) {
+  if (!options.plain || !options.forImage) {
     return COUNTIES_URL;
   }
   const values = (await import('us-atlas/counties-10m.json')).default;
@@ -208,7 +208,7 @@ export async function createMap(
   const data = {
     dataSource: await chooseDataSource(options),
     maxValue: getValueDomain(signal, meta)[1],
-    valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
+    valueTitle: axisTitle(signal),
     colorScheme: signal.colorScheme,
     title: `${signal.name} as of ${formatLocal(date)}`,
     description: signal.description(date),

@@ -49,10 +49,8 @@ export interface ISignalDetails {
 
 export interface ISignalWithDetailsValue extends ISignalValue, ISignalDetails {}
 
-export interface IEpiDataRow {
-  signal: string;
-  geo_value: string;
-  time_value: number;
-  value: number;
-  stderr: number;
+export interface ITripleValue extends IValue {
+  date?: Date;
+  signal?: string;
+  region?: string;
 }

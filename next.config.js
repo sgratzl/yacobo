@@ -7,6 +7,7 @@ module.exports = {
   env: {
     NEXT_PUBLIC_VERSION: pkg.version,
     NEXT_PUBLIC_BASE_URL: process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'http://localhost:3000',
+    COVIDCAST_ENDPOINT: process.env.COVIDCAST_ENDPOINT || 'https://api.covidcast.cmu.edu/epidata/api.php',
   },
   async redirects() {
     return [

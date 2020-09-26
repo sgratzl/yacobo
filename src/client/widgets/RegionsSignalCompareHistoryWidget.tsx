@@ -1,16 +1,13 @@
-import EyeOutlined from '@ant-design/icons/EyeOutlined';
-import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
-import { Button, Card, Tooltip } from 'antd';
-import { useCallback } from 'react';
+import { fullUrl } from '@/client/hooks';
 import type { IRegion, ISignal } from '@/model';
+import { Card } from 'antd';
+import { CompareLegend } from '../components/CompareIcon';
 import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
-import { showInfoBox } from '../components/SignalInfoBox';
+import { DetailsLink } from '../components/LinkWrapper';
+import { ShowInfo } from '../components/SignalInfoBox';
+import { LineMultiDescription, LineMultiImage } from '../vega/LineMultiImage';
 import styles from './Section.module.css';
-import { LineMultiImage } from '../vega/LineMultiImage';
-import { CompareLegend } from '../components/CompareIcon';
-import { fullUrl } from '@/client/hooks';
-import LinkWrapper from '../components/LinkWrapper';
 
 export default function RegionsSignalCompareHistoryWidget({
   regions,
@@ -20,17 +17,11 @@ export default function RegionsSignalCompareHistoryWidget({
   legend = true,
 }: {
   regions: IRegion[];
-  signal?: ISignal;
+  signal: ISignal;
   date?: Date;
   focus: 'region' | 'signal' | 'both';
   legend?: boolean;
 }) {
-  const showInfo = useCallback(() => {
-    if (signal) {
-      showInfoBox(signal, date);
-    }
-  }, [signal, date]);
-
   const title =
     focus === 'both'
       ? `${regions.map((d) => d.name).join(' vs. ')} - ${signal?.name}`
@@ -48,16 +39,15 @@ export default function RegionsSignalCompareHistoryWidget({
         </>
       }
       actions={[
-        <LinkWrapper key="d" path="/compare/[regions]/[signal]" query={{ regions, signal }}>
-          <Tooltip title="show details">
-            <Button type="default" shape="circle" icon={<EyeOutlined />} />
-          </Tooltip>
-        </LinkWrapper>,
-        <FavoriteToggle key="b" signal={signal} region={regions} history />,
+        <DetailsLink key="d" path="/compare/[regions]/[signal]" query={{ regions, signal }} />,
+        <FavoriteToggle key="b" favorite={{ type: 'rs+s+h', signal, regions }} />,
         <DownloadMenu key="d" path={fullUrl('/compare/[regions]/[signal]', { regions, signal })} />,
-        <Tooltip key="i" title="show signal information">
-          <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />
-        </Tooltip>,
+        <ShowInfo
+          key="i"
+          signal={signal}
+          date={date}
+          chart={<LineMultiDescription signal={signal} regions={regions} />}
+        />,
       ]}
     >
       <Card.Meta

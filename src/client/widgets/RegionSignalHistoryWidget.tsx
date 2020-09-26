@@ -1,25 +1,23 @@
-import EyeOutlined from '@ant-design/icons/EyeOutlined';
-import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
-import { Button, Card, Tooltip } from 'antd';
-import { useCallback } from 'react';
+import { fullUrl } from '@/client/hooks';
+import type { IRegion, ISignal } from '@/model';
+import { Card } from 'antd';
+import { CompareIcon, CompareWithButton } from '../components/CompareIcon';
 import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
-import { showInfoBox } from '../components/SignalInfoBox';
-import { LineImage } from '../vega/LineImage';
-import styles from './Section.module.css';
+import { DetailsLink } from '../components/LinkWrapper';
 import { RegionSignalKeyFacts } from '../components/RegionSignalKeyFacts';
-import { fullUrl } from '@/client/hooks';
-import LinkWrapper from '../components/LinkWrapper';
-import { CompareIcon, CompareWithButton } from '../components/CompareIcon';
+import { ShowInfo } from '../components/SignalInfoBox';
+import { LineDescription, LineImage } from '../vega/LineImage';
 import type { IWidgetProps } from './interfaces';
+import styles from './Section.module.css';
 
-export default function RegionSignalHistoryWidget({ region, signal, date, focus = 'both', compare }: IWidgetProps) {
-  const showInfo = useCallback(() => {
-    if (signal) {
-      showInfoBox(signal, date);
-    }
-  }, [signal, date]);
-
+export default function RegionSignalHistoryWidget({
+  region,
+  signal,
+  date,
+  focus = 'both',
+  compare,
+}: IWidgetProps & { signal: ISignal; region: IRegion }) {
   const title =
     focus === 'both' ? `${region?.name} - ${signal?.name}` : focus === 'region' ? region?.name : signal?.name;
 
@@ -33,17 +31,11 @@ export default function RegionSignalHistoryWidget({ region, signal, date, focus 
         </>
       }
       actions={[
-        <LinkWrapper key="d" path="/region/[region]/[signal]/" query={{ region, signal }}>
-          <Tooltip title="show details">
-            <Button type="default" shape="circle" icon={<EyeOutlined />} />
-          </Tooltip>
-        </LinkWrapper>,
+        <DetailsLink key="d" path="/region/[region]/[signal]/" query={{ region, signal }} />,
         compare == null && <CompareWithButton region={region} date={date} signal={signal} />,
-        <FavoriteToggle key="b" signal={signal} region={region} history />,
+        <FavoriteToggle key="b" favorite={{ type: 'r+s+h', signal, region }} />,
         <DownloadMenu key="d" path={fullUrl('/region/[region]/[signal]', { region, signal })} />,
-        <Tooltip key="i" title="show signal information">
-          <Button type="default" shape="circle" onClick={showInfo} icon={<QuestionOutlined />} />
-        </Tooltip>,
+        <ShowInfo key="i" signal={signal} date={date} chart={<LineDescription signal={signal} region={region} />} />,
       ].filter(Boolean)}
     >
       <Card.Meta

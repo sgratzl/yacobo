@@ -8,3 +8,6 @@ export const HIGHLIGHT_LIGHT_COLOR = '#fdbf6f';
 
 export const COMPARE_LIGHT_COLORS = ['#a6cee3', '#b2df8a', '#fb9a99', '#cab2d6'];
 export const COMPARE_COLORS = ['#1f78b4', '#33a02c', '#e31a1c', '#6a3d9a'];
+
+export const HISTOGRAM_BINS = 10;
+export const MAX_BIN_FREQUENCY = 0.5; // 10 bins on average 0.1 max distribution 0.5 should be safe

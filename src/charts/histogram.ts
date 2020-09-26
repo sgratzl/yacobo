@@ -4,8 +4,8 @@ import type { TopLevelSpec } from 'vega-lite';
 import type { SchemeParams } from 'vega-lite/build/src/scale';
 import { font, IVegaOptions } from '.';
 import { fetchMeta } from '../api/data';
-import { HIGHLIGHT_COLOR, ZERO_COLOR } from '../model/constants';
-import { getValueDomain, ISignal } from '../model/signals';
+import { HIGHLIGHT_COLOR, HISTOGRAM_BINS, MAX_BIN_FREQUENCY, ZERO_COLOR } from '../model/constants';
+import { axisTitle, getValueDomain, ISignal } from '../model/signals';
 
 const HISTOGRAM_WIDTH = 400;
 const HISTOGRAM_HEIGHT = 200;
@@ -27,7 +27,7 @@ function createHistogramSpec(
   };
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-    ...(options.details ? meta : {}),
+    ...(!options.plain ? meta : {}),
     width: HISTOGRAM_WIDTH * options.scaleFactor,
     height: HISTOGRAM_HEIGHT * options.scaleFactor,
     data: {
@@ -36,13 +36,18 @@ function createHistogramSpec(
     },
     transform: [
       {
-        filter: "substring(datum.region, 0, -3) !== '000'",
+        filter: "substring(datum.region, 0, -3) !== '000' && datum.value != null",
+      },
+      {
+        calculate: `min(${data.maxValue}, max(0, datum.value))`,
+        as: 'c_value',
       },
       {
         bin: {
           extent: [0, data.maxValue],
+          maxbins: HISTOGRAM_BINS,
         },
-        field: 'value',
+        field: 'c_value',
         as: 'bin_value',
       },
       {
@@ -106,7 +111,7 @@ function createHistogramSpec(
         field: '_percent',
         type: 'quantitative',
         scale: {
-          domain: [0, 0.5], // 10 bins on average 0.1 max distribution 0.5 should be safe
+          domain: [0, MAX_BIN_FREQUENCY],
           clamp: true,
         },
         axis: {
@@ -157,7 +162,7 @@ export async function createHistogramChart(
       values: values ?? [],
       maxValue: getValueDomain(signal, meta)[1],
       colorScheme: signal.colorScheme,
-      valueTitle: `of ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`,
+      valueTitle: axisTitle(signal),
     },
     options
   );

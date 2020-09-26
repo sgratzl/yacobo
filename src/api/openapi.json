@@ -56,7 +56,7 @@
             "$ref": "#/components/parameters/region"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -80,7 +80,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -99,10 +99,10 @@
                         "$ref": "#/components/schemas/Signal"
                       },
                       {
-                        "$ref": "#/components/schemas/SignalDetails"
+                        "$ref": "#/components/schemas/Date"
                       },
                       {
-                        "$ref": "#/components/schemas/Date"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -141,6 +141,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/Date"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -168,7 +171,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -187,10 +190,10 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/RegionDetails"
+                        "$ref": "#/components/schemas/Date"
                       },
                       {
-                        "$ref": "#/components/schemas/Date"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -212,7 +215,7 @@
             "$ref": "#/components/parameters/signal"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -236,7 +239,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -253,9 +256,6 @@
                       },
                       {
                         "$ref": "#/components/schemas/Region"
-                      },
-                      {
-                        "$ref": "#/components/schemas/RegionDetails"
                       },
                       {
                         "$ref": "#/components/schemas/MultiSignal"
@@ -283,7 +283,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -302,7 +302,7 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/RegionDetails"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -327,7 +327,7 @@
             "$ref": "#/components/parameters/signal"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -346,10 +346,10 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/RegionDetails"
+                        "$ref": "#/components/schemas/Date"
                       },
                       {
-                        "$ref": "#/components/schemas/Date"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -363,7 +363,6 @@
         }
       }
     },
-
     "/compare/{regions}/{signal}/{date}": {
       "get": {
         "summary": "returns history of the signal for the given regions",
@@ -378,7 +377,7 @@
             "$ref": "#/components/parameters/date"
           },
           {
-            "$ref": "#/components/parameters/details"
+            "$ref": "#/components/parameters/plain"
           }
         ],
         "responses": {
@@ -397,10 +396,10 @@
                         "$ref": "#/components/schemas/Region"
                       },
                       {
-                        "$ref": "#/components/schemas/RegionDetails"
+                        "$ref": "#/components/schemas/Date"
                       },
                       {
-                        "$ref": "#/components/schemas/Date"
+                        "$ref": "#/components/schemas/Details"
                       }
                     ]
                   }
@@ -462,22 +461,6 @@
         },
         "required": ["region"]
       },
-      "RegionDetails": {
-        "type": "object",
-        "properties": {
-          "regionName": {
-            "type": "string"
-          },
-          "regionPopulation": {
-            "type": "number",
-            "nullable": true
-          },
-          "regionState": {
-            "type": "string"
-          }
-        },
-        "required": ["regionName"]
-      },
       "Signal": {
         "type": "object",
         "properties": {
@@ -486,15 +469,6 @@
           }
         },
         "required": ["signal"]
-      },
-      "SignalDetails": {
-        "type": "object",
-        "properties": {
-          "signalName": {
-            "type": "string"
-          }
-        },
-        "required": ["signalName"]
       },
       "Date": {
         "type": "object",
@@ -505,6 +479,35 @@
           }
         },
         "required": ["date"]
+      },
+      "Details": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "region": {
+            "type": "string"
+          },
+          "regionName": {
+            "type": "string"
+          },
+          "regionPopulation": {
+            "type": "number",
+            "nullable": true
+          },
+          "regionState": {
+            "type": "string"
+          },
+          "signal": {
+            "type": "string"
+          },
+          "signalName": {
+            "type": "string"
+          }
+        },
+        "required": ["date", "region", "regionName", "signal", "signalName"]
       },
       "MultiSignal": {
         "type": "object",
@@ -583,10 +586,27 @@
         "in": "path",
         "description": "The date to query",
         "required": true,
-        "example": "2020-07-02",
+        "examples": {
+          "2020-07-02": {
+            "description": "specific date",
+            "value": "2020-07-02"
+          },
+          "latest": {
+            "description": "latest date",
+            "value": "latest"
+          }
+        },
         "schema": {
-          "type": "string",
-          "format": "date"
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "string",
+              "enum": ["latest", "earliest"]
+            }
+          ]
         }
       },
       "scale": {
@@ -609,20 +629,20 @@
           "minimum": 1
         }
       },
-      "details": {
-        "name": "details",
+      "plain": {
+        "name": "plain",
         "in": "query",
-        "description": "Return more details in the JSON/CSV file",
+        "description": "Return only plain in the JSON/CSV file",
         "required": false,
         "allowEmptyValue": true,
         "schema": {
           "type": "boolean"
         }
       },
-      "detailsVG": {
-        "name": "details",
+      "plainVG": {
+        "name": "plain",
         "in": "query",
-        "description": "Includes data in the VEGA spec file",
+        "description": "No data in the VEGA spec file",
         "required": false,
         "allowEmptyValue": true,
         "schema": {
@@ -677,6 +697,16 @@
         "description": "CSV File",
         "content": {
           "text/csv": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SQL": {
+        "description": "SQL File",
+        "content": {
+          "application/sql": {
             "schema": {
               "type": "string"
             }

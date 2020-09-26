@@ -18,9 +18,19 @@ import {
   useRegionValue,
 } from '../data';
 import { formatAPIDate, formatFixedValue } from '../../common';
-import { getValueScale, ICountyRegion, IDateValue, IRegion, ISignal, ISignalWithMeta, ITriple } from '../../model';
+import {
+  axisTitle,
+  getColorScale,
+  getValueScale,
+  ICountyRegion,
+  IDateValue,
+  IRegion,
+  ISignal,
+  ITriple,
+} from '../../model';
 import { classNames } from '../utils';
 import styles from './DataTables.module.css';
+import colors from './ColorBox.module.css';
 import { CompareIcon } from './CompareIcon';
 import LinkWrapper from './LinkWrapper';
 
@@ -30,29 +40,36 @@ const renderStdErr = (value: number | null) => {
   return <span>{value == null ? '?' : value.toFixed(2)}</span>;
 };
 
-function generateGradient(meta?: ISignalWithMeta, value?: number | null) {
-  if (!meta || value == null) {
-    return undefined;
-  }
-  const scale = getValueScale(meta, meta.meta);
-  const p = Math.round(1000 * scale(value)) / 10;
-  return `linear-gradient(to right, var(--color) ${p}%, transparent ${p}%)`;
-}
-
 function useRenderBarValue(signal?: ISignal) {
   const meta = useFetchSignalMeta(signal);
+  const scale = useMemo(
+    () =>
+      meta
+        ? {
+            value: getValueScale(meta, meta.meta),
+            color: getColorScale(meta, meta.meta),
+          }
+        : undefined,
+    [meta]
+  );
   return useCallback(
     (value?: number | null) => {
-      if (value == null) {
-        return <div className={styles.gradientMissing}>?</div>;
+      if (value == null || !scale) {
+        return <div className={classNames(styles.gradient, colors.color, colors.missing)}>?</div>;
       }
+      const p = Math.round(1000 * scale.value(value)) / 10;
+      const gradient = `linear-gradient(to right, var(--g-color) ${p}%, transparent ${p}%)`;
+      const color = scale.color(value);
       return (
-        <div className={styles.gradient} style={{ background: generateGradient(meta, value) }}>
+        <div
+          className={classNames(colors.color, styles.gradient)}
+          style={{ background: gradient, '--color': color } as any}
+        >
           {formatFixedValue(value)}
         </div>
       );
     },
-    [meta]
+    [scale]
   );
 }
 // export const columns: ColumnsType<ISignalMultiRow> = [
@@ -125,7 +142,7 @@ export default function SignalTable({ signal, date, region }: ITriple) {
         sortDirections={['ascend', 'descend']}
       />
       <Table.Column<IRegionObjectValue>
-        title={signal?.name}
+        title={`${signal?.name ?? 'Signal'} ${axisTitle(signal, 'per')}`}
         dataIndex="value"
         render={renderBarValue}
         align="right"
@@ -180,7 +197,7 @@ export function DateTable({ signal, region, date }: ITriple) {
         sortDirections={['ascend', 'descend']}
       />
       <Table.Column<IDateValue>
-        title={signal?.name ?? 'Signal'}
+        title={`${signal?.name ?? 'Signal'} ${axisTitle(signal, 'per')}`}
         dataIndex="value"
         render={renderBarValue}
         align="right"

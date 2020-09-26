@@ -9,11 +9,12 @@ import { FavoriteToggle } from '../components/FavoriteToggle';
 import { RegionSignalKeyFacts, RegionSignalKeyFactsTable } from '../components/RegionSignalKeyFacts';
 import { Divider, Typography } from 'antd';
 import { SignalInfoBlock } from '../components/SignalInfoBox';
-import { MapImage } from '../vega/MapImage';
-import { LineImage } from '../vega/LineImage';
+import { MapDescription, MapImage } from '../vega/MapImage';
+import { LineDescription, LineImage } from '../vega/LineImage';
 import ContentLayout from '../components/ContentLayout';
 import { fullUrl } from '@/client/hooks';
 import { CompareWithButton } from '../components/CompareIcon';
+import ParagraphTitle from '../components/ParagraphTitle';
 
 export function RegionSignalDate({ region, signal, date }: ITriple) {
   const apiDate = formatAPIDate(date);
@@ -64,7 +65,9 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
       ]}
       extra={[
         <CompareWithButton key="c" region={region} signal={signal} date={date} />,
-        <FavoriteToggle signal={signal} region={region} key="bookmark" warning={false} />,
+        region && signal && (
+          <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 'r+s', region, signal }} />
+        ),
         <DownloadMenu
           key="download"
           img={false}
@@ -80,11 +83,31 @@ export function RegionSignalDate({ region, signal, date }: ITriple) {
         <Divider />
         <SignalInfoBlock signal={signal} />
         <Divider />
-        <Typography.Title level={2}>Overview</Typography.Title>
+        <ParagraphTitle
+          level={2}
+          extra={[
+            signal && <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 's', signal }} />,
+            <DownloadMenu key="download" path={fullUrl('/signal/[signal]/[date]', { signal, date })} />,
+          ]}
+        >
+          Overview
+        </ParagraphTitle>
         <MapImage scale={2} interactive region={region} signal={signal} date={date} />
+        <MapDescription signal={signal} date={date} />
         <Divider />
-        <Typography.Title level={2}>History</Typography.Title>
+        <ParagraphTitle
+          level={2}
+          extra={[
+            region && signal && (
+              <FavoriteToggle key="bookmark" warning={false} favorite={{ type: 'r+s+h', region, signal }} />
+            ),
+            <DownloadMenu key="download" path={fullUrl('/region/[region]/[signal]', { region, signal })} />,
+          ]}
+        >
+          History
+        </ParagraphTitle>
         <LineImage scale={2} interactive region={region} signal={signal} date={date} />
+        <LineDescription signal={signal} region={region} />
       </ContentLayout>
     </BaseLayout>
   );

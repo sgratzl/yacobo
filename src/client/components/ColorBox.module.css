@@ -1,0 +1,23 @@
+.color {
+  --color: #ececec;
+  position: relative;
+  margin-right: 1.4em;
+  white-space: nowrap;
+}
+
+.color::before {
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  right: -1.3em;
+  top: 50%;
+  transform: translate(0, -50%);
+  content: '';
+  background: var(--color);
+  border: 1px solid currentColor;
+}
+
+.missing::before {
+  background: repeating-linear-gradient(-45deg, #c4c4c4 0, white 20%);
+}

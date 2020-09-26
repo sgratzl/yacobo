@@ -5,19 +5,19 @@ import { DownloadMenu } from '../components/DownloadMenu';
 import { FavoriteToggle } from '../components/FavoriteToggle';
 import { DetailsLink } from '../components/LinkWrapper';
 import { ShowInfo } from '../components/SignalInfoBox';
-import { MapDescription, MapImage } from '../vega/MapImage';
+import { HistogramDescription, HistogramImage } from '../vega/HistogramImage';
 import styles from './Section.module.css';
 
-export default function SignalWidget({ signal, date, region }: ITriple & { signal: ISignal }) {
+export default function SignalDistributionWidget({ signal, date, region }: ITriple & { signal: ISignal }) {
   return (
     <Card
       className={styles.card}
-      cover={<MapImage signal={signal} date={date} region={region} />}
+      cover={<HistogramImage signal={signal} date={date} region={region} />}
       actions={[
         <DetailsLink key="d" path="/signal/[signal]/[date]" query={{ signal, date }} />,
-        <FavoriteToggle key="b" favorite={{ type: 's', signal }} />,
+        <FavoriteToggle key="b" favorite={{ type: 's+d', signal }} />,
         <DownloadMenu key="d" path={fullUrl('/signal/[signal]/[date]', { signal, date })} />,
-        <ShowInfo key="i" signal={signal} date={date} chart={<MapDescription signal={signal} date={date} />} />,
+        <ShowInfo key="i" signal={signal} date={date} chart={<HistogramDescription signal={signal} date={date} />} />,
       ]}
     >
       <Card.Meta title={signal.name} description={signal.description(date)} />

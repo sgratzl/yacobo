@@ -1,5 +1,7 @@
 import { formatLocal } from '@/common';
 import type { ReactNode } from 'react';
+import { scheme } from 'vega-scale';
+import { ZERO_COLOR } from './constants';
 
 export interface ISignal {
   id: string;
@@ -34,6 +36,13 @@ export function hasMeta(signal: ISignal): signal is ISignalWithMeta {
 
 function dated(prefix: string, date?: Date) {
   return date ? ` ${prefix} ${formatLocal(date)}` : '';
+}
+
+export function axisTitle(signal?: ISignal, prefix = 'of') {
+  if (!signal) {
+    return `${prefix} 100 people`;
+  }
+  return `${prefix} ${signal.data.maxValue.toLocaleString()} ${signal.data.unit}`;
 }
 
 function JohnHopkins() {
@@ -258,4 +267,13 @@ export function getValueScale(signal: ISignal, meta: ISignalMeta) {
   const domain = getValueDomain(signal, meta);
   const range = domain[1] - domain[0];
   return (value: number) => Math.min(1, Math.max(0, (value - domain[0]) / range));
+}
+
+export function getColorScale(signal: ISignal, meta: ISignalMeta) {
+  const scale = getValueScale(signal, meta);
+  const s = scheme(signal.colorScheme) as (v: number) => string;
+  return (value: number) => {
+    const v = scale(value);
+    return v === 0 ? ZERO_COLOR : s(v);
+  };
 }

@@ -3,6 +3,7 @@ import GithubOutlined from '@ant-design/icons/GithubOutlined';
 import BugOutlined from '@ant-design/icons/BugOutlined';
 import { Button, Tooltip, Typography } from 'antd';
 import ContentLayout from '@/client/components/ContentLayout';
+import { ColorLegend, ValueLegend } from '@/client/vega/descriptions';
 
 export default function OpenAPI() {
   return (
@@ -79,13 +80,13 @@ export default function OpenAPI() {
           <Typography.Link href="https://covidcast.cmu.edu/terms-of-use.html" target="_blank" rel="noopener noreferrer">
             Terms of Use
           </Typography.Link>
-          {' apply. The scales for line charts and maps are using the same logic as the original '}
-          <Typography.Link href="https://covidcast.cmu.edu" target="_blank" rel="noopener noreferrer">
-            COVIDCast Map
-          </Typography.Link>
-          {': '}
-          <code>[0, mean + 3 * stdev]</code>
+          {' apply.'}
         </Typography.Paragraph>
+
+        <Typography.Title level={3}>Value Scales</Typography.Title>
+        <ValueLegend />
+        <Typography.Title level={3}>Color Scales</Typography.Title>
+        <ColorLegend />
 
         <Typography.Title level={2}>License</Typography.Title>
         <Typography.Paragraph>

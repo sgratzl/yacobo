@@ -8,7 +8,7 @@ export enum CacheDuration {
   long = 96 * HOURS,
 }
 
-export function estimateCacheDuration(date: Date) {
+export function estimateCacheDuration(date: Date | number) {
   return differenceInDays(date, startOfToday()) < 5 ? CacheDuration.short : CacheDuration.medium;
 }
 

@@ -11,11 +11,25 @@ import { valueTooltipContent } from './VegaTooltip';
 import { useImageLoading, Image } from './Image';
 import { LoadingImage } from './LoadingImage';
 import { InteractiveWrapper, VegaLoader } from './MakeInteractive';
-import { isFakeRegion, ITriple, regionByID } from '@/model';
+import { isFakeRegion, ISignal, ITriple, regionByID } from '@/model';
 import { useRouterWrapper } from '@/client/hooks';
+import { Typography } from 'antd';
+import { ColorLegend } from './descriptions';
 
 interface IParams extends ITriple {
   scale?: number;
+}
+
+export function MapDescription({ signal, date }: { signal?: ISignal; date?: Date }) {
+  return (
+    <>
+      <Typography.Paragraph>
+        {`The chart shows a choropleth map of US counties for the signal ${signal?.name} as of ${formatLocal(date)}.
+        Each county is colored based on its value of the specific date.`}
+      </Typography.Paragraph>
+      <ColorLegend signal={signal} />
+    </>
+  );
 }
 
 export function MapImage({
@@ -29,7 +43,7 @@ export function MapImage({
 }) {
   const valid = signal != null && isValid(date);
   const src = valid
-    ? addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.jpg`, 'highlight', region?.id)
+    ? addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.jpg?plain`, 'highlight', region?.id)
     : undefined;
   const [loading, error, imgRef] = useImageLoading(src);
 
@@ -74,7 +88,7 @@ function regionValueTooltip(datum: { region: string }) {
 function InteractiveMapVega({ signal, date, region, scale }: IParams) {
   const { data, error } = useRegionValue(signal, date);
   const specUrl = addParam(
-    addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.vg`, 'scale', scale),
+    addParam(`/api/signal/${signal?.id}/${formatAPIDate(date)}.vg?plain`, 'scale', scale),
     'highlight',
     region?.id
   )!;

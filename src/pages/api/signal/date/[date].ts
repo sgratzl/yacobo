@@ -1,10 +1,9 @@
 import { IRequestContext, withMiddleware } from '@/api/middleware';
-import { sendFormat, extractFormat } from '@/api/format';
-import { extractDate } from '@/common/validator';
-import { fetchAllRegions } from '@/api/data';
+import { sendCustomFormat, extractFormat } from '@/api/format';
+import { extractDateOrMagic } from '@/common/validator';
+import { fetchAllRegions, resolveMetaDate } from '@/api/data';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { signals } from '@/model/signals';
-import { regionByID } from '@/model/regions';
 import type { IRegionValue } from '@/model';
 import { formatAPIDate } from '@/common';
 import { estimateCacheDuration } from '@/api/model';
@@ -29,18 +28,18 @@ function merge(all: IRegionValue[][]) {
 }
 
 export default withMiddleware(async (req: NextApiRequest, res: NextApiResponse, ctx: IRequestContext) => {
-  const { param: date, format } = extractFormat(req, 'date', extractDate);
+  const { param: dateOrMagic, format } = extractFormat(req, 'date', extractDateOrMagic);
+  const date = dateOrMagic instanceof Date ? dateOrMagic : await resolveMetaDate(dateOrMagic, ctx);
 
-  const data = () => Promise.all(signals.map((signal) => fetchAllRegions(ctx, signal.data, date))).then(merge);
+  const data = () => Promise.all(signals.map((signal) => fetchAllRegions(ctx, signal, date))).then(merge);
 
-  return sendFormat(req, res, ctx, format, data, {
+  return sendCustomFormat(req, res, format, data, {
     title: `all-${formatAPIDate(date)}`,
     headers: [
       'region',
       ...signals.map((signal) => (signal.data.hasStdErr ? [signal.id, `${signal.id}_stderr`] : signal.id)),
     ].flat(),
-    // vega: () => createMap(signal, data),
     cache: estimateCacheDuration(date),
-    regions: regionByID,
+    constantFields: { date },
   });
 });
