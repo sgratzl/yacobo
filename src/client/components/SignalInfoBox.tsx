@@ -45,14 +45,12 @@ export function ShowInfo({ signal, date, chart }: { signal?: ISignal; date?: Dat
     Modal.info({
       title: signal.name,
       content: (
-        <SignalInfoBox signal={signal} date={date}>
-          {chart && (
-            <>
-              <Typography.Title level={4}>About the chart</Typography.Title>
-              {chart}
-            </>
-          )}
-        </SignalInfoBox>
+        <>
+          {chart && <Typography.Title level={4}>About the signal</Typography.Title>}
+          <SignalInfoBox signal={signal} date={date} />
+          {chart && <Typography.Title level={4}>About the chart</Typography.Title>}
+          {chart}
+        </>
       ),
       width: '50em',
     });
