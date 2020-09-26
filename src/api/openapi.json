@@ -703,6 +703,16 @@
           }
         }
       },
+      "SQL": {
+        "description": "SQL File",
+        "content": {
+          "application/sql": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "PNG": {
         "description": "PNG File",
         "content": {

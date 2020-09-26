@@ -49,6 +49,11 @@ export function DownloadMenu({ path, img = true }: { path: string; img?: boolean
             Download CSV
           </Typography.Link>
         </Menu.Item>
+        <Menu.Item icon={<FileOutlined />}>
+          <Typography.Link href={`/api${path}.sql?download`} data-format="SQL" onClick={hintDownload}>
+            Download SQL
+          </Typography.Link>
+        </Menu.Item>
       </Menu.ItemGroup>
     </Menu>
   );

@@ -7,6 +7,7 @@ import type { CacheDuration } from './model';
 import { injectCustomDetails, injectDetails } from './send/injectDetails';
 import sendCSV from './send/sendCSV';
 import sendJSON from './send/sendJSON';
+import sendSQL from './send/sendSQL';
 import sendVega, { IMultiVegaFactory, IVegaFactory } from './send/sendVega';
 
 export enum Formats {
@@ -17,6 +18,7 @@ export enum Formats {
   vg = 'vg',
   jpg = 'jpg',
   pdf = 'pdf',
+  sql = 'sql',
 }
 
 export function extractFormat<S extends string, V>(
@@ -66,11 +68,11 @@ export async function sendFormat<T extends ITripleValue>(
     vega?: IVegaFactory<T> | IMultiVegaFactory<T>;
   }
 ) {
-  if (format === Formats.csv || format === Formats.json) {
+  if (format === Formats.csv || format === Formats.json || format === Formats.sql) {
     let data = await loadData();
     let headers: (keyof T)[] = ['value', 'stderr'];
 
-    if (req.query.plain == null) {
+    if (req.query.plain == null && format !== Formats.sql) {
       // details
       const r = injectDetails(data, options.constantFields);
       data = r.data;
@@ -81,6 +83,8 @@ export async function sendFormat<T extends ITripleValue>(
     }
     if (format === Formats.csv) {
       return sendCSV(req, res, data, headers as (keyof T)[], options);
+    } else if (format === Formats.sql) {
+      return sendSQL(req, res, data, options);
     }
     return sendJSON(req, res, data, options);
   }

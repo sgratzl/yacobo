@@ -102,6 +102,7 @@ const imageParams = [
 function generateFormatPaths(paths: Record<string, any>) {
   Object.entries(api.paths).forEach(([key, value]) => {
     generateFormatPath(paths, 'csv', key, value);
+    generateFormatPath(paths, 'sql', key, value);
     // image formats
     if (noImages.includes(key)) {
       return;
