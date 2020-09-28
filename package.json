@@ -1,6 +1,7 @@
 {
   "name": "yacobo",
   "version": "0.2.0",
+  "description": "Test",
   "private": true,
   "author": {
     "name": "Samuel Gratzl",
@@ -16,13 +17,15 @@
     "build": "cross-env NEXT_TELEMETRY_DISABLED=1 next build",
     "canvas:fix": "yum install gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/",
     "vercel-build": "yarn canvas:fix && yarn build",
-    "start": "next start"
+    "start": "next start",
+    "cli": "ts-node -r tsconfig-paths/register --project tsconfig.cli.json ./src/cli/index.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
     "@popperjs/core": "^2.5.2",
     "@types/cors": "^2.8.7",
     "@types/d3-dsv": "^1.0.36",
+    "@types/fluent-ffmpeg": "^2.1.15",
     "@types/react-vega": "^6.0.0",
     "@types/redis": "^2.8.27",
     "@types/swagger-ui-react": "^3.23.3",
@@ -33,6 +36,8 @@
     "cross-fetch": "^3.0.6",
     "d3-dsv": "^2.0.0",
     "date-fns": "^2.16.1",
+    "dotenv": "^8.2.0",
+    "fluent-ffmpeg": "^2.1.2",
     "next": "^9.5.3",
     "rc-resize-observer": "^0.2.5",
     "react": "16.13.1",
@@ -54,6 +59,7 @@
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@commitlint/prompt-cli": "^11.0.0",
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "@types/node": "^14.11.2",
     "@types/react": "^16.9.49",
     "@typescript-eslint/eslint-plugin": "^4.2.0",
@@ -69,6 +75,8 @@
     "eslint-plugin-react": "^7.21.2",
     "eslint-plugin-react-hooks": "^4.1.2",
     "prettier": "^2.1.2",
+    "ts-node": "^9.0.0",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.0.3"
   },
   "resolutions_d": {

@@ -1,5 +1,5 @@
 import { formatLocal } from '@/common';
-import type { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { scheme } from 'vega-scale';
 import { ZERO_COLOR } from './constants';
 

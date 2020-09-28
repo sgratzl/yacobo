@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "baseUrl": ".",
+    "jsx": "react",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
+}

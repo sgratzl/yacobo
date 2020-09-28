@@ -5,9 +5,8 @@ import type { IVegaOptions } from '@/charts';
 import { setCommonHeaders } from './setCommonHeaders';
 import { ICommonOptions, Formats, ILoadOptions } from '../format';
 import type { View } from 'vega';
-import type { Canvas } from 'canvas';
 import type { IRequestContext } from '../middleware';
-import { initCanvas } from 'yacobo-font-canvas-helper';
+import { createCanvas, createVega } from '@/charts/vega';
 
 export interface IVegaFactory<T> {
   (data: T[] | undefined, options: IVegaOptions): TopLevelSpec | Promise<TopLevelSpec>;
@@ -54,9 +53,7 @@ export default async function sendVega<T>(
   }
 
   try {
-    initCanvas();
-    const canvasOptions = format === Formats.pdf ? { type: 'pdf' } : undefined;
-    const canvas = ((await view.toCanvas(vegaOptions.devicePixelRatio, canvasOptions)) as unknown) as Canvas;
+    const canvas = await createCanvas(view, vegaOptions.devicePixelRatio, format === Formats.pdf);
 
     switch (format) {
       case Formats.jpg:
@@ -84,21 +81,6 @@ export default async function sendVega<T>(
   } catch (err) {
     throw new CustomHTTPError(500, err.message);
   }
-}
-
-async function createVega(spec: TopLevelSpec | Promise<TopLevelSpec>, skeleton?: boolean) {
-  const vegaLiteSpec = await spec;
-  if (skeleton) {
-    vegaLiteSpec.background = 'transparent';
-  }
-  const { compile } = await import('vega-lite');
-  const s = compile(vegaLiteSpec).spec;
-
-  const { View, parse } = await import('vega');
-  const runtime = parse(s);
-  return new View(runtime, {
-    renderer: 'none',
-  });
 }
 
 async function sendVegaSpec(
