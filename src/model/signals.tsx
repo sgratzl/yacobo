@@ -102,7 +102,7 @@ const base: (ISignal | false)[] = [
       `How many out of 100 participants of the daily Facebook survey${dated('from', date)} survey know someone in their local community with COVID-like symptoms`,
     longDescription: () =>
       // prettier-ignore
-      `Every day, Delphi surveys tens of thousands of Facebook users, asking them a broad set of COVID-related questions, including whether they, or anyone in their household, are currently experiencing COVID-relarted symptoms. We also ask them if they know anyone in their local community who has COVID-like or flu-like symptoms, defined here as fever along with either sore throat, cough, shortness of breath, or difficulty breathing.  For this indicator, we estimate the percentage of people who know someone, in their household or outside it, who has these symptoms. While many conditions can cause these symptoms, not just COVID, comparing the rates across the country can suggest where COVID is most active.`,
+      `Every day, Delphi surveys tens of thousands of Facebook users, asking them a broad set of COVID-related questions, including whether they, or anyone in their household, are currently experiencing COVID-related symptoms. We also ask them if they know anyone in their local community who has COVID-like or flu-like symptoms, defined here as fever along with either sore throat, cough, shortness of breath, or difficulty breathing.  For this indicator, we estimate the percentage of people who know someone, in their household or outside it, who has these symptoms. While many conditions can cause these symptoms, not just COVID, comparing the rates across the country can suggest where COVID is most active.`,
     seeAlso: [
       {
         alt: 'More information',
@@ -130,7 +130,7 @@ const base: (ISignal | false)[] = [
       `How many out of 100 doctor visits${dated('on', date)} were due to COVID-like symptoms`,
     longDescription: () =>
       // prettier-ignore
-      `Delphi receives from our health system partners aggregated statistics on COVID-related outpatient doctor visits, derived from ICD codes found in insurance claims. Using this data, Delphi estimates the percentage of daily doctor’s visits in each area that are due to COVID-like illness. Note that these estimates are based only on visits by patients whose data is accessible by our partners.`,
+      `Delphi receives from our health system partners aggregated statistics on COVID-related outpatient doctor visits, derived from ICD codes found in insurance claims. Using this data Delphi estimates the percentage of daily doctor’s visits in each area that are due to COVID-like illness. Note that these estimates are based only on visits by patients whose data is accessible to our partners.`,
     seeAlso: [
       {
         alt: 'Technical description',
@@ -155,7 +155,7 @@ const base: (ISignal | false)[] = [
     longDescription: () =>
       // prettier-ignore
       <>
-        {`This data shows the number of COVID-19 confirmed cases newly reported each day. It reflects only cases reported by state and local health authorities. It is based on case counts compiled and made public by `}<USAFacts />{` and by `}<JohnHopkins/>{`. We use Johns Hopkins data for Puerto Rico and report USAFacts data in all other locations. Note that “confirmed cases” covers only those infections that were confirmed via testing, not all infections. The signal may not be directly comparable across regions with vastly different testing capacity.`}
+        {`This data shows the number of COVID-19 confirmed cases newly reported each day. It reflects only cases reported by state and local health authorities. It is based on case counts compiled and made public by `}<USAFacts />{` and by `}<JohnHopkins/>{`. We use Johns Hopkins data for Puerto Rico and report USAFacts data in all other locations. The signal may not be directly comparable across regions with vastly different testing capacity or reporting criteria.`}
       </>,
     seeAlso: [
       {
@@ -182,7 +182,7 @@ const base: (ISignal | false)[] = [
         date
       )} have been tested positively for COVID-19 antigens`,
     longDescription: () =>
-      `When a patient (whether at a doctor’s office, clinic, or hospital) has COVID-like symptoms, doctors may order an antigen test, which can detect parts of the virus that are present during an active infection. Quidel, a national provider of networked lab testing devices, provides us with data from every COVID antigen test that they conduct.  We report the percentage of COVID antigen tests that are positive. Note that this signal only includes Quidel’s antigen tests, not those run by other test providers`,
+      `When a patient (whether at a doctor’s office, clinic, or hospital) has COVID-like symptoms, doctors may order an antigen test, which can detect parts of the virus that are present during an active infection. Quidel, a national provider of networked lab testing devices, provides us with data from every COVID antigen test that they conduct. We report the percentage of COVID antigen tests that are positive. Note that this signal only includes Quidel’s antigen tests, not those run by other test providers.`,
     seeAlso: [
       {
         alt: 'Technical description',
@@ -204,7 +204,7 @@ const base: (ISignal | false)[] = [
     description: (date?: Date) =>
       `How many out of 100 hospital admission${dated('on', date)} had a COVID-19 associated diagnoses`,
     longDescription: () =>
-      `Delphi receives from our health system partners aggregated statistics on COVID-related hospital admissions, derived from ICD codes found in insurance claims and other medical records. Using this data, we estimate the percentage of new hospital admissions each day that are related to COVID-19. Note that these estimates are based only on admissions by patients whose data is accessible to our partners and addresses new hospital admissions each day, not all currently hospitalized patients who have COVID-related diagnoses.`,
+      `Delphi receives from our health system partners aggregated statistics on COVID-related hospital admissions, derived from ICD codes found in insurance claims and other medical records. Using this data, we estimate the percentage of new hospital admissions each day that are related to COVID-19. Note that these estimates are based only on admissions by patients whose data is accessible to our partners, and address new hospital admissions each day, not all currently hospitalized patients who have COVID-related diagnoses.`,
     seeAlso: [
       {
         alt: 'Technical description',
@@ -229,7 +229,7 @@ const base: (ISignal | false)[] = [
     longDescription: () =>
       // prettier-ignore
       <>
-        {`This data shows the number of COVID-19 related deaths newly reported each day. It reflects official figures reported by state and local health authorities, and may not include excess deaths not confirmed by health authorities to be due to COVID-19. They signal is based on death counts compiled and made public by `}<USAFacts />{` and by `}<JohnHopkins/>{`. We use Johns Hopkins data for Puerto Rico and report USAFacts data in all other locations.`}
+        {`This data shows the number of COVID-19 related deaths newly reported each day. It reflects official figures reported by state and local health authorities, and may not include excess deaths not confirmed by health authorities to be due to COVID-19. The signal is based on death counts compiled and made public by `}<USAFacts />{` and by `}<JohnHopkins/>{`. We use Johns Hopkins data for Puerto Rico and report USAFacts data in all other locations.`}
       </>,
     seeAlso: [
       {
