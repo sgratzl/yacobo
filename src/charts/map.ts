@@ -10,9 +10,16 @@ import { getValueDomain, HIGHLIGHT_COLOR, IRegionValue, ISignal, ZERO_COLOR, MAP
 const MAP_CHART_WIDTH = 500;
 const MAP_CHART_HEIGHT = 300;
 
-function createBaseMap(data: { title: string; description: string }, options: IVegaOptions): TopLevel<LayerSpec> {
+function createBaseMap(
+  data: { title: string; description: string; signalTitle?: boolean },
+  options: IVegaOptions
+): TopLevel<LayerSpec> {
   const meta = {
-    title: data.title,
+    title: data.signalTitle
+      ? {
+          text: { expr: 'title' },
+        }
+      : data.title,
     description: data.description,
   };
   return {
@@ -202,7 +209,8 @@ export async function createMap(
   signal: ISignal,
   date: Date,
   values: IRegionValue[] | undefined,
-  options: IVegaOptions
+  options: IVegaOptions,
+  signalTitle = false
 ) {
   const meta = await fetchSignalMeta(options.ctx, signal);
   const data = {
@@ -217,6 +225,7 @@ export async function createMap(
     valuesSource: {
       name: 'data',
     },
+    signalTitle,
   };
 
   const spec: TopLevel<LayerSpec> = {

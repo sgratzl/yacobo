@@ -21,11 +21,12 @@ function createLineChartSpec(
     valueTitle: string;
     hasStdErr: boolean;
     hasRegion?: boolean;
+    signalTitle?: boolean;
   },
   options: IVegaOptions
 ): TopLevel<LayerSpec> {
   const meta = {
-    title: data.title,
+    title: data.signalTitle ? { text: { expr: 'title' } } : data.title,
     description: data.description,
   };
   const max = startOfISOToday();
@@ -165,7 +166,8 @@ export async function createSignalLineChart(
   region: IRegion,
   signal: ISignal,
   values: IDateValue[] | undefined,
-  options: IVegaOptions
+  options: IVegaOptions,
+  signalTitle = false
 ): Promise<TopLevelSpec> {
   const metas = await fetchMeta(options.ctx);
   const meta = metas.find((d) => d.signal === signal.id)!;
@@ -173,6 +175,7 @@ export async function createSignalLineChart(
   return createLineChartSpec(
     {
       title: `${region.name} - ${signal.name}`,
+      signalTitle,
       description: signal.description(),
       values: imputeMissing(values ?? [], {}),
       minDate,

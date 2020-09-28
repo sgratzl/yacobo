@@ -3,13 +3,14 @@ import type { IRequestContext } from '@/api/middleware';
 import { Redis } from '@/api/redis';
 import { createMap } from '@/charts/map';
 import { createVega } from '@/charts/vega';
-import { formatAPIDate } from '@/common';
+import { formatAPIDate, formatLocal } from '@/common';
 import { counties, historyRange, IRegion, ISignal } from '@/model';
 import { eachDayOfInterval } from 'date-fns';
 import { mkdirSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import type { IVegaOptions } from '../../charts';
 import { createSignalLineChart } from '../../charts/line';
+import { imputeMissing, startOfISODate } from '@/common/parseDates';
 import { write, IImageOptions } from '../vega';
 import { concatPNGImages, IVideoOptions } from '../video';
 
@@ -55,6 +56,12 @@ export async function runMapHistory(signal: ISignal, options: IImageOptions & IV
     recursive: true,
   });
 
+  // dummy with signals
+  const spec = await createMap(signal, dates[0], [{ region: 'US' }], vegaOptions, true);
+  const view = await createVega(spec, false, {
+    title: 'Test',
+  });
+
   for (let i = 0; i < dates.length; i++) {
     const date = dates[i];
     const file = `./data/${signal.id}/${signal.id}_${i.toString().padStart(3, '0')}.png`;
@@ -63,8 +70,16 @@ export async function runMapHistory(signal: ISignal, options: IImageOptions & IV
       continue;
     }
     const data = await fetchAllRegions(vegaOptions.ctx, signal, date, 'county');
-    const spec = await createMap(signal, date, data, vegaOptions);
-    const view = await createVega(spec, false);
+    // update view with data and title
+    view.signal('title', `${signal.name} as of ${formatLocal(date)}`);
+    view.change(
+      'data',
+      view
+        .changeset()
+        .remove(() => true)
+        .insert(data)
+    );
+    await view.runAsync();
     console.log(formatAPIDate(date), data.length);
     await write(view, file, options);
   }
@@ -102,6 +117,12 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
   });
   const range = historyRange();
 
+  // dummy with signals
+  const spec = await createSignalLineChart(counties[0], signal, [], vegaOptions, true);
+  const view = await createVega(spec, false, {
+    title: 'Test',
+  });
+
   for (let i = 0; i < counties.length; i++) {
     const region = counties[i];
     const file = `./data/${signal.id}_regions/${i.toString().padStart(3, '0')}.png`;
@@ -110,8 +131,17 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
       continue;
     }
     const data = await fetchSignalRegion(vegaOptions.ctx, signal, region, range);
-    const spec = await createSignalLineChart(region, signal, data, vegaOptions);
-    const view = await createVega(spec, false);
+    // prepare data
+    const full = imputeMissing(data, {}).map((d) => ({ ...d, date: startOfISODate(d.date).valueOf() }));
+    // update view with data and title
+    view.signal('title', `${region.name} - ${signal.name}`);
+    view.change(
+      'data',
+      view
+        .changeset()
+        .remove(() => true)
+        .insert(full)
+    );
     console.log(region.id, data.length);
     await write(view, file, options);
   }
