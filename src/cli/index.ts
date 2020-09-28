@@ -36,6 +36,9 @@ withVideoOptions(withImageOptions(program.command('map-history <signal>'))).acti
   const s = signalByID(signal)!;
   import('./commands/charts').then((r) => r.runMapHistory(s, options));
 });
+withVideoOptions(withImageOptions(program.command('map-history-all'))).action((options: IOptions) => {
+  import('./commands/charts').then((r) => r.runMapHistoryAll(options));
+});
 withImageOptions(program.command('line <signal> <region>')).action((signal, region, options: IOptions) => {
   const s = signalByID(signal)!;
   const county = regionByID(region);

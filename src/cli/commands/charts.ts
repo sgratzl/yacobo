@@ -4,7 +4,7 @@ import { Redis } from '@/api/redis';
 import { createMap } from '@/charts/map';
 import { createVega } from '@/charts/vega';
 import { formatAPIDate, formatLocal } from '@/common';
-import { counties, historyRange, IRegion, ISignal } from '@/model';
+import { counties, historyRange, IRegion, ISignal, signals } from '@/model';
 import { eachDayOfInterval } from 'date-fns';
 import { mkdirSync, existsSync } from 'fs';
 import { resolve } from 'path';
@@ -12,7 +12,7 @@ import type { IVegaOptions } from '../../charts';
 import { createSignalLineChart } from '../../charts/line';
 import { imputeMissing, startOfISODate } from '@/common/parseDates';
 import { write, IImageOptions } from '../vega';
-import { concatPNGImages, IVideoOptions } from '../video';
+import { concatPNGImages, IVideoOptions, stackVideos } from '../video';
 
 export interface ICommonOptions {
   force?: boolean;
@@ -89,7 +89,21 @@ export async function runMapHistory(signal: ISignal, options: IImageOptions & IV
   await concatPNGImages(
     resolve(process.cwd(), `data/${signal.id}/${signal.id}_%03d.png`),
     resolve(process.cwd(), `data/${signal.id}_${options.fps ?? 1}x.mp4`),
-    options
+    {
+      ...options,
+      size: [600, 330],
+    }
+  );
+}
+
+export async function runMapHistoryAll(options: IImageOptions & IVideoOptions & ICommonOptions) {
+  // for (const s of signals) {
+  //   await runMapHistory(s, options);
+  // }
+  console.log('create stacked video');
+  await stackVideos(
+    signals.map((signal) => `data/${signal.id}_${options.fps ?? 1}x.mp4`),
+    `data/combined_${options.fps ?? 1}x.mp4`
   );
 }
 
