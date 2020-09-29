@@ -32,6 +32,13 @@ function createVegaOptions(options: IImageOptions): IVegaOptions {
   };
 }
 
+function fpsSuffix(options: { fps?: number }) {
+  if (options.fps == null || options.fps === 1) {
+    return '';
+  }
+  return `_${options.fps}x`;
+}
+
 export async function runMap(signal: ISignal, date: Date, options: IImageOptions & ICommonOptions) {
   console.log('create map', signal.id, date);
   const file = `./data/${signal.id}_${formatAPIDate(date)}.png`;
@@ -88,7 +95,7 @@ export async function runMapHistory(signal: ISignal, options: IImageOptions & IV
   console.log('create video');
   await concatPNGImages(
     resolve(process.cwd(), `data/${signal.id}/${signal.id}_%03d.png`),
-    resolve(process.cwd(), `data/${signal.id}_${options.fps ?? 1}x.mp4`),
+    resolve(process.cwd(), `data/${signal.id}${fpsSuffix(options)}.mp4`),
     {
       ...options,
       size: [600 * (options.devicePixelRatio ?? 1), 330 * (options.devicePixelRatio ?? 1)],
@@ -102,8 +109,8 @@ export async function runMapHistoryAll(options: IImageOptions & IVideoOptions & 
   }
   console.log('create stacked video');
   await stackVideos(
-    signals.map((signal) => `data/${signal.id}_${options.fps ?? 1}x.mp4`),
-    `data/combined_${options.fps ?? 1}x.mp4`
+    signals.map((signal) => `data/${signal.id}${fpsSuffix(options)}.mp4`),
+    `data/combined${fpsSuffix(options)}.mp4`
   );
 }
 
@@ -186,7 +193,7 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
   console.log('create video');
   await concatPNGImages(
     resolve(process.cwd(), `data/${signal.id}_regions/%03d.png`),
-    resolve(process.cwd(), `data/${signal.id}_regions_${options.fps ?? 1}x.mp4`),
+    resolve(process.cwd(), `data/${signal.id}_regions${fpsSuffix(options)}.mp4`),
     {
       ...options,
       size: [460 * (options.devicePixelRatio ?? 1), 270 * (options.devicePixelRatio ?? 1)],
@@ -200,7 +207,7 @@ export async function runLineRegionsAll(options: IImageOptions & IVideoOptions &
   }
   console.log('create stacked video');
   await stackVideos(
-    signals.map((signal) => `data/${signal.id}_regions_${options.fps ?? 1}x.mp4`),
-    `data/combined_regions_${options.fps ?? 1}x.mp4`
+    signals.map((signal) => `data/${signal.id}_regions${fpsSuffix(options)}.mp4`),
+    `data/combined_regions${fpsSuffix(options)}.mp4`
   );
 }
