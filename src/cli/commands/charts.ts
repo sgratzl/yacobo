@@ -91,7 +91,7 @@ export async function runMapHistory(signal: ISignal, options: IImageOptions & IV
     resolve(process.cwd(), `data/${signal.id}_${options.fps ?? 1}x.mp4`),
     {
       ...options,
-      size: [600, 330],
+      size: [600 * (options.devicePixelRatio ?? 1), 330 * (options.devicePixelRatio ?? 1)],
     }
   );
 }
@@ -187,6 +187,20 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
   await concatPNGImages(
     resolve(process.cwd(), `data/${signal.id}_regions/%03d.png`),
     resolve(process.cwd(), `data/${signal.id}_regions_${options.fps ?? 1}x.mp4`),
-    options
+    {
+      ...options,
+      size: [460 * (options.devicePixelRatio ?? 1), 270 * (options.devicePixelRatio ?? 1)],
+    }
+  );
+}
+
+export async function runLineRegionsAll(options: IImageOptions & IVideoOptions & ICommonOptions) {
+  for (const s of signals) {
+    await runLineRegions(s, options);
+  }
+  console.log('create stacked video');
+  await stackVideos(
+    signals.map((signal) => `data/${signal.id}_regions_${options.fps ?? 1}x.mp4`),
+    `data/combined_regions_${options.fps ?? 1}x.mp4`
   );
 }

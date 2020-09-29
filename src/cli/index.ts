@@ -48,6 +48,9 @@ withVideoOptions(withImageOptions(program.command('line-regions <signal>'))).act
   const s = signalByID(signal)!;
   import('./commands/charts').then((r) => r.runLineRegions(s, options));
 });
+withVideoOptions(withImageOptions(program.command('line-regions-all'))).action((options: IOptions) => {
+  import('./commands/charts').then((r) => r.runLineRegionsAll(options));
+});
 
 withImageOptions(program.command('color-scale')).action((options: IOptions) => {
   import('./commands/heatmap').then((r) => r.colorScaleTexture(options));

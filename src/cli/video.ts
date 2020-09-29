@@ -31,7 +31,7 @@ export function concatPNGImages(input: string, output: string, { fps = 1, size }
 
     command.noAudio();
     command.on('end', resolve);
-    // console.log(command._getArguments());
+    // console.log(`${path} ${command._getArguments().join(' ')}`);
     command.run();
   });
 }
