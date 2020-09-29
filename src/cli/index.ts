@@ -52,5 +52,8 @@ withVideoOptions(withImageOptions(program.command('line-regions <signal>'))).act
 withImageOptions(program.command('color-scale')).action((options: IOptions) => {
   import('./commands/heatmap').then((r) => r.colorScaleTexture(options));
 });
+withImageOptions(program.command('heatmap')).action((options: IOptions) => {
+  import('./commands/heatmap').then((r) => r.heatmap(options));
+});
 
 program.parse(process.argv);
