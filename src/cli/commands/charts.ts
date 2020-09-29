@@ -141,7 +141,7 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
     const region = counties[i];
     const file = `./data/${signal.id}_regions/${i.toString().padStart(3, '0')}.png`;
     if (!options.force && existsSync(file)) {
-      console.log(region.id, 'skip');
+      // console.log(region.id, 'skip');
       continue;
     }
     const data = await fetchSignalRegion(vegaOptions.ctx, signal, region, range);
