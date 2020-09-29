@@ -22,9 +22,9 @@ function withVideoOptions(command: Command) {
 function withImageOptions(command: Command) {
   return command
     .option('--plain', 'plain chart')
-    .option('--scaleFactor <scaleFactor>', 'scale factor', (v) => Number.parseFloat(v))
-    .option('--devicePixelRatio <devicePixelRatio>', 'device pixel ratio', (v) => Number.parseFloat(v))
-    .option('--fps <fps>', 'fps', (v) => Number.parseInt(v, 10));
+    .option('--scaleFactor <scaleFactor>', 'scale factor', (v) => Number.parseFloat(v), 1)
+    .option('--devicePixelRatio <devicePixelRatio>', 'device pixel ratio', (v) => Number.parseFloat(v), 1)
+    .option('--fps <fps>', 'fps', (v) => Number.parseInt(v, 10), 1);
 }
 
 withImageOptions(program.command('map <signal> <date>')).action((signal, date, options: IOptions) => {

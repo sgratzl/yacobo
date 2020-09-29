@@ -18,7 +18,7 @@
     "canvas:fix": "yum install gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/",
     "vercel-build": "yarn canvas:fix && yarn build",
     "start": "next start",
-    "cli": "ts-node -r tsconfig-paths/register --project tsconfig.cli.json ./src/cli/index.ts"
+    "cli": "ts-node --transpile-only -r tsconfig-paths/register --project tsconfig.cli.json ./src/cli/index.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.2",

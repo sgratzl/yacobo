@@ -6,7 +6,6 @@ import ffmpeg from 'fluent-ffmpeg';
 
 ffmpeg.setFfmpegPath(path);
 
-console.log(path);
 export interface IVideoOptions {
   fps?: number;
   size?: [number, number];
@@ -18,18 +17,21 @@ export function concatPNGImages(input: string, output: string, { fps = 1, size }
     // Use FFMpeg to create a video.
 
     command.input(input);
-
     command.output(output);
+    command.inputFPS(fps);
     // command.addOutput(output.replace('.mp4', '.webm'));
-    command.outputFPS(fps);
+    // } else {
+    //   command.outputFPS(fps);
+    // }
+
     if (size) {
       command.videoFilter(`pad=w=${size[0]}:h=${size[1]}:color=white`);
     }
     // command.videoCodec('libx264');
 
     command.noAudio();
-    command.on('exit', resolve);
-    console.log(command._getArguments());
+    command.on('end', resolve);
+    // console.log(command._getArguments());
     command.run();
   });
 }
@@ -52,7 +54,7 @@ export function stackVideos(inputs: string[], output: string) {
 
     command.noAudio();
     command.on('exit', resolve);
-    console.log(`${path} ${command._getArguments().join(' ')}`);
+    // console.log(`${path} ${command._getArguments().join(' ')}`);
     command.run();
   });
 }

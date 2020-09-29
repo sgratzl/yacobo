@@ -66,7 +66,7 @@ export async function runMapHistory(signal: ISignal, options: IImageOptions & IV
     const date = dates[i];
     const file = `./data/${signal.id}/${signal.id}_${i.toString().padStart(3, '0')}.png`;
     if (!options.force && existsSync(file)) {
-      console.log(formatAPIDate(date), 'skip');
+      // console.log(formatAPIDate(date), 'skip');
       continue;
     }
     const data = await fetchAllRegions(vegaOptions.ctx, signal, date, 'county');
@@ -97,9 +97,9 @@ export async function runMapHistory(signal: ISignal, options: IImageOptions & IV
 }
 
 export async function runMapHistoryAll(options: IImageOptions & IVideoOptions & ICommonOptions) {
-  // for (const s of signals) {
-  //   await runMapHistory(s, options);
-  // }
+  for (const s of signals) {
+    await runMapHistory(s, options);
+  }
   console.log('create stacked video');
   await stackVideos(
     signals.map((signal) => `data/${signal.id}_${options.fps ?? 1}x.mp4`),
