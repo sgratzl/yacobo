@@ -259,8 +259,8 @@ export function signalByID(signal: string) {
 
 export const refSignal = signals.find((d) => d.id === 'cases')!;
 
-export function getValueDomain(signal: ISignal, meta: ISignalMeta) {
-  return [0, Math.min(signal.data.maxValue, Math.ceil(meta.mean + 3 * meta.stdev))] as const;
+export function getValueDomain(signal: ISignal, meta: ISignalMeta): [number, number] {
+  return [0, Math.min(signal.data.maxValue, Math.ceil(meta.mean + 3 * meta.stdev))];
 }
 
 export function getValueScale(signal: ISignal, meta: ISignalMeta) {
