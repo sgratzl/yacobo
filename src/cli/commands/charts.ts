@@ -4,7 +4,7 @@ import { Redis } from '@/api/redis';
 import { createMap } from '@/charts/map';
 import { createVega } from '@/charts/vega';
 import { formatAPIDate, formatLocal } from '@/common';
-import { counties, historyRange, IRegion, ISignal, signals } from '@/model';
+import { counties, historyRange, IDateValue, IRegion, ISignal, signals } from '@/model';
 import { eachDayOfInterval } from 'date-fns';
 import { mkdirSync, existsSync } from 'fs';
 import { resolve } from 'path';
@@ -129,13 +129,32 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
   mkdirSync(`./data/${signal.id}_regions`, {
     recursive: true,
   });
-  const range = historyRange();
+  const dates = eachDayOfInterval(historyRange());
 
   // dummy with signals
   const spec = await createSignalLineChart(counties[0], signal, [], vegaOptions, true);
   const view = await createVega(spec, false, {
     title: 'Test',
   });
+
+  const lookup = new Map<string, IDateValue[]>();
+
+  const buildData = async () => {
+    counties.forEach((county) => lookup.set(county.id, []));
+
+    // load all data since we have those data in the cache
+    for (const date of dates) {
+      const data = await fetchAllRegions(vegaOptions.ctx, signal, date, 'county');
+      for (const row of data) {
+        if (lookup.has(row.region)) {
+          lookup.get(row.region)!.push({
+            ...row,
+            date,
+          });
+        }
+      }
+    }
+  };
 
   for (let i = 0; i < counties.length; i++) {
     const region = counties[i];
@@ -144,7 +163,10 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
       // console.log(region.id, 'skip');
       continue;
     }
-    const data = await fetchSignalRegion(vegaOptions.ctx, signal, region, range);
+    if (lookup.size === 0) {
+      await buildData();
+    }
+    const data = lookup.get(region.id)!;
     // prepare data
     const full = imputeMissing(data, {}).map((d) => ({ ...d, date: startOfISODate(d.date).valueOf() }));
     // update view with data and title
@@ -156,7 +178,7 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
         .remove(() => true)
         .insert(full)
     );
-    console.log(region.id, data.length);
+    // console.log(region.id, data.length);
     await write(view, file, options);
   }
 
