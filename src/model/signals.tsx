@@ -207,10 +207,10 @@ const base: (ISignal | false)[] = [
     name: 'Positive COVID Test in last 14 days',
     description: (date?: Date) =>
       // prettier-ignore
-      `How many out of 100 participants of the daily Facebook survey${dated('from', date)} where tested positively for COVID-19 in the last 14 days`,
+      `How many out of 100 tested participants of the daily Facebook survey${dated('from', date)} got tested and got tested positively for COVID-19 in the last 14 days`,
     longDescription: () =>
       // prettier-ignore
-      `Every day, Delphi surveys tens of thousands of Facebook users, asking a broad set of COVID-related questions, including whether the test positivity rate (percent) among people tested for COVID-19 in the past 14 days. These indicators are based on questions in Wave 4 of the survey, introduced on September 8, 2020.`,
+      `Every day, Delphi surveys tens of thousands of Facebook users, asking a broad set of COVID-related questions, including the test positivity rate (percent) among people tested for COVID-19 in the past 14 days. These indicators are based on questions in Wave 4 of the survey, introduced on September 8, 2020.`,
     seeAlso: [
       {
         href: 'https://covidcast.cmu.edu/surveys.html',
@@ -223,7 +223,7 @@ const base: (ISignal | false)[] = [
     ],
     colorScheme: 'reds',
     data: {
-      unit: 'participants',
+      unit: 'tested participants',
       maxValue: 100,
       dataSource: 'fb-survey',
       signal: 'smoothed_tested_positive_14d',
