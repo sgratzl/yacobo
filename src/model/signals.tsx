@@ -67,6 +67,34 @@ function USAFacts() {
 
 const base: (ISignal | false)[] = [
   {
+    id: 'fb_survey_mask',
+    name: 'Wearing Masks',
+    description: (date?: Date) =>
+      // prettier-ignore
+      `How many out of 100 participants of the daily Facebook survey${dated('from', date)} wore a mask most or all of the time while in public in the past 5 days`,
+    longDescription: () =>
+      // prettier-ignore
+      `Every day, Delphi surveys tens of thousands of Facebook users, asking a broad set of COVID-related questions, including whether they wore a mask most or all of the time while in public in the past 5 days; those not in public in the past 5 days are not counted. These indicators are based on questions in Wave 4 of the survey, introduced on September 8, 2020.`,
+    seeAlso: [
+      {
+        href: 'https://covidcast.cmu.edu/surveys.html',
+        alt: 'More information',
+      },
+      {
+        href: 'https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/fb-survey.html',
+        alt: 'Technical description',
+      },
+    ],
+    colorScheme: 'greens',
+    data: {
+      unit: 'participants',
+      maxValue: 100,
+      dataSource: 'fb-survey',
+      signal: 'smoothed_wearing_mask',
+      hasStdErr: true,
+    },
+  },
+  {
     id: 'fb_survey',
     name: 'COVID-Like Symptoms',
     description: (date?: Date) =>
@@ -94,8 +122,8 @@ const base: (ISignal | false)[] = [
       hasStdErr: true,
     },
   },
-  false && {
-    id: 'fb-survey-community',
+  {
+    id: 'fb_survey_community',
     name: 'COVID-Like Symptoms in Community',
     description: (date?: Date) =>
       // prettier-ignore
@@ -144,6 +172,62 @@ const base: (ISignal | false)[] = [
       dataSource: 'doctor-visits',
       signal: 'smoothed_adj_cli',
       hasStdErr: false,
+    },
+  },
+  {
+    id: 'fb_survey_tested',
+    name: 'Took COVID Test in last 14 days',
+    description: (date?: Date) =>
+      // prettier-ignore
+      `How many out of 100 participants of the daily Facebook survey${dated('from', date)} where tested positively for COVID-19 in the last 14 days`,
+    longDescription: () =>
+      // prettier-ignore
+      `Every day, Delphi surveys tens of thousands of Facebook users, asking a broad set of COVID-related questions, including whether they were tested for COVID-19 in the past 14 days, regardless of their test result. These indicators are based on questions in Wave 4 of the survey, introduced on September 8, 2020.`,
+    seeAlso: [
+      {
+        href: 'https://covidcast.cmu.edu/surveys.html',
+        alt: 'More information',
+      },
+      {
+        href: 'https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/fb-survey.html',
+        alt: 'Technical description',
+      },
+    ],
+    colorScheme: 'oranges',
+    data: {
+      unit: 'participants',
+      maxValue: 100,
+      dataSource: 'fb-survey',
+      signal: 'smoothed_tested_14d',
+      hasStdErr: true,
+    },
+  },
+  {
+    id: 'fb_survey_positive',
+    name: 'Positive COVID Test in last 14 days',
+    description: (date?: Date) =>
+      // prettier-ignore
+      `How many out of 100 participants of the daily Facebook survey${dated('from', date)} where tested positively for COVID-19 in the last 14 days`,
+    longDescription: () =>
+      // prettier-ignore
+      `Every day, Delphi surveys tens of thousands of Facebook users, asking a broad set of COVID-related questions, including whether the test positivity rate (percent) among people tested for COVID-19 in the past 14 days. These indicators are based on questions in Wave 4 of the survey, introduced on September 8, 2020.`,
+    seeAlso: [
+      {
+        href: 'https://covidcast.cmu.edu/surveys.html',
+        alt: 'More information',
+      },
+      {
+        href: 'https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/fb-survey.html',
+        alt: 'Technical description',
+      },
+    ],
+    colorScheme: 'reds',
+    data: {
+      unit: 'participants',
+      maxValue: 100,
+      dataSource: 'fb-survey',
+      signal: 'smoothed_tested_positive_14d',
+      hasStdErr: true,
     },
   },
   {
@@ -198,7 +282,7 @@ const base: (ISignal | false)[] = [
       hasStdErr: true,
     },
   },
-  {
+  false && {
     id: 'hospital_admissions',
     name: 'COVID Hospital Admissions',
     description: (date?: Date) =>
