@@ -179,7 +179,7 @@ const base: (ISignal | false)[] = [
     name: 'Took COVID Test in last 14 days',
     description: (date?: Date) =>
       // prettier-ignore
-      `How many out of 100 participants of the daily Facebook survey${dated('from', date)} where tested positively for COVID-19 in the last 14 days`,
+      `How many out of 100 participants of the daily Facebook survey${dated('from', date)} where tested for COVID-19 in the last 14 days`,
     longDescription: () =>
       // prettier-ignore
       `Every day, Delphi surveys tens of thousands of Facebook users, asking a broad set of COVID-related questions, including whether they were tested for COVID-19 in the past 14 days, regardless of their test result. These indicators are based on questions in Wave 4 of the survey, introduced on September 8, 2020.`,
