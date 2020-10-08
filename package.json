@@ -38,7 +38,7 @@
     "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
     "fluent-ffmpeg": "^2.1.2",
-    "next": "^9.5.3",
+    "next": "^9.5.4",
     "rc-resize-observer": "^0.2.5",
     "react": "16.13.1",
     "react-dom": "16.13.1",
