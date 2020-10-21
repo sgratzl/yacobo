@@ -68,7 +68,7 @@ function USAFacts() {
 const base: (ISignal | false)[] = [
   {
     id: 'fb_survey_mask',
-    name: 'Wearing Masks',
+    name: 'People Wearing Masks',
     description: (date?: Date) =>
       // prettier-ignore
       `How many out of 100 participants of the daily Facebook survey${dated('from', date)} wore a mask most or all of the time while in public in the past 5 days`,
