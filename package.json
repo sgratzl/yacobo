@@ -50,7 +50,7 @@
     "us-atlas": "^3.0.0",
     "use-persisted-state": "^0.3.0",
     "use-ssr": "^1.0.23",
-    "vega": "^5.17.0",
+    "vega": "^5.17.3",
     "vega-lite": "^4.17.0",
     "vega-scale": "^7.1.1",
     "yacobo-font-canvas-helper": "file:./yacobo-font-canvas-helper"
