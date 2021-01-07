@@ -283,6 +283,34 @@ const base: (ISignal | false)[] = [
     },
   },
   false && {
+    id: 'fb_survey_vaccine',
+    name: 'Vaccine Acceptance',
+    description: (date?: Date) =>
+      // prettier-ignore
+      `How many out of 100 tested participants of the daily Facebook survey${dated('from', date)} would definitely or probably choose to receive a COVID vaccine if it were offered to them today`,
+    longDescription: () =>
+      // prettier-ignore
+      `Every day, Delphi surveys tens of thousands of Facebook users, asking them a broad set of COVID-related questions, including whether they would choose to be vaccinated if they were offered a COVID vaccine today. For this signal, we estimate the percentage of people who would “definitely” or “probably” choose to be vaccinated if a COVID vaccine were offered to them. Beginning January 6, 2021, this question is only asked to respondents who have not yet received a COVID vaccine.`,
+    seeAlso: [
+      {
+        href: 'https://covidcast.cmu.edu/surveys.html',
+        alt: 'More information',
+      },
+      {
+        href: 'https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/fb-survey.html',
+        alt: 'Technical description',
+      },
+    ],
+    colorScheme: 'yellowgreen',
+    data: {
+      unit: 'participants',
+      maxValue: 100,
+      dataSource: 'fb-survey',
+      signal: 'smoothed_accept_covid_vaccine',
+      hasStdErr: true,
+    },
+  },
+  false && {
     id: 'hospital_admissions',
     name: 'COVID Hospital Admissions',
     description: (date?: Date) =>
