@@ -6,7 +6,7 @@ import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
 import FilePdfOutlined from '@ant-design/icons/FilePdfOutlined';
 import { useCallback } from 'react';
 
-export function DownloadMenu({ path, img = true, params }: { path: string; img?: boolean; params?: string }) {
+export function DownloadMenu({ path, img = true, params = '' }: { path: string; img?: boolean; params?: string }) {
   const hintDownload = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     notification.info({
       message: <>Start downloading {e.currentTarget.dataset.format} file shortly&hellip;</>,
