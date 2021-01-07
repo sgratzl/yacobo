@@ -167,11 +167,12 @@ export async function createSignalLineChart(
   signal: ISignal,
   values: IDateValue[] | undefined,
   options: IVegaOptions,
-  signalTitle = false
+  signalTitle = false,
+  localMinDate = false
 ): Promise<TopLevelSpec> {
   const metas = await fetchMeta(options.ctx);
   const meta = metas.find((d) => d.signal === signal.id)!;
-  const minDate = extractDateRange(metas).min;
+  const minDate = localMinDate ? meta.minTime : extractDateRange(metas).min;
   return createLineChartSpec(
     {
       title: `${region.name} - ${signal.name}`,

@@ -1,4 +1,4 @@
-import { fetchAllRegions, fetchSignalRegion } from '@/api/data';
+import { fetchAllRegions, fetchSignalMeta, fetchSignalRegion } from '@/api/data';
 import type { IRequestContext } from '@/api/middleware';
 import { Redis } from '@/api/redis';
 import { createMap } from '@/charts/map';
@@ -16,6 +16,11 @@ import { concatPNGImages, IVideoOptions, stackVideos } from '../video';
 
 export interface ICommonOptions {
   force?: boolean;
+}
+
+interface ILineOptions {
+  skip?: boolean;
+  local?: boolean;
 }
 
 function createVegaOptions(options: IImageOptions): IVegaOptions {
@@ -114,7 +119,11 @@ export async function runMapHistoryAll(options: IImageOptions & IVideoOptions & 
   );
 }
 
-export async function runLine(signal: ISignal, region: IRegion, options: IImageOptions & ICommonOptions) {
+export async function runLine(
+  signal: ISignal,
+  region: IRegion,
+  options: IImageOptions & ICommonOptions & ILineOptions
+) {
   console.log('create line', signal.id, region.name);
   const file = `./data/${region.id}_${signal.id}.png`;
   if (!options.force && existsSync(file)) {
@@ -123,23 +132,27 @@ export async function runLine(signal: ISignal, region: IRegion, options: IImageO
   }
   const vegaOptions = createVegaOptions(options);
   const data = await fetchSignalRegion(vegaOptions.ctx, signal, region, historyRange());
-  const spec = await createSignalLineChart(region, signal, data, vegaOptions);
+  const spec = await createSignalLineChart(region, signal, data, vegaOptions, false, options.local);
   const view = await createVega(spec, false);
   await write(view, file, options);
   vegaOptions.ctx.redis.destroy();
   console.log('done');
 }
 
-export async function runLineRegions(signal: ISignal, options: IImageOptions & IVideoOptions & ICommonOptions) {
+export async function runLineRegions(
+  signal: ISignal,
+  options: IImageOptions & IVideoOptions & ICommonOptions & ILineOptions
+) {
   console.log('create line regions', signal.id);
   const vegaOptions = createVegaOptions(options);
   mkdirSync(`./data/${signal.id}_regions`, {
     recursive: true,
   });
-  const dates = eachDayOfInterval(historyRange());
+  const meta = await fetchSignalMeta(vegaOptions.ctx, signal);
+  const dates = eachDayOfInterval(options.local ? { start: meta.minTime, end: meta.maxTime } : historyRange());
 
   // dummy with signals
-  const spec = await createSignalLineChart(counties[0], signal, [], vegaOptions, true);
+  const spec = await createSignalLineChart(counties[0], signal, [], vegaOptions, true, options.local ?? false);
   const view = await createVega(spec, false, {
     title: 'Test',
   });
@@ -165,7 +178,7 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
 
   for (let i = 0; i < counties.length; i++) {
     const region = counties[i];
-    const file = `./data/${signal.id}_regions/${i.toString().padStart(3, '0')}.png`;
+    const file = `./data/${signal.id}_regions/${i.toString().padStart(4, '0')}.png`;
     if (!options.force && existsSync(file)) {
       // console.log(region.id, 'skip');
       continue;
@@ -173,7 +186,10 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
     if (lookup.size === 0) {
       await buildData();
     }
-    const data = lookup.get(region.id)!;
+    const data = lookup.get(region.id)! || [];
+    if (options.skip && data.length === 0) {
+      continue;
+    }
     // prepare data
     const full = imputeMissing(data, {}).map((d) => ({ ...d, date: startOfISODate(d.date).valueOf() }));
     // update view with data and title
@@ -192,7 +208,7 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
   vegaOptions.ctx.redis.destroy();
   console.log('create video');
   await concatPNGImages(
-    resolve(process.cwd(), `data/${signal.id}_regions/%03d.png`),
+    resolve(process.cwd(), `data/${signal.id}_regions/%04d.png`),
     resolve(process.cwd(), `data/${signal.id}_regions${fpsSuffix(options)}.mp4`),
     {
       ...options,
@@ -201,7 +217,7 @@ export async function runLineRegions(signal: ISignal, options: IImageOptions & I
   );
 }
 
-export async function runLineRegionsAll(options: IImageOptions & IVideoOptions & ICommonOptions) {
+export async function runLineRegionsAll(options: IImageOptions & IVideoOptions & ICommonOptions & ILineOptions) {
   for (const s of signals) {
     await runLineRegions(s, options);
   }

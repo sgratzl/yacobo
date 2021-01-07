@@ -39,18 +39,27 @@ withVideoOptions(withImageOptions(program.command('map-history <signal>'))).acti
 withVideoOptions(withImageOptions(program.command('map-history-all'))).action((options: IOptions) => {
   import('./commands/charts').then((r) => r.runMapHistoryAll(options));
 });
-withImageOptions(program.command('line <signal> <region>')).action((signal, region, options: IOptions) => {
-  const s = signalByID(signal)!;
-  const county = regionByID(region);
-  import('./commands/charts').then((r) => r.runLine(s, county, options));
-});
-withVideoOptions(withImageOptions(program.command('line-regions <signal>'))).action((signal, options: IOptions) => {
-  const s = signalByID(signal)!;
-  import('./commands/charts').then((r) => r.runLineRegions(s, options));
-});
-withVideoOptions(withImageOptions(program.command('line-regions-all'))).action((options: IOptions) => {
-  import('./commands/charts').then((r) => r.runLineRegionsAll(options));
-});
+withImageOptions(program.command('line <signal> <region>'))
+  .option('--local', 'local date range')
+  .option('--skip', 'skip empty')
+  .action((signal, region, options: IOptions) => {
+    const s = signalByID(signal)!;
+    const county = regionByID(region);
+    import('./commands/charts').then((r) => r.runLine(s, county, options));
+  });
+withVideoOptions(withImageOptions(program.command('line-regions <signal>')))
+  .option('--local', 'local date range')
+  .option('--skip', 'skip empty')
+  .action((signal, options: IOptions) => {
+    const s = signalByID(signal)!;
+    import('./commands/charts').then((r) => r.runLineRegions(s, options));
+  });
+withVideoOptions(withImageOptions(program.command('line-regions-all')))
+  .option('--local', 'local date range')
+  .option('--skip', 'skip empty')
+  .action((options: IOptions) => {
+    import('./commands/charts').then((r) => r.runLineRegionsAll(options));
+  });
 
 withImageOptions(program.command('color-scale')).action((options: IOptions) => {
   import('./commands/heatmap').then((r) => r.colorScaleTexture(options));
