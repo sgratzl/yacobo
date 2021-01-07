@@ -42,7 +42,7 @@ export class Redis {
         if (error) {
           reject(error);
         } else {
-          resolve(value);
+          resolve(value || 'OK');
         }
       });
     });

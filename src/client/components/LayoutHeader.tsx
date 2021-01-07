@@ -20,7 +20,7 @@ export function Search() {
   );
 
   return (
-    <TreeSelect
+    <TreeSelect<string>
       size="large"
       className={styles.search}
       onChange={onSelect}
