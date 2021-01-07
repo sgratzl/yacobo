@@ -257,7 +257,7 @@ const base: (ISignal | false)[] = [
       hasStdErr: false,
     },
   },
-  {
+  false && {
     id: 'antigen_tests',
     name: 'COVID Antigen Test Positivity (Quidel)',
     description: (date?: Date) =>
